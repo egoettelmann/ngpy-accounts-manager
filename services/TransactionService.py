@@ -17,6 +17,10 @@ class TransactionService():
         transactions = TransactionDbo.query.all()
         return self.mapper.map_all(transactions, Transaction)
 
+    def get_by_id(self, transaction_id):
+        transaction = TransactionDbo.query.get(transaction_id)
+        return self.mapper.map(transaction, Transaction)
+
     def find_by_reference(self, reference):
         transaction = TransactionDbo.query.filter(TransactionDbo.reference == reference).first()
         if not transaction:

@@ -8,5 +8,8 @@ class TransactionController(Resource):
     service = TransactionService()
 
     @marshal_with(Transaction.resource_fields)
-    def get(self):
-        return TransactionService.get_all()
+    def get(self, transaction_id=None):
+        if transaction_id is None:
+            return self.service.get_all()
+        else:
+            return self.service.get_by_id(transaction_id)

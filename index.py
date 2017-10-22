@@ -16,7 +16,7 @@ class HelloWorld(Resource):
 api.add_resource(HelloWorld, '/')
 api.add_resource(LabelController, '/labels', '/labels/<int:label_id>')
 api.add_resource(AccountController, '/accounts', '/accounts/<int:account_id>')
-api.add_resource(TransactionController, '/transactions')
+api.add_resource(TransactionController, '/transactions', '/transactions/<int:transaction_id>')
 
 if __name__ == '__main__':
     DBManager.init()
