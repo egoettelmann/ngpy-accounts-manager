@@ -1,7 +1,7 @@
-from mapper.object_mapper import ObjectMapper
-
 from models.Mapper import Mapper
+from models.domain.Account import Account
 from models.domain.Label import Label
+from models.entities.AccountDbo import AccountDbo
 from models.entities.LabelDbo import LabelDbo
 
 
@@ -12,6 +12,7 @@ class MapperManager():
     def init():
         MapperManager._mapper = Mapper()
         MapperManager._mapper.create_map(LabelDbo, Label)
+        MapperManager._mapper.create_map(AccountDbo, Account)
 
     @staticmethod
     def getInstance():

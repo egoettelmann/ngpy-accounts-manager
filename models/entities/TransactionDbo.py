@@ -6,7 +6,7 @@ from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy.sql.sqltypes import Integer, Date, String, Numeric
 
 from models.DBManager import DBManager
-from models.entities.AccountDbo import Account
+from models.entities.AccountDbo import AccountDbo
 from models.entities.LabelDbo import LabelDbo
 
 
@@ -47,7 +47,7 @@ class Transaction(DBManager.getBase()):
 
     @staticmethod
     def createFromCSV(row):
-        account = Account.findFromName(row[0])
+        account = AccountDbo.findFromName(row[0])
         date_compta = datetime.datetime.strptime(row[1], "%d/%m/%Y").date()
         date_operation = datetime.datetime.strptime(row[2], "%d/%m/%Y").date()
         description = row[3]
@@ -59,7 +59,7 @@ class Transaction(DBManager.getBase()):
 
     @staticmethod
     def createFromCSV2(row):
-        account = Account.findFromName(row[0])
+        account = AccountDbo.findFromName(row[0])
         date_compta = datetime.datetime.strptime(row[1], "%d-%m-%y").date()
         date_operation = datetime.datetime.strptime(row[2], "%d-%m-%y").date()
         description = row[4]
