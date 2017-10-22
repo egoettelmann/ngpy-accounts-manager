@@ -1,3 +1,4 @@
+import datetime
 import hashlib
 
 from flask_restful import fields
@@ -5,21 +6,11 @@ from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy.sql.sqltypes import Integer, Date, String, Numeric
 
 from models.DBManager import DBManager
+from models.entities.AccountDbo import AccountDbo
+from models.entities.LabelDbo import LabelDbo
 
 
-class TransactionDbo(DBManager.getBase()):
-    __tablename__ = 'transactions'
-    id = Column(Integer, primary_key=True)
-    account_id = Column(Integer, ForeignKey('accounts.id'))
-    date_compta = Column(Date())
-    date_operation = Column(Date())
-    date_value = Column(Date())
-    description = Column(String(250))
-    reference = Column(String(50))
-    amount = Column(Numeric(precision=2))
-    note = Column(String(250))
-    label_id = Column(Integer, ForeignKey('labels.id'))
-    hash = Column(String(250), unique=True)
+class Transaction():
     resource_fields = {
         'reference': fields.String,
         'date': fields.DateTime,
