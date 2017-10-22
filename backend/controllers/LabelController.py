@@ -1,7 +1,7 @@
 from flask_restful import Resource, marshal_with
 
-from models.domain.Label import Label
-from services.LabelService import LabelService
+from ..models.domain.Label import Label
+from ..services.LabelService import LabelService
 
 
 class LabelController(Resource):

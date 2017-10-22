@@ -1,13 +1,17 @@
 from flask import Flask
 from flask_restful import Api
 
-from controllers.AccountController import AccountController
-from controllers.LabelController import LabelController
-from controllers.TransactionController import TransactionController
-from models.DBManager import DBManager
+from backend.models.DBManager import DBManager
+
 
 app = Flask(__name__, static_folder="public", static_url_path="")
 api = Api(app, prefix="/rest")
+DBManager.init('sqlite:///compta.db')
+
+
+from backend.controllers.AccountController import AccountController
+from backend.controllers.LabelController import LabelController
+from backend.controllers.TransactionController import TransactionController
 
 
 @app.route("/")
@@ -20,5 +24,4 @@ api.add_resource(AccountController, '/accounts', '/accounts/<int:account_id>')
 api.add_resource(TransactionController, '/transactions', '/transactions/<int:transaction_id>')
 
 if __name__ == '__main__':
-    DBManager.init()
     app.run(debug=True)

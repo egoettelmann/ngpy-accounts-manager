@@ -1,6 +1,6 @@
-from models.MapperManager import MapperManager
-from models.domain.Account import Account
-from models.entities.AccountDbo import AccountDbo
+from ..models.MapperManager import MapperManager
+from ..models.domain.Account import Account
+from ..models.entities.AccountDbo import AccountDbo
 
 
 class AccountService():

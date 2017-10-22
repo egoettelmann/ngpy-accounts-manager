@@ -1,10 +1,10 @@
 from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy.sql.sqltypes import Integer, Date, Numeric
 
-from models.DBManager import DBManager
+from ..DBManager import DBManager
 
 
-class Status(DBManager.getBase()):
+class StatusDbo(DBManager.getBase()):
     __tablename__ = 'status'
     id = Column(Integer, primary_key=True)
     account_id = Column(Integer, ForeignKey('accounts.id'))

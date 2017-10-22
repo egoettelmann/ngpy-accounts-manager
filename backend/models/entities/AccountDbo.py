@@ -2,7 +2,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Column
 from sqlalchemy.sql.sqltypes import Integer, String
 
-from models.DBManager import DBManager
+from ..DBManager import DBManager
 
 
 class AccountDbo(DBManager.getBase()):
@@ -12,7 +12,7 @@ class AccountDbo(DBManager.getBase()):
     description = Column(String(250))
     transactions = relationship("TransactionDbo", backref="account")
     color = Column(String(50))
-    status = relationship("Status", backref="account")
+    status = relationship("StatusDbo", backref="account")
 
     def __init__(self, name=None, description=None):
         self.name = name

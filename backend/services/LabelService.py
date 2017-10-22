@@ -1,6 +1,6 @@
-from models.MapperManager import MapperManager
-from models.domain.Label import Label
-from models.entities.LabelDbo import LabelDbo
+from ..models.MapperManager import MapperManager
+from ..models.entities.LabelDbo import LabelDbo
+from ..models.domain.Label import Label
 
 
 class LabelService():

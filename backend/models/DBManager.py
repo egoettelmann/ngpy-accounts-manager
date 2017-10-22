@@ -9,10 +9,16 @@ class DBManager():
     _engine = None
     _session = None
     _base = None
+    _db_file_path = None
 
     @staticmethod
-    def init():
-        from models.entities import AccountDbo, LabelDbo, StatusDbo, TransactionDbo
+    def init(db_file_path):
+        DBManager._db_file_path = db_file_path
+        # Required to import all entities to initialize them
+        from .entities.LabelDbo import LabelDbo
+        from .entities.TransactionDbo import TransactionDbo
+        from .entities.AccountDbo import AccountDbo
+        from .entities.StatusDbo import StatusDbo
         Table('labels_transactions', DBManager.getBase().metadata,
               Column('label_id', Integer, ForeignKey('labels.id')),
               Column('transaction_id', Integer, ForeignKey('transactions.id'))
@@ -21,7 +27,7 @@ class DBManager():
     @staticmethod
     def getEngine():
         if DBManager._engine is None:
-            DBManager._engine = create_engine('sqlite:///compta.db', convert_unicode=True)
+            DBManager._engine = create_engine(DBManager._db_file_path, convert_unicode=True)
         return DBManager._engine
 
     @staticmethod

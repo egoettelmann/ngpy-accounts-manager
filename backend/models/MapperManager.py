@@ -1,10 +1,10 @@
-from models.Mapper import Mapper
-from models.domain.Account import Account
-from models.domain.Label import Label
-from models.domain.Transaction import Transaction
-from models.entities.AccountDbo import AccountDbo
-from models.entities.LabelDbo import LabelDbo
-from models.entities.TransactionDbo import TransactionDbo
+from .Mapper import Mapper
+from .domain.Account import Account
+from .domain.Label import Label
+from .domain.Transaction import Transaction
+from .entities.LabelDbo import LabelDbo
+from .entities.TransactionDbo import TransactionDbo
+from .entities.AccountDbo import AccountDbo
 
 
 class MapperManager():

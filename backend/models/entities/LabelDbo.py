@@ -2,7 +2,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Column
 from sqlalchemy.sql.sqltypes import Integer, String
 
-from models.DBManager import DBManager
+from ..DBManager import DBManager
 
 
 class LabelDbo(DBManager.getBase()):

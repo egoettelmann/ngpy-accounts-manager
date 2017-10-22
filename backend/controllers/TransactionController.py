@@ -1,7 +1,7 @@
 from flask_restful import Resource, marshal_with
 
-from models.domain.Transaction import Transaction
-from services.TransactionService import TransactionService
+from ..models.domain.Transaction import Transaction
+from ..services.TransactionService import TransactionService
 
 
 class TransactionController(Resource):
