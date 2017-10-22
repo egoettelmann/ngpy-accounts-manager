@@ -10,7 +10,7 @@ class AccountDbo(DBManager.getBase()):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
     description = Column(String(250))
-    transactions = relationship("Transaction", backref="account")
+    transactions = relationship("TransactionDbo", backref="account")
     color = Column(String(50))
     status = relationship("Status", backref="account")
 

@@ -9,7 +9,8 @@ class Account():
         'color': fields.String,
     }
 
-    def __init__(self, name=None, description=None, color=None):
+    def __init__(self, id=None, name=None, description=None, color=None):
+        self.id = id
         self.name = name
         self.description = description
         self.color = color

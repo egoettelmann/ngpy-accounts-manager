@@ -1,13 +1,6 @@
-import datetime
 import hashlib
 
 from flask_restful import fields
-from sqlalchemy.sql.schema import Column, ForeignKey
-from sqlalchemy.sql.sqltypes import Integer, Date, String, Numeric
-
-from models.DBManager import DBManager
-from models.entities.AccountDbo import AccountDbo
-from models.entities.LabelDbo import LabelDbo
 
 
 class Transaction():

@@ -14,8 +14,8 @@ class HelloWorld(Resource):
         return {'hello': 'world'}
 
 api.add_resource(HelloWorld, '/')
-api.add_resource(LabelController, '/labels')
-api.add_resource(AccountController, '/accounts')
+api.add_resource(LabelController, '/labels', '/labels/<int:label_id>')
+api.add_resource(AccountController, '/accounts', '/accounts/<int:account_id>')
 api.add_resource(TransactionController, '/transactions')
 
 if __name__ == '__main__':

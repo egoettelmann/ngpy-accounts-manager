@@ -10,8 +10,10 @@ class AccountService():
         accounts = AccountDbo.query.all()
         return self.mapper.map_all(accounts, Account)
 
+    def get_by_id(self, account_id):
+        account = AccountDbo.query.get(account_id)
+        return self.mapper.map(account, Account)
+
     def find_by_name(self, name):
         account = AccountDbo.query.filter(AccountDbo.name == name).first()
-        if not account:
-            return None
-        return self.mapper.map(account)
+        return self.mapper.map(account, Account)

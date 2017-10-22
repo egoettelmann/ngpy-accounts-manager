@@ -11,7 +11,7 @@ class LabelDbo(DBManager.getBase()):
     name = Column(String(250), unique=True)
     color = Column(String(50))
     icon = Column(String(50))
-    transactions = relationship("Transaction", backref="label")
+    transactions = relationship("TransactionDbo", backref="label")
 
     def __init__(self, name=None, color=None):
         self.name = name

@@ -10,5 +10,8 @@ class AccountController(Resource):
     service = AccountService()
 
     @marshal_with(Account.resource_fields)
-    def get(self):
-        return self.service.get_all()
+    def get(self, account_id=None):
+        if account_id is None:
+            return self.service.get_all()
+        else:
+            return self.service.get_by_id(account_id)

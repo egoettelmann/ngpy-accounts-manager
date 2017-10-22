@@ -8,5 +8,8 @@ class LabelController(Resource):
     service = LabelService()
 
     @marshal_with(Label.resource_fields)
-    def get(self):
-        return self.service.get_all()
+    def get(self, label_id=None):
+        if label_id is None:
+            return self.service.get_all()
+        else:
+            return self.service.get_by_id(label_id)
