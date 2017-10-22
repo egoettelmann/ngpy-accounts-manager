@@ -4,7 +4,7 @@ from flask_restful import Api
 from backend.models.DBManager import DBManager
 
 
-app = Flask(__name__, static_folder="public", static_url_path="")
+app = Flask(__name__, static_folder="frontend/dist", static_url_path="")
 api = Api(app, prefix="/rest")
 DBManager.init('sqlite:///compta.db')
 
