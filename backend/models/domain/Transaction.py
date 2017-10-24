@@ -5,7 +5,8 @@ class Transaction():
     resource_fields = {
         'id': fields.Integer,
         'reference': fields.String,
-        'date': fields.DateTime,
+        'description': fields.String,
+        'date_value': fields.DateTime(dt_format="iso8601"),
         'amount': fields.Float,
     }
 

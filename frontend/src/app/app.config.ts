@@ -24,9 +24,13 @@ export class AppConfig {
     },
     {
       name: 'root.transactions',
-      url: '/transactions',
+      url: '/transactions/:year/:month',
       views: {
         'content': TransactionsComponent
+      },
+      params: {
+        year: { squash: true, value: null },
+        month: { squash: true, value: null }
       }
     }
   ];

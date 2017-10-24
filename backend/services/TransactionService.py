@@ -1,6 +1,8 @@
 import datetime
 import hashlib
 
+from sqlalchemy.sql.expression import extract
+
 from ..models.MapperManager import MapperManager
 from ..models.domain.Transaction import Transaction
 from ..models.entities.TransactionDbo import TransactionDbo
@@ -13,8 +15,19 @@ class TransactionService():
     accountService = AccountService()
     labelService = LabelService()
 
-    def get_all(self):
-        transactions = TransactionDbo.query.all()
+    def get_all(self, year=None, month=None, account_ids=None):
+        transactions = TransactionDbo.query
+        if year is not None:
+            transactions = transactions.filter(
+                extract('year', TransactionDbo.date_value) == year
+            )
+        if month is not None:
+            transactions = transactions.filter(
+                extract('month', TransactionDbo.date_value) == month
+            )
+        if account_ids is not None:
+            transactions = transactions.filter(TransactionDbo.account_id.in_(account_ids))
+        transactions = transactions.order_by(TransactionDbo.date_value)
         return self.mapper.map_all(transactions, Transaction)
 
     def get_by_id(self, transaction_id):
