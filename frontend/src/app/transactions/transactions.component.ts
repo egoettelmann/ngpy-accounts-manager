@@ -5,7 +5,10 @@ import { Component } from '@angular/core';
 })
 export class TransactionsComponent {
 
-  public monthList = Array.from(Array(12).keys());
+  public monthList = [
+    'January', 'February', 'March', 'April', 'May', 'June', 'July',
+    'August', 'September', 'October', 'November', 'December'
+  ];
 
   constructor() {
     console.log('TransactionsComponent');
