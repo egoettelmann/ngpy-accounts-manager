@@ -3,10 +3,18 @@ import {TransactionsComponent} from './transactions/transactions.component';
 import {Ng2StateDeclaration} from '@uirouter/angular';
 import {AppComponent} from './app.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
+import {LoginComponent} from './login/login.component';
 
 export class AppConfig {
 
   public static STATES: Ng2StateDeclaration[] = [
+    {
+      name: 'login',
+      url: '/login',
+      views: {
+        '@': LoginComponent
+      }
+    },
     {
       name: 'root',
       url: '',

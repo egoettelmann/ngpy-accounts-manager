@@ -1,0 +1,27 @@
+<div class="login-wrapper">
+  <form class="login" (ngSubmit)="tryLogin()">
+    <div class="title">
+      <h3 class="welcome">Welcome to</h3>
+      Company Product Name
+      <h5 class="hint">Use your Company ID to sign in</h5>
+    </div>
+    <div class="login-group">
+      <input [(ngModel)]="loginForm.username"
+             name="username"
+             class="username"
+             type="text"
+             id="login_username"
+             placeholder="Username">
+      <input [(ngModel)]="loginForm.password"
+             name="password"
+             class="password"
+             type="password"
+             id="login_password"
+             placeholder="Password">
+      <div class="error inactive">
+        Invalid user name or password
+      </div>
+      <button type="submit" class="btn btn-primary">LOGIN</button>
+    </div>
+  </form>
+</div>
