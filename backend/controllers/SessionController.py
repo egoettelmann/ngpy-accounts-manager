@@ -13,3 +13,7 @@ class SessionController(Resource):
         print(username + '/' + password)
         session['logged_user_id'] = username
         return {}
+
+    def delete(self):
+        session.pop('logged_user_id', None)
+        return {}

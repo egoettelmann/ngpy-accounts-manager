@@ -4,6 +4,7 @@ import {Ng2StateDeclaration} from '@uirouter/angular';
 import {AppComponent} from './app.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {LoginComponent} from './login/login.component';
+import {SessionService} from './session.service';
 
 export class AppConfig {
 
@@ -21,7 +22,14 @@ export class AppConfig {
       views: {
         '@': AppComponent,
         'nav@root': NavComponent
-      }
+      },
+      resolve: [
+        {
+          token: 'connectedUser',
+          deps: [SessionService],
+          resolveFn: loadConnectedUser
+        }
+      ]
     },
     {
       name: 'root.dashboard',
@@ -43,4 +51,8 @@ export class AppConfig {
     }
   ];
 
+}
+
+export function loadConnectedUser(sessionService: SessionService): any {
+  return sessionService.getConnectedUser();
 }

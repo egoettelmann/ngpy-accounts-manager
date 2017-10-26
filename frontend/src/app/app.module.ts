@@ -13,6 +13,7 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {ErrorInterceptor} from './error.interceptor';
 import {LoginComponent} from './login/login.component';
 import {FormsModule} from '@angular/forms';
+import {SessionService} from './session.service';
 
 @NgModule({
   declarations: [
@@ -26,11 +27,14 @@ import {FormsModule} from '@angular/forms';
     UIRouterModule.forRoot({ states: AppConfig.STATES, initial: {state: 'root.dashboard'}, useHash: true }),
     ClarityModule.forRoot()
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: ErrorInterceptor,
-    multi: true
-  }],
+  providers: [
+    SessionService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [UIView]
 })
 export class AppModule { }
