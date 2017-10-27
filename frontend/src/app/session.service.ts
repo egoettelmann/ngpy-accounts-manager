@@ -17,7 +17,7 @@ export class SessionService {
   }
 
   getConnectedUser(): Promise<any> {
-    return this.http.get<any>('/rest/user').toPromise().then(data => {
+    return this.http.get<any>('/rest/login').toPromise().then(data => {
       return data;
     }, err => {
       this.$state.go('login');

@@ -10,7 +10,6 @@ api = Api(app, prefix="/rest")
 DBManager.init(app.config['DATASOURCE'])
 
 
-from backend.controllers.UserController import UserController
 from backend.controllers.SessionController import SessionController
 from backend.controllers.AccountController import AccountController
 from backend.controllers.LabelController import LabelController
@@ -23,7 +22,6 @@ def serve_page():
 
 
 api.add_resource(SessionController, '/login', endpoint='login')
-api.add_resource(UserController, '/user')
 api.add_resource(LabelController, '/labels', '/labels/<int:label_id>')
 api.add_resource(AccountController, '/accounts', '/accounts/<int:account_id>')
 api.add_resource(TransactionController, '/transactions', '/transactions/<int:transaction_id>')

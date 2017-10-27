@@ -7,6 +7,8 @@ import {SessionService} from '../session.service';
 })
 export class LoginComponent implements OnInit {
 
+  public formInError = false;
+  public formIsLoading = false;
   public loginForm: {username?: String, password?: String} = {};
 
   constructor(private $state: StateService, private sessionService: SessionService) {}
@@ -14,9 +16,15 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   tryLogin(): void {
+    this.formInError = false;
+    this.formIsLoading = true;
     this.sessionService.login(this.loginForm).then(data => {
       console.log('LOGIN', data);
       this.$state.go('root.dashboard');
+    }, err => {
+      console.log('FAILED', err);
+      this.formInError = true;
+      this.formIsLoading = false;
     });
   }
 
