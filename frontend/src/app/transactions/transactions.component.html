@@ -1,7 +1,21 @@
 <nav class="subnav">
+  <clr-dropdown>
+    <button type="button" class="btn btn-link" clrDropdownTrigger>
+      {{ currentYear }}
+      <clr-icon shape="caret down"></clr-icon>
+    </button>
+    <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+      <button *ngFor="let year of yearList"
+              type="button"
+              clrDropdownItem
+              uiSref="root.transactions"
+              [uiParams]="{ year: year }">{{ year }}</button>
+    </clr-dropdown-menu>
+  </clr-dropdown>
+
   <ul class="nav">
     <li class="nav-item" *ngFor="let month of monthList; let i = index">
-      <a class="nav-link" uiSref="root.transactions" [uiParams]="{ month: i + 1}" uiSrefActive="active">{{ month }}</a>
+      <a class="nav-link" uiSref="root.transactions" [uiParams]="{ month: i + 1 }" uiSrefActive="active">{{ month }}</a>
     </li>
   </ul>
 </nav>

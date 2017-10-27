@@ -45,8 +45,8 @@ export class AppConfig {
         'content': TransactionsComponent
       },
       params: {
-        year: { squash: true, value: null },
-        month: { squash: true, value: null }
+        year: { value: getCurrentYear },
+        month: { value: getCurrentMonth }
       }
     }
   ];
@@ -55,4 +55,14 @@ export class AppConfig {
 
 export function loadConnectedUser(sessionService: SessionService): any {
   return sessionService.getConnectedUser();
+}
+
+export function getCurrentYear(): string {
+  const d = new Date();
+  return String(d.getFullYear());
+}
+
+export function getCurrentMonth(): string {
+  const d = new Date();
+  return String(d.getMonth() + 1);
 }

@@ -1,28 +1,25 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {StateService} from '@uirouter/angular';
+import {TransactionsService} from './transactions.service';
 
 @Component({
   templateUrl: './transactions.component.html'
 })
 export class TransactionsComponent implements OnInit {
 
+  public yearList = [2017, 2016, 2015, 2014];
   public monthList = [
     'January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'
   ];
+  public currentYear: any;
   public transactions: any[];
 
-  constructor(private http: HttpClient) {}
+  constructor(private $state: StateService, private transactionsService: TransactionsService) {}
 
   ngOnInit(): void {
-    // Initialize Params Object
-    let params = new HttpParams();
-
-    // Begin assigning parameters
-    params = params.append('year', '2017');
-    params = params.append('month', '10');
-
-    this.http.get<any>('/rest/transactions', {params: params}).subscribe(data => {
+    this.currentYear = this.$state.params.year;
+    this.transactionsService.getTransactions(this.$state.params.year, this.$state.params.month).then(data => {
       this.transactions = data;
     });
   }

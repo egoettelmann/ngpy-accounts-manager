@@ -14,6 +14,7 @@ import {ErrorInterceptor} from './error.interceptor';
 import {LoginComponent} from './login/login.component';
 import {FormsModule} from '@angular/forms';
 import {SessionService} from './session.service';
+import {TransactionsService} from './transactions/transactions.service';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {SessionService} from './session.service';
   ],
   providers: [
     SessionService,
+    TransactionsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
