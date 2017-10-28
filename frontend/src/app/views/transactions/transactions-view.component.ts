@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {StateService} from '@uirouter/angular';
-import {TransactionsService} from './transactions.service';
+import {TransactionsService} from '../../modules/transactions/transactions.service';
 
 @Component({
-  templateUrl: './transactions.component.html'
+  templateUrl: './transactions-view.component.html'
 })
-export class TransactionsComponent implements OnInit {
+export class TransactionsViewComponent implements OnInit {
 
   public yearList = [2017, 2016, 2015, 2014];
   public monthList = [

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {StateService} from '@uirouter/angular';
-import {SessionService} from '../session.service';
+import {SessionService} from '../../session.service';
 
 @Component({
   templateUrl: './nav.component.html'

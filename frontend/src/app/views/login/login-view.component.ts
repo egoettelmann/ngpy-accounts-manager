@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {StateService} from '@uirouter/angular';
-import {SessionService} from '../session.service';
+import {SessionService} from '../../session.service';
 
 @Component({
-  templateUrl: './login.component.html'
+  templateUrl: './login-view.component.html'
 })
-export class LoginComponent implements OnInit {
+export class LoginViewComponent implements OnInit {
 
   public formInError = false;
   public formIsLoading = false;

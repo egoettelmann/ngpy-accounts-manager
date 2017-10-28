@@ -1,18 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {AccountsService} from "../../modules/accounts/accounts.service";
 
 @Component({
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard-view.component.html'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardViewComponent implements OnInit {
 
   public accounts: any[];
   public total: number;
 
-  constructor(private http: HttpClient) {}
+  constructor(private accountsService: AccountsService) {}
 
   ngOnInit(): void {
-    this.http.get<any>('/rest/accounts').subscribe(data => {
+    this.accountsService.getAccounts().then(data => {
       this.accounts = data;
       this.total = 0;
       for (const a of this.accounts) {

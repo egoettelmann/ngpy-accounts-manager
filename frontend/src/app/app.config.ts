@@ -1,10 +1,10 @@
-import {NavComponent} from './nav/nav.component';
-import {TransactionsComponent} from './transactions/transactions.component';
+import {NavComponent} from './components/navigation/nav.component';
 import {Ng2StateDeclaration} from '@uirouter/angular';
 import {AppComponent} from './app.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {LoginComponent} from './login/login.component';
+import {LoginViewComponent} from './views/login/login-view.component';
 import {SessionService} from './session.service';
+import {DashboardViewComponent} from './views/dashboard/dashboard-view.component';
+import {TransactionsViewComponent} from './views/transactions/transactions-view.component';
 
 export class AppConfig {
 
@@ -13,7 +13,7 @@ export class AppConfig {
       name: 'login',
       url: '/login',
       views: {
-        '@': LoginComponent
+        '@': LoginViewComponent
       }
     },
     {
@@ -35,14 +35,14 @@ export class AppConfig {
       name: 'root.dashboard',
       url: '/dashboard',
       views: {
-        'content': DashboardComponent
+        'content': DashboardViewComponent
       }
     },
     {
       name: 'root.transactions',
       url: '/transactions/:year/:month',
       views: {
-        'content': TransactionsComponent
+        'content': TransactionsViewComponent
       },
       params: {
         year: { value: getCurrentYear },

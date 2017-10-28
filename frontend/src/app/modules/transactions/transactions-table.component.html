@@ -1,0 +1,20 @@
+<h3>List of transactions</h3>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th class="left">Reference</th>
+      <th>Description</th>
+      <th>Value date</th>
+      <th>Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let transaction of transactions">
+      <td class="left">{{ transaction.reference }}</td>
+      <td class="left">{{ transaction.description }}</td>
+      <td>{{ transaction.date_value }}</td>
+      <td class="right">{{ transaction.amount | number:'1.2-2' }} €</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title" [ngStyle]="{'color': account.color}">
+      <strong>{{ account.name }}</strong>
+    </h4>
+    <p class="card-text">
+      {{ account.description }}
+    </p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <strong>Total:</strong>
+      <span>{{ account.total | number:'1.2-2' }} €</span>
+    </li>
+  </ul>
+</div>
