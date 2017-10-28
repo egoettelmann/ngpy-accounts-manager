@@ -15,7 +15,7 @@ export class TransactionsViewComponent implements OnInit {
   ];
   public currentYear: any;
   public transactions: any[];
-  public graphData: any;
+  public graphOptions: any;
 
   constructor(private $state: StateService,
               private transactionsService: TransactionsService,
@@ -27,8 +27,25 @@ export class TransactionsViewComponent implements OnInit {
       this.transactions = data;
     });
     this.statisticsService.getGroupedByLabel(this.$state.params.year, this.$state.params.month).then(data => {
-      this.graphData = data;
+      this.graphOptions = this.buildChartOptions(data);
     });
+  }
+
+  buildChartOptions(data: any) {
+    const options = {
+      xAxis: {
+        categories: []
+      },
+      series: [{
+        data: [],
+        showInLegend: false
+      }]
+    };
+    for (const d of data) {
+      options.xAxis.categories.push(d.label);
+      options.series[0].data.push(d.value);
+    }
+    return options;
   }
 
 }

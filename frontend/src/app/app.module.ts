@@ -16,6 +16,7 @@ import {DashboardViewComponent} from './views/dashboard/dashboard-view.component
 import {TransactionsViewComponent} from './views/transactions/transactions-view.component';
 import {TransactionsModule} from './modules/transactions/transactions.module';
 import {AccountsModule} from './modules/accounts/accounts.module';
+import {GraphComponent} from './components/graph/graph.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {AccountsModule} from './modules/accounts/accounts.module';
     AppComponent,
     NavComponent,
     DashboardViewComponent,
-    TransactionsViewComponent
+    TransactionsViewComponent,
+    GraphComponent
   ],
   imports: [
     TransactionsModule,

@@ -9,10 +9,10 @@
   </thead>
   <tbody>
     <tr *ngFor="let transaction of transactions">
-      <td class="left">{{ transaction.reference }}</td>
-      <td class="left">{{ transaction.description }}</td>
+      <td class="text-left">{{ transaction.reference }}</td>
+      <td class="text-left">{{ transaction.description }}</td>
       <td>{{ transaction.date_value }}</td>
-      <td class="right">{{ transaction.amount | number:'1.2-2' }} €</td>
+      <td class="text-right">{{ transaction.amount | number:'1.2-2' }} €</td>
     </tr>
   </tbody>
 </table>
