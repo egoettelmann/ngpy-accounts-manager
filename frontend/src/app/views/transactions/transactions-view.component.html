@@ -20,4 +20,13 @@
   </ul>
 </nav>
 
+<div class="row">
+  <div class="col-md-6 col-xs-12">&nbsp;</div>
+  <div class="col-md-6 col-xs-12">
+    <pre>{{ graphData | json }}</pre>
+  </div>
+</div>
+
+<h3>List of transactions</h3>
+
 <app-transactions-table [transactions]="transactions"></app-transactions-table>

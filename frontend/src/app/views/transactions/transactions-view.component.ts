@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {StateService} from '@uirouter/angular';
 import {TransactionsService} from '../../modules/transactions/transactions.service';
+import {StatisticsService} from '../../statistics.service';
 
 @Component({
   templateUrl: './transactions-view.component.html'
@@ -14,13 +15,19 @@ export class TransactionsViewComponent implements OnInit {
   ];
   public currentYear: any;
   public transactions: any[];
+  public graphData: any;
 
-  constructor(private $state: StateService, private transactionsService: TransactionsService) {}
+  constructor(private $state: StateService,
+              private transactionsService: TransactionsService,
+              private statisticsService: StatisticsService) {}
 
   ngOnInit(): void {
     this.currentYear = this.$state.params.year;
-    this.transactionsService.getTransactions(this.$state.params.year, this.$state.params.month).then(data => {
+    this.transactionsService.getAll(this.$state.params.year, this.$state.params.month).then(data => {
       this.transactions = data;
+    });
+    this.statisticsService.getGroupedByLabel(this.$state.params.year, this.$state.params.month).then(data => {
+      this.graphData = data;
     });
   }
 

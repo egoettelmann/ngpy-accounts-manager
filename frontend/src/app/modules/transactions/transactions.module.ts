@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {TransactionsTableComponent} from './transactions-table.component';
 import {TransactionsService} from './transactions.service';
 import {SharedModule} from '../shared/shared.module';
+import {StatisticsService} from '../../statistics.service';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import {SharedModule} from '../shared/shared.module';
     TransactionsTableComponent,
   ],
   providers: [
-    TransactionsService
+    TransactionsService,
+    StatisticsService
   ],
   imports: [
     SharedModule
