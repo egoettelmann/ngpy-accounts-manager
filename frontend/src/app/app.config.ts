@@ -5,6 +5,7 @@ import {LoginViewComponent} from './views/login/login-view.component';
 import {SessionService} from './session.service';
 import {DashboardViewComponent} from './views/dashboard/dashboard-view.component';
 import {TransactionsViewComponent} from './views/transactions/transactions-view.component';
+import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
 
 export class AppConfig {
 
@@ -47,6 +48,13 @@ export class AppConfig {
       params: {
         year: { value: getCurrentYear },
         month: { value: getCurrentMonth }
+      }
+    },
+    {
+      name: 'root.treasury',
+      url: '/treasury',
+      views: {
+        'content': TreasuryViewComponent
       }
     }
   ];

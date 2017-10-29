@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {UIRouterModule, UIView} from '@uirouter/angular';
 import {ClarityModule} from 'clarity-angular';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DecimalPipe} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import {AppComponent} from './app.component';
@@ -18,6 +18,7 @@ import {TransactionsModule} from './modules/transactions/transactions.module';
 import {AccountsModule} from './modules/accounts/accounts.module';
 import {GraphComponent} from './components/graph/graph.component';
 import {StatisticsModule} from './modules/statistics/statistics.module';
+import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {StatisticsModule} from './modules/statistics/statistics.module';
     NavComponent,
     DashboardViewComponent,
     TransactionsViewComponent,
+    TreasuryViewComponent,
     GraphComponent
   ],
   imports: [
@@ -40,6 +42,7 @@ import {StatisticsModule} from './modules/statistics/statistics.module';
     ClarityModule.forRoot()
   ],
   providers: [
+    DecimalPipe,
     SessionService,
     {
       provide: HTTP_INTERCEPTORS,

@@ -35,4 +35,15 @@ export class StatisticsService {
     return this.http.get<any>('/rest/summary', {params: params}).toPromise();
   }
 
+  getEvolution(year: string): Promise<any> {
+    // Initialize Params Object
+    let params = new HttpParams();
+
+    // Begin assigning parameters
+    if (year !== undefined) {
+      params = params.append('year', year);
+    }
+    return this.http.get<any>('/rest/treasury', {params: params}).toPromise();
+  }
+
 }

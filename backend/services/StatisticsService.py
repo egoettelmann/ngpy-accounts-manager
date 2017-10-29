@@ -88,7 +88,8 @@ class StatisticsService():
             total = 0
         return begin_amount + total
 
-    def filter_transactions_by_accounts(self, query, account_ids):
+    @staticmethod
+    def filter_transactions_by_accounts(query, account_ids):
         if account_ids:
             ids = []
             for account_id in account_ids:
@@ -98,21 +99,24 @@ class StatisticsService():
             query = query.filter(TransactionDbo.account_id.in_(ids))
         return query
 
-    def filter_transactions_by_year(self, query, year):
+    @staticmethod
+    def filter_transactions_by_year(query, year):
         if year:
             query = query.filter(
                 extract('year', TransactionDbo.date_value) == year
             )
         return query
 
-    def filter_transactions_by_month(self, query, month):
+    @staticmethod
+    def filter_transactions_by_month(query, month):
         if month:
             query = query.filter(
                 extract('month', TransactionDbo.date_value) == month
             )
         return query
 
-    def filter_transactions_by_labels(self, query, labels=[]):
+    @staticmethod
+    def filter_transactions_by_labels(query, labels=[]):
         if labels:
             ids = []
             for label in labels:

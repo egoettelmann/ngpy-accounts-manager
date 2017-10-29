@@ -11,6 +11,7 @@ DBManager.init(app.config['DATASOURCE'])
 
 
 from backend.controllers.SessionController import SessionController
+from backend.controllers.TreasuryController import TreasuryController
 from backend.controllers.SummaryController import SummaryController
 from backend.controllers.StatisticsController import StatisticsController
 from backend.controllers.AccountController import AccountController
@@ -24,6 +25,7 @@ def serve_page():
 
 
 api.add_resource(SessionController, '/login', endpoint='login')
+api.add_resource(TreasuryController, '/treasury')
 api.add_resource(SummaryController, '/summary')
 api.add_resource(StatisticsController, '/stats')
 api.add_resource(LabelController, '/labels', '/labels/<int:label_id>')
@@ -41,4 +43,4 @@ def before_request():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5050)
