@@ -12,4 +12,4 @@ class KeyValue():
         self.value = value
 
     def __repr__(self):
-        return '<GraphEntry %r>' % self.label
+        return '<KeyValue %r>' % self.label

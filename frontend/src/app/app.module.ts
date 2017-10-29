@@ -17,6 +17,7 @@ import {TransactionsViewComponent} from './views/transactions/transactions-view.
 import {TransactionsModule} from './modules/transactions/transactions.module';
 import {AccountsModule} from './modules/accounts/accounts.module';
 import {GraphComponent} from './components/graph/graph.component';
+import {StatisticsModule} from './modules/statistics/statistics.module';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import {GraphComponent} from './components/graph/graph.component';
   imports: [
     TransactionsModule,
     AccountsModule,
+    StatisticsModule,
     FormsModule,
     BrowserModule,
     CommonModule,

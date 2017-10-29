@@ -21,9 +21,11 @@
 </nav>
 
 <div class="row">
-  <div class="col-md-4 col-xs-12">&nbsp;</div>
+  <div class="col-md-4 col-xs-12">
+    <app-summary [summary]="summary"></app-summary>
+  </div>
   <div class="col-md-8 col-xs-12">
-    <app-chart [options]="graphOptions"></app-chart>
+    <app-chart class="card" [options]="graphOptions"></app-chart>
   </div>
 </div>
 

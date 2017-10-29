@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {StateService} from '@uirouter/angular';
 import {TransactionsService} from '../../modules/transactions/transactions.service';
-import {StatisticsService} from '../../statistics.service';
+import {StatisticsService} from '../../modules/statistics/statistics.service';
 
 @Component({
   templateUrl: './transactions-view.component.html'
@@ -16,6 +16,7 @@ export class TransactionsViewComponent implements OnInit {
   public currentYear: any;
   public transactions: any[];
   public graphOptions: any;
+  public summary: any;
 
   constructor(private $state: StateService,
               private transactionsService: TransactionsService,
@@ -28,6 +29,9 @@ export class TransactionsViewComponent implements OnInit {
     });
     this.statisticsService.getGroupedByLabel(this.$state.params.year, this.$state.params.month).then(data => {
       this.graphOptions = this.buildChartOptions(data);
+    });
+    this.statisticsService.getSummary(this.$state.params.year, this.$state.params.month).then(data => {
+      this.summary = data;
     });
   }
 
