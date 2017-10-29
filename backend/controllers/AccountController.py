@@ -4,7 +4,7 @@ from ..models.domain.Account import Account
 from ..services.AccountService import AccountService
 
 
-class AccountController(Resource):
+class Details(Resource):
     service = AccountService()
 
     @marshal_with(Account.resource_fields)

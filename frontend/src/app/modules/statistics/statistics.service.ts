@@ -18,7 +18,7 @@ export class StatisticsService {
     if (month !== undefined) {
       params = params.append('month', month);
     }
-    return this.http.get<any>('/rest/stats', {params: params}).toPromise();
+    return this.http.get<any>('/rest/stats/repartition', {params: params}).toPromise();
   }
 
   getSummary(year: string, month: string): Promise<any> {
@@ -32,7 +32,7 @@ export class StatisticsService {
     if (month !== undefined) {
       params = params.append('month', month);
     }
-    return this.http.get<any>('/rest/summary', {params: params}).toPromise();
+    return this.http.get<any>('/rest/stats/summary', {params: params}).toPromise();
   }
 
   getEvolution(year: string): Promise<any> {
@@ -43,7 +43,7 @@ export class StatisticsService {
     if (year !== undefined) {
       params = params.append('year', year);
     }
-    return this.http.get<any>('/rest/treasury', {params: params}).toPromise();
+    return this.http.get<any>('/rest/stats/treasury', {params: params}).toPromise();
   }
 
 }

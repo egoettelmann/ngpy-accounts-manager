@@ -4,7 +4,7 @@ from ..models.domain.Label import Label
 from ..services.LabelService import LabelService
 
 
-class LabelController(Resource):
+class Details(Resource):
     service = LabelService()
 
     @marshal_with(Label.resource_fields)

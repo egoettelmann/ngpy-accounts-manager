@@ -5,7 +5,7 @@ from ..models.domain.Transaction import Transaction
 from ..services.TransactionService import TransactionService
 
 
-class TransactionController(Resource):
+class Details(Resource):
     service = TransactionService()
 
     @marshal_with(Transaction.resource_fields)

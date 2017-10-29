@@ -4,7 +4,7 @@ from flask_restful import Resource
 from ..services.AccountService import AccountService
 
 
-class SessionController(Resource):
+class Authentication(Resource):
     service = AccountService()
 
     def post(self):
