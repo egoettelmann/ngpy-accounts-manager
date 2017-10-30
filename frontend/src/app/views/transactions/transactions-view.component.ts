@@ -40,6 +40,9 @@ export class TransactionsViewComponent implements OnInit {
   buildChartOptions(data: any) {
     const that = this;
     const options = {
+      chart: {
+        type: 'column'
+      },
       tooltip: {
         formatter: function () {
           return '' + this.x + ': <b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>';

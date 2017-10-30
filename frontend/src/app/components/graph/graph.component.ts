@@ -1,9 +1,6 @@
 import {Component, ElementRef, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {StateService} from '@uirouter/angular';
-import {SessionService} from '../../session.service';
-import {AppConfig} from '../../app.config';
-
-declare const Highcharts: any;
+import * as Highcharts from 'highcharts';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-chart',
@@ -16,7 +13,6 @@ export class GraphComponent implements OnChanges {
 
   private defaultOptions = {
     chart: {
-      type: 'column',
       backgroundColor: 'none',
       width: null
     },
@@ -40,7 +36,7 @@ export class GraphComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options != null && this.options) {
-      const opts = Object.assign({}, this.defaultOptions, this.options);
+      const opts = _.merge({}, this.defaultOptions, this.options);
       Highcharts.chart(this.element.nativeElement, opts);
     }
   }
