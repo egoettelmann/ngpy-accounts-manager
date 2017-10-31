@@ -22,7 +22,7 @@ class Treasury(Resource):
 
     @marshal_with(KeyValue.resource_fields)
     def get(self):
-        year = request.args.get('year')
+        year = int(request.args.get('year'))
         account_ids = request.args.get('account_ids')
         return self.service.get_evolution(year, account_ids)
 
@@ -33,5 +33,7 @@ class AccountSummary(Resource):
     @marshal_with(Summary.resource_fields)
     def get(self):
         year = int(request.args.get('year'))
-        month = int(request.args.get('month'))
+        month = request.args.get('month')
+        if month is not None:
+            month = int(month)
         return self.service.get_summary(year, month)

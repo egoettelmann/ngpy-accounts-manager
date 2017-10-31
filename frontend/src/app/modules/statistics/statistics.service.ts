@@ -21,7 +21,7 @@ export class StatisticsService {
     return this.http.get<any>('/rest/stats/repartition', {params: params}).toPromise();
   }
 
-  getSummary(year: string, month: string): Promise<any> {
+  getSummary(year?: string, month?: string): Promise<any> {
     // Initialize Params Object
     let params = new HttpParams();
 

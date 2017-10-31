@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {StateService} from '@uirouter/angular';
-import {TransactionsService} from '../../modules/transactions/transactions.service';
 import {StatisticsService} from '../../modules/statistics/statistics.service';
 import {DecimalPipe} from '@angular/common';
+import {Summary} from '../../modules/statistics/summary';
 
 @Component({
   templateUrl: './treasury-view.component.html'
@@ -16,6 +16,7 @@ export class TreasuryViewComponent implements OnInit {
   ];
   public currentYear: any;
   public graphOptions: any;
+  public summary: Summary;
 
   constructor(private $state: StateService,
               private statisticsService: StatisticsService,
@@ -25,6 +26,9 @@ export class TreasuryViewComponent implements OnInit {
     this.currentYear = this.$state.params.year;
     this.statisticsService.getEvolution(this.$state.params.year).then(data => {
       this.graphOptions = this.buildChartOptions(data);
+    });
+    this.statisticsService.getSummary(this.$state.params.year).then(data => {
+      this.summary = data;
     });
   }
 

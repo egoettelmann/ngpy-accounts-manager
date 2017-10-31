@@ -1,0 +1,49 @@
+{
+  "i18n": {
+    "views": {
+      "dashboard": {
+        "accounts": {
+          "total": "Total of all accounts:"
+        }
+      },
+      "transactions": {
+        "list": {
+          "title": "List of transactions"
+        }
+      }
+    },
+    "modules": {
+      "statistics": {
+        "summary": {
+          "DAY": {
+            "status": "Status",
+            "balance": "Balance",
+            "start": "Start of day",
+            "end": "End of day",
+            "debit": "Debit",
+            "credit": "Credit",
+            "result": "Daily result"
+          },
+          "MONTH": {
+            "status": "Status",
+            "balance": "Balance",
+            "start": "Start of month",
+            "end": "End of month",
+            "debit": "Debit",
+            "credit": "Credit",
+            "result": "Monthly result"
+          },
+          "YEAR": {
+            "status": "Status",
+            "balance": "Balance",
+            "start": "Start of year",
+            "end": "End of year",
+            "debit": "Debit",
+            "credit": "Credit",
+            "result": "Yearly result"
+          }
+        }
+      }
+    }
+  }
+}

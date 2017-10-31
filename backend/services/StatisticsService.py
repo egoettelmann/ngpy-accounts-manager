@@ -48,11 +48,15 @@ class StatisticsService():
         total_debit = queryDebit.scalar()
         total_credit = queryCredit.scalar()
         amount_end = amount_start + total_credit + total_debit
+        period_type = 'YEAR'
+        if month is not None:
+            period_type = 'MONTH'
         return Summary(
             amount_start,
             amount_end,
             total_credit,
-            total_debit
+            total_debit,
+            period_type
         )
 
     def get_last_status(self, account_id, date=None):

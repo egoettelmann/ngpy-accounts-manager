@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {UIRouterModule, UIView} from '@uirouter/angular';
 import {ClarityModule} from 'clarity-angular';
 import {CommonModule, DecimalPipe} from '@angular/common';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {AppComponent} from './app.component';
 import {NavComponent} from './components/navigation/nav.component';
@@ -19,6 +19,12 @@ import {AccountsModule} from './modules/accounts/accounts.module';
 import {GraphComponent} from './components/graph/graph.component';
 import {StatisticsModule} from './modules/statistics/statistics.module';
 import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -38,8 +44,21 @@ import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
     BrowserModule,
     CommonModule,
     HttpClientModule,
-    UIRouterModule.forRoot({ states: AppConfig.STATES, initial: {state: 'root.dashboard'}, useHash: true }),
-    ClarityModule.forRoot()
+    UIRouterModule.forRoot({
+      states: AppConfig.STATES,
+      initial: {
+        state: 'root.dashboard'
+      },
+      useHash: true
+    }),
+    ClarityModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     DecimalPipe,
