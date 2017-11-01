@@ -1,5 +1,8 @@
+from flask_restful import marshal_with
+
 from .. import restful
 from ..depynject import injectable
+from ..models.domain.Account import Account
 
 
 @injectable()
@@ -10,6 +13,7 @@ class AccountController():
         self.account_service = account_service
 
     @restful.route('/accounts')
+    @marshal_with(Account.resource_fields)
     def get(self, account_id=None):
         if account_id is None:
             return self.account_service.get_all()
