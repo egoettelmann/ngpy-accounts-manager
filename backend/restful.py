@@ -15,7 +15,7 @@ def prefix(rule, **options):
     """
     def decorator(c):
         __PREFIX_LIST__[c.__qualname__] = {
-            'instance': c(), # TODO: This should be handled through a DI mechanism
+            'reference': c,
             'rule': rule,
             'options': options
         }
@@ -48,12 +48,25 @@ def route(rule, **options):
     return decorator
 
 
+def default_di_provider(class_ref):
+    """
+    The default dependency provider.
+    It tries to instantiate the given class.
+    If the constructor takes any argument, it will fail.
+
+    :param class_ref: the class reference
+    :return: the class instance
+    """
+    return class_ref()
+
+
 class Api:
 
-    def __init__(self, app, prefix="", jsonifier=jsonify):
+    def __init__(self, app, prefix="", jsonifier=jsonify, di_provider=default_di_provider):
         self.app = app
         self.prefix = prefix
         self.jsonifier = jsonifier
+        self.di_provider = di_provider
 
     def register(self, class_ref, options=None):
         classname = class_ref.__qualname__
@@ -64,7 +77,7 @@ class Api:
             if classname not in __PREFIX_LIST__:
                 raise Exception('Route annotation defined on class without prefix')
             full_prefix = full_prefix + __PREFIX_LIST__[classname]['rule']
-            instance = __PREFIX_LIST__[classname]['instance']
+            instance = self.di_provider(__PREFIX_LIST__[classname]['reference'])
             for r in __ROUTES_LIST__[classname]:
                 endpoint = r['options'].pop('endpoint', r['function'].__qualname__)
                 full_rule = full_prefix + r['rule']
