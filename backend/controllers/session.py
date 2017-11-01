@@ -1,13 +1,15 @@
 from flask import request, session, abort
-from flask_restful import Resource
 
-from ..services.AccountService import AccountService
+from .. import restful
+from ..depynject import injectable
 
 
-class Authentication(Resource):
-    service = AccountService()
+@injectable()
+@restful.prefix('/session')
+class SessionController():
 
-    def post(self):
+    @restful.route('', methods=['POST'])
+    def login(self):
         username = request.json.get('username')
         password = request.json.get('password')
         if username != "admin":
@@ -16,11 +18,13 @@ class Authentication(Resource):
         print(username + '/' + password)
         return {}
 
-    def delete(self):
+    @restful.route('', methods=['DELETE'])
+    def logout(self):
         session.pop('logged_user_id', None)
         return {}
 
-    def get(self):
+    @restful.route('', methods=['GET'])
+    def get_user_info(self):
         if 'logged_user_id' in session:
             return {'username': 'Test User', 'userId': session['logged_user_id']}
         else:

@@ -1,12 +1,10 @@
-from flask_restful import Resource
-
 from .. import restful
 from ..depynject import injectable
 
 
 @injectable()
 @restful.prefix('')
-class LabelController(Resource):
+class LabelController():
 
     def __init__(self, label_service):
         self.label_service = label_service

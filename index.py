@@ -12,10 +12,12 @@ app.config.from_pyfile('config.cfg')
 DBManager.init(app.config['DATASOURCE'])
 
 
-from backend.controllers.TestController import TestController
-from backend.controllers.AccountController import AccountController
-from backend.controllers.LabelController import LabelController
-from backend.controllers.TransactionController import TransactionController
+from backend.controllers.test import TestController
+from backend.controllers.account import AccountController
+from backend.controllers.label import LabelController
+from backend.controllers.transaction import TransactionController
+from backend.controllers.statistics import StatisticsController
+from backend.controllers.session import SessionController
 from backend.services.TestService import TestService
 from backend.services.AccountService import AccountService
 from backend.services.LabelService import LabelService
@@ -33,6 +35,8 @@ api.register(TestController)
 api.register(AccountController)
 api.register(LabelController)
 api.register(TransactionController)
+api.register(StatisticsController)
+api.register(SessionController)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5050)

@@ -1,12 +1,10 @@
-from flask_restful import Resource
-
 from .. import restful
 from ..depynject import injectable
 
 
 @injectable()
 @restful.prefix('')
-class AccountController(Resource):
+class AccountController():
 
     def __init__(self, account_service):
         self.account_service = account_service

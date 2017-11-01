@@ -1,5 +1,4 @@
 from flask import request
-from flask_restful import Resource
 
 from .. import restful
 from ..depynject import injectable
@@ -7,7 +6,7 @@ from ..depynject import injectable
 
 @injectable()
 @restful.prefix('')
-class TransactionController(Resource):
+class TransactionController():
 
     def __init__(self, transaction_service):
         self.transaction_service = transaction_service
