@@ -1,16 +1,20 @@
 from flask import request
-from flask_restful import Resource, marshal_with
+from flask_restful import Resource
 
-from ..models.domain.Transaction import Transaction
-from ..services.TransactionService import TransactionService
+from .. import restful
+from ..depynject import injectable
 
 
-class Details(Resource):
-    service = TransactionService()
+@injectable()
+@restful.prefix('')
+class TransactionController(Resource):
 
-    @marshal_with(Transaction.resource_fields)
+    def __init__(self, transaction_service):
+        self.transaction_service = transaction_service
+
+    @restful.route('/transactions')
     def get(self):
         year = request.args.get('year')
         month = request.args.get('month')
         account_ids = request.args.get('account_ids')
-        return self.service.get_all(year, month, account_ids)
+        return self.transaction_service.get_all(year, month, account_ids)

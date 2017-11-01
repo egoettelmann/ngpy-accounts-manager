@@ -2,6 +2,7 @@ import datetime
 
 from sqlalchemy.sql.expression import extract, func, desc
 
+from ..depynject import injectable
 from ..models.DBManager import DBManager
 from ..models.MapperManager import MapperManager
 from ..models.domain.KeyValue import KeyValue
@@ -12,6 +13,7 @@ from ..models.entities.StatusDbo import StatusDbo
 from ..models.entities.TransactionDbo import TransactionDbo
 
 
+@injectable()
 class StatisticsService():
     mapper = MapperManager.getInstance()
 

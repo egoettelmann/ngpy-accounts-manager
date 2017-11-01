@@ -2,6 +2,7 @@ import datetime
 
 from sqlalchemy import func, extract
 
+from ..depynject import injectable
 from ..services.StatisticsService import StatisticsService
 from ..models.DBManager import DBManager
 from ..models.MapperManager import MapperManager
@@ -11,9 +12,12 @@ from ..models.entities.AccountDbo import AccountDbo
 from ..models.entities.TransactionDbo import TransactionDbo
 
 
+@injectable()
 class AccountService():
     mapper = MapperManager.getInstance()
-    statisticsService = StatisticsService()
+
+    def __init__(self, statistics_service):
+        self.statistics_service = statistics_service
 
     def get_all(self):
         accounts = AccountDbo.query.all()
@@ -49,7 +53,7 @@ class AccountService():
             accounts = AccountDbo.query.all()
             for acc in accounts:
                 account_ids.append(acc.id)
-                status = self.statisticsService.get_account_status(acc.id, year, 1, 1)
+                status = self.statistics_service.get_account_status(acc.id, year, 1, 1)
                 start_amount = start_amount + status
         entries = StatisticsService.filter_transactions_by_accounts(entries, account_ids)
         if year is not None:

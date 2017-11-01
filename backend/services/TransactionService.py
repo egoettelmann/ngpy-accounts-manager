@@ -3,17 +3,19 @@ import hashlib
 
 from sqlalchemy.sql.expression import extract
 
+from ..depynject import injectable
 from ..models.MapperManager import MapperManager
 from ..models.domain.Transaction import Transaction
 from ..models.entities.TransactionDbo import TransactionDbo
-from ..services.AccountService import AccountService
-from ..services.LabelService import LabelService
 
 
+@injectable()
 class TransactionService():
     mapper = MapperManager.getInstance()
-    accountService = AccountService()
-    labelService = LabelService()
+
+    def __init__(self, account_service, label_service):
+        self.account_service = account_service
+        self.label_service = label_service
 
     def get_all(self, year=None, month=None, account_ids=None):
         transactions = TransactionDbo.query
@@ -41,7 +43,7 @@ class TransactionService():
         return self.mapper.map(transaction, Transaction)
 
     def create_from_csv(self, row):
-        account = self.accountService.find_by_name(row[0])
+        account = self.account_service.find_by_name(row[0])
         date_compta = datetime.datetime.strptime(row[1], "%d/%m/%Y").date()
         date_operation = datetime.datetime.strptime(row[2], "%d/%m/%Y").date()
         description = row[3]
@@ -52,14 +54,14 @@ class TransactionService():
         return transaction
 
     def create_from_csv2(self, row):
-        account = self.accountService.find_by_name(row[0])
+        account = self.account_service.find_by_name(row[0])
         date_compta = datetime.datetime.strptime(row[1], "%d-%m-%y").date()
         date_operation = datetime.datetime.strptime(row[2], "%d-%m-%y").date()
         description = row[4]
         reference = row[5]
         date_value = datetime.datetime.strptime(row[6], "%d-%m-%y").date()
         amount = float(str(row[7]).replace(",", "."))
-        label = self.labelService.find_by_name(row[3].lower().capitalize())
+        label = self.label_service.find_by_name(row[3].lower().capitalize())
         transaction = Transaction(account.id, date_compta, date_operation, description, reference, date_value, amount, "", label.id)
         return transaction
 

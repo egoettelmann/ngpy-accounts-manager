@@ -49,15 +49,12 @@ class Depynject:
             i_scope = __INJECTABLE_LIST__[classname]['scope']
         i_args = __INJECTABLE_LIST__[classname]['arguments']
         if i_scope == 'prototype':
-            print('Depynject.provide: scope=prototype, class_ref=' + str(class_ref))
             return self.create_new_instance(class_ref, i_args)
         if i_scope == 'singleton':
             if classname not in self.singleton_store:
                 self.singleton_store[classname] = self.create_new_instance(class_ref, i_args)
-            print('Depynject.provide: scope=singleton, class_ref=' + str(class_ref))
             return self.singleton_store[classname]
         if i_scope in self.providers:
-            print('Depynject.provide: scope=' + i_scope + ', class_ref=' + str(class_ref))
             return self.providers[classname](class_ref, i_args)
         raise Exception('Cannot resolve injectable class with name=' + classname)
 
@@ -76,6 +73,7 @@ class Depynject:
                 raise Exception('Cannot resolve injectable constructor argument with name ' + arg_class_name)
             arg_obj = __INJECTABLE_LIST__[arg_class_name]
             arg_instances[arg] = self.provide(arg_obj['reference'], **arg_obj['options'])
+        print('Creating new instance of ' + str(class_ref.__qualname__))
         return class_ref(**arg_instances)
 
     @staticmethod

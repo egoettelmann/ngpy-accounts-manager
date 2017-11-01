@@ -1,15 +1,19 @@
-from flask_restful import Resource, marshal_with
+from flask_restful import Resource
 
-from ..models.domain.Account import Account
-from ..services.AccountService import AccountService
+from .. import restful
+from ..depynject import injectable
 
 
-class Details(Resource):
-    service = AccountService()
+@injectable()
+@restful.prefix('')
+class AccountController(Resource):
 
-    @marshal_with(Account.resource_fields)
+    def __init__(self, account_service):
+        self.account_service = account_service
+
+    @restful.route('/accounts')
     def get(self, account_id=None):
         if account_id is None:
-            return self.service.get_all()
+            return self.account_service.get_all()
         else:
-            return self.service.get_by_id(account_id)
+            return self.account_service.get_by_id(account_id)
