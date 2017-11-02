@@ -1,6 +1,6 @@
+from ..dbconnector.entities import LabelDbo
 from ..depynject import injectable
 from ..models.MapperManager import MapperManager
-from ..models.entities.LabelDbo import LabelDbo
 from ..models.domain.Label import Label
 
 

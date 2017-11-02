@@ -2,24 +2,24 @@ import datetime
 
 from sqlalchemy.sql.expression import extract, func, desc
 
+from ..dbconnector.entities import AccountDbo, LabelDbo, StatusDbo, TransactionDbo
 from ..depynject import injectable
-from ..models.DBManager import DBManager
 from ..models.MapperManager import MapperManager
 from ..models.domain.KeyValue import KeyValue
 from ..models.domain.Summary import Summary
-from ..models.entities.AccountDbo import AccountDbo
-from ..models.entities.LabelDbo import LabelDbo
-from ..models.entities.StatusDbo import StatusDbo
-from ..models.entities.TransactionDbo import TransactionDbo
 
 
 @injectable()
 class StatisticsService():
     mapper = MapperManager.getInstance()
 
+    def __init__(self, entity_manager):
+        self.entity_manager = entity_manager
+
     def get_grouped_by_labels(self, year=None, month=None, account_ids=None):
+        session = self.entity_manager.create_session()
         result = []
-        entries = DBManager.getSession().query(
+        entries = session.query(
             LabelDbo.name.label('label'),
             func.sum(TransactionDbo.amount).label('value')
         ).join(
@@ -34,7 +34,8 @@ class StatisticsService():
         return result
 
     def get_summary(self, year=None, month=None):
-        query = DBManager.getSession().query(func.sum(TransactionDbo.amount).label("total"))
+        session = self.entity_manager.create_session()
+        query = session.query(func.sum(TransactionDbo.amount).label("total"))
         query = self.filter_transactions_by_year(query, year)
         query = self.filter_transactions_by_month(query, month)
         queryDebit = query.filter(
@@ -69,6 +70,7 @@ class StatisticsService():
         return status.first()
 
     def get_account_status(self, account_id, year=None, month=None, day=None):
+        session = self.entity_manager.create_session()
         if year is None:
             year = int(datetime.datetime.now().strftime("%Y"))
         if month is None:
@@ -85,7 +87,7 @@ class StatisticsService():
             begin_amount = 0
             begin_date = datetime.date(1900, 1, 1)
 
-        query = DBManager.getSession().query(func.sum(TransactionDbo.amount).label("total"))
+        query = session.query(func.sum(TransactionDbo.amount).label("total"))
         query = query.filter(TransactionDbo.account_id == account_id)
         query = query.filter(TransactionDbo.date_value >= begin_date)
         query = query.filter(TransactionDbo.date_value < end_date)

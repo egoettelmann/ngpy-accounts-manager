@@ -1,10 +1,8 @@
+from ..dbconnector.entities import LabelDbo, AccountDbo, TransactionDbo
 from .Mapper import Mapper
 from .domain.Account import Account
 from .domain.Label import Label
 from .domain.Transaction import Transaction
-from .entities.LabelDbo import LabelDbo
-from .entities.TransactionDbo import TransactionDbo
-from .entities.AccountDbo import AccountDbo
 
 
 class MapperManager():

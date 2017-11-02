@@ -76,6 +76,17 @@ class Depynject:
         print('Creating new instance of ' + str(class_ref.__qualname__))
         return class_ref(**arg_instances)
 
+    def register_singleton(self, instance):
+        """
+        Registers an instance as a singleton.
+
+        :param instance: the instance to register
+        :return: None
+        """
+        class_ref = instance.__class__
+        injectable()(class_ref)
+        self.singleton_store[class_ref.__qualname__] = instance
+
     @staticmethod
     def to_camel_case(snake_str):
         """

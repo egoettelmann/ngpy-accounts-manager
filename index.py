@@ -1,16 +1,18 @@
 from flask import Flask
 
+from backend.dbconnector.manager import EntityManager
 from backend.depynject import Depynject
-from backend.models.DBManager import DBManager
 from backend.restful import Api
 
+d_injector = Depynject()
 
 app = Flask(__name__, static_folder="../frontend/dist", static_url_path="")
-api = Api(app, prefix="/rest", di_provider=Depynject().provide)
+api = Api(app, prefix="/rest", di_provider=d_injector.provide)
 
 app.config.from_pyfile('config.cfg')
-DBManager.init(app.config['DATASOURCE'])
-
+em = EntityManager(app.config['DATASOURCE'])
+d_injector.register_singleton(em)
+em.init()
 
 from backend.controllers.test import TestController
 from backend.controllers.account import AccountController

@@ -2,22 +2,21 @@ import datetime
 
 from sqlalchemy import func, extract
 
+from ..dbconnector.entities import AccountDbo, TransactionDbo
 from ..depynject import injectable
 from ..services.StatisticsService import StatisticsService
-from ..models.DBManager import DBManager
 from ..models.MapperManager import MapperManager
 from ..models.domain.Account import Account
 from ..models.domain.KeyValue import KeyValue
-from ..models.entities.AccountDbo import AccountDbo
-from ..models.entities.TransactionDbo import TransactionDbo
 
 
 @injectable()
 class AccountService():
     mapper = MapperManager.getInstance()
 
-    def __init__(self, statistics_service):
+    def __init__(self, statistics_service, entity_manager):
         self.statistics_service = statistics_service
+        self.entity_manager = entity_manager
 
     def get_all(self):
         accounts = AccountDbo.query.all()
@@ -35,16 +34,18 @@ class AccountService():
         return self.mapper.map(account, Account)
 
     def get_account_total(self, account_id):
-        query = DBManager.getSession().query(func.sum(TransactionDbo.amount).label("total"))
+        session = self.entity_manager.create_session()
+        query = session.query(func.sum(TransactionDbo.amount).label("total"))
         query = query.filter(TransactionDbo.account_id == account_id)
         return query.scalar()
 
     def get_evolution(self, year=None, account_ids=None):
+        session = self.entity_manager.create_session()
         if year is None:
             year = int(datetime.datetime.now().strftime("%Y"))
         start_amount = 0
 
-        entries = DBManager.getSession().query(
+        entries = session.query(
             TransactionDbo.date_value.label('label'),
             func.sum(TransactionDbo.amount).label('value')
         )

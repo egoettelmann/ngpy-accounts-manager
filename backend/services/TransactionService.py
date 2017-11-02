@@ -3,10 +3,10 @@ import hashlib
 
 from sqlalchemy.sql.expression import extract
 
+from ..dbconnector.entities import TransactionDbo
 from ..depynject import injectable
 from ..models.MapperManager import MapperManager
 from ..models.domain.Transaction import Transaction
-from ..models.entities.TransactionDbo import TransactionDbo
 
 
 @injectable()
