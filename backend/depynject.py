@@ -34,10 +34,13 @@ def injectable(name=None, scope='singleton', **options):
     return decorator
 
 
-def inject(silent=False):
+def inject(silent=False, **hints):
     """
     Makes the method's arguments injectable.
     When calling the method, not resolved arguments will be tried to be resolved.
+
+    :param: silent: if False, an unresolved dependency will raise an InjectionError, otherwise nothing happens
+    :param: hints: other arguments will be looked at for finding the injectable
     :return: the decorated method
     """
     def wrap(m):
@@ -51,17 +54,26 @@ def inject(silent=False):
                     num_args = len((list(args)[1:]))
                     args_to_resolve = list(defaults)[num_args:]
                     for idx, val in enumerate(reversed(args_to_resolve)):
-                        if val is None:
-                            arg_name = arguments[idx]
-                            if arg_name not in kwargs:
-                                print('Injecting ' + arg_name + ' in method ' + m.__qualname__)
-                                try:
-                                    kwargs[arg_name] = instance.provide(arg_name)
-                                except InjectionError as e:
-                                    if not silent:
-                                        raise e
+                        # We loop through the default args that were not given as positional arg
+                        if val is not None:
+                            # The default value should be None
+                            continue
+                        arg_name = arguments[idx]
+                        if arg_name in kwargs:
+                            # The default arg should not be given as named arg
+                            continue
+                        resolve_name = arg_name
+                        if arg_name in hints and isinstance(hints[arg_name], str):
+                            # Is there a hint given as a string ?
+                            resolve_name = hints[arg_name]
+                        print('Injecting [' + arg_name + '=' + resolve_name + '] in method ' + m.__qualname__)
+                        try:
+                            kwargs[arg_name] = instance.provide(resolve_name)
+                        except InjectionError as e:
+                            if not silent:
+                                raise e
             else:
-                print('Invoked ' + m.__qualname__ + ' with @inject but class has never been provided, no DI context bound !')
+                print('Invoked ' + m.__qualname__ + ' with @inject but no DI context bound (is the class injectable ?)')
             return m(*args, **kwargs)
 
         return wrapper
