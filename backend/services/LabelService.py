@@ -1,12 +1,13 @@
 from ..dbconnector.entities import LabelDbo
 from ..depynject import injectable
-from ..models.MapperManager import MapperManager
 from ..models.domain.Label import Label
 
 
 @injectable()
 class LabelService():
-    mapper = MapperManager.getInstance()
+
+    def __init__(self, object_mapper):
+        self.mapper = object_mapper
 
     def get_all(self):
         labels = LabelDbo.query.all()

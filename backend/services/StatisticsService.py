@@ -4,17 +4,16 @@ from sqlalchemy.sql.expression import extract, func, desc
 
 from ..dbconnector.entities import AccountDbo, LabelDbo, StatusDbo, TransactionDbo
 from ..depynject import injectable
-from ..models.MapperManager import MapperManager
 from ..models.domain.KeyValue import KeyValue
 from ..models.domain.Summary import Summary
 
 
 @injectable()
 class StatisticsService():
-    mapper = MapperManager.getInstance()
 
-    def __init__(self, entity_manager):
+    def __init__(self, entity_manager, object_mapper):
         self.entity_manager = entity_manager
+        self.mapper = object_mapper
 
     def get_grouped_by_labels(self, year=None, month=None, account_ids=None):
         session = self.entity_manager.create_session()

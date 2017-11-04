@@ -4,19 +4,18 @@ from sqlalchemy import func, extract
 
 from ..dbconnector.entities import AccountDbo, TransactionDbo
 from ..depynject import injectable
-from ..services.StatisticsService import StatisticsService
-from ..models.MapperManager import MapperManager
 from ..models.domain.Account import Account
 from ..models.domain.KeyValue import KeyValue
+from ..services.StatisticsService import StatisticsService
 
 
 @injectable()
 class AccountService():
-    mapper = MapperManager.getInstance()
 
-    def __init__(self, statistics_service, entity_manager):
+    def __init__(self, statistics_service, entity_manager, object_mapper):
         self.statistics_service = statistics_service
         self.entity_manager = entity_manager
+        self.mapper = object_mapper
 
     def get_all(self):
         accounts = AccountDbo.query.all()

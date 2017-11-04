@@ -20,6 +20,7 @@ from backend.controllers.label import LabelController
 from backend.controllers.transaction import TransactionController
 from backend.controllers.statistics import StatisticsController
 from backend.controllers.session import SessionController
+from backend.models.Mapper import Mapper
 from backend.services.TestService import TestService
 from backend.services.AccountService import AccountService
 from backend.services.LabelService import LabelService

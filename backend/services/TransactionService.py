@@ -5,17 +5,16 @@ from sqlalchemy.sql.expression import extract
 
 from ..dbconnector.entities import TransactionDbo
 from ..depynject import injectable
-from ..models.MapperManager import MapperManager
 from ..models.domain.Transaction import Transaction
 
 
 @injectable()
 class TransactionService():
-    mapper = MapperManager.getInstance()
 
-    def __init__(self, account_service, label_service):
+    def __init__(self, account_service, label_service, object_mapper):
         self.account_service = account_service
         self.label_service = label_service
+        self.mapper = object_mapper
 
     def get_all(self, year=None, month=None, account_ids=None):
         transactions = TransactionDbo.query
