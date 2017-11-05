@@ -46,11 +46,11 @@ class Label():
 
 class Summary():
     resource_fields = {
-        'amount_start': fields.Float,
-        'amount_end': fields.Float,
-        'total_credit': fields.Float,
-        'total_debit': fields.Float,
-        'period_type': fields.String
+        'amountStart': fields.Float(attribute='amount_start'),
+        'amountEnd': fields.Float(attribute='amount_end'),
+        'totalCredit': fields.Float(attribute='total_credit'),
+        'totalDebit': fields.Float(attribute='total_debit'),
+        'periodType': fields.String(attribute='period_type')
     }
 
     def __init__(self, amount_start=None, amount_end=None, total_credit=None, total_debit=None, period_type=None) -> None:
@@ -63,7 +63,7 @@ class Summary():
 
 class Status():
     resource_fields = {
-        'account_id': fields.Integer,
+        'accountId': fields.Integer(attribute='account_id'),
         'date': fields.DateTime(dt_format="iso8601"),
         'value': fields.Float,
     }
@@ -79,7 +79,7 @@ class Transaction():
         'id': fields.Integer,
         'reference': fields.String,
         'description': fields.String,
-        'date_value': fields.DateTime(dt_format="iso8601"),
+        'dateValue': fields.DateTime(attribute='date_value', dt_format="iso8601"),
         'amount': fields.Float,
     }
 

@@ -14,10 +14,13 @@ class AccountService():
         self.status_service = status_service
 
     def get_all_accounts(self):
-        return self.mapper.map_all(
+        accounts = self.mapper.map_all(
             self.repository.get_all(),
             Account
         )
+        for acc in accounts:
+            acc.total = self.get_account_total(acc.id)
+        return accounts
 
     def get_account(self, account_id):
         return self.mapper.map(

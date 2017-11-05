@@ -117,7 +117,6 @@ class Depynject:
             scope = options.pop('scope', 'singleton')
             injectable(scope=scope, **options)(class_ref)
         for m in __INJECTABLE_LIST__[classname]['injecting_methods']:
-            print(m)
             if __INJECTING_LIST__[m]['bound_instance'] is None:
                 print('method is bound to instance !')
                 __INJECTING_LIST__[m]['bound_instance'] = self

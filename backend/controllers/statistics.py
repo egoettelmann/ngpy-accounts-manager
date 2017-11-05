@@ -19,8 +19,8 @@ class StatisticsController():
     @restful.route('/repartition')
     @marshal_with(KeyValue.resource_fields)
     def get_repartition(self):
-        year = request.args.get('year')
-        month = request.args.get('month')
+        year = int(request.args.get('year'))
+        month = int(request.args.get('month'))
         return self.transaction_service.get_total_by_labels(None, year, month)
 
     @restful.route('/treasury')

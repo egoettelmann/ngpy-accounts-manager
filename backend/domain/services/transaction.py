@@ -17,6 +17,7 @@ class TransactionService():
     def get_all_transactions(self, account_ids=None, year=None, month=None):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
+        print('get_all_transactions', date_from, date_to)
         return self.mapper.map_all(
             self.repository.get_all(account_ids, date_from, date_to),
             Transaction
@@ -31,17 +32,15 @@ class TransactionService():
     def get_total_by_labels(self, account_ids=None, year=None, month=None, sign=None):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
-        return self.mapper.map_all(
-            self.repository.get_grouped_by_labels(account_ids, date_from, date_to, sign),
-            KeyValue
+        return self.map_to_key_value_list(
+            self.repository.get_grouped_by_labels(account_ids, date_from, date_to, sign)
         )
 
     def get_total_by_period(self, account_ids=None, year=None, month=None, period=None):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
-        return self.mapper.map_all(
-            self.repository.get_grouped_by_period(account_ids, date_from, date_to, period),
-            KeyValue
+        return self.map_to_key_value_list(
+            self.repository.get_grouped_by_period(account_ids, date_from, date_to, period)
         )
 
     def get_total(self, account_ids=None, year=None, month=None, sign=None):
@@ -62,10 +61,18 @@ class TransactionService():
     def get_date_to(year=None, month=None):
         date_to = datetime.date(datetime.date.today().year + 1, 1, 1)
         if year is not None:
-            date_to = date_to.replace(year=year + 1)
+            date_to = date_to.replace(year=year+1)
         if month is not None:
+            date_to = date_to.replace(year=year)
             date_to = date_to.replace(month=month+1)
         return date_to
+
+    @staticmethod
+    def map_to_key_value_list(entries):
+        values = []
+        for kv in entries:
+            values.append(KeyValue(kv.label, kv.value))
+        return values
 
     def create_from_csv(self, row):
         account = self.account_service.find_by_name(row[0])

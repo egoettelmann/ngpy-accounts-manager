@@ -30,14 +30,14 @@ class TransactionRepository():
                               date_from : datetime.date,
                               date_to : datetime.date,
                               sign : bool
-                              ) -> QKeyValue : ...
+                              ) -> list(QKeyValue) : ...
 
     def get_grouped_by_period(self,
                               account_ids : list(int),
                               date_from : datetime.date,
                               date_to : datetime.date,
                               period : str
-                              ) -> QKeyValue : ...
+                              ) -> list(QKeyValue) : ...
 
     def get_total(self,
                   account_ids : list(int),

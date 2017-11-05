@@ -23,8 +23,8 @@ class EntityManager():
     def create_session(self):
         return scoped_session(self.session_maker)
 
-    def query(self):
-        return self.create_session().query
+    def query(self, *args, **kwargs):
+        return self.create_session().query(*args, **kwargs)
 
     @staticmethod
     def get_base(name='default'):

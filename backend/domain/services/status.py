@@ -26,7 +26,6 @@ class StatusService():
         last_status = self.repository.get_last_account_status(account_id, date)
         if last_status is None:
             return None
-        print('get_last_account_status', last_status)
         return self.mapper.map(
             last_status,
             Status
