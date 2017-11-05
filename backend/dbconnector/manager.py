@@ -23,6 +23,9 @@ class EntityManager():
     def create_session(self):
         return scoped_session(self.session_maker)
 
+    def query(self):
+        return self.create_session().query
+
     @staticmethod
     def get_base(name='default'):
         if name not in __AVAILABLE_MANAGERS__:

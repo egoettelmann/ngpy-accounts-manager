@@ -1,7 +1,7 @@
 from flask import request, session, abort
 
-from .. import restful
-from ..depynject import injectable
+from ..modules import restful
+from ..modules.depynject import injectable
 
 
 @injectable()

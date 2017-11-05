@@ -1,45 +1,71 @@
 import datetime
 import hashlib
 
-from sqlalchemy.sql.expression import extract
+from ...modules.depynject import injectable
 
-from ..dbconnector.entities import TransactionDbo
-from ..depynject import injectable
-from ..models.domain.Transaction import Transaction
+from ..models import Transaction, KeyValue
 
 
 @injectable()
 class TransactionService():
 
-    def __init__(self, account_service, label_service, object_mapper):
-        self.account_service = account_service
-        self.label_service = label_service
+    def __init__(self, transaction_repository, object_mapper, label_service):
+        self.repository = transaction_repository
         self.mapper = object_mapper
+        self.label_service = label_service
 
-    def get_all(self, year=None, month=None, account_ids=None):
-        transactions = TransactionDbo.query
+    def get_all_transactions(self, account_ids=None, year=None, month=None):
+        date_from = self.get_date_from(year, month)
+        date_to = self.get_date_to(year, month)
+        return self.mapper.map_all(
+            self.repository.get_all(account_ids, date_from, date_to),
+            Transaction
+        )
+
+    def get_transaction(self, transaction_id):
+        return self.mapper.map(
+            self.repository.get_by_id(transaction_id),
+            Transaction
+        )
+
+    def get_total_by_labels(self, account_ids=None, year=None, month=None, sign=None):
+        date_from = self.get_date_from(year, month)
+        date_to = self.get_date_to(year, month)
+        return self.mapper.map_all(
+            self.repository.get_grouped_by_labels(account_ids, date_from, date_to, sign),
+            KeyValue
+        )
+
+    def get_total_by_period(self, account_ids=None, year=None, month=None, period=None):
+        date_from = self.get_date_from(year, month)
+        date_to = self.get_date_to(year, month)
+        return self.mapper.map_all(
+            self.repository.get_grouped_by_period(account_ids, date_from, date_to, period),
+            KeyValue
+        )
+
+    def get_total(self, account_ids=None, year=None, month=None, sign=None):
+        date_from = self.get_date_from(year, month)
+        date_to = self.get_date_to(year, month)
+        return self.repository.get_total(account_ids, date_from, date_to, sign)
+
+    @staticmethod
+    def get_date_from(year=None, month=None):
+        date_from = datetime.date(1900, 1, 1)
         if year is not None:
-            transactions = transactions.filter(
-                extract('year', TransactionDbo.date_value) == year
-            )
+            date_from = date_from.replace(year=year)
         if month is not None:
-            transactions = transactions.filter(
-                extract('month', TransactionDbo.date_value) == month
-            )
-        if account_ids is not None:
-            transactions = transactions.filter(TransactionDbo.account_id.in_(account_ids))
-        transactions = transactions.order_by(TransactionDbo.date_value)
-        return self.mapper.map_all(transactions, Transaction)
+            date_from = date_from.replace(month=month)
+        return date_from
 
-    def get_by_id(self, transaction_id):
-        transaction = TransactionDbo.query.get(transaction_id)
-        return self.mapper.map(transaction, Transaction)
-
-    def find_by_reference(self, reference):
-        transaction = TransactionDbo.query.filter(TransactionDbo.reference == reference).first()
-        if not transaction:
-            return None
-        return self.mapper.map(transaction, Transaction)
+    @staticmethod
+    def get_date_to(year=None, month=None):
+        date_to = datetime.date(datetime.date.today().year + 1, 1, 1)
+        if year is not None:
+            date_to = date_to.replace(year=year + 1)
+        if month is not None:
+            date_to = date_to.replace(month=month+1)
+        return date_to
 
     def create_from_csv(self, row):
         account = self.account_service.find_by_name(row[0])
