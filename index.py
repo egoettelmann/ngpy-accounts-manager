@@ -27,7 +27,7 @@ def serve_page():
 
 @app.before_request
 def before_request():
-    if request.path.startswith(api.prefix) and request.endpoint.startswith('SessionController'):
+    if request.path.startswith(api.prefix) and not request.endpoint.startswith('SessionController'):
         if 'logged_user_id' not in session:
             abort(403)
         else:
