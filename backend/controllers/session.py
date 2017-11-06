@@ -1,5 +1,6 @@
 from flask import request, session, abort
 
+from ..domain.exceptions import NotAuthenticatedException, WrongLoginException
 from ..modules import restful
 from ..modules.depynject import injectable
 
@@ -13,7 +14,7 @@ class SessionController():
         username = request.json.get('username')
         password = request.json.get('password')
         if username != "admin":
-            abort(403)
+            raise WrongLoginException()
         session['logged_user_id'] = username
         print(username + '/' + password)
         return {}
@@ -28,4 +29,4 @@ class SessionController():
         if 'logged_user_id' in session:
             return {'username': 'Test User', 'userId': session['logged_user_id']}
         else:
-            abort(403)
+            raise NotAuthenticatedException()

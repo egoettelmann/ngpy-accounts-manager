@@ -1,4 +1,6 @@
+from flask.helpers import make_response
 from flask.json import jsonify
+from flask_restful import marshal_with, fields
 
 __PREFIX_LIST__ = {}
 __ROUTES_LIST__ = {}
@@ -62,11 +64,19 @@ def default_di_provider(class_ref):
 
 class Api:
 
-    def __init__(self, app, prefix="", jsonifier=jsonify, di_provider=default_di_provider):
+    def __init__(self,
+                 app,
+                 prefix="",
+                 jsonifier=jsonify,
+                 di_provider=default_di_provider,
+                 exception_handler=None):
         self.app = app
         self.prefix = prefix
         self.jsonifier = jsonifier
         self.di_provider = di_provider
+        if exception_handler is None:
+            exception_handler = DefaultExceptionHandler()
+        self.exception_handler = exception_handler
 
     def register(self, class_ref, options=None):
         classname = class_ref.__qualname__
@@ -90,6 +100,13 @@ class Api:
     def as_json(self, *args, **kwargs):
         return self.jsonifier(*args, **kwargs)
 
+    def return_exception(self, e):
+        (res, code) = self.exception_handler.handle(e)
+        return make_response(
+            self.as_json(res),
+            code
+        )
+
     def route(self, rule, **options):
         """
         Defines a rest endpoint:
@@ -108,8 +125,7 @@ class Api:
 
         return decorator
 
-    @staticmethod
-    def wrap(f, pre=None, post=None, instance=None):
+    def wrap(self, f, pre=None, post=None, instance=None):
         """
         Wraps a function with a pre and/or a post function.
         If a 'pre' function is given, it is called with the params of 'f',
@@ -119,19 +135,65 @@ class Api:
         :param f: the function to wrap
         :param pre: the pre function to execute
         :param post: the post function to execute
+        :param instance: the instance of the controller
         :return: the wrapped function
         """
         def wrapper(*args, **kwargs):
             bound_handler = f
             if instance is not None:
                 bound_handler = f.__get__(instance)
-            if pre is not None:
-                retval = bound_handler(pre(*args, **kwargs))
-            else:
-                retval = bound_handler(*args, **kwargs)
-            if post is not None:
-                return post(retval)
-            else:
-                return retval
+            try:
+                if pre is not None:
+                    retval = bound_handler(pre(*args, **kwargs))
+                else:
+                    retval = bound_handler(*args, **kwargs)
+                if post is not None:
+                    return post(retval)
+                else:
+                    return retval
+            except Exception as e:
+                return self.return_exception(e)
 
         return wrapper
+
+
+class ErrorMessage():
+    resource_fields = {
+        'code': fields.String,
+        'message': fields.String
+    }
+
+    def __init__(self, code, message):
+        self.code = code
+        self.message = message
+
+
+class DefaultExceptionHandler():
+
+    def __init__(self):
+        self.exceptions = []
+        self.add(Exception, 'T500')
+
+    def add(self, exception_ref, code, message='internal_error', http_status=500):
+        self.exceptions.append({
+            'reference': exception_ref,
+            'error': ErrorMessage(code, message),
+            'status': http_status
+        })
+
+    def handle(self, e, idx=None):
+        if idx is None:
+            idx = len(self.exceptions) - 1
+        if idx >= len(self.exceptions) or idx < 0:
+            raise e
+        if isinstance(e, self.exceptions[idx]['reference']):
+            return (
+                self.build(self.exceptions[idx]['error']),
+                self.exceptions[idx]['status']
+            )
+        else:
+            return self.handle(e, idx-1)
+
+    @marshal_with(ErrorMessage.resource_fields)
+    def build(self, em):
+        return em
