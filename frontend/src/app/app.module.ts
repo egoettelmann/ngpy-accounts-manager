@@ -21,8 +21,9 @@ import {StatisticsModule} from './modules/statistics/statistics.module';
 import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {NotificationService} from './modules/notification/notification.service';
+import {NotificationService} from './components/notification/notification.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NotificationModalComponent} from './components/notification/notification-modal.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -33,6 +34,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoginViewComponent,
     AppComponent,
     NavComponent,
+    NotificationModalComponent,
     DashboardViewComponent,
     TransactionsViewComponent,
     TreasuryViewComponent,

@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
-import {NotificationService} from './modules/notification/notification.service';
-import {Notification, NotificationType} from './modules/notification/notification';
+import {NotificationService} from './components/notification/notification.service';
+import {Notification, NotificationType} from './components/notification/notification';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

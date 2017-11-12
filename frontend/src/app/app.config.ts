@@ -6,6 +6,7 @@ import {SessionService} from './session.service';
 import {DashboardViewComponent} from './views/dashboard/dashboard-view.component';
 import {TransactionsViewComponent} from './views/transactions/transactions-view.component';
 import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
+import {NotificationModalComponent} from './components/notification/notification-modal.component';
 
 export class AppConfig {
 
@@ -14,7 +15,8 @@ export class AppConfig {
       name: 'login',
       url: '/login',
       views: {
-        '@': LoginViewComponent
+        '@': LoginViewComponent,
+        'notification-modal@login': NotificationModalComponent
       }
     },
     {
