@@ -21,6 +21,8 @@ import {StatisticsModule} from './modules/statistics/statistics.module';
 import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {NotificationService} from './modules/notification/notification.service';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -37,6 +39,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     GraphComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     TransactionsModule,
     AccountsModule,
     StatisticsModule,
@@ -63,6 +66,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     DecimalPipe,
     SessionService,
+    NotificationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,

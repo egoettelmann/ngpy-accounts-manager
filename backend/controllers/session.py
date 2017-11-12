@@ -1,4 +1,4 @@
-from flask import request, session, abort
+from flask import request, session
 
 from ..domain.exceptions import NotAuthenticatedException, WrongLoginException
 from ..modules import restful
@@ -14,9 +14,9 @@ class SessionController():
         username = request.json.get('username')
         password = request.json.get('password')
         if username != "admin":
-            raise WrongLoginException()
+            raise WrongLoginException("Wrong login '" + str(username) + "' ")
         session['logged_user_id'] = username
-        print(username + '/' + password)
+        print(username + '/' + password + ': ' + str(session))
         return {}
 
     @restful.route('/logout', methods=['DELETE'])
@@ -29,4 +29,4 @@ class SessionController():
         if 'logged_user_id' in session:
             return {'username': 'Test User', 'userId': session['logged_user_id']}
         else:
-            raise NotAuthenticatedException()
+            raise NotAuthenticatedException("No user found in session")

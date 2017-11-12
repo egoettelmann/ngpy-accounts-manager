@@ -1,3 +1,8 @@
+import collections
+import copy
+from datetime import datetime
+
+import time
 from flask.helpers import make_response
 from flask.json import jsonify
 from flask_restful import marshal_with, fields
@@ -79,11 +84,19 @@ class Api:
         self.exception_handler = exception_handler
 
     def register(self, class_ref, options=None):
+        """
+        Registers a class as a restful event handler.
+
+        :param class_ref: the class reference to register
+        :param options: the options object
+                        - prefix, the prefix for the entire controller
+        :return:
+        """
         classname = class_ref.__qualname__
         if classname in __ROUTES_LIST__:
             full_prefix = ''
-            if options is not None and 'endpoint' in options:
-                full_prefix = full_prefix + options.endpoint
+            if options is not None and 'prefix' in options:
+                full_prefix = full_prefix + options.prefix
             if classname not in __PREFIX_LIST__:
                 raise Exception('Route annotation defined on class without prefix')
             full_prefix = full_prefix + __PREFIX_LIST__[classname]['rule']
@@ -94,13 +107,41 @@ class Api:
                 self.add_route(full_rule, endpoint, r['function'], r['options'], instance=instance)
 
     def add_route(self, rule, endpoint, f, options, instance=None):
-        self.app.add_url_rule(self.prefix + rule, endpoint, self.wrap(f, post=self.as_json, instance=instance), **options)
+        """
+        Adds a route to the application.
+        Wraps the passed method with all RESTFUL utilities.
+
+        :param rule: the url rule
+        :param endpoint: the endpoint
+        :param f: the function executed for the request
+        :param options: any options you can pass to flasks 'add_url_rule' (or @app.route decorator)
+        :param instance: if a class method is passed, the instance of the class
+        :return:
+        """
+        r_function = self.wrap(f, post=self.as_json, instance=instance)
+        self.app.add_url_rule(self.prefix + rule, endpoint, r_function, **options)
         print('Added RESTFUL route [' + self.prefix + rule + '] as endpoint [' + endpoint + ']')
 
     def as_json(self, *args, **kwargs):
-        return self.jsonifier(*args, **kwargs)
+        """
+        Returns the result as JSON.
+        Uses the jsonifier of the instance.
+
+        :param args: *args
+        :param kwargs:  **kwargs
+        :return: the JSON
+        """
+        resp = self.jsonifier(*args, **kwargs)
+        return resp
 
     def return_exception(self, e):
+        """
+        Returns an exception as an HTTP response.
+        Uses the exception_handler for transforming the exception.
+
+        :param e: the exception
+        :return: the exception as HTTP response
+        """
         (res, code) = self.exception_handler.handle(e)
         return make_response(
             self.as_json(res),
@@ -144,20 +185,24 @@ class Api:
                 bound_handler = f.__get__(instance)
             try:
                 if pre is not None:
-                    retval = bound_handler(pre(*args, **kwargs))
+                    r_value = bound_handler(pre(*args, **kwargs))
                 else:
-                    retval = bound_handler(*args, **kwargs)
+                    r_value = bound_handler(*args, **kwargs)
                 if post is not None:
-                    return post(retval)
+                    if isinstance(r_value, collections.Sequence):
+                        return post(*r_value)
+                    if isinstance(r_value, dict):
+                        return post(**r_value)
+                    return post(r_value)
                 else:
-                    return retval
+                    return r_value
             except Exception as e:
                 return self.return_exception(e)
 
         return wrapper
 
 
-class ErrorMessage():
+class ErrorMessage:
     resource_fields = {
         'code': fields.String,
         'message': fields.String
@@ -168,7 +213,7 @@ class ErrorMessage():
         self.message = message
 
 
-class DefaultExceptionHandler():
+class DefaultExceptionHandler:
 
     def __init__(self):
         self.exceptions = []

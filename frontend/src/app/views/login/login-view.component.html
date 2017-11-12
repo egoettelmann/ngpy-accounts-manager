@@ -26,3 +26,10 @@
     </div>
   </form>
 </div>
+
+<clr-modal *ngIf="errorNotification" [(clrModalOpen)]="showErrorModal" [clrModalClosable]="true" [clrModalStaticBackdrop]="true">
+  <h3 class="modal-title">{{ errorNotification.code }}</h3>
+  <div class="modal-body text-danger">
+    <p>{{ errorNotification.content }}</p>
+  </div>
+</clr-modal>
