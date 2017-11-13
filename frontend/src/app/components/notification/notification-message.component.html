@@ -1,0 +1,3 @@
+<div class="error active" *ngIf="errorNotification" [hidden]="!showNotification">
+  {{ 'i18n.error.' + errorNotification.code | translate }}
+</div>

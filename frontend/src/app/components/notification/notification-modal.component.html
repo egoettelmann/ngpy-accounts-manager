@@ -1,4 +1,4 @@
-<clr-modal *ngIf="errorNotification" [(clrModalOpen)]="showErrorModal" [clrModalClosable]="true" [clrModalStaticBackdrop]="true">
+<clr-modal *ngIf="errorNotification" [(clrModalOpen)]="showNotification" [clrModalClosable]="true" [clrModalStaticBackdrop]="true">
   <h3 class="modal-title">{{ errorNotification.code }}</h3>
   <div class="modal-body text-danger">
     <p>{{ errorNotification.content }}</p>

@@ -29,7 +29,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           notif.code = err.error.code;
           notif.content = err.error.message;
         }
-        this.notificationService.notify(notif);
+        this.notificationService.broadcast(notif);
       }
     });
   }

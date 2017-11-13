@@ -18,13 +18,10 @@
              type="password"
              id="login_password"
              placeholder="Password">
-      <div class="error active" [hidden]="!formInError">
-        Invalid user name or password
-      </div>
+      <app-notification-message [dismiss]="2000"></app-notification-message>
       <div class="spinner spinner-sm" [hidden]="!formIsLoading">Loading...</div>
       <button type="submit" class="btn btn-primary" [hidden]="formIsLoading">LOGIN</button>
     </div>
   </form>
 </div>
 
-<ui-view name="notification-modal"></ui-view>

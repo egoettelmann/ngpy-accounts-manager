@@ -24,6 +24,8 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NotificationService} from './components/notification/notification.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NotificationModalComponent} from './components/notification/notification-modal.component';
+import {NotificationMessageComponent} from './components/notification/notification-message.component';
+import {AbstractNotificationComponent} from './components/notification/abstract-notification.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -34,6 +36,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoginViewComponent,
     AppComponent,
     NavComponent,
+    NotificationMessageComponent,
     NotificationModalComponent,
     DashboardViewComponent,
     TransactionsViewComponent,
