@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/toPromise';
-import {Notification, NotificationType} from './notification';
+import {Notification} from './notification';
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
 import 'rxjs/add/operator/filter';
@@ -17,7 +17,7 @@ export class NotificationService {
     this.handler.next(notification);
   }
 
-  subscribe(callback: NotificationCallback, type?: NotificationType): Subscription {
+  subscribe(callback: NotificationCallback, type?: string): Subscription {
     return this.handler
       .filter(n => type === undefined || n.type === type)
       .subscribe(callback);

@@ -1,3 +1,10 @@
-<div class="error active" *ngIf="errorNotification" [hidden]="!showNotification">
-  {{ 'i18n.error.' + errorNotification.code | translate }}
-</div>
+<clr-alert *ngIf="errorNotification"
+           [hidden]="!showNotification"
+           [clrAlertType]="cssClasses.alert[errorNotification.type]"
+           [clrAlertClosable]="false">
+  <div class="alert-item">
+    <span class="alert-text">
+      {{ translationPrefix + errorNotification.code | translate }}
+    </span>
+  </div>
+</clr-alert>

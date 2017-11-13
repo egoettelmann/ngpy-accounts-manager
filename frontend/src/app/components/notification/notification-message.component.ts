@@ -8,6 +8,15 @@ import {NotificationService} from './notification.service';
 })
 export class NotificationMessageComponent extends AbstractNotificationComponent {
 
+  public cssClasses = {
+    alert: {
+      ERROR: 'alert-danger',
+      WARNING: 'alert-warning',
+      INFO: 'alert-primary',
+      SUCCESS: 'alert-success'
+    }
+  };
+
   constructor(protected notificationService: NotificationService) {
     super(notificationService);
   }

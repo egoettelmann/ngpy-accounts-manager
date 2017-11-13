@@ -8,6 +8,27 @@ import {NotificationService} from './notification.service';
 })
 export class NotificationModalComponent extends AbstractNotificationComponent {
 
+  public cssClasses = {
+    textColor: {
+      ERROR: 'text-danger',
+      WARNING: 'text-warning',
+      INFO: 'text-primary',
+      SUCCESS: 'text-success'
+    },
+    bgColor: {
+      ERROR: 'bg-danger',
+      WARNING: 'bg-warning',
+      INFO: 'bg-primary',
+      SUCCESS: 'bg-success'
+    },
+    button: {
+      ERROR: 'btn-danger',
+      WARNING: 'btn-warning',
+      INFO: 'btn-primary',
+      SUCCESS: 'btn-success'
+    },
+  };
+
   constructor(protected notificationService: NotificationService) {
     super(notificationService);
   }
