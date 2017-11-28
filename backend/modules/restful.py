@@ -190,10 +190,6 @@ class Api:
                 else:
                     r_value = bound_handler(*args, **kwargs)
                 if post is not None:
-                    if isinstance(r_value, collections.Sequence):
-                        return post(*r_value)
-                    if isinstance(r_value, dict):
-                        return post(**r_value)
                     return post(r_value)
                 else:
                     return r_value
@@ -218,7 +214,7 @@ class DefaultExceptionHandler:
 
     def __init__(self):
         self.exceptions = []
-        #self.add(Exception, 'T500')
+        self.add(Exception, 'T500')
 
     def add(self, exception_ref, code, message='internal_error', http_status=500):
         self.exceptions.append({
