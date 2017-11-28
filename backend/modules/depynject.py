@@ -19,16 +19,17 @@ def injectable(name=None, scope='singleton', **options):
         r_name = c.__qualname__
         if name is not None:
             r_name = Depynject.to_camel_case(name)
-        for n, method in c.__dict__.items():
-            if hasattr(method, '__inject_decorated__'):
-                injecting_methods.append(method.__inject_decorated__)
-        __INJECTABLE_LIST__[r_name] = {
-            'reference': c,
-            'arguments': args,
-            'scope': scope,
-            'options': options,
-            'injecting_methods': injecting_methods
-        }
+        if r_name not in __INJECTABLE_LIST__:
+            for n, method in c.__dict__.items():
+                if hasattr(method, '__inject_decorated__'):
+                    injecting_methods.append(method.__inject_decorated__)
+            __INJECTABLE_LIST__[r_name] = {
+                'reference': c,
+                'arguments': args,
+                'scope': scope,
+                'options': options,
+                'injecting_methods': injecting_methods
+            }
         return c
 
     return decorator
@@ -130,7 +131,7 @@ class Depynject:
                 self.singleton_store[classname] = self.create_new_instance(class_ref, i_args)
             return self.singleton_store[classname]
         if i_scope in self.providers:
-            return self.providers[classname](class_ref, i_args)
+            return self.providers[i_scope](class_ref, i_args, self)
         raise InjectionError('Cannot resolve injectable class with name ' + classname)
 
     def __provide_by_name__(self, class_name):

@@ -143,6 +143,7 @@ class Api:
         :return: the exception as HTTP response
         """
         (res, code) = self.exception_handler.handle(e)
+        self.app.logger.error(e)
         return make_response(
             self.as_json(res),
             code
@@ -217,7 +218,7 @@ class DefaultExceptionHandler:
 
     def __init__(self):
         self.exceptions = []
-        self.add(Exception, 'T500')
+        #self.add(Exception, 'T500')
 
     def add(self, exception_ref, code, message='internal_error', http_status=500):
         self.exceptions.append({

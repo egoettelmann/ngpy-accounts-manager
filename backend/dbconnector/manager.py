@@ -4,10 +4,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.schema import Table, Column, ForeignKey
 from sqlalchemy.sql.sqltypes import Integer
 
+from ..modules.depynject import inject, injectable
+
 __AVAILABLE_MANAGERS__ = {}
 
 
-class EntityManager():
+class EntityManager:
 
     def __init__(self, db_file_path, name='default'):
         self.db_file_path = db_file_path
@@ -18,13 +20,16 @@ class EntityManager():
             autoflush=False,
             bind=self.engine
         )
-        self.base.query = self.create_session().query_property() # TODO: not okay, session should be created when needed
+        self.base.query = self.get_session().query_property()
 
-    def create_session(self):
-        return scoped_session(self.session_maker)
+    @inject()
+    def get_session(self, request_scoped_session=None):
+        if request_scoped_session is None:
+            return scoped_session(self.session_maker)  # TODO: not ok, can't a session object be used ?
+        return request_scoped_session()
 
     def query(self, *args, **kwargs):
-        return self.create_session().query(*args, **kwargs)
+        return self.get_session().query(*args, **kwargs)
 
     @staticmethod
     def get_base(name='default'):
@@ -41,3 +46,13 @@ class EntityManager():
             Column('label_id', Integer, ForeignKey('labels.id')),
             Column('transaction_id', Integer, ForeignKey('transactions.id'))
         )
+
+
+@injectable(scope='request')
+class RequestScopedSession:
+
+    def __init__(self, entity_manager):
+        self.session = entity_manager.session_maker()
+
+    def __call__(self, *args, **kwargs):
+        return self.session

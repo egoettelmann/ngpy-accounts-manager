@@ -9,18 +9,17 @@ from ..entities import LabelDbo, TransactionDbo
 class TransactionRepository():
 
     def __init__(self, entity_manager):
-        self.query = TransactionDbo.query
         self.entity_manager = entity_manager
 
     def get_all(self, account_ids=None, date_from=None, date_to=None):
-        query = self.query
+        query = self.entity_manager.query(TransactionDbo)
         query = self.filter_by_accounts(query, account_ids)
         query = self.filter_by_date_from(query, date_from)
         query = self.filter_by_date_to(query, date_to)
         return query.order_by(TransactionDbo.date_value)
 
     def get_by_id(self, transaction_id):
-        return self.query.get(transaction_id)
+        return self.entity_manager.query(TransactionDbo).get(transaction_id)
 
     def get_grouped_by_labels(self, account_ids=None, date_from=None, date_to=None, sign=None):
         query = self.entity_manager.query(
@@ -53,7 +52,7 @@ class TransactionRepository():
         return query.all()
 
     def get_total(self, account_ids=None, date_from=None, date_to=None, sign=None):
-        query = self.entity_manager.create_session().query(
+        query = self.entity_manager.query(
             func.sum(TransactionDbo.amount).label("total")
         )
         query = self.filter_by_accounts(query, account_ids)
