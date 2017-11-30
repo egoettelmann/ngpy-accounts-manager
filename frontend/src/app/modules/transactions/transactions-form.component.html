@@ -1,15 +1,22 @@
 <form [formGroup]="form"
       (ngSubmit)="saveTransaction()">
 
-  <span *ngFor="let control of getControlList()">
-        <input [formControl]="control"
-               type="text">
-        <div *ngIf="control.touched && control.errors">
-            {{ control.errors | json }}
-        </div>
-  </span>
+  <div class="form-group">
+      <div *ngFor="let controlKey of getFormControls()">
+          <label [for]="controlKey">
+              {{ 'i18n.modules.transactions.form.' + controlKey | translate }}
+          </label>
+          <input [formControl]="form.get(controlKey)"
+                 [id]="controlKey"
+                 type="text">
+          <div *ngIf="form.get(controlKey).touched && form.get(controlKey).errors">
+              {{ form.get(controlKey).errors | json }}
+          </div>
+      </div>
+  </div>
 
   <button [disabled]="!form.valid"
+          class="btn btn-primary"
           type="submit">
     {{ buttonLabel }}
   </button>

@@ -31,8 +31,8 @@ export class TransactionsFormComponent {
     );
   }
 
-  getControlList() {
-    return Object.values(this.form.controls);
+  getFormControls() {
+    return Object.keys(this.form.controls);
   }
 
   saveTransaction() {
