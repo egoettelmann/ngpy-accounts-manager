@@ -13,6 +13,7 @@ class Mapper(ObjectMapper):
         self.create_map(LabelDbo, Label)
         self.create_map(AccountDbo, Account)
         self.create_map(TransactionDbo, Transaction)
+        self.create_map(Transaction, TransactionDbo)
         self.create_map(StatusDbo, Status)
 
     def map_all(self, object_list, target_type):

@@ -1,0 +1,13 @@
+from ..models import Transaction
+
+
+class Parser:
+    filename : str
+
+    def __init__(self, filename : str) -> None : ...
+
+    def parse(self) -> list(Transaction) : ...
+
+    def get_account_name(self) -> str : ...
+
+    def create_transaction(self, row : list) -> Transaction : ...

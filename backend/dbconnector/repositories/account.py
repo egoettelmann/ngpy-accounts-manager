@@ -18,3 +18,6 @@ class AccountRepository():
 
     def get_total(self, account_id, date_from=None, date_to=None):
         return self.transaction_repository.get_total([account_id], date_from, date_to)
+
+    def find_by_name(self, name):
+        return self.entity_manager.query(AccountDbo).filter(AccountDbo.name == name).first()

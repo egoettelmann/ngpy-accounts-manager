@@ -70,7 +70,7 @@ class TransactionDbo(EntityManager.get_base()):
     label_id = Column(Integer, ForeignKey('labels.id'))
     hash = Column(String(250), unique=True)
 
-    def __init__(self, account_id=None, date_compta=None, date_operation=None, description=None, reference=None, date_value=None, amount=None, note=None, label_id=None):
+    def __init__(self, account_id=None, date_compta=None, date_operation=None, description=None, reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None):
         self.account_id = account_id
         self.date_compta = date_compta
         self.date_operation = date_operation
@@ -80,8 +80,7 @@ class TransactionDbo(EntityManager.get_base()):
         self.amount = amount
         self.note = note
         self.label_id = label_id
-        s = str(account_id) + reference + date_value.strftime("%Y-%m-%d") + "{0:.2f}".format(amount)
-        self.hash = hashlib.md5(s.encode('utf-8')).hexdigest()
+        self.hash = hash
 
     def __repr__(self):
         return '<Transaction %r>' % self.reference

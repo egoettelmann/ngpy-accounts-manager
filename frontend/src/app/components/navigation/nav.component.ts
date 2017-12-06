@@ -3,7 +3,8 @@ import {StateService} from '@uirouter/angular';
 import {SessionService} from '../../session.service';
 
 @Component({
-  templateUrl: './nav.component.html'
+  templateUrl: './nav.component.html',
+  styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
 

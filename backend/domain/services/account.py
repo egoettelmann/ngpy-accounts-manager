@@ -1,5 +1,7 @@
 import datetime
+import hashlib
 
+from ...dbconnector.entities import TransactionDbo
 from ...modules.depynject import injectable
 from ..models import Account, KeyValue
 
@@ -7,11 +9,12 @@ from ..models import Account, KeyValue
 @injectable()
 class AccountService():
 
-    def __init__(self, account_repository, object_mapper, transaction_service, status_service):
+    def __init__(self, account_repository, object_mapper, transaction_service, status_service, resolver):
         self.repository = account_repository
         self.mapper = object_mapper
         self.transaction_service = transaction_service
         self.status_service = status_service
+        self.resolver = resolver
 
     def get_all_accounts(self):
         accounts = self.mapper.map_all(
@@ -25,6 +28,12 @@ class AccountService():
     def get_account(self, account_id):
         return self.mapper.map(
             self.repository.get_by_id(account_id),
+            Account
+        )
+
+    def find_by_name(self, name):
+        return self.mapper.map(
+            self.repository.find_by_name(name),
             Account
         )
 
@@ -58,3 +67,17 @@ class AccountService():
             start_amount = start_amount + e.value
             values.append(KeyValue(e.label, start_amount))
         return values
+
+    def import_file(self, filename):
+        parser = self.resolver.resolve(filename)
+        account_name = parser.get_account_name()
+        account = self.find_by_name(account_name)
+        transactions = self.mapper.map_all(
+            parser.parse(),
+            TransactionDbo
+        )
+        for t in transactions:
+            t.account_id = account.id
+            s = str(t.account_id) + t.reference + t.date_value.strftime("%Y-%m-%d") + "{0:.2f}".format(t.amount)
+            t.hash = hashlib.md5(s.encode('utf-8')).hexdigest()
+        self.transaction_service.create_all(transactions)

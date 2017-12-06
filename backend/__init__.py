@@ -20,3 +20,6 @@ from .domain.services.account import AccountService
 from .domain.services.label import LabelService
 from .domain.services.statistics import StatisticsService
 from .domain.services.transaction import TransactionService
+
+# Additional imports
+from .domain.importers.resolve import Resolver

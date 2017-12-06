@@ -1,6 +1,5 @@
 import datetime
 
-from .account import AccountService
 from .label import LabelService
 from ..models import Transaction, KeyValue
 from ...dbconnector.repositories.transaction import TransactionRepository
@@ -41,6 +40,9 @@ class TransactionService():
                   year : int,
                   month : int,
                   sign : bool) -> float : ...
+
+    def create_all(self,
+                   transactions : list(Transaction)) -> bool : ...
 
     @staticmethod
     def get_date_from(year : int, month : int) -> datetime.date : ...

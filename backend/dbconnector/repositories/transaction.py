@@ -61,6 +61,16 @@ class TransactionRepository():
         query = self.filter_by_sign(query, sign)
         return query.scalar()
 
+    def create_all(self, transactions):
+        for transaction in transactions:
+            self.entity_manager.get_session().add(transaction)
+        try:
+            self.entity_manager.get_session().commit()
+        except:
+            self.entity_manager.get_session().rollback()
+            raise
+        return True
+
     @staticmethod
     def filter_by_accounts(query, account_ids=None):
         if account_ids is not None:
