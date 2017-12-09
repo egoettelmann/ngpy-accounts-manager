@@ -24,10 +24,10 @@ export class TreasuryViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentYear = this.$state.params.year;
-    this.statisticsService.getEvolution(this.$state.params.year).then(data => {
+    this.statisticsService.getEvolution(this.$state.params.year).subscribe(data => {
       this.graphOptions = this.buildChartOptions(data);
     });
-    this.statisticsService.getSummary(this.$state.params.year).then(data => {
+    this.statisticsService.getSummary(this.$state.params.year).subscribe(data => {
       this.summary = data;
     });
   }

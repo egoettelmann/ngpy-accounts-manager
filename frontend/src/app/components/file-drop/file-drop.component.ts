@@ -18,20 +18,10 @@ export class FileDropComponent {
     this.files = event.files;
     for (const file of event.files) {
       file.fileEntry.file(f => {
-        this.uploadFile(f, f.name);
+        this.uploadService.uploadFile(f, f.name).subscribe(() => {
+          console.log('uploaded', f.name);
+        });
       });
     }
-  }
-
-  private uploadFile(uploadFile: any, fileName: string) {
-    return this.uploadService.uploadFile(uploadFile, fileName);
-  }
-
-  public fileOver(event) {
-    console.log(event);
-  }
-
-  public fileLeave(event) {
-    console.log(event);
   }
 }

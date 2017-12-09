@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import 'rxjs/add/operator/toPromise';
 import {Notification} from './notification';
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';

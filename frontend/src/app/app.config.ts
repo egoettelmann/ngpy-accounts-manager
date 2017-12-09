@@ -6,6 +6,7 @@ import {SessionService} from './session.service';
 import {DashboardViewComponent} from './views/dashboard/dashboard-view.component';
 import {TransactionsViewComponent} from './views/transactions/transactions-view.component';
 import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
+import 'rxjs/add/operator/toPromise';
 
 export class AppConfig {
 
@@ -64,8 +65,8 @@ export class AppConfig {
 
 }
 
-export function loadConnectedUser(sessionService: SessionService): any {
-  return sessionService.getConnectedUser();
+export function loadConnectedUser(sessionService: SessionService): Promise<any> {
+  return sessionService.getConnectedUser().toPromise();
 }
 
 export function getCurrentYear(): string {

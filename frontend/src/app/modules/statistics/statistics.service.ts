@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class StatisticsService {
 
   constructor(private http: HttpClient) {}
 
-  getGroupedByLabel(year: string, month: string): Promise<any> {
+  getGroupedByLabel(year: string, month: string): Observable<any> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -18,10 +18,10 @@ export class StatisticsService {
     if (month !== undefined) {
       params = params.append('month', month);
     }
-    return this.http.get<any>('/rest/stats/repartition', {params: params}).toPromise();
+    return this.http.get<any>('/rest/stats/repartition', {params: params});
   }
 
-  getSummary(year?: string, month?: string): Promise<any> {
+  getSummary(year?: string, month?: string): Observable<any> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -32,10 +32,10 @@ export class StatisticsService {
     if (month !== undefined) {
       params = params.append('month', month);
     }
-    return this.http.get<any>('/rest/stats/summary', {params: params}).toPromise();
+    return this.http.get<any>('/rest/stats/summary', {params: params});
   }
 
-  getEvolution(year: string): Promise<any> {
+  getEvolution(year: string): Observable<any> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -43,7 +43,7 @@ export class StatisticsService {
     if (year !== undefined) {
       params = params.append('year', year);
     }
-    return this.http.get<any>('/rest/stats/treasury', {params: params}).toPromise();
+    return this.http.get<any>('/rest/stats/treasury', {params: params});
   }
 
 }

@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Transaction} from './transaction';
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class TransactionsService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(year?: string, month?: string): Promise<Transaction[]> {
+  getAll(year?: string, month?: string): Observable<Transaction[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -20,7 +20,7 @@ export class TransactionsService {
       params = params.append('month', month);
     }
 
-    return this.http.get<Transaction[]>('/rest/transactions', {params: params}).toPromise();
+    return this.http.get<Transaction[]>('/rest/transactions', {params: params});
   }
 
 }

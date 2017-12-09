@@ -11,8 +11,7 @@ export class NavComponent {
   constructor(private $state: StateService, private sessionService: SessionService) {}
 
   clickLogout(): void {
-    console.log('logout');
-    this.sessionService.logout().then(() => {
+    this.sessionService.logout().subscribe(() => {
       this.$state.go('login');
     });
   }

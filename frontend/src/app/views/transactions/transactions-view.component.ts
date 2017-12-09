@@ -26,13 +26,13 @@ export class TransactionsViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentYear = this.$state.params.year;
-    this.transactionsService.getAll(this.$state.params.year, this.$state.params.month).then(data => {
+    this.transactionsService.getAll(this.$state.params.year, this.$state.params.month).subscribe(data => {
       this.transactions = data;
     });
-    this.statisticsService.getGroupedByLabel(this.$state.params.year, this.$state.params.month).then(data => {
+    this.statisticsService.getGroupedByLabel(this.$state.params.year, this.$state.params.month).subscribe(data => {
       this.graphOptions = this.buildChartOptions(data);
     });
-    this.statisticsService.getSummary(this.$state.params.year, this.$state.params.month).then(data => {
+    this.statisticsService.getSummary(this.$state.params.year, this.$state.params.month).subscribe(data => {
       this.summary = data;
     });
   }

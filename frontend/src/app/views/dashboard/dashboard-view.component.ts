@@ -13,7 +13,7 @@ export class DashboardViewComponent implements OnInit {
   constructor(private accountsService: AccountsService) {}
 
   ngOnInit(): void {
-    this.accountsService.getAccounts().then(data => {
+    this.accountsService.getAccounts().subscribe(data => {
       this.accounts = data;
       this.total = 0;
       for (const a of this.accounts) {

@@ -16,7 +16,7 @@ export class LoginViewComponent {
   tryLogin(): void {
     this.formInError = false;
     this.formIsLoading = true;
-    this.sessionService.login(this.loginForm).then(data => {
+    this.sessionService.login(this.loginForm).subscribe(data => {
       this.$state.go('root.dashboard');
     }, err => {
       this.formInError = true;
