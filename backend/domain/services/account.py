@@ -1,9 +1,10 @@
 import datetime
 import hashlib
 
+from ..exceptions import FileImportException
+from ..models import Account, KeyValue
 from ...dbconnector.entities import TransactionDbo
 from ...modules.depynject import injectable
-from ..models import Account, KeyValue
 
 
 @injectable()
@@ -80,4 +81,7 @@ class AccountService():
             t.account_id = account.id
             s = str(t.account_id) + t.reference + t.date_value.strftime("%Y-%m-%d") + "{0:.2f}".format(t.amount)
             t.hash = hashlib.md5(s.encode('utf-8')).hexdigest()
-        self.transaction_service.create_all(transactions)
+        try:
+            self.transaction_service.create_all(transactions)
+        except:
+            raise FileImportException("Impossible to import file")

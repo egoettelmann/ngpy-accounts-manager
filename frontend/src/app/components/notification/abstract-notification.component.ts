@@ -20,10 +20,8 @@ export abstract class AbstractNotificationComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.type || this.subscription === undefined) {
       if (this.subscription !== undefined) {
-        console.log('Resetting subscription');
         this.subscription.unsubscribe();
       }
-      console.log('subscribing to ', this.type);
       this.startSubscription();
     }
   }

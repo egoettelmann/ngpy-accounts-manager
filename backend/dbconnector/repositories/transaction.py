@@ -1,8 +1,7 @@
 from sqlalchemy.sql.expression import extract, func
 
-from ...modules.depynject import injectable
-
 from ..entities import LabelDbo, TransactionDbo
+from ...modules.depynject import injectable
 
 
 @injectable()
