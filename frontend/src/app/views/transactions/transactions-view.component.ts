@@ -3,6 +3,7 @@ import {StateService} from '@uirouter/angular';
 import {TransactionsService} from '../../modules/transactions/transactions.service';
 import {StatisticsService} from '../../modules/statistics/statistics.service';
 import {DecimalPipe} from '@angular/common';
+import { Transaction } from '../../modules/transactions/transaction';
 
 @Component({
   templateUrl: './transactions-view.component.html'
@@ -18,6 +19,7 @@ export class TransactionsViewComponent implements OnInit {
   public transactions: any[];
   public graphOptions: any;
   public summary: any;
+  public selectedTransaction: Transaction;
 
   constructor(private $state: StateService,
               private transactionsService: TransactionsService,
@@ -61,6 +63,14 @@ export class TransactionsViewComponent implements OnInit {
       options.series[0].data.push(d.value);
     }
     return options;
+  }
+
+  editTransaction(transaction: Transaction) {
+    this.selectedTransaction = transaction;
+  }
+
+  saveTransaction(transaction: Transaction) {
+    console.log('SAVING', transaction);
   }
 
 }

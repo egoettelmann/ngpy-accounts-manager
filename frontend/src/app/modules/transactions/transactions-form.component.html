@@ -1,5 +1,5 @@
 <form [formGroup]="form"
-      (ngSubmit)="saveTransaction()">
+      (ngSubmit)="submitForm()">
 
   <div class="form-group">
       <div *ngFor="let controlKey of getFormControls()">
