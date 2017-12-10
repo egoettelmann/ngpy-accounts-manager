@@ -21,6 +21,7 @@ class EntityManager:
             bind=self.engine
         )
         self.base.query = self.get_session().query_property()
+        self.association_tables = {}
 
     @inject()
     def get_session(self, request_scoped_session=None):
@@ -37,10 +38,9 @@ class EntityManager:
             __AVAILABLE_MANAGERS__[name] = declarative_base()
         return __AVAILABLE_MANAGERS__[name]
 
-    @staticmethod
-    def init():
+    def init(self):
         # Required to import all entities to initialize them
-        Table(
+        self.association_tables['labels_transactions'] = Table(
             'labels_transactions',
             EntityManager.get_base().metadata,
             Column('label_id', Integer, ForeignKey('labels.id')),

@@ -16,7 +16,6 @@ class TransactionService():
     def get_all_transactions(self, account_ids=None, year=None, month=None):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
-        print('get_all_transactions', date_from, date_to)
         return self.mapper.map_all(
             self.repository.get_all(account_ids, date_from, date_to),
             Transaction

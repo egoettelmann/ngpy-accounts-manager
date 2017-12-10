@@ -83,4 +83,4 @@ class TransactionDbo(EntityManager.get_base()):
         self.hash = hash
 
     def __repr__(self):
-        return '<Transaction %r>' % self.reference
+        return '<TransactionDbo %r>' % (self.reference)

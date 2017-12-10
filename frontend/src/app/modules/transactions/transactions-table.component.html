@@ -1,6 +1,7 @@
 <table class="table" *ngIf="transactions">
   <thead>
     <tr>
+      <th>Label</th>
       <th class="left">Reference</th>
       <th>Description</th>
       <th>Value date</th>
@@ -9,10 +10,11 @@
   </thead>
   <tbody>
     <tr *ngFor="let transaction of transactions">
+      <td class="text-left">{{ transaction.label?.name }}</td>
       <td class="text-left">{{ transaction.reference }}</td>
       <td class="text-left">{{ transaction.description }}</td>
       <td class="text-center">{{ transaction.dateValue }}</td>
-      <td class="text-right">{{ transaction.amount | number:'1.2-2' }} €</td>
+      <td class="text-right">{{ transaction.amount | number:'1.2-2' }}&nbsp;€</td>
     </tr>
   </tbody>
 </table>

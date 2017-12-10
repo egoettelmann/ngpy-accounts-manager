@@ -81,9 +81,10 @@ class Transaction():
         'description': fields.String,
         'dateValue': fields.DateTime(attribute='date_value', dt_format="iso8601"),
         'amount': fields.Float,
+        'label': fields.Nested(Label.resource_fields)
     }
 
-    def __init__(self, id=None, account_id=None, date_compta=None, date_operation=None, description=None, reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None):
+    def __init__(self, id=None, account_id=None, date_compta=None, date_operation=None, description=None, reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None, label=None):
         self.id = id
         self.account_id = account_id
         self.date_compta = date_compta
@@ -95,3 +96,7 @@ class Transaction():
         self.note = note
         self.label_id = label_id
         self.hash = hash
+        self.label = label
+
+    def __repr__(self):
+        return '<Transaction %r, %r>' % (self.reference, self.label)
