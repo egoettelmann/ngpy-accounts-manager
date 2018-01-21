@@ -10,7 +10,7 @@ export class UploadService {
   uploadFile(fileContent: any, fileName: string): Observable<any> {
     const formData = new FormData();
     formData.append('file', fileContent, fileName);
-    return this.http.post<any>('/rest/transactions', formData);
+    return this.http.post<any>('/rest/transactions/upload-file', formData);
   }
 
 }

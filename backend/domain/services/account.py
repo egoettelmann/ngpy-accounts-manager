@@ -83,5 +83,5 @@ class AccountService():
             t.hash = hashlib.md5(s.encode('utf-8')).hexdigest()
         try:
             self.transaction_service.create_all(transactions)
-        except:
-            raise FileImportException("Impossible to import file")
+        except Exception as e:
+            raise FileImportException("Impossible to import file", cause=e)

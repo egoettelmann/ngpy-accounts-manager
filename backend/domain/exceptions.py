@@ -3,15 +3,19 @@ from ..modules.restful import DefaultExceptionHandler
 
 class BaseAppException(Exception):
 
-    def __init__(self, message, params=None):
+    def __init__(self, message, params=None, cause=None):
         super(BaseAppException, self).__init__(message)
         self.message = message
         if not params:
             params = {}
         self.params = params
+        self.cause = cause
 
     def __str__(self):
-        return self.message
+        msg = self.message
+        if self.cause:
+            msg += ' caused by: ' + self.cause.message
+        return msg
 
 
 class NotAuthenticatedException(BaseAppException):

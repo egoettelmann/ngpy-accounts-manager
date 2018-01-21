@@ -27,6 +27,9 @@ class TransactionService():
             Transaction
         )
 
+    def delete_transaction(self, transaction_id):
+        self.repository.delete_by_id(transaction_id)
+
     def get_total_by_labels(self, account_ids=None, year=None, month=None, sign=None):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
@@ -64,8 +67,12 @@ class TransactionService():
         if year is not None:
             date_to = date_to.replace(year=year+1)
         if month is not None:
-            date_to = date_to.replace(year=year)
-            date_to = date_to.replace(month=month+1)
+            if month > 11:
+                date_to = date_to.replace(year=year+1)
+                date_to = date_to.replace(month=1)
+            else:
+                date_to = date_to.replace(year=year)
+                date_to = date_to.replace(month=month+1)
         return date_to
 
     @staticmethod

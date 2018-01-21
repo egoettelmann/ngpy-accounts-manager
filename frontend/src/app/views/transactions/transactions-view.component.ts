@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {StateService} from '@uirouter/angular';
-import {TransactionsService} from '../../modules/transactions/transactions.service';
-import {StatisticsService} from '../../modules/statistics/statistics.service';
-import {DecimalPipe} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { StateService } from '@uirouter/angular';
+import { TransactionsService } from '../../modules/transactions/transactions.service';
+import { StatisticsService } from '../../modules/statistics/statistics.service';
+import { DecimalPipe } from '@angular/common';
 import { Transaction } from '../../modules/transactions/transaction';
+import * as JsonPatch from 'fast-json-patch';
 
 @Component({
   templateUrl: './transactions-view.component.html'
@@ -70,7 +71,19 @@ export class TransactionsViewComponent implements OnInit {
   }
 
   saveTransaction(transaction: Transaction) {
-    console.log('SAVING', transaction);
+    const diff = JsonPatch.compare(this.selectedTransaction, transaction);
+    console.log('DIFF', diff);
+    if (diff.length > 0) {
+      this.transactionsService.updateOne(this.selectedTransaction.id, diff).subscribe(data => {
+        console.log(data);
+      });
+    }
+  }
+
+  deleteTransaction(transaction: Transaction) {
+    this.transactionsService.deleteOne(transaction).subscribe(data => {
+      console.log(data);
+    });
   }
 
 }

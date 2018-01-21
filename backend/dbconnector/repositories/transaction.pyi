@@ -25,6 +25,8 @@ class TransactionRepository():
 
     def get_by_id(self, transaction_id : int) -> TransactionDbo : ...
 
+    def delete_by_id(self, transaction_id : int) -> None : ...
+
     def get_grouped_by_labels(self,
                               account_ids : list(int),
                               date_from : datetime.date,

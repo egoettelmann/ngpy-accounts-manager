@@ -9,9 +9,11 @@ import { Transaction } from './transaction';
 export class TransactionsFormComponent implements OnChanges {
 
   @Input() buttonLabel = 'i18n.transactions.form.button.add';
+  @Input() buttonDeleteLabel = 'i18n.transactions.form.button.delete';
   @Input() model: Transaction;
 
   @Output() onFormSubmit = new EventEmitter<Transaction>();
+  @Output() onFormDelete = new EventEmitter<Transaction>();
 
   form: FormGroup;
 
@@ -56,7 +58,13 @@ export class TransactionsFormComponent implements OnChanges {
   }
 
   submitForm() {
-    this.onFormSubmit.emit(this.form.value);
+    const t = Object.assign({}, this.model, this.form.value);
+    this.onFormSubmit.emit(t);
+  }
+
+  deleteTransaction() {
+    const t = Object.assign({}, this.model);
+    this.onFormDelete.emit(t);
   }
 
 }

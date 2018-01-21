@@ -1,7 +1,27 @@
+from collections import MutableMapping
+
 from flask_restful import fields
 
 
-class Account():
+class Patchable(MutableMapping):
+
+    def __getitem__(self, item):
+        return getattr(self, item)
+
+    def __setitem__(self, item, value):
+        setattr(self, item, value)
+
+    def __iter__(self):
+        pass
+
+    def __delitem__(self, key):
+        pass
+
+    def __len__(self):
+        pass
+
+
+class Account(Patchable):
     resource_fields = {
         'id': fields.Integer,
         'name': fields.String,
@@ -18,7 +38,7 @@ class Account():
         self.color = color
 
 
-class KeyValue():
+class KeyValue(Patchable):
     resource_fields = {
         'label': fields.String,
         'value': fields.Float
@@ -29,7 +49,7 @@ class KeyValue():
         self.value = value
 
 
-class Label():
+class Label(Patchable):
     resource_fields = {
         'id': fields.Integer,
         'name': fields.String,
@@ -44,7 +64,7 @@ class Label():
         self.icon = icon
 
 
-class Summary():
+class Summary(Patchable):
     resource_fields = {
         'amountStart': fields.Float(attribute='amount_start'),
         'amountEnd': fields.Float(attribute='amount_end'),
@@ -61,7 +81,7 @@ class Summary():
         self.period_type = period_type
 
 
-class Status():
+class Status(Patchable):
     resource_fields = {
         'accountId': fields.Integer(attribute='account_id'),
         'date': fields.DateTime(dt_format="iso8601"),
@@ -74,7 +94,7 @@ class Status():
         self.value = value
 
 
-class Transaction():
+class Transaction(Patchable):
     resource_fields = {
         'id': fields.Integer,
         'reference': fields.String,

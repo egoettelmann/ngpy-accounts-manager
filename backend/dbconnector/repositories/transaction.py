@@ -20,6 +20,9 @@ class TransactionRepository():
     def get_by_id(self, transaction_id):
         return self.entity_manager.query(TransactionDbo).get(transaction_id)
 
+    def delete_by_id(self, transaction_id):
+        return self.entity_manager.query(TransactionDbo).delete(transaction_id)
+
     def get_grouped_by_labels(self, account_ids=None, date_from=None, date_to=None, sign=None):
         query = self.entity_manager.query(
             LabelDbo.name.label('label'),

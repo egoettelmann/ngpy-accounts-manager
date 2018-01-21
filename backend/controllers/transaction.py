@@ -1,5 +1,6 @@
 import os
 
+import jsonpatch
 from flask import request
 from flask_restful import marshal_with
 from werkzeug.utils import secure_filename
@@ -10,7 +11,7 @@ from ..modules.depynject import injectable
 
 
 @injectable()
-@restful.prefix('')
+@restful.prefix('/transactions')
 class TransactionController():
 
     def __init__(self, transaction_service, account_service):
@@ -21,7 +22,7 @@ class TransactionController():
     def allowed_file(filename):
         return '.' in filename and filename.rsplit('.', 1)[1] in ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv']
 
-    @restful.route('/transactions')
+    @restful.route('')
     @marshal_with(Transaction.resource_fields)
     def get_all(self):
         year = int(request.args.get('year'))
@@ -29,7 +30,28 @@ class TransactionController():
         account_ids = request.args.get('account_ids')
         return self.transaction_service.get_all_transactions(account_ids, year, month)
 
-    @restful.route('/transactions', methods=['POST'])
+    @restful.route('/<int:transaction_id>')
+    @marshal_with(Transaction.resource_fields)
+    def get_one(self, transaction_id):
+        return self.transaction_service.get_transaction(transaction_id)
+
+    @restful.route('/<int:transaction_id>', methods=['DELETE'])
+    def delete_one(self, transaction_id):
+        self.transaction_service.delete_transaction(transaction_id)
+
+    @restful.route('/<int:transaction_id>', methods=['POST'])
+    @marshal_with(Transaction.resource_fields)
+    def update_one(self, transaction_id):
+        patch = request.get_json(force=True)  # force flag necessary if 'Content-Type' is not 'application/json'
+        print('PATCH', patch)
+        t = self.transaction_service.get_transaction(transaction_id)
+        print('OLD', t)
+        obj = jsonpatch.apply_patch(t, patch)
+        print('NEW', obj)
+        # TODO: save object
+        return obj
+
+    @restful.route('/upload-file', methods=['POST'])
     def upload_file(self):
         file = request.files['file']
         if file and self.allowed_file(file.filename):
