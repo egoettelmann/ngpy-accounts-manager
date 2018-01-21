@@ -1,6 +1,7 @@
 <table class="table" *ngIf="transactions">
   <thead>
     <tr>
+      <th>Account</th>
       <th>Label</th>
       <th class="left">Reference</th>
       <th>Description</th>
@@ -11,6 +12,18 @@
   </thead>
   <tbody>
     <tr *ngFor="let transaction of transactions">
+      <td class="text-left">
+        <span class="badge tooltip tooltip-md tooltip-top-right"
+              [style.background]="transaction.account?.color"
+              role="tooltip"
+              aria-haspopup="true">
+          <span>&nbsp;</span>
+          <span class="tooltip-content">
+            <span>{{ transaction.account?.name }}</span><br/>
+            <em>{{ transaction.account?.description }}</em>
+          </span>
+        </span>
+      </td>
       <td class="text-left">{{ transaction.label?.name }}</td>
       <td class="text-left">{{ transaction.reference }}</td>
       <td class="text-left">{{ transaction.description }}</td>

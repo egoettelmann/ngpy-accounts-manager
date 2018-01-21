@@ -21,7 +21,12 @@ class TransactionRepository():
         return self.entity_manager.query(TransactionDbo).get(transaction_id)
 
     def delete_by_id(self, transaction_id):
-        return self.entity_manager.query(TransactionDbo).delete(transaction_id)
+        self.entity_manager.query(TransactionDbo).filter(TransactionDbo.id == transaction_id).delete()
+        try:
+            self.entity_manager.get_session().commit()
+        except:
+            self.entity_manager.get_session().rollback()
+            raise
 
     def get_grouped_by_labels(self, account_ids=None, date_from=None, date_to=None, sign=None):
         query = self.entity_manager.query(

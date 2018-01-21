@@ -25,12 +25,7 @@ export class TransactionsService {
   }
 
   deleteOne(transaction: Transaction): Observable<any> {
-    return this.http.delete('/rest/transactions/' + transaction.id, {
-      observe: 'response',
-      headers: new HttpHeaders().set('Content-Type', 'application/json'),
-      responseType: 'json',
-      withCredentials: true
-    });
+    return this.http.delete('/rest/transactions/' + transaction.id);
   }
 
   createOne(transaction: Transaction): Observable<Transaction> {

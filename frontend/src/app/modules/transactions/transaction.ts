@@ -1,4 +1,5 @@
 import { Label } from './label';
+import { Account } from '../accounts/account';
 
 export class Transaction {
 
@@ -8,6 +9,7 @@ export class Transaction {
   public dateValue: Date;
   public amount: number;
   public label: Label;
+  public account: Account;
 
   constructor(id: number, reference: string, description: string, dateValue: Date, amount: number) {
     this.id = id;
