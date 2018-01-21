@@ -21,13 +21,18 @@ class StatisticsController():
     def get_repartition(self):
         year = int(request.args.get('year'))
         month = int(request.args.get('month'))
-        return self.transaction_service.get_total_by_labels(None, year, month)
+        account_ids = request.args.get('account_ids')
+        if account_ids is not None:
+            account_ids = account_ids.split(',')
+        return self.transaction_service.get_total_by_labels(account_ids, year, month)
 
     @restful.route('/treasury')
     @marshal_with(KeyValue.resource_fields)
     def get_treasury(self):
         year = int(request.args.get('year'))
         account_ids = request.args.get('account_ids')
+        if account_ids is not None:
+            account_ids = account_ids.split(',')
         return self.account_service.get_evolution_for_year(account_ids, year)
 
     @restful.route('/summary')
@@ -37,4 +42,7 @@ class StatisticsController():
         month = request.args.get('month')
         if month is not None:
             month = int(month)
-        return self.statistics_service.get_summary(None, year, month)
+        account_ids = request.args.get('account_ids')
+        if account_ids is not None:
+            account_ids = account_ids.split(',')
+        return self.statistics_service.get_summary(account_ids, year, month)

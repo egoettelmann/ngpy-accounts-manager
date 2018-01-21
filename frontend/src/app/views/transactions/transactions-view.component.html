@@ -22,6 +22,38 @@
 
 <div class="row">
   <div class="col-md-4 col-xs-12">
+
+    <table class="table table-compact table-vertical">
+      <tr>
+        <th class="text-left align-middle">Account(s):</th>
+        <td class="text-right">
+          <clr-dropdown *ngIf="accounts">
+            <button type="button" class="btn btn-link" clrDropdownTrigger>
+              {{ selectedAccounts?.length === accounts?.length ? 'All accounts' : selectedAccounts?.length + ' account(s)' }}
+              <clr-icon shape="caret down"></clr-icon>
+            </button>
+            <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+              <button type="button"
+                      clrDropdownItem
+                      (click)="toggleAllAccounts()">
+                <clr-icon *ngIf="selectedAccounts?.length === accounts?.length" shape="check-circle" class="is-success"></clr-icon>
+                <clr-icon *ngIf="selectedAccounts?.length !== accounts?.length" shape="circle"></clr-icon>
+                <span>All accounts</span>
+              </button>
+              <button *ngFor="let account of accounts"
+                      type="button"
+                      clrDropdownItem
+                      (click)="toggleAccount(account)">
+                <clr-icon *ngIf="isSelected(account)" shape="check-circle" class="is-success"></clr-icon>
+                <clr-icon *ngIf="!isSelected(account)" shape="circle"></clr-icon>
+                <span>{{ account.name }} - {{ account.description }}</span>
+              </button>
+            </clr-dropdown-menu>
+          </clr-dropdown>
+        </td>
+      </tr>
+    </table>
+
     <app-summary [summary]="summary"></app-summary>
   </div>
   <div class="col-md-8 col-xs-12">

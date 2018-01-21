@@ -28,6 +28,8 @@ class TransactionController():
         year = int(request.args.get('year'))
         month = int(request.args.get('month'))
         account_ids = request.args.get('account_ids')
+        if account_ids is not None:
+            account_ids = account_ids.split(',')
         return self.transaction_service.get_all_transactions(account_ids, year, month)
 
     @restful.route('/<int:transaction_id>')

@@ -28,6 +28,7 @@ import { NotificationMessageComponent } from './components/notification/notifica
 import { FileDropModule } from 'ngx-file-drop';
 import { FileDropComponent } from './components/file-drop/file-drop.component';
 import { UploadService } from './components/file-drop/upload.service';
+import { RestService } from './modules/shared/rest.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -76,6 +77,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DecimalPipe,
     SessionService,
     UploadService,
+    RestService,
     NotificationService,
     {
       provide: HTTP_INTERCEPTORS,

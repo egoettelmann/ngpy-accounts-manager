@@ -42,7 +42,7 @@ export class AppConfig {
     },
     {
       name: 'root.transactions',
-      url: '/transactions/:year/:month',
+      url: '/transactions/:year/:month?accounts',
       views: {
         'content': TransactionsViewComponent
       },

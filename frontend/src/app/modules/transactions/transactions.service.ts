@@ -9,7 +9,7 @@ export class TransactionsService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(year?: string, month?: string): Observable<Transaction[]> {
+  getAll(year?: string, month?: string, accounts?: number[]): Observable<Transaction[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -19,6 +19,9 @@ export class TransactionsService {
     }
     if (month !== undefined) {
       params = params.append('month', month);
+    }
+    if (accounts !== undefined) {
+      params = params.append('account_ids', accounts.join(','));
     }
 
     return this.http.get<Transaction[]>('/rest/transactions', {params: params});
