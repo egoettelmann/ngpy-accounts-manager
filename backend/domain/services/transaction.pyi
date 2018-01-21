@@ -25,6 +25,8 @@ class TransactionService():
 
     def delete_transaction(self, transaction_id : int) -> None : ...
 
+    def get_last_transaction(self, account_ids : list(int)) -> Transaction : ...
+
     def get_total_by_labels(self,
                             account_ids : list(int),
                             year : int,

@@ -5,6 +5,7 @@ export class Account {
   public description: string;
   public total: number;
   public color: string;
+  public lastUpdate: Date;
 
   constructor(id: number, name: string, description: string, total: number, color: string) {
     this.id = id;

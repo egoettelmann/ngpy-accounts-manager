@@ -28,6 +28,7 @@ class Account(Patchable):
         'description': fields.String,
         'total': fields.Float,
         'color': fields.String,
+        'lastUpdate': fields.DateTime(attribute="last_update", dt_format="iso8601")
     }
 
     def __init__(self, id=None, name=None, description=None, total=None, color=None):

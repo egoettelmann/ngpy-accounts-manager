@@ -1,4 +1,4 @@
-from sqlalchemy.sql.expression import extract, func
+from sqlalchemy.sql.expression import extract, func, desc
 
 from ..entities import LabelDbo, TransactionDbo
 from ...modules.depynject import injectable
@@ -27,6 +27,11 @@ class TransactionRepository():
         except:
             self.entity_manager.get_session().rollback()
             raise
+
+    def get_last_transaction(self, account_ids):
+        query = self.entity_manager.query(TransactionDbo)
+        query = self.filter_by_accounts(query, account_ids)
+        return query.order_by(desc(TransactionDbo.date_value)).first()
 
     def get_grouped_by_labels(self, account_ids=None, date_from=None, date_to=None, sign=None):
         query = self.entity_manager.query(

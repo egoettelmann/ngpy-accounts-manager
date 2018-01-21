@@ -27,7 +27,7 @@
       <td class="text-left">{{ transaction.label?.name }}</td>
       <td class="text-left">{{ transaction.reference }}</td>
       <td class="text-left">{{ transaction.description }}</td>
-      <td class="text-center">{{ transaction.dateValue }}</td>
+      <td class="text-center text-nowrap">{{ transaction.dateValue }}</td>
       <td class="text-right">{{ transaction.amount | number:'1.2-2' }}&nbsp;€</td>
       <td><clr-icon (click)="select(transaction)" shape="note" size="12"></clr-icon></td>
     </tr>

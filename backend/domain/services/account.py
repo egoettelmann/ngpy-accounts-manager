@@ -24,6 +24,7 @@ class AccountService():
         )
         for acc in accounts:
             acc.total = self.get_account_total(acc.id)
+            acc.last_update = self.get_last_update(acc.id)
         return accounts
 
     def get_account(self, account_id):
@@ -37,6 +38,10 @@ class AccountService():
             self.repository.find_by_name(name),
             Account
         )
+
+    def get_last_update(self, account_id):
+        transaction = self.transaction_service.get_last_transaction([account_id])
+        return transaction.date_value
 
     def get_account_total(self, account_id, date=None):
         last_status = self.status_service.get_last_account_status(account_id, date)

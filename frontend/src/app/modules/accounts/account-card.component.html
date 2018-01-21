@@ -6,6 +6,9 @@
     <p class="card-text">
       {{ account.description }}
     </p>
+    <p class="card-text">
+      Latest transaction: {{ account.lastUpdate | date:'dd/MM/yyyy' }}
+    </p>
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
