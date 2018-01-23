@@ -42,13 +42,17 @@ export class AppConfig {
     },
     {
       name: 'root.transactions',
-      url: '/transactions/:year/:month?accounts',
+      url: '/transactions/:year/:month?{account}',
       views: {
         'content': TransactionsViewComponent
       },
       params: {
         year: { value: getCurrentYear },
-        month: { value: getCurrentMonth }
+        month: { value: getCurrentMonth },
+        account: {
+          type: 'int',
+          array: true
+        }
       }
     },
     {

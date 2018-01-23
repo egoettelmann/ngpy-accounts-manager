@@ -37,10 +37,8 @@ export class TransactionsViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentYear = this.$state.params.year;
-    if (this.$state.params.accounts) {
-      this.selectedAccounts = this.restService.decode(
-        this.$state.params.accounts
-      );
+    if (this.$state.params.account) {
+      this.selectedAccounts = this.$state.params.account;
     }
     this.accountsService.getAccounts().subscribe(data => {
       this.accounts = data;
@@ -154,12 +152,10 @@ export class TransactionsViewComponent implements OnInit {
 
   private reload() {
     this.$state.go('root.transactions', {
-      accounts: this.restService.encode(
-        this.selectedAccounts.length === this.accounts.length ? undefined : this.selectedAccounts
-      )
+      account: this.selectedAccounts.length === this.accounts.length ? undefined : this.selectedAccounts
     }, {
       notify: true,
-      reload: false
+      reload: true
     });
   }
 
