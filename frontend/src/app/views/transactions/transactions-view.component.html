@@ -64,7 +64,8 @@
 <h3>{{ 'i18n.views.transactions.list.title' | translate }}</h3>
 
 <app-transactions-table [transactions]="transactions"
-                        (onSelect)="editTransaction($event)">
+                        (onSelect)="editTransaction($event)"
+                        (onChangeLabel)="saveTransactionLabel($event)">
 </app-transactions-table>
 
 <app-transactions-form [model]="selectedTransaction"

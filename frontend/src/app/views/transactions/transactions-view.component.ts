@@ -120,6 +120,21 @@ export class TransactionsViewComponent implements OnInit {
     }
   }
 
+  saveTransactionLabel(transaction: Transaction) {
+    const oldT = this.transactions.find(t => t.id === transaction.id);
+    console.log(oldT, transaction);
+    if (oldT) {
+      delete oldT.label; // TODO: not ok, list should be cloned, so autocomplete does not modify it
+      const diff = JsonPatch.compare(oldT, transaction);
+      if (diff.length > 0) {
+        console.log(transaction);
+        this.transactionsService.updateOne(transaction.id, { label_id: transaction.label.id }).subscribe(data => {
+          console.log('SAVE', data);
+        });
+      }
+    }
+  }
+
   deleteTransaction(transaction: Transaction) {
     this.transactionsService.deleteOne(transaction).subscribe(data => {
       console.log('DELETE', data);

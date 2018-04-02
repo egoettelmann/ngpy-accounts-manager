@@ -1,8 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { UIRouterModule, UIView } from '@uirouter/angular';
 import { ClarityModule } from 'clarity-angular';
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -10,7 +9,6 @@ import { NavComponent } from './components/navigation/nav.component';
 import { AppConfig } from './app.config';
 import { ErrorInterceptor } from './error.interceptor';
 import { LoginViewComponent } from './views/login/login-view.component';
-import { FormsModule } from '@angular/forms';
 import { SessionService } from './session.service';
 import { DashboardViewComponent } from './views/dashboard/dashboard-view.component';
 import { TransactionsViewComponent } from './views/transactions/transactions-view.component';
@@ -29,6 +27,8 @@ import { FileDropModule } from 'ngx-file-drop';
 import { FileDropComponent } from './components/file-drop/file-drop.component';
 import { UploadService } from './components/file-drop/upload.service';
 import { RestService } from './modules/shared/rest.service';
+import { SharedModule } from './modules/shared/shared.module';
+import { BrowserModule } from '@angular/platform-browser';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -52,9 +52,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     TransactionsModule,
     AccountsModule,
     StatisticsModule,
-    FormsModule,
     BrowserModule,
-    CommonModule,
+    SharedModule,
     HttpClientModule,
     FileDropModule,
     UIRouterModule.forRoot({

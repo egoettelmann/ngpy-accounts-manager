@@ -1,5 +1,6 @@
 import datetime
 
+from ...dbconnector.entities import TransactionDbo
 from ...modules.depynject import injectable
 
 from ..models import Transaction, KeyValue
@@ -54,6 +55,14 @@ class TransactionService():
 
     def create_all(self, transactions):
         return self.repository.create_all(transactions)
+
+    def update_one(self, transaction):
+        return self.repository.save_one(
+            self.mapper.map(
+                transaction,
+                TransactionDbo
+            )
+        )
 
     @staticmethod
     def get_date_from(year=None, month=None):

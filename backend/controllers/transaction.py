@@ -48,10 +48,10 @@ class TransactionController():
         print('PATCH', patch)
         t = self.transaction_service.get_transaction(transaction_id)
         print('OLD', t)
-        obj = jsonpatch.apply_patch(t, patch)
-        print('NEW', obj)
-        # TODO: save object
-        return obj
+        for key, value in patch.items():
+            t[key] = value
+        print('NEW', t)
+        return self.transaction_service.update_one(t)
 
     @restful.route('/upload-file', methods=['POST'])
     def upload_file(self):

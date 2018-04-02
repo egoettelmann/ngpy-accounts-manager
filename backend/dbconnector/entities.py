@@ -70,7 +70,8 @@ class TransactionDbo(EntityManager.get_base()):
     label_id = Column(Integer, ForeignKey('labels.id'))
     hash = Column(String(250), unique=True)
 
-    def __init__(self, account_id=None, date_compta=None, date_operation=None, description=None, reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None):
+    def __init__(self, id=None, account_id=None, date_compta=None, date_operation=None, description=None, reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None):
+        self.id = id
         self.account_id = account_id
         self.date_compta = date_compta
         self.date_operation = date_operation

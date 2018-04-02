@@ -83,6 +83,15 @@ class TransactionRepository():
             raise
         return True
 
+    def save_one(self, transaction):
+        self.entity_manager.get_session().merge(transaction)
+        try:
+            self.entity_manager.get_session().commit()
+        except:
+            self.entity_manager.get_session().rollback()
+            raise
+        return True
+
     @staticmethod
     def filter_by_accounts(query, account_ids=None):
         if account_ids is not None:

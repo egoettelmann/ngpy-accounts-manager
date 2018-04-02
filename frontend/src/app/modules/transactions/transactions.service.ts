@@ -35,7 +35,7 @@ export class TransactionsService {
     return this.http.post<Transaction>('/rest/transactions/' + transaction.id, JSON.stringify(transaction));
   }
 
-  updateOne(transaction_id: number, diff: Operation[]): Observable<Transaction> {
+  updateOne(transaction_id: number, diff: any): Observable<Transaction> {
     return this.http.post<Transaction>('/rest/transactions/' + transaction_id, JSON.stringify(diff));
   }
 
