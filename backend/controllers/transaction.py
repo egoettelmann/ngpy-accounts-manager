@@ -1,6 +1,5 @@
 import os
 
-import jsonpatch
 from flask import request
 from flask_restful import marshal_with
 from werkzeug.utils import secure_filename
