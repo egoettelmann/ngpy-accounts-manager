@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import {Transaction} from './transaction';
+import { PatchEvent, Transaction } from './transaction';
 import { Label } from './label';
-import { LabelsService } from './labels.service';
 
 @Component({
   selector: 'app-transactions-table',
@@ -10,28 +9,21 @@ import { LabelsService } from './labels.service';
 export class TransactionsTableComponent implements OnChanges, OnInit {
 
   @Input() transactions: Transaction[];
+  @Input() labels: Label[];
 
-  @Output() onSelect = new EventEmitter<Transaction>();
-  @Output() onChangeLabel = new EventEmitter<Transaction>();
+  @Output() onChange = new EventEmitter<PatchEvent<Transaction>>();
+  @Output() onDelete = new EventEmitter<Transaction>();
 
-  labels: Label[];
+  selectedTransaction: Transaction;
+  showModal = false;
 
-  constructor(private labelService: LabelsService) {}
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-    this.labelService.getAll().subscribe(labels => {
-      this.labels = labels;
-    });
-  }
-
-  ngOnChanges(changes) {
-    if (changes.transactions != null) {
-      console.log('TransactionsTableComponent.ngOnChanges');
-    }
-  }
+  ngOnChanges(changes) {}
 
   select(transaction: Transaction) {
-    this.onSelect.emit(transaction);
+    this.selectedTransaction = transaction;
+    this.showModal = true;
   }
 
   changeLabel(label: Label, transaction: Transaction) {
@@ -39,11 +31,16 @@ export class TransactionsTableComponent implements OnChanges, OnInit {
       && transaction
       && transaction.label
       && label.id !== transaction.label.id) {
-      const t = Object.assign({}, transaction);
-      t.label = label;
-      delete t.label['toString'];
-      this.onChangeLabel.emit(t);
+      this.onChange.emit(new PatchEvent(transaction, { label_id: label.id }));
     }
+  }
+
+  changeTransaction(transaction: Transaction) {
+    this.onChange.emit(new PatchEvent(transaction, transaction));
+  }
+
+  deleteTransaction(transaction: Transaction) {
+    this.onDelete.emit(transaction);
   }
 
   labelDropdownFormatter(data: any): string {

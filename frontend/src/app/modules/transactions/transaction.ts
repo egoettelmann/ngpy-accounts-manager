@@ -19,3 +19,13 @@ export class Transaction {
     this.amount = amount;
   }
 }
+
+export class PatchEvent<T> {
+  public model: T;
+  public changes: { [key: string]: any };
+
+  constructor(model: T, changes: { [p: string]: any }) {
+    this.model = model;
+    this.changes = changes;
+  }
+}

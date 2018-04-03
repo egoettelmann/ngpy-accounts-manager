@@ -3,12 +3,12 @@ import { StateService } from '@uirouter/angular';
 import { TransactionsService } from '../../modules/transactions/transactions.service';
 import { StatisticsService } from '../../modules/statistics/statistics.service';
 import { DecimalPipe } from '@angular/common';
-import { Transaction } from '../../modules/transactions/transaction';
-import * as JsonPatch from 'fast-json-patch';
+import { PatchEvent, Transaction } from '../../modules/transactions/transaction';
 import { Summary } from '../../modules/statistics/summary';
 import { Account } from '../../modules/accounts/account';
 import { AccountsService } from '../../modules/accounts/accounts.service';
-import { RestService } from '../../modules/shared/rest.service';
+import { LabelsService } from '../../modules/transactions/labels.service';
+import { Label } from '../../modules/transactions/label';
 
 @Component({
   templateUrl: './transactions-view.component.html'
@@ -24,12 +24,12 @@ export class TransactionsViewComponent implements OnInit {
   public transactions: Transaction[];
   public graphOptions: any;
   public summary: Summary;
-  public selectedTransaction: Transaction;
   public accounts: Account[];
+  public labels: Label[];
   public selectedAccounts: number[] = [];
 
   constructor(private $state: StateService,
-              private restService: RestService,
+              private labelsService: LabelsService,
               private transactionsService: TransactionsService,
               private statisticsService: StatisticsService,
               private accountsService: AccountsService,
@@ -60,12 +60,15 @@ export class TransactionsViewComponent implements OnInit {
         this.$state.params.month,
         this.selectedAccounts.length === this.accounts.length ? undefined : this.selectedAccounts
       );
+      this.labelsService.getAll().subscribe(labels => {
+        this.labels = labels.slice(0);
+      });
     });
   }
 
   private loadTransactions(year: string, month: string, accounts: number[]) {
     this.transactionsService.getAll(year, month, accounts).subscribe(data => {
-      this.transactions = data;
+      this.transactions = data.slice(0);
     });
   }
 
@@ -107,32 +110,11 @@ export class TransactionsViewComponent implements OnInit {
     return options;
   }
 
-  editTransaction(transaction: Transaction) {
-    this.selectedTransaction = transaction;
-  }
-
-  saveTransaction(transaction: Transaction) {
-    const diff = JsonPatch.compare(this.selectedTransaction, transaction);
-    if (diff.length > 0) {
-      this.transactionsService.updateOne(this.selectedTransaction.id, diff).subscribe(data => {
-        console.log('SAVE', data);
-      });
-    }
-  }
-
-  saveTransactionLabel(transaction: Transaction) {
-    const oldT = this.transactions.find(t => t.id === transaction.id);
-    console.log(oldT, transaction);
-    if (oldT) {
-      delete oldT.label; // TODO: not ok, list should be cloned, so autocomplete does not modify it
-      const diff = JsonPatch.compare(oldT, transaction);
-      if (diff.length > 0) {
-        console.log(transaction);
-        this.transactionsService.updateOne(transaction.id, { label_id: transaction.label.id }).subscribe(data => {
-          console.log('SAVE', data);
-        });
-      }
-    }
+  saveTransaction(patchEvent: PatchEvent<Transaction>) {
+    console.log('patchEvent', patchEvent);
+    this.transactionsService.updateOne(patchEvent.model.id, patchEvent.changes).subscribe(data => {
+      console.log('SAVE', data);
+    });
   }
 
   deleteTransaction(transaction: Transaction) {

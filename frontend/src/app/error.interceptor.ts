@@ -17,7 +17,10 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // const apiReq = req.clone();
     const baseUrl = 'http://localhost:5050';
-    const apiReq = req.clone({url: baseUrl + req.url, withCredentials: true});
+    let apiReq = req.clone();
+    if (!req.url.startsWith('/assets')) {
+      apiReq = req.clone({url: baseUrl + req.url, withCredentials: true});
+    }
     return next.handle(apiReq).do((event: HttpEvent<any>) => {
       // do stuff with response if you want
     }, (err: any) => {

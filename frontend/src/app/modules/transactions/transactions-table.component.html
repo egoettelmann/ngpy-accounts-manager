@@ -47,3 +47,13 @@
     </tr>
   </tbody>
 </table>
+
+<clr-modal *ngIf="selectedTransaction" [(clrModalOpen)]="showModal" [clrModalClosable]="false" [clrModalStaticBackdrop]="true">
+  <h3 class="modal-title">{{ selectedTransaction.reference }}</h3>
+  <div class="modal-body">
+    <app-transactions-form [model]="selectedTransaction"
+                           (onFormSubmit)="changeTransaction($event)"
+                           (onFormDelete)="deleteTransaction($event)">
+    </app-transactions-form>
+  </div>
+</clr-modal>
