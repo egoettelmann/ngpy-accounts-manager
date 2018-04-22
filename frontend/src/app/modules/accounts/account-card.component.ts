@@ -1,17 +1,12 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Account } from './account';
 
 @Component({
   selector: 'app-account-card',
   templateUrl: './account-card.component.html'
 })
-export class AccountCardComponent implements OnChanges {
+export class AccountCardComponent {
 
   @Input() account: Account;
-
-  ngOnChanges(changes) {
-    if (changes.account != null) {
-      console.log('AccountCardComponent.ngOnChanges');
-    }
-  }
 
 }
