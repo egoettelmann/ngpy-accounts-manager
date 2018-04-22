@@ -19,9 +19,14 @@
       <td class="text-right" [ngClass]="getAmountColor(summary.totalCredit)">{{ summary.totalCredit | number:'1.2-2' }}&nbsp;€</td>
     </tr>
     <tr>
-      <td colspan="2">&nbsp;</td>
       <td class="text-left">{{ 'i18n.modules.statistics.summary.' + summary.periodType + '.result' | translate }}</td>
       <td class="text-right font-weight-bold" [ngClass]="getAmountColor(result)">{{ result | number:'1.2-2' }}&nbsp;€</td>
+      <td class="text-left">&nbsp;</td>
+      <td class="text-right" [ngClass]="getAmountColor(performance)">
+        <clr-icon *ngIf="performance >= 0" shape="plus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></clr-icon>
+        <clr-icon *ngIf="performance < 0" shape="minus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></clr-icon>
+        <span>{{ performance | number:'1.2-2' }}&nbsp;%</span>
+      </td>
     </tr>
   </tbody>
 </table>
