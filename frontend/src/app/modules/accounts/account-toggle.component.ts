@@ -17,7 +17,7 @@ export class AccountToggleComponent implements OnChanges {
     if (changes.preSelected && this.preSelected) {
       this.selectedAccounts = this.preSelected.slice(0);
     }
-    if (changes.accounts && this.accounts && this.selectedAccounts.length === 0) {
+    if (changes.accounts && this.accounts) {
       if (this.selectedAccounts.length === 0) {
         this.toggleAllAccounts();
       } else {
