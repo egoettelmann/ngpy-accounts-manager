@@ -66,11 +66,12 @@ class AccountService():
 
         if account_ids is not None:
             for acc_id in account_ids:
-                start_amount = start_amount + self.repository.get_total(acc_id, date_from)
+                account_total = self.repository.get_total(acc_id, date_from)
+                start_amount = start_amount + 0 if account_total is None else account_total
 
         values = [KeyValue(str(year) + '-01-01', start_amount)]
         for e in entries:
-            start_amount = start_amount + e.value
+            start_amount = start_amount + 0 if e.value is None else e.value
             values.append(KeyValue(e.label, start_amount))
         return values
 

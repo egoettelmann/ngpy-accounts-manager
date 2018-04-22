@@ -42,13 +42,16 @@ export class StatisticsService {
     return this.http.get<any>('/rest/stats/summary', {params: params});
   }
 
-  getEvolution(year: string): Observable<any> {
+  getEvolution(year: string, accounts?: number[]): Observable<any> {
     // Initialize Params Object
     let params = new HttpParams();
 
     // Begin assigning parameters
     if (year !== undefined) {
       params = params.append('year', year);
+    }
+    if (accounts !== undefined) {
+      params = params.append('account_ids', accounts.join(','));
     }
     return this.http.get<any>('/rest/stats/treasury', {params: params});
   }

@@ -58,12 +58,17 @@ export class AppConfig {
     },
     {
       name: 'root.treasury',
-      url: '/treasury/:year',
+      url: '/treasury/:year?{account}',
       views: {
         'content': TreasuryViewComponent
       },
       params: {
-        year: { value: getCurrentYear }
+        year: { value: getCurrentYear },
+        account: {
+          type: 'int',
+          array: true,
+          dynamic: true
+        }
       }
     }
   ];

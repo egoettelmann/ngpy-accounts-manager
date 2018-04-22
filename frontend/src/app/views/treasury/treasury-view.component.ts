@@ -3,31 +3,57 @@ import {StateService} from '@uirouter/angular';
 import {StatisticsService} from '../../modules/statistics/statistics.service';
 import {DecimalPipe} from '@angular/common';
 import {Summary} from '../../modules/statistics/summary';
+import { Account } from '../../modules/accounts/account';
+import { AccountsService } from '../../modules/accounts/accounts.service';
 
 @Component({
   templateUrl: './treasury-view.component.html'
 })
 export class TreasuryViewComponent implements OnInit {
 
-  public yearList = [2017, 2016, 2015, 2014];
-  public monthList = [
-    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-    'August', 'September', 'October', 'November', 'December'
-  ];
+  public yearList = [2018, 2017, 2016, 2015, 2014];
   public currentYear: any;
   public graphOptions: any;
+  public accounts: Account[];
   public summary: Summary;
+  public accountsFilter: number[] = [];
 
   constructor(private $state: StateService,
+              private accountsService: AccountsService,
               private statisticsService: StatisticsService,
               private decimalPipe: DecimalPipe) {}
 
   ngOnInit(): void {
     this.currentYear = this.$state.params.year;
-    this.statisticsService.getEvolution(this.$state.params.year).subscribe(data => {
+    if (this.$state.params.account) {
+      this.accountsFilter = this.$state.params.account;
+    }
+    this.accountsService.getAccounts().subscribe(data => {
+      this.accounts = data;
+    });
+  }
+
+  changeAccounts(accounts: Account[]) {
+    const accountIds = accounts.length === this.accounts.length ? undefined : accounts.map(a => a.id);
+    this.reload(accountIds);
+  }
+
+  private reload(accountIds: number[]) {
+    this.$state.go('root.treasury', {
+      account: accountIds
+    });
+    this.loadEvolution(this.$state.params.year, accountIds);
+    this.loadSummary(this.$state.params.year, accountIds);
+  }
+
+  private loadEvolution(year: string, accounts: number[]) {
+    this.statisticsService.getEvolution(year, accounts).subscribe(data => {
       this.graphOptions = this.buildChartOptions(data);
     });
-    this.statisticsService.getSummary(this.$state.params.year).subscribe(data => {
+  }
+
+  private loadSummary(year: string, accounts: number[]) {
+    this.statisticsService.getSummary(year, undefined, accounts).subscribe(data => {
       this.summary = data;
     });
   }
