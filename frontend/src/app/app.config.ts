@@ -51,7 +51,8 @@ export class AppConfig {
         month: { value: getCurrentMonth },
         account: {
           type: 'int',
-          array: true
+          array: true,
+          dynamic: true
         }
       }
     },

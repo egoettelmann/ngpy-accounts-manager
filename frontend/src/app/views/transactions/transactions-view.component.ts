@@ -9,6 +9,8 @@ import { Account } from '../../modules/accounts/account';
 import { AccountsService } from '../../modules/accounts/accounts.service';
 import { LabelsService } from '../../modules/transactions/labels.service';
 import { Label } from '../../modules/transactions/label';
+import { Observable } from 'rxjs/Observable';
+import "rxjs/add/observable/zip";
 
 @Component({
   templateUrl: './transactions-view.component.html'
@@ -26,43 +28,27 @@ export class TransactionsViewComponent implements OnInit {
   public summary: Summary;
   public accounts: Account[];
   public labels: Label[];
-  public selectedAccounts: number[] = [];
+  public accountsFilter: number[] = [];
 
   constructor(private $state: StateService,
               private labelsService: LabelsService,
               private transactionsService: TransactionsService,
               private statisticsService: StatisticsService,
               private accountsService: AccountsService,
-              private decimalPipe: DecimalPipe) {}
+              private decimalPipe: DecimalPipe
+  ) {}
 
   ngOnInit(): void {
     this.currentYear = this.$state.params.year;
     if (this.$state.params.account) {
-      this.selectedAccounts = this.$state.params.account;
+      this.accountsFilter = this.$state.params.account;
     }
-    this.accountsService.getAccounts().subscribe(data => {
-      this.accounts = data;
-      if (this.selectedAccounts.length === 0 && this.accounts) {
-        this.selectedAccounts = this.accounts.map(a => a.id);
-      }
-      this.loadTransactions(
-        this.$state.params.year,
-        this.$state.params.month,
-        this.selectedAccounts.length === this.accounts.length ? undefined : this.selectedAccounts
-      );
-      this.loadSummary(
-        this.$state.params.year,
-        this.$state.params.month,
-        this.selectedAccounts.length === this.accounts.length ? undefined : this.selectedAccounts
-      );
-      this.loadRepartition(
-        this.$state.params.year,
-        this.$state.params.month,
-        this.selectedAccounts.length === this.accounts.length ? undefined : this.selectedAccounts
-      );
-      this.labelsService.getAll().subscribe(labels => {
-        this.labels = labels.slice(0);
-      });
+    Observable.zip(
+      this.accountsService.getAccounts(),
+      this.labelsService.getAll()
+    ).subscribe(([accounts, labels]) => {
+      this.accounts = accounts.slice(0);
+      this.labels = labels.slice(0);
     });
   }
 
@@ -123,37 +109,18 @@ export class TransactionsViewComponent implements OnInit {
     });
   }
 
-  isSelected(account: Account): boolean {
-    if (this.selectedAccounts) {
-      return this.selectedAccounts.indexOf(account.id) > -1;
-    }
-    return false;
+  changeAccounts(accounts: Account[]) {
+    const accountIds = accounts.length === this.accounts.length ? undefined : accounts.map(a => a.id);
+    this.reload(accountIds);
   }
 
-  toggleAccount(account: Account) {
-    if (this.isSelected(account)) {
-      const idx = this.selectedAccounts.indexOf(account.id);
-      if (this.selectedAccounts.length > 1) {
-        this.selectedAccounts.splice(idx, 1);
-      }
-    } else {
-      this.selectedAccounts.push(account.id);
-    }
-    this.reload();
-  }
-
-  toggleAllAccounts() {
-    this.selectedAccounts = this.accounts.map(a => a.id);
-    this.reload();
-  }
-
-  private reload() {
+  private reload(accountIds: number[]) {
     this.$state.go('root.transactions', {
-      account: this.selectedAccounts.length === this.accounts.length ? undefined : this.selectedAccounts
-    }, {
-      notify: true,
-      reload: true
+      account: accountIds
     });
+    this.loadTransactions(this.$state.params.year, this.$state.params.month, accountIds);
+    this.loadSummary(this.$state.params.year, this.$state.params.month, accountIds);
+    this.loadRepartition(this.$state.params.year, this.$state.params.month, accountIds);
   }
 
 }
