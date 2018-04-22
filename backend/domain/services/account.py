@@ -64,14 +64,19 @@ class AccountService():
 
         entries = self.transaction_service.get_total_by_period(account_ids, year, None, 'month')
 
-        if account_ids is not None:
-            for acc_id in account_ids:
-                account_total = self.repository.get_total(acc_id, date_from)
-                start_amount = start_amount + 0 if account_total is None else account_total
+        if account_ids is None:
+            account_ids = []
+            for acc in self.repository.get_all():
+                account_ids.append(acc.id)
+        for acc_id in account_ids:
+            account_total = self.get_account_total(acc_id, date_from)
+            if account_total is not None:
+                start_amount = start_amount + account_total
 
         values = [KeyValue(str(year) + '-01-01', start_amount)]
         for e in entries:
-            start_amount = start_amount + 0 if e.value is None else e.value
+            if e.value is not None:
+                start_amount = start_amount + e.value
             values.append(KeyValue(e.label, start_amount))
         return values
 
