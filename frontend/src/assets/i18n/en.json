@@ -12,6 +12,7 @@
   "i18n.views.dashboard.chart.title": "Distribution by account",
   "i18n.views.transactions.list.title": "List of transactions",
   "i18n.views.transactions.chart.title": "Distribution by category",
+  "i18n.views.treasury.label.year-dropdown": "Year",
   "i18n.views.treasury.chart.title": "Treasury history",
 
   "i18n.components.navigation.dashboard": "Dashboard",
