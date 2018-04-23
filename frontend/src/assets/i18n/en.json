@@ -1,49 +1,56 @@
 {
-  "i18n": {
-    "views": {
-      "dashboard": {
-        "accounts": {
-          "total": "Total of all accounts:"
-        }
-      },
-      "transactions": {
-        "list": {
-          "title": "List of transactions"
-        }
-      }
-    },
-    "modules": {
-      "statistics": {
-        "summary": {
-          "DAY": {
-            "status": "Status",
-            "balance": "Balance",
-            "start": "Start of day",
-            "end": "End of day",
-            "debit": "Debit",
-            "credit": "Credit",
-            "result": "Daily result"
-          },
-          "MONTH": {
-            "status": "Status",
-            "balance": "Balance",
-            "start": "Start of month",
-            "end": "End of month",
-            "debit": "Debit",
-            "credit": "Credit",
-            "result": "Monthly result"
-          },
-          "YEAR": {
-            "status": "Status",
-            "balance": "Balance",
-            "start": "Start of year",
-            "end": "End of year",
-            "debit": "Debit",
-            "credit": "Credit",
-            "result": "Yearly result"
-          }
-        }
-      }
-    }
-  }
+  "i18n.app.title": "Account Manager",
+
+  "i18n.views.login.welcome.text": "Welcome to",
+  "i18n.views.login.help-text": "Use your email or username to sign in",
+  "i18n.views.login.loading": "Loading...",
+  "i18n.views.login.form.placeholder.username": "Email / Username",
+  "i18n.views.login.form.placeholder.password": "Password",
+  "i18n.views.login.form.button.submit": "LOGIN",
+
+  "i18n.views.dashboard.accounts.total": "Total of all accounts:",
+  "i18n.views.dashboard.chart.title": "Distribution by account",
+  "i18n.views.transactions.list.title": "List of transactions",
+  "i18n.views.transactions.chart.title": "Distribution by category",
+  "i18n.views.treasury.chart.title": "Treasury history",
+
+  "i18n.components.navigation.dashboard": "Dashboard",
+  "i18n.components.navigation.transactions": "Transactions",
+  "i18n.components.navigation.treasury": "Treasury",
+  "i18n.components.file-drop.header-text": "Upload a file",
+
+  "i18n.modules.accounts.account-card.latest-transaction": "Latest transaction:",
+  "i18n.modules.accounts.account-card.total": "Total:",
+  "i18n.modules.accounts.account-toggle.label": "Account(s):",
+  "i18n.modules.accounts.account-toggle.all-accounts": "All accounts",
+  "i18n.modules.accounts.account-toggle.accounts": " account(s)",
+
+  "i18n.modules.transactions.table.header.account": "Account",
+  "i18n.modules.transactions.table.header.label": "Label",
+  "i18n.modules.transactions.table.header.reference": "Reference",
+  "i18n.modules.transactions.table.header.description": "Description",
+  "i18n.modules.transactions.table.header.value-date": "Value date",
+  "i18n.modules.transactions.table.header.amount": "Amount",
+
+  "i18n.modules.statistics.summary.DAY.status": "Status",
+  "i18n.modules.statistics.summary.DAY.balance": "Balance",
+  "i18n.modules.statistics.summary.DAY.start": "Start of day",
+  "i18n.modules.statistics.summary.DAY.end": "End of day",
+  "i18n.modules.statistics.summary.DAY.debit": "Debit",
+  "i18n.modules.statistics.summary.DAY.credit": "Credit",
+  "i18n.modules.statistics.summary.DAY.result": "Daily result",
+  "i18n.modules.statistics.summary.MONTH.status": "Status",
+  "i18n.modules.statistics.summary.MONTH.balance": "Balance",
+  "i18n.modules.statistics.summary.MONTH.start": "Start of month",
+  "i18n.modules.statistics.summary.MONTH.end": "End of month",
+  "i18n.modules.statistics.summary.MONTH.debit": "Debit",
+  "i18n.modules.statistics.summary.MONTH.credit": "Credit",
+  "i18n.modules.statistics.summary.MONTH.result": "Monthly result",
+  "i18n.modules.statistics.summary.YEAR.status": "Status",
+  "i18n.modules.statistics.summary.YEAR.balance": "Balance",
+  "i18n.modules.statistics.summary.YEAR.start": "Start of year",
+  "i18n.modules.statistics.summary.YEAR.end": "End of year",
+  "i18n.modules.statistics.summary.YEAR.debit": "Debit",
+  "i18n.modules.statistics.summary.YEAR.credit": "Credit",
+  "i18n.modules.statistics.summary.YEAR.result": "Yearly result"
 }

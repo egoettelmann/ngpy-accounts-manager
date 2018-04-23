@@ -1,5 +1,5 @@
 <div class="center">
-  <file-drop headertext="Uploader un fichier"
+  <file-drop [headertext]="'i18n.components.file-drop.header-text' | translate"
              customstyle="file-drop"
              (onFileDrop)="dropped($event)">
   </file-drop>

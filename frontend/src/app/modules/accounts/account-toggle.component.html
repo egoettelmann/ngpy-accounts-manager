@@ -1,10 +1,10 @@
 <table class="table table-compact table-vertical">
   <tr>
-    <th class="text-left align-middle">Account(s):</th>
+    <th class="text-left align-middle">{{ 'i18n.modules.accounts.account-toggle.label' | translate }}</th>
     <td class="text-right">
       <clr-dropdown *ngIf="accounts">
         <button type="button" class="btn btn-link" clrDropdownTrigger>
-          {{ selectedAccounts?.length === accounts?.length ? 'All accounts' : selectedAccounts?.length + ' account(s)' }}
+          {{ selectedAccounts?.length === accounts?.length ? ('i18n.modules.accounts.account-toggle.all-accounts' | translate) : selectedAccounts?.length + ('i18n.modules.accounts.account-toggle.accounts' | translate) }}
           <clr-icon shape="caret down"></clr-icon>
         </button>
         <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
@@ -13,7 +13,7 @@
                   (click)="toggleAllAccounts()">
             <clr-icon *ngIf="selectedAccounts?.length === accounts?.length" shape="check-circle" class="is-success"></clr-icon>
             <clr-icon *ngIf="selectedAccounts?.length !== accounts?.length" shape="circle"></clr-icon>
-            <span>All accounts</span>
+            <span>{{ 'i18n.modules.accounts.account-toggle.all-accounts' | translate }}</span>
           </button>
           <button *ngFor="let account of accounts"
                   type="button"
