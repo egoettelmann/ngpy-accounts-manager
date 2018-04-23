@@ -29,6 +29,7 @@ import { UploadService } from './components/file-drop/upload.service';
 import { RestService } from './modules/shared/rest.service';
 import { SharedModule } from './modules/shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
+import { AnalyticsViewComponent } from './views/analytics/analytics-view.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -45,6 +46,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DashboardViewComponent,
     TransactionsViewComponent,
     TreasuryViewComponent,
+    AnalyticsViewComponent,
     GraphComponent
   ],
   imports: [

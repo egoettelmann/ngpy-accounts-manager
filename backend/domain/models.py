@@ -65,6 +65,17 @@ class Label(Patchable):
         self.icon = icon
 
 
+class Category(Patchable):
+    resource_fields = {
+        'id': fields.Integer,
+        'name': fields.String,
+    }
+
+    def __init__(self, id=None, name=None) -> None:
+        self.id = id
+        self.name = name
+
+
 class Summary(Patchable):
     resource_fields = {
         'amountStart': fields.Float(attribute='amount_start'),

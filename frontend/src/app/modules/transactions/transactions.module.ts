@@ -7,6 +7,7 @@ import { TransactionsFormComponent } from './transactions-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LabelsService } from './labels.service';
 import { ClarityModule } from 'clarity-angular';
+import { CategoriesService } from './categories.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ClarityModule } from 'clarity-angular';
   ],
   providers: [
     TransactionsService,
-    LabelsService
+    LabelsService,
+    CategoriesService
   ],
   imports: [
     StatisticsModule,

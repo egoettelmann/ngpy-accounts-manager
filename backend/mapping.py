@@ -1,8 +1,8 @@
 from mapper.object_mapper import ObjectMapper
 
 from .modules.depynject import injectable
-from .dbconnector.entities import LabelDbo, AccountDbo, StatusDbo, TransactionDbo
-from .domain.models import Account, Label, Status, Transaction
+from .dbconnector.entities import LabelDbo, AccountDbo, StatusDbo, TransactionDbo, CategoryDbo
+from .domain.models import Account, Label, Status, Transaction, Category
 
 
 @injectable('object_mapper')
@@ -15,6 +15,7 @@ class Mapper(ObjectMapper):
         self.create_map(TransactionDbo, Transaction, {'label': lambda x: x.label, 'account': lambda x: x.account})
         self.create_map(Transaction, TransactionDbo)
         self.create_map(StatusDbo, Status)
+        self.create_map(CategoryDbo, Category)
 
     def map_all(self, object_list, target_type):
         target_list = []

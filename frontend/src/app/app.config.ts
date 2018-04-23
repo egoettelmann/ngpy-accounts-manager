@@ -7,6 +7,7 @@ import {DashboardViewComponent} from './views/dashboard/dashboard-view.component
 import {TransactionsViewComponent} from './views/transactions/transactions-view.component';
 import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
 import 'rxjs/add/operator/toPromise';
+import { AnalyticsViewComponent } from './views/analytics/analytics-view.component';
 
 export class AppConfig {
 
@@ -61,6 +62,21 @@ export class AppConfig {
       url: '/treasury/:year?{account}',
       views: {
         'content': TreasuryViewComponent
+      },
+      params: {
+        year: { value: getCurrentYear },
+        account: {
+          type: 'int',
+          array: true,
+          dynamic: true
+        }
+      }
+    },
+    {
+      name: 'root.analytics',
+      url: '/analytics/:year?{account}',
+      views: {
+        'content': AnalyticsViewComponent
       },
       params: {
         year: { value: getCurrentYear },

@@ -6,6 +6,7 @@ from backend.controllers.label import LabelController
 from backend.controllers.session import SessionController
 from backend.controllers.statistics import StatisticsController
 from backend.controllers.transaction import TransactionController
+from backend.controllers.category import CategoryController
 from backend.dbconnector.manager import EntityManager
 from backend.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
 from backend.modules.depynject import Depynject
@@ -57,6 +58,7 @@ def after_request(resp):
 
 api.register(AccountController)
 api.register(LabelController)
+api.register(CategoryController)
 api.register(TransactionController)
 api.register(StatisticsController)
 api.register(SessionController)

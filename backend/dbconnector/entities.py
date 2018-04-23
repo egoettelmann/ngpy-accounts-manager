@@ -31,6 +31,7 @@ class LabelDbo(EntityManager.get_base()):
     color = Column(String(50))
     icon = Column(String(50))
     transactions = relationship("TransactionDbo", backref="label")
+    category_id = Column(Integer, ForeignKey('categories.id'))
 
     def __init__(self, name=None, color=None):
         self.name = name
@@ -38,6 +39,13 @@ class LabelDbo(EntityManager.get_base()):
 
     def __repr__(self):
         return '<LabelDbo %r>' % self.name
+
+
+class CategoryDbo(EntityManager.get_base()):
+    __tablename__ = 'categories'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), unique=True)
+    labels = relationship("LabelDbo", backref="category")
 
 
 class StatusDbo(EntityManager.get_base()):

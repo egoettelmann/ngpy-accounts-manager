@@ -18,6 +18,7 @@
   "i18n.components.navigation.dashboard": "Dashboard",
   "i18n.components.navigation.transactions": "Transactions",
   "i18n.components.navigation.treasury": "Treasury",
+  "i18n.components.navigation.analytics": "Analytics",
   "i18n.components.file-drop.header-text": "Upload a file",
 
   "i18n.modules.accounts.account-card.latest-transaction": "Latest transaction:",
