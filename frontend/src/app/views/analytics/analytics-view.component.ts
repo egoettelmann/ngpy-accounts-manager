@@ -5,6 +5,7 @@ import { Category } from '../../modules/transactions/category';
 import { CategoriesService } from '../../modules/transactions/categories.service';
 import { StatisticsService } from '../../modules/statistics/statistics.service';
 import { StateService } from '@uirouter/angular';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   templateUrl: './analytics-view.component.html'
@@ -22,7 +23,8 @@ export class AnalyticsViewComponent implements OnInit {
   constructor(private $state: StateService,
               private accountsService: AccountsService,
               private categoriesService: CategoriesService,
-              private statisticsService: StatisticsService
+              private statisticsService: StatisticsService,
+              private decimalPipe: DecimalPipe
   ) {}
 
   ngOnInit(): void {
@@ -58,12 +60,22 @@ export class AnalyticsViewComponent implements OnInit {
       chart: {
         type: 'column'
       },
+      tooltip: {
+        formatter: function () {
+          return '<b>' + this.series.name + '</b><br/>'
+            + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
+            + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
+        }
+      },
       xAxis: {
         categories: []
       },
       yAxis: {
         stackLabels: {
           enabled: true,
+          formatter: function() {
+            return that.decimalPipe.transform(this.total, '1.2-2') + ' €';
+          }
         }
       },
       plotOptions: {
@@ -71,6 +83,9 @@ export class AnalyticsViewComponent implements OnInit {
           stacking: 'normal',
           dataLabels: {
             enabled: true,
+            formatter: function() {
+              return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
+            }
           }
         }
       },
@@ -81,7 +96,7 @@ export class AnalyticsViewComponent implements OnInit {
     for (const d of data) {
       const categoryIdx = parseInt(d.category) - 1;
       this.resizeArray(categories, 0, categoryIdx);
-      categories[categoryIdx] = d.category;
+      categories[categoryIdx] = 'Q' + d.category;
       if (!series.hasOwnProperty(d.label)) {
         series[d.label] = [];
       }
