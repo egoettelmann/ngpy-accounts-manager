@@ -3,7 +3,7 @@ import datetime
 from ...dbconnector.entities import TransactionDbo
 from ...modules.depynject import injectable
 
-from ..models import Transaction, KeyValue
+from ..models import Transaction, KeyValue, GroupedValue
 
 
 @injectable()
@@ -46,6 +46,13 @@ class TransactionService():
         date_to = self.get_date_to(year, month)
         return self.map_to_key_value_list(
             self.repository.get_grouped_by_period(account_ids, date_from, date_to, period)
+        )
+
+    def get_total_by_category_type(self, account_ids=None, year=None, category_type=None):
+        date_from = self.get_date_from(year)
+        date_to = self.get_date_to(year)
+        return self.map_to_grouped_value_list(
+            self.repository.get_grouped_by_category_type(account_ids, date_from, date_to, category_type)
         )
 
     def get_total(self, account_ids=None, year=None, month=None, sign=None):
@@ -92,4 +99,11 @@ class TransactionService():
         values = []
         for kv in entries:
             values.append(KeyValue(kv.label, kv.value))
+        return values
+
+    @staticmethod
+    def map_to_grouped_value_list(entries):
+        values = []
+        for kv in entries:
+            values.append(GroupedValue(kv.category, kv.label, kv.value))
         return values

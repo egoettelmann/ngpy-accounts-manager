@@ -45,6 +45,7 @@ class CategoryDbo(EntityManager.get_base()):
     __tablename__ = 'categories'
     id = Column(Integer, primary_key=True)
     name = Column(String(250), unique=True)
+    type = Column(String(10))
     labels = relationship("LabelDbo", backref="category")
 
 

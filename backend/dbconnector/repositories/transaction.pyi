@@ -11,6 +11,12 @@ class QKeyValue:
     value: float
 
 
+class QGroupedValue:
+    category: str
+    label: str
+    value: float
+
+
 class TransactionRepository():
     query : Query
     entity_manager : EntityManager
@@ -43,6 +49,13 @@ class TransactionRepository():
                               period : str
                               ) -> list(QKeyValue) : ...
 
+    def get_grouped_by_category_type(self,
+                                     account_ids : list(int),
+                                     date_from : datetime.date,
+                                     date_to : datetime.date,
+                                     category_type : str
+                                     ) -> list(QGroupedValue) : ...
+
     def get_total(self,
                   account_ids : list(int),
                   date_from : datetime.date,
@@ -65,6 +78,9 @@ class TransactionRepository():
 
     @staticmethod
     def filter_by_labels(query : Query, label_ids : list(int)) -> Query : ...
+
+    @staticmethod
+    def filter_by_category_type(query : Query, category_type : str) -> Query : ...
 
     @staticmethod
     def filter_by_sign(query : Query, sign : bool) -> Query : ...

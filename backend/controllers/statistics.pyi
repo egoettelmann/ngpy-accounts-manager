@@ -1,4 +1,4 @@
-from ..domain.models import KeyValue, Summary
+from ..domain.models import KeyValue, Summary, GroupedValue
 from ..domain.services.account import AccountService
 from ..domain.services.statistics import StatisticsService
 from ..domain.services.transaction import TransactionService
@@ -19,3 +19,5 @@ class StatisticsController():
     def get_treasury(self) -> list(KeyValue) : ...
 
     def get_summary(self) -> Summary : ...
+
+    def get_analytics(self) -> list(GroupedValue) : ...

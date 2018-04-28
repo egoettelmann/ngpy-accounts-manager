@@ -1,7 +1,7 @@
 import datetime
 
 from .label import LabelService
-from ..models import Transaction, KeyValue
+from ..models import Transaction, KeyValue, GroupedValue
 from ...dbconnector.repositories.transaction import TransactionRepository
 from ...mapping import Mapper
 
@@ -39,6 +39,11 @@ class TransactionService():
                             month : int,
                             period : str) -> KeyValue : ...
 
+    def get_total_by_category_type(self,
+                                   account_ids : list(int),
+                                   year : int,
+                                   category_type : str) -> GroupedValue : ...
+
     def get_total(self,
                   account_ids : list(int),
                   year : int,
@@ -57,3 +62,6 @@ class TransactionService():
 
     @staticmethod
     def map_to_key_value_list(entries : list(any)) -> list(KeyValue) : ...
+
+    @staticmethod
+    def map_to_grouped_value_list(entries : list(any)) -> list(GroupedValue) : ...

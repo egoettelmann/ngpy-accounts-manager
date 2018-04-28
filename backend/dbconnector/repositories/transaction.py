@@ -1,6 +1,6 @@
-from sqlalchemy.sql.expression import extract, func, desc
+from sqlalchemy.sql.expression import extract, func, desc, label
 
-from ..entities import LabelDbo, TransactionDbo
+from ..entities import LabelDbo, TransactionDbo, CategoryDbo
 from ...modules.depynject import injectable
 
 
@@ -63,6 +63,25 @@ class TransactionRepository():
             query = query.group_by(extract('day', TransactionDbo.date_value))
         return query.all()
 
+    def get_grouped_by_category_type(self, account_ids=None, date_from=None, date_to=None, category_type=None):
+        quarter_expr = (extract('month', TransactionDbo.date_value) + 2) / 3  # quarter of year
+        query = self.entity_manager.query(
+            label('category', quarter_expr),
+            CategoryDbo.name.label('label'),
+            func.sum(TransactionDbo.amount).label('value')
+        ).join(
+            CategoryDbo.labels
+        ).join(
+            LabelDbo.transactions
+        )
+        query = self.filter_by_accounts(query, account_ids)
+        query = self.filter_by_date_from(query, date_from)
+        query = self.filter_by_date_to(query, date_to)
+        query = self.filter_by_category_type(query, category_type)
+        query = query.group_by(CategoryDbo.name)
+        query = query.group_by(quarter_expr)
+        return query.all()
+
     def get_total(self, account_ids=None, date_from=None, date_to=None, sign=None):
         query = self.entity_manager.query(
             func.sum(TransactionDbo.amount).label("total")
@@ -118,6 +137,12 @@ class TransactionRepository():
     def filter_by_labels(query, label_ids=None):
         if label_ids is not None:
             query = query.filter(TransactionDbo.label_id.in_(label_ids))
+        return query
+
+    @staticmethod
+    def filter_by_category_type(query, category_type=None):
+        if category_type is not None:
+            query = query.filter(CategoryDbo.type == category_type)
         return query
 
     @staticmethod

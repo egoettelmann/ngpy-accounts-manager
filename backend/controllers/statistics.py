@@ -3,8 +3,7 @@ from flask_restful import marshal_with
 
 from ..modules import restful
 from ..modules.depynject import injectable
-from ..domain.models import KeyValue
-from ..domain.models import Summary
+from ..domain.models import KeyValue, GroupedValue, Summary
 
 
 @injectable()
@@ -46,3 +45,13 @@ class StatisticsController():
         if account_ids is not None:
             account_ids = account_ids.split(',')
         return self.statistics_service.get_summary(account_ids, year, month)
+
+    @restful.route('/analytics')
+    @marshal_with(GroupedValue.resource_fields)
+    def get_analytics(self):
+        category_type = request.args.get('category_type')
+        year = int(request.args.get('year'))
+        account_ids = request.args.get('account_ids')
+        if account_ids is not None:
+            account_ids = account_ids.split(',')
+        return self.transaction_service.get_total_by_category_type(account_ids, year, category_type)

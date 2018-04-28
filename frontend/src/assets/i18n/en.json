@@ -14,6 +14,9 @@
   "i18n.views.transactions.chart.title": "Distribution by category",
   "i18n.views.treasury.label.year-dropdown": "Year",
   "i18n.views.treasury.chart.title": "Treasury history",
+  "i18n.views.analytics.label.year-dropdown": "Year",
+  "i18n.views.analytics.chart.credit.title": "Crediting transactions per quarter",
+  "i18n.views.analytics.chart.debit.title": "Debiting transactions per quarter",
 
   "i18n.components.navigation.dashboard": "Dashboard",
   "i18n.components.navigation.transactions": "Transactions",

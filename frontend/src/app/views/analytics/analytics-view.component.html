@@ -1,5 +1,40 @@
 <div class="row">
-  <div class="col-xs-6" *ngFor="let category of categories">
-    <span>{{ category.name }}</span>
+  <div class="col-xs-4">
+    <table class="table table-compact table-vertical">
+      <tr>
+        <th class="text-left align-middle" width="40%">{{ 'i18n.views.analytics.label.year-dropdown' | translate }}</th>
+        <td class="text-right">
+          <clr-dropdown class="col-xs-6 text-right">
+            <button type="button" class="btn btn-link" clrDropdownTrigger>
+              {{ currentYear }}
+              <clr-icon shape="caret down"></clr-icon>
+            </button>
+            <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
+              <button *ngFor="let year of yearList"
+                      type="button"
+                      clrDropdownItem
+                      uiSref="root.analytics"
+                      [uiParams]="{ year: year }">{{ year }}</button>
+            </clr-dropdown-menu>
+          </clr-dropdown>
+        </td>
+      </tr>
+    </table>
+
+    <app-account-toggle *ngIf="accounts"
+                        [accounts]="accounts"
+                        [preSelected]="accountsFilter"
+                        (onChange)="changeAccounts($event)">
+    </app-account-toggle>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <app-chart class="card" [title]="'i18n.views.analytics.chart.credit.title' | translate" [options]="graphOptionsCredit"></app-chart>
+  </div>
+  <div class="col-xs-6">
+    <app-chart class="card" [title]="'i18n.views.analytics.chart.debit.title' | translate" [options]="graphOptionsDebit"></app-chart>
+  </div>
+</div>
+

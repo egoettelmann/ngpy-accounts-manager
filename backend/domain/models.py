@@ -50,6 +50,19 @@ class KeyValue(Patchable):
         self.value = value
 
 
+class GroupedValue(Patchable):
+    resource_fields = {
+        'category': fields.String,
+        'label': fields.String,
+        'value': fields.Float
+    }
+
+    def __init__(self, category=None, label=None, value=None) -> None:
+        self.category = category
+        self.label = label
+        self.value = value
+
+
 class Label(Patchable):
     resource_fields = {
         'id': fields.Integer,
@@ -69,11 +82,13 @@ class Category(Patchable):
     resource_fields = {
         'id': fields.Integer,
         'name': fields.String,
+        'type': fields.String,
     }
 
-    def __init__(self, id=None, name=None) -> None:
+    def __init__(self, id=None, name=None, type=None) -> None:
         self.id = id
         self.name = name
+        self.type = type
 
 
 class Summary(Patchable):
