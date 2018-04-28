@@ -27,6 +27,28 @@
                         (onChange)="changeAccounts($event)">
     </app-account-toggle>
   </div>
+  <div class="col-xs-8">
+    <table class="table table-vertical">
+      <tr>
+        <td width="20%">{{ 'i18n.views.analytics.table.title' | translate }}</td>
+        <th class="text-right">Q1</th>
+        <th class="text-right">Q2</th>
+        <th class="text-right">Q3</th>
+        <th class="text-right">Q4</th>
+      </tr>
+      <tr *ngFor="let movement of tableMovements">
+        <th>{{ movement.name }}</th>
+        <td *ngFor="let d of movement.data" class="text-right">
+          <span>{{ d | number:'1.2-2' }}&nbsp;€</span>
+        </td>
+      </tr>
+      <tr *ngIf="tableMovements.length === 0">
+        <td colspan="5">
+          <span>{{ 'i18n.views.analytics.table.no-entries' | translate }}</span>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>
 
 <div class="row">

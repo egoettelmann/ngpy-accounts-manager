@@ -19,6 +19,7 @@ export class AnalyticsViewComponent implements OnInit {
   public accountsFilter: number[] = [];
   public graphOptionsCredit: any;
   public graphOptionsDebit: any;
+  public tableMovements: any[] = [];
 
   constructor(private $state: StateService,
               private accountsService: AccountsService,
@@ -52,6 +53,28 @@ export class AnalyticsViewComponent implements OnInit {
     this.statisticsService.getAnalytics(this.currentYear, 'D', accountIds).subscribe(data => {
       this.graphOptionsDebit = this.buildChartOptions(data);
     });
+    this.statisticsService.getAnalytics(this.currentYear, 'M', accountIds).subscribe(data => {
+      this.tableMovements = this.buildTable(data);
+    });
+  }
+
+  buildTable(data: any[]) {
+    const movements = [];
+    const series = {};
+    for (const d of data) {
+      const categoryIdx = parseInt(d.category) - 1;
+      if (!series.hasOwnProperty(d.label)) {
+        series[d.label] = [0, 0, 0, 0];
+      }
+      series[d.label][categoryIdx] = d.value;
+    }
+    for (const key in series) {
+      movements.push({
+        name: key,
+        data: series[key]
+      });
+    }
+    return movements;
   }
 
   buildChartOptions(data: any) {
