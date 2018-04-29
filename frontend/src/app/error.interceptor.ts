@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import {NotificationService} from './components/notification/notification.service';
 import {Notification} from './components/notification/notification';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -16,7 +17,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // const apiReq = req.clone();
-    const baseUrl = 'http://localhost:5050';
+    const baseUrl = environment.baseUrl;
     let apiReq = req.clone();
     if (!req.url.startsWith('/assets')) {
       apiReq = req.clone({url: baseUrl + req.url, withCredentials: true});
