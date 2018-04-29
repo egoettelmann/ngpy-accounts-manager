@@ -1,0 +1,7 @@
+{
+  "name": "frontend",
+  "version": "0.0.0",
+  "scripts": {
+    "postinstall": "npm install --prefix frontend && npm run build --prefix frontend"
+  }
+}
