@@ -32,6 +32,7 @@ api = Api(app,
           exception_handler=e_handler
           )
 
+app.secret_key = os.environ['SESSION_SECRET_KEY']
 em = EntityManager(os.environ['DATABASE_URL'])
 d_injector.register_singleton(em)
 em.init()
