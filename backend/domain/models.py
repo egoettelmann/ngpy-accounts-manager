@@ -21,6 +21,18 @@ class Patchable(MutableMapping):
         pass
 
 
+class User(Patchable):
+    resource_fields = {
+        'id': fields.Integer,
+        'login': fields.String,
+    }
+
+    def __init__(self, id=None, login=None, password=None):
+        self.id = id
+        self.login = login
+        self.password = password
+
+
 class Account(Patchable):
     resource_fields = {
         'id': fields.Integer,

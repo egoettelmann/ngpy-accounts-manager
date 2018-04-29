@@ -15,6 +15,7 @@ from .dbconnector.repositories.label import LabelRepository
 from .dbconnector.repositories.status import StatusRepository
 from .dbconnector.repositories.transaction import TransactionRepository
 from .dbconnector.repositories.category import CategoryRepository
+from .dbconnector.repositories.user import UserRepository
 
 # Importing all business services
 from .domain.services.status import StatusService
@@ -23,6 +24,7 @@ from .domain.services.label import LabelService
 from .domain.services.statistics import StatisticsService
 from .domain.services.transaction import TransactionService
 from .domain.services.category import CategoryService
+from .domain.services.user import UserService
 
 # Additional imports
 from .domain.importers.resolve import Resolver

@@ -7,6 +7,13 @@ from sqlalchemy.sql.sqltypes import Date, Numeric, Integer, String
 from .manager import EntityManager
 
 
+class UserDbo(EntityManager.get_base()):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    login = Column(String(50), unique=True)
+    password = Column(String(250))
+
+
 class AccountDbo(EntityManager.get_base()):
     __tablename__ = 'accounts'
     id = Column(Integer, primary_key=True)
