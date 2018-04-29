@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request, session
 from flask_cors import CORS
 
@@ -30,8 +32,7 @@ api = Api(app,
           exception_handler=e_handler
           )
 
-app.config.from_pyfile('config.cfg')
-em = EntityManager(app.config['DATASOURCE'])
+em = EntityManager(os.environ['DATABASE_URL'])
 d_injector.register_singleton(em)
 em.init()
 
