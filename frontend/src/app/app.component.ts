@@ -5,7 +5,7 @@ import {TranslateService} from '@ngx-translate/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   @Input() connectedUser;
 
@@ -14,7 +14,4 @@ export class AppComponent implements OnInit {
     translate.use('en');
   }
 
-  ngOnInit(): void {
-    console.log('connectedUser', this.connectedUser);
-  }
 }
