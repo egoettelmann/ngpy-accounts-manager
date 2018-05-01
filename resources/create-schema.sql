@@ -1,66 +1,66 @@
 -- we don't know how to generate schema main (class Schema) :(
-create table public."accounts"
+CREATE TABLE public."accounts"
 (
-  id serial primary key,
-  name VARCHAR(50) unique,
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) UNIQUE,
   description VARCHAR(250),
   color VARCHAR(50)
 )
 ;
 
-create table public."categories"
+CREATE TABLE public."categories"
 (
-  id serial primary key,
-  name VARCHAR(250) unique,
-  type varchar(10)
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(250) UNIQUE,
+  type VARCHAR(10)
 )
 ;
 
-create table public."labels"
+CREATE TABLE public."labels"
 (
-  id serial primary key,
-  name VARCHAR(250) unique,
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(250) UNIQUE,
   color VARCHAR(50),
   icon VARCHAR(250),
   category_id INTEGER
 )
 ;
 
-create table public."status"
+CREATE TABLE public."status"
 (
-  id serial primary key,
-  account_id INTEGER references accounts,
+  id SERIAL PRIMARY KEY,
+  account_id INTEGER REFERENCES accounts,
   date DATE,
-  value NUMERIC(2)
+  value NUMERIC(25, 2)
 )
 ;
 
-create table public."transactions"
+CREATE TABLE public."transactions"
 (
-  id serial primary key,
-  account_id INTEGER references accounts,
+  id SERIAL PRIMARY KEY,
+  account_id INTEGER REFERENCES accounts,
   date_compta DATE,
   date_operation DATE,
   date_value DATE,
   description VARCHAR(250),
   reference VARCHAR(50),
-  amount NUMERIC(2),
+  amount NUMERIC(25, 2),
   note VARCHAR(250),
-  label_id INTEGER references labels,
-  hash VARCHAR(250) unique
+  label_id INTEGER REFERENCES labels,
+  hash VARCHAR(250) UNIQUE
 )
 ;
 
-create table public."labels_transactions"
+CREATE TABLE public."labels_transactions"
 (
   label_id INTEGER references labels,
   transaction_id INTEGER references transactions
 )
 ;
 
-create table public."user"
+CREATE TABLE public."user"
 (
-  id serial primary key,
+  id SERIAL PRIMARY KEY,
   login VARCHAR(50),
   password VARCHAR(250)
 )
