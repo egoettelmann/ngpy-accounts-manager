@@ -31,6 +31,24 @@ class TransactionController():
             account_ids = account_ids.split(',')
         return self.transaction_service.get_all_transactions(account_ids, year, month)
 
+    @restful.route('/top/<int:num_transactions>/<asc>')
+    @marshal_with(Transaction.resource_fields)
+    def get_top_transactions(self, num_transactions, asc):
+        year = request.args.get('year')
+        if year is not None:
+            year = int(year)
+        month = request.args.get('month')
+        if month is not None:
+            month = int(month)
+        account_ids = request.args.get('account_ids')
+        if account_ids is not None:
+            account_ids = account_ids.split(',')
+        num_transactions = min(num_transactions, 10)
+        ascending = False
+        if asc == 'true':
+            ascending = True
+        return self.transaction_service.get_top_transactions(num_transactions, ascending, account_ids, year, month)
+
     @restful.route('/<int:transaction_id>')
     @marshal_with(Transaction.resource_fields)
     def get_one(self, transaction_id):

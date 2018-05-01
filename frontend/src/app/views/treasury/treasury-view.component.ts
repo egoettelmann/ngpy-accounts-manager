@@ -5,6 +5,8 @@ import {DecimalPipe} from '@angular/common';
 import {Summary} from '../../modules/statistics/summary';
 import { Account } from '../../modules/accounts/account';
 import { AccountsService } from '../../modules/accounts/accounts.service';
+import { TransactionsService } from '../../modules/transactions/transactions.service';
+import { Transaction } from '../../modules/transactions/transaction';
 
 @Component({
   templateUrl: './treasury-view.component.html'
@@ -15,12 +17,15 @@ export class TreasuryViewComponent implements OnInit {
   public currentYear: any;
   public graphOptions: any;
   public accounts: Account[];
+  public topTransactionsAsc: Transaction[];
+  public topTransactionsDesc: Transaction[];
   public summary: Summary;
   public accountsFilter: number[] = [];
 
   constructor(private $state: StateService,
               private accountsService: AccountsService,
               private statisticsService: StatisticsService,
+              private transactionsService: TransactionsService,
               private decimalPipe: DecimalPipe) {}
 
   ngOnInit(): void {
@@ -44,6 +49,7 @@ export class TreasuryViewComponent implements OnInit {
     });
     this.loadEvolution(this.$state.params.year, accountIds);
     this.loadSummary(this.$state.params.year, accountIds);
+    this.loadTops(this.$state.params.year, accountIds);
   }
 
   private loadEvolution(year: string, accounts: number[]) {
@@ -55,6 +61,15 @@ export class TreasuryViewComponent implements OnInit {
   private loadSummary(year: string, accounts: number[]) {
     this.statisticsService.getSummary(year, undefined, accounts).subscribe(data => {
       this.summary = data;
+    });
+  }
+
+  private loadTops(year: string, accounts: number[]) {
+    this.transactionsService.getTop(10, true, year, undefined, accounts).subscribe(data => {
+      this.topTransactionsAsc = data;
+    });
+    this.transactionsService.getTop(10, false, year, undefined, accounts).subscribe(data => {
+      this.topTransactionsDesc = data;
     });
   }
 

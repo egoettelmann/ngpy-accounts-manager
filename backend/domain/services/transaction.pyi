@@ -27,6 +27,14 @@ class TransactionService():
 
     def get_last_transaction(self, account_ids : list(int)) -> Transaction : ...
 
+    def get_top_transactions(self,
+                             num_transactions : int,
+                             ascending : bool,
+                             account_ids : list(int),
+                             year : int,
+                             month : int
+                             ) -> Transaction : ...
+
     def get_total_by_labels(self,
                             account_ids : list(int),
                             year : int,

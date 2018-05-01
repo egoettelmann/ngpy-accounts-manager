@@ -32,7 +32,18 @@ class TransactionService():
         self.repository.delete_by_id(transaction_id)
 
     def get_last_transaction(self, account_ids):
-        return self.repository.get_last_transaction(account_ids)
+        return self.mapper.map(
+            self.repository.get_last_transaction(account_ids),
+            Transaction
+        )
+
+    def get_top_transactions(self, num_transactions, ascending, account_ids, year, month):
+        date_from = self.get_date_from(year, month)
+        date_to = self.get_date_to(year, month)
+        return self.mapper.map_all(
+            self.repository.get_top_transactions(num_transactions, ascending, account_ids, date_from, date_to),
+            Transaction
+        )
 
     def get_total_by_labels(self, account_ids=None, year=None, month=None, sign=None):
         date_from = self.get_date_from(year, month)

@@ -10,6 +10,7 @@ export class TransactionsTableComponent implements OnChanges, OnInit {
 
   @Input() transactions: Transaction[];
   @Input() labels: Label[];
+  @Input() editable = false;
 
   @Output() onChange = new EventEmitter<PatchEvent<Transaction>>();
   @Output() onDelete = new EventEmitter<Transaction>();

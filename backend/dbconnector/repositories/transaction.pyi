@@ -35,6 +35,14 @@ class TransactionRepository():
 
     def get_last_transaction(self, account_ids : list(int)) -> TransactionDbo : ...
 
+    def get_top_transactions(self,
+                             num_transactions : int,
+                             ascending : bool,
+                             account_ids : list(int),
+                             date_from : datetime.date,
+                             date_to : datetime.date
+                             ) -> list(TransactionDbo) : ...
+
     def get_grouped_by_labels(self,
                               account_ids : list(int),
                               date_from : datetime.date,

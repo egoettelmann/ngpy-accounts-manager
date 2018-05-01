@@ -33,6 +33,17 @@ class TransactionRepository():
         query = self.filter_by_accounts(query, account_ids)
         return query.order_by(desc(TransactionDbo.date_value)).first()
 
+    def get_top_transactions(self, num_transactions, ascending, account_ids=None, date_from=None, date_to=None):
+        query = self.entity_manager.query(TransactionDbo)
+        query = self.filter_by_accounts(query, account_ids)
+        query = self.filter_by_date_from(query, date_from)
+        query = self.filter_by_date_to(query, date_to)
+        if ascending:
+            query = query.order_by(TransactionDbo.amount)
+        else:
+            query = query.order_by(desc(TransactionDbo.amount))
+        return query.limit(num_transactions).all()
+
     def get_grouped_by_labels(self, account_ids=None, date_from=None, date_to=None, sign=None):
         query = self.entity_manager.query(
             LabelDbo.name.label('label'),

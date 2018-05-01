@@ -33,3 +33,12 @@
     <app-chart class="card" [title]="'i18n.views.treasury.chart.title' | translate" [options]="graphOptions"></app-chart>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <app-transactions-table [transactions]="topTransactionsAsc"></app-transactions-table>
+  </div>
+  <div class="col-xs-6">
+    <app-transactions-table [transactions]="topTransactionsDesc"></app-transactions-table>
+  </div>
+</div>

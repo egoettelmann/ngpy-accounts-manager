@@ -2,12 +2,12 @@
   <thead>
     <tr>
       <th>{{ 'i18n.modules.transactions.table.header.account' | translate }}</th>
-      <th>{{ 'i18n.modules.transactions.table.header.label' | translate }}</th>
+      <th *ngIf="labels">{{ 'i18n.modules.transactions.table.header.label' | translate }}</th>
       <th class="left">{{ 'i18n.modules.transactions.table.header.reference' | translate }}</th>
       <th>{{ 'i18n.modules.transactions.table.header.description' | translate }}</th>
       <th>{{ 'i18n.modules.transactions.table.header.value-date' | translate }}</th>
       <th>{{ 'i18n.modules.transactions.table.header.amount' | translate }}</th>
-      <th>&nbsp;</th>
+      <th *ngIf="editable">&nbsp;</th>
     </tr>
   </thead>
   <tbody>
@@ -24,7 +24,7 @@
           </span>
         </span>
       </td>
-      <td class="text-left">
+      <td *ngIf="labels" class="text-left">
         <div class="select">
           <input title="Label"
                  type="text"
@@ -43,7 +43,7 @@
       <td class="text-left">{{ transaction.description }}</td>
       <td class="text-center text-nowrap">{{ transaction.dateValue }}</td>
       <td class="text-right">{{ transaction.amount | number:'1.2-2' }}&nbsp;€</td>
-      <td><clr-icon (click)="select(transaction)" shape="note" size="12"></clr-icon></td>
+      <td *ngIf="editable"><clr-icon (click)="select(transaction)" shape="note" size="12"></clr-icon></td>
     </tr>
   </tbody>
 </table>
