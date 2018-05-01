@@ -14,6 +14,7 @@
   "i18n.views.transactions.chart.title": "Distribution by category",
   "i18n.views.treasury.label.year-dropdown": "Year",
   "i18n.views.treasury.chart.title": "Treasury history",
+  "i18n.views.treasury.top-list.title": "Top transactions",
   "i18n.views.analytics.label.year-dropdown": "Year",
   "i18n.views.analytics.table.title": "Movements between accounts by quarter",
   "i18n.views.analytics.table.no-entries": "No entries",

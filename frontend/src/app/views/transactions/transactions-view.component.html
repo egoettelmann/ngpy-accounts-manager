@@ -37,8 +37,12 @@
 
 <h3>{{ 'i18n.views.transactions.list.title' | translate }}</h3>
 
-<app-transactions-table [transactions]="transactions"
-                        [labels]="labels"
-                        [editable]="true"
-                        (onChange)="saveTransaction($event)">
-</app-transactions-table>
+<div class="row">
+  <div class="col-xs-12">
+    <app-transactions-table [transactions]="transactions"
+                            [labels]="labels"
+                            [editable]="true"
+                            (onChange)="saveTransaction($event)">
+    </app-transactions-table>
+  </div>
+</div>
