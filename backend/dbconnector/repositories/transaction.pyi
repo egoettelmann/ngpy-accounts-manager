@@ -64,6 +64,13 @@ class TransactionRepository():
                                      category_type : str
                                      ) -> list(QGroupedValue) : ...
 
+    def get_grouped_by_labels_and_category_type(self,
+                                                account_ids : list(int),
+                                                date_from : datetime.date,
+                                                date_to : datetime.date,
+                                                category_type : str
+                                                ) -> list(QGroupedValue) : ...
+
     def get_total(self,
                   account_ids : list(int),
                   date_from : datetime.date,

@@ -39,18 +39,27 @@ class TransactionService():
                             account_ids : list(int),
                             year : int,
                             month : int,
-                            sign : bool) -> KeyValue : ...
+                            sign : bool
+                            ) -> KeyValue : ...
 
     def get_total_by_period(self,
                             account_ids : list(int),
                             year : int,
                             month : int,
-                            period : str) -> KeyValue : ...
+                            period : str
+                            ) -> KeyValue : ...
 
     def get_total_by_category_type(self,
                                    account_ids : list(int),
                                    year : int,
-                                   category_type : str) -> GroupedValue : ...
+                                   category_type : str
+                                   ) -> GroupedValue : ...
+
+    def get_total_by_labels_and_category_type(self,
+                                              account_ids : list(int),
+                                              year : int,
+                                              category_type : str
+                                              ) -> GroupedValue : ...
 
     def get_total(self,
                   account_ids : list(int),

@@ -55,3 +55,13 @@ class StatisticsController():
         if account_ids is not None:
             account_ids = account_ids.split(',')
         return self.transaction_service.get_total_by_category_type(account_ids, year, category_type)
+
+    @restful.route('/analytics/details')
+    @marshal_with(GroupedValue.resource_fields)
+    def get_analytics_details(self):
+        category_type = request.args.get('category_type')
+        year = int(request.args.get('year'))
+        account_ids = request.args.get('account_ids')
+        if account_ids is not None:
+            account_ids = account_ids.split(',')
+        return self.transaction_service.get_total_by_labels_and_category_type(account_ids, year, category_type)

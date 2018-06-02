@@ -20,6 +20,8 @@ export class AnalyticsViewComponent implements OnInit {
   public graphOptionsCredit: any;
   public graphOptionsDebit: any;
   public tableMovements: any[] = [];
+  public detailsCredit: any[] = [];
+  public detailsDebit: any[] = [];
 
   constructor(private $state: StateService,
               private accountsService: AccountsService,
@@ -55,6 +57,12 @@ export class AnalyticsViewComponent implements OnInit {
     });
     this.statisticsService.getAnalytics(this.currentYear, 'M', accountIds).subscribe(data => {
       this.tableMovements = this.buildTable(data);
+    });
+    this.statisticsService.getAnalyticsDetails(this.currentYear, 'C', accountIds).subscribe(data => {
+      this.detailsCredit = data;
+    });
+    this.statisticsService.getAnalyticsDetails(this.currentYear, 'D', accountIds).subscribe(data => {
+      this.detailsDebit = data;
     });
   }
 

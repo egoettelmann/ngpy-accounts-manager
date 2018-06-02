@@ -93,6 +93,23 @@ class TransactionRepository():
         query = query.group_by(quarter_expr)
         return query.all()
 
+    def get_grouped_by_labels_and_category_type(self, account_ids=None, date_from=None, date_to=None, category_type=None):
+        query = self.entity_manager.query(
+            CategoryDbo.name.label('category'),
+            LabelDbo.name.label('label'),
+            func.sum(TransactionDbo.amount).label('value')
+        ).join(
+            CategoryDbo.labels
+        ).join(
+            LabelDbo.transactions
+        )
+        query = self.filter_by_accounts(query, account_ids)
+        query = self.filter_by_date_from(query, date_from)
+        query = self.filter_by_date_to(query, date_to)
+        query = self.filter_by_category_type(query, category_type)
+        query = query.group_by(LabelDbo.id)
+        return query.all()
+
     def get_total(self, account_ids=None, date_from=None, date_to=None, sign=None):
         query = self.entity_manager.query(
             func.sum(TransactionDbo.amount).label("total")
