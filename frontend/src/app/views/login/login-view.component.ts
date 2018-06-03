@@ -4,7 +4,8 @@ import {SessionService} from '../../session.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  templateUrl: './login-view.component.html'
+  templateUrl: './login-view.component.html',
+  styleUrls: ['./login-view.component.scss']
 })
 export class LoginViewComponent {
 
