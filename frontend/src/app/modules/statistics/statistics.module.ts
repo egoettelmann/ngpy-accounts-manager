@@ -1,9 +1,7 @@
-import {NgModule} from '@angular/core';
-import {SharedModule} from '../shared/shared.module';
-import {StatisticsService} from './statistics.service';
-import {SummaryComponent} from './summary.component';
-import { ClarityModule } from 'clarity-angular';
+import { NgModule } from '@angular/core';
+import { SummaryComponent } from './summary.component';
 import { GroupedDetailsTableComponent } from './grouped-details-table.component';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
   declarations: [
@@ -14,12 +12,8 @@ import { GroupedDetailsTableComponent } from './grouped-details-table.component'
     SummaryComponent,
     GroupedDetailsTableComponent
   ],
-  providers: [
-    StatisticsService
-  ],
   imports: [
-    SharedModule,
-    ClarityModule.forChild()
+    SharedModule
   ]
 })
 export class StatisticsModule {

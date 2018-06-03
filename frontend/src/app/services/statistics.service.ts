@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Summary } from './summary';
+import { Summary } from '../modules/statistics/summary';
 
 @Injectable()
 export class StatisticsService {

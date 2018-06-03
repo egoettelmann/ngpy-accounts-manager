@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountsService } from '../../modules/accounts/accounts.service';
 import { Account } from '../../modules/accounts/account';
 import { Category } from '../../modules/transactions/category';
-import { CategoriesService } from '../../modules/transactions/categories.service';
-import { StatisticsService } from '../../modules/statistics/statistics.service';
 import { StateService } from '@uirouter/angular';
 import { DecimalPipe } from '@angular/common';
+import { AccountsService } from '../../services/accounts.service';
+import { CategoriesService } from '../../services/categories.service';
+import { StatisticsService } from '../../services/statistics.service';
 
 @Component({
   templateUrl: './analytics-view.component.html'

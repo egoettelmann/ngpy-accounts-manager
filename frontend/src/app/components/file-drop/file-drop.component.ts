@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { UploadFile, UploadEvent } from 'ngx-file-drop';
-import { UploadService } from './upload.service';
+import { UploadService } from '../../services/upload.service';
 
 @Component({
   selector: 'app-file-drop',

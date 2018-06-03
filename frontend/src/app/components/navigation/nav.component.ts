@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {StateService} from '@uirouter/angular';
-import {SessionService} from '../../session.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   templateUrl: './nav.component.html',
@@ -8,7 +8,9 @@ import {SessionService} from '../../session.service';
 })
 export class NavComponent {
 
-  constructor(private $state: StateService, private sessionService: SessionService) {}
+  constructor(private $state: StateService,
+              private sessionService: SessionService
+  ) {}
 
   clickLogout(): void {
     this.sessionService.logout().subscribe(() => {

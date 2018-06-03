@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {StateService} from '@uirouter/angular';
-import {SessionService} from '../../session.service';
+import { Component } from '@angular/core';
+import { StateService } from '@uirouter/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   templateUrl: './login-view.component.html',

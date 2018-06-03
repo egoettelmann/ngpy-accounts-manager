@@ -2,12 +2,12 @@ import {NavComponent} from './components/navigation/nav.component';
 import {Ng2StateDeclaration} from '@uirouter/angular';
 import {AppComponent} from './app.component';
 import {LoginViewComponent} from './views/login/login-view.component';
-import {SessionService} from './session.service';
 import {DashboardViewComponent} from './views/dashboard/dashboard-view.component';
 import {TransactionsViewComponent} from './views/transactions/transactions-view.component';
 import {TreasuryViewComponent} from './views/treasury/treasury-view.component';
 import 'rxjs/add/operator/toPromise';
 import { AnalyticsViewComponent } from './views/analytics/analytics-view.component';
+import { SessionService } from './services/session.service';
 
 export class AppConfig {
 

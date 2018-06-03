@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {StateService} from '@uirouter/angular';
-import {StatisticsService} from '../../modules/statistics/statistics.service';
 import {DecimalPipe} from '@angular/common';
 import {Summary} from '../../modules/statistics/summary';
 import { Account } from '../../modules/accounts/account';
-import { AccountsService } from '../../modules/accounts/accounts.service';
-import { TransactionsService } from '../../modules/transactions/transactions.service';
 import { Transaction } from '../../modules/transactions/transaction';
+import { AccountsService } from '../../services/accounts.service';
+import { StatisticsService } from '../../services/statistics.service';
+import { TransactionsService } from '../../services/transactions.service';
 
 @Component({
   templateUrl: './treasury-view.component.html'

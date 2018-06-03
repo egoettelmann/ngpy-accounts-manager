@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { StateService } from '@uirouter/angular';
-import { TransactionsService } from '../../modules/transactions/transactions.service';
-import { StatisticsService } from '../../modules/statistics/statistics.service';
 import { DecimalPipe } from '@angular/common';
 import { PatchEvent, Transaction } from '../../modules/transactions/transaction';
 import { Summary } from '../../modules/statistics/summary';
 import { Account } from '../../modules/accounts/account';
-import { AccountsService } from '../../modules/accounts/accounts.service';
-import { LabelsService } from '../../modules/transactions/labels.service';
 import { Label } from '../../modules/transactions/label';
 import { Observable } from 'rxjs/Observable';
-import "rxjs/add/observable/zip";
+import 'rxjs/add/observable/zip';
+import { LabelsService } from '../../services/labels.service';
+import { TransactionsService } from '../../services/transactions.service';
+import { StatisticsService } from '../../services/statistics.service';
+import { AccountsService } from '../../services/accounts.service';
 
 @Component({
   templateUrl: './transactions-view.component.html'

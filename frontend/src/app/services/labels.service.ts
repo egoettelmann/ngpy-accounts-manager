@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Label } from './label';
+import { Label } from '../modules/transactions/label';
 
 @Injectable()
 export class LabelsService {

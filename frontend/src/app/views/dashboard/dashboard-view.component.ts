@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountsService } from '../../modules/accounts/accounts.service';
 import { DecimalPipe } from '@angular/common';
 import { Account } from '../../modules/accounts/account';
+import { AccountsService } from '../../services/accounts.service';
 
 @Component({
   templateUrl: './dashboard-view.component.html'
