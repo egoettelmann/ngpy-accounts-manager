@@ -1,8 +1,10 @@
-<div class="autocomplete">
-  <input [ngModel]="ngModel"
+<div class="autocomplete select">
+  <input type="text"
+         [ngModel]="ngModel"
          class="autocomplete-input"
          (ngModelChange)="onChange($event)"
-         (keyup)="select($event)"/>
+         (keyup)="select($event)"
+         (focusout)="onFocusOut()"/>
   <div class="autocomplete-options" *ngIf="ngOptions">
     <div *ngFor="let option of ngOptions"
          [ngClass]="{'selected': isSelected(option)}"

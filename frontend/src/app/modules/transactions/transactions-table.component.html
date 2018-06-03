@@ -25,7 +25,11 @@
         </span>
       </td>
       <td *ngIf="labels" class="text-left">
-        <app-autocomplete [value]="transaction.label" [options]="labels"></app-autocomplete>
+        <app-autocomplete [value]="transaction.label"
+                          [options]="labels"
+                          (onSelect)="changeLabel($event, transaction)"
+                          (onCreate)="addLabel($event, transaction)">
+        </app-autocomplete>
       </td>
       <td class="text-left">{{ transaction.reference }}</td>
       <td class="text-left">{{ transaction.description }}</td>

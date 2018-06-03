@@ -4,15 +4,13 @@
 
   &-input {
     width: 100%;
-    border: 0;
-    border-bottom: 1px solid black;
   }
 
   &-options {
     width: 100%;
     z-index: 30;
     position: absolute;
-    border: 1px solid black;
+    border: 1px solid #9a9a9a;
     border-top: 0;
     background-color: white;
 
@@ -21,7 +19,7 @@
 
       &.selected, &:hover {
         cursor: pointer;
-        background-color: gray;
+        background-color: #0094d2;
         color: white;
       }
     }

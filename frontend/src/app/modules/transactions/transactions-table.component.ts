@@ -28,7 +28,6 @@ export class TransactionsTableComponent implements OnChanges, OnInit {
   }
 
   changeLabel(label: Label, transaction: Transaction) {
-    console.log('label', label);
     if (label
       && transaction
       && transaction.label
@@ -38,19 +37,18 @@ export class TransactionsTableComponent implements OnChanges, OnInit {
     }
   }
 
+  addLabel(labelString: string, transaction: Transaction) {
+    if (transaction) {
+      console.log('Add new label', labelString);
+    }
+  }
+
   changeTransaction(transaction: Transaction) {
     this.onChange.emit(new PatchEvent(transaction, transaction));
   }
 
   deleteTransaction(transaction: Transaction) {
     this.onDelete.emit(transaction);
-  }
-
-  labelDropdownFormatter(data: any): string {
-    if (data && data.id) {
-      return data.name;
-    }
-    return '';
   }
 
 }
