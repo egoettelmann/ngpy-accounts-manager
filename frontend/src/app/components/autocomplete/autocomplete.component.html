@@ -1,0 +1,13 @@
+<div class="autocomplete">
+  <input [ngModel]="ngModel"
+         class="autocomplete-input"
+         (ngModelChange)="onChange($event)"
+         (keyup)="select($event)"/>
+  <div class="autocomplete-options" *ngIf="ngOptions">
+    <div *ngFor="let option of ngOptions"
+         [ngClass]="{'selected': isSelected(option)}"
+         (click)="selectClick(option)">
+      <span>{{ option[labelAttribute] }}</span>
+    </div>
+  </div>
+</div>

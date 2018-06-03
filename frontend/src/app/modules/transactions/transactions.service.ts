@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Transaction } from './transaction';
 import { Observable } from 'rxjs/Observable';
-import { Operation } from 'fast-json-patch';
 
 @Injectable()
 export class TransactionsService {

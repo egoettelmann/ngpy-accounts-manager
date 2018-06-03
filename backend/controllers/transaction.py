@@ -62,12 +62,9 @@ class TransactionController():
     @marshal_with(Transaction.resource_fields)
     def update_one(self, transaction_id):
         patch = request.get_json(force=True)  # force flag necessary if 'Content-Type' is not 'application/json'
-        print('PATCH', patch)
         t = self.transaction_service.get_transaction(transaction_id)
-        print('OLD', t)
         for key, value in patch.items():
             t[key] = value
-        print('NEW', t)
         return self.transaction_service.update_one(t)
 
     @restful.route('/upload-file', methods=['POST'])

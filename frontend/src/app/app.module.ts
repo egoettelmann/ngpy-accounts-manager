@@ -88,4 +88,5 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   bootstrap: [UIView]
 })
-export class AppModule { }
+export class AppModule {
+}

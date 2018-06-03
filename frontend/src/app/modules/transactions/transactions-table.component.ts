@@ -28,9 +28,11 @@ export class TransactionsTableComponent implements OnChanges, OnInit {
   }
 
   changeLabel(label: Label, transaction: Transaction) {
+    console.log('label', label);
     if (label
       && transaction
       && transaction.label
+      && label.id !== undefined
       && label.id !== transaction.label.id) {
       this.onChange.emit(new PatchEvent(transaction, { label_id: label.id }));
     }

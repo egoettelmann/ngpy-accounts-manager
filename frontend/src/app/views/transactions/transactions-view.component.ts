@@ -97,7 +97,6 @@ export class TransactionsViewComponent implements OnInit {
   }
 
   saveTransaction(patchEvent: PatchEvent<Transaction>) {
-    console.log('patchEvent', patchEvent);
     this.transactionsService.updateOne(patchEvent.model.id, patchEvent.changes).subscribe(data => {
       console.log('SAVE', data);
     });

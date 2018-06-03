@@ -25,19 +25,7 @@
         </span>
       </td>
       <td *ngIf="labels" class="text-left">
-        <div class="select">
-          <input title="Label"
-                 type="text"
-                 auto-complete
-                 [ngModel]="transaction.label"
-                 (valueChanged)="changeLabel($event, transaction)"
-                 [value-formatter]="labelDropdownFormatter"
-                 [list-formatter]="'name'"
-                 [auto-complete-placeholder]="'None'"
-                 [max-num-list]="10"
-                 [accept-user-input]="false"
-                 [source]="labels" />
-        </div>
+        <app-autocomplete [value]="transaction.label" [options]="labels"></app-autocomplete>
       </td>
       <td class="text-left">{{ transaction.reference }}</td>
       <td class="text-left">{{ transaction.description }}</td>

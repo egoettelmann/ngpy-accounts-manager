@@ -1,0 +1,30 @@
+.autocomplete {
+  width: 100%;
+  position: relative;
+
+  &-input {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid black;
+  }
+
+  &-options {
+    width: 100%;
+    z-index: 30;
+    position: absolute;
+    border: 1px solid black;
+    border-top: 0;
+    background-color: white;
+
+    & > div {
+      padding: 3px;
+
+      &.selected, &:hover {
+        cursor: pointer;
+        background-color: gray;
+        color: white;
+      }
+    }
+  }
+
+}

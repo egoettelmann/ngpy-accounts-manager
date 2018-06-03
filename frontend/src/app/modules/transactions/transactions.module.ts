@@ -8,11 +8,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LabelsService } from './labels.service';
 import { ClarityModule } from 'clarity-angular';
 import { CategoriesService } from './categories.service';
+import { AutocompleteComponent } from '../../components/autocomplete/autocomplete.component';
 
 @NgModule({
   declarations: [
     TransactionsTableComponent,
-    TransactionsFormComponent
+    TransactionsFormComponent,
+    AutocompleteComponent,
   ],
   exports: [
     TransactionsTableComponent,
