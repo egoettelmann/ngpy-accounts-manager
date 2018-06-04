@@ -38,15 +38,6 @@ class EntityManager:
             __AVAILABLE_MANAGERS__[name] = declarative_base()
         return __AVAILABLE_MANAGERS__[name]
 
-    def init(self):
-        # Required to import all entities to initialize them
-        self.association_tables['labels_transactions'] = Table(
-            'labels_transactions',
-            EntityManager.get_base().metadata,
-            Column('label_id', Integer, ForeignKey('labels.id')),
-            Column('transaction_id', Integer, ForeignKey('transactions.id'))
-        )
-
 
 @injectable(scope='request')
 class RequestScopedSession:

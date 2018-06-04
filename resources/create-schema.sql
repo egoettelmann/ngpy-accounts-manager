@@ -1,4 +1,10 @@
--- we don't know how to generate schema main (class Schema) :(
+DROP TABLE IF EXISTS public."user";
+DROP TABLE IF EXISTS public."categories";
+DROP TABLE IF EXISTS public."status";
+DROP TABLE IF EXISTS public."transactions";
+DROP TABLE IF EXISTS public."accounts";
+DROP TABLE IF EXISTS public."labels";
+
 CREATE TABLE public."accounts"
 (
   id SERIAL PRIMARY KEY,
@@ -48,13 +54,6 @@ CREATE TABLE public."transactions"
   note VARCHAR(250),
   label_id INTEGER REFERENCES labels,
   hash VARCHAR(250) UNIQUE
-)
-;
-
-CREATE TABLE public."labels_transactions"
-(
-  label_id INTEGER references labels,
-  transaction_id INTEGER references transactions
 )
 ;
 

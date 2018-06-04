@@ -35,7 +35,6 @@ api = Api(app,
 app.secret_key = os.environ['SESSION_SECRET_KEY']
 em = EntityManager(os.environ['DATABASE_URL'])
 d_injector.register_singleton(em)
-em.init()
 
 
 @app.route("/")
