@@ -13,8 +13,9 @@
               <button *ngFor="let year of yearList"
                       type="button"
                       clrDropdownItem
-                      uiSref="root.treasury"
-                      [uiParams]="{ year: year }">{{ year }}</button>
+                      [routerLink]="['/treasury', year]">
+                {{ year }}
+              </button>
             </clr-dropdown-menu>
           </clr-dropdown>
         </td>

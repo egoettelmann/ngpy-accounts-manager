@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { StateService } from '@uirouter/angular';
 import { DecimalPipe } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
@@ -11,6 +10,7 @@ import { PatchEvent, Transaction } from '../../../components/transactions/transa
 import { Summary } from '../../../components/statistics/summary';
 import { Label } from '../../../components/transactions/label';
 import { Account } from '../../../components/accounts/account';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: './transactions-view.component.html'
@@ -30,18 +30,22 @@ export class TransactionsViewComponent implements OnInit {
   public labels: Label[];
   public accountsFilter: number[] = [];
 
-  constructor(private $state: StateService,
+  constructor(private route: ActivatedRoute,
+              private router: Router,
               private labelsService: LabelsService,
               private transactionsService: TransactionsService,
               private statisticsService: StatisticsService,
               private accountsService: AccountsService,
               private decimalPipe: DecimalPipe
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
-    this.currentYear = this.$state.params.year;
-    if (this.$state.params.account) {
-      this.accountsFilter = this.$state.params.account;
+    console.log(this.route.snapshot);
+    this.currentYear = +this.route.snapshot.paramMap.get('year');
+    if (this.route.snapshot.paramMap.has('account')) {
+      //this.accountsFilter = this.$state.params.account;
+      this.accountsFilter = [];
     }
     Observable.zip(
       this.accountsService.getAccounts(),
@@ -114,12 +118,16 @@ export class TransactionsViewComponent implements OnInit {
   }
 
   private reload(accountIds: number[]) {
-    this.$state.go('root.transactions', {
-      account: accountIds
+    const year = this.route.snapshot.paramMap.get('year');
+    const month = this.route.snapshot.paramMap.get('month');
+    this.router.navigate(['transactions', year, month], {
+      queryParams: {
+        account: accountIds
+      }
     });
-    this.loadTransactions(this.$state.params.year, this.$state.params.month, accountIds);
-    this.loadSummary(this.$state.params.year, this.$state.params.month, accountIds);
-    this.loadRepartition(this.$state.params.year, this.$state.params.month, accountIds);
+    this.loadTransactions(year, month, accountIds);
+    this.loadSummary(year, month, accountIds);
+    this.loadRepartition(year, month, accountIds);
   }
 
 }

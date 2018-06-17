@@ -1,15 +1,15 @@
 <header class="header-6">
   <div class="header-nav">
-    <a uiSref="main.dashboard" uiSrefActive="active" class="nav-link">
+    <a [routerLink]="['/dashboard']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.dashboard' | translate }}</span>
     </a>
-    <a uiSref="main.transactions" uiSrefActive="active" class="nav-link">
+    <a [routerLink]="['/transactions', currentYear, currentMonth]" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.transactions' | translate }}</span>
     </a>
-    <a uiSref="main.treasury" uiSrefActive="active" class="nav-link">
+    <a [routerLink]="['/treasury', currentYear]" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.treasury' | translate }}</span>
     </a>
-    <a uiSref="main.analytics" uiSrefActive="active" class="nav-link">
+    <a [routerLink]="['/analytics', currentYear]" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.analytics' | translate }}</span>
     </a>
   </div>

@@ -8,14 +8,15 @@
       <button *ngFor="let year of yearList"
               type="button"
               clrDropdownItem
-              uiSref="root.transactions"
-              [uiParams]="{ year: year }">{{ year }}</button>
+              [routerLink]="['/transactions', year]">
+        {{ year }}
+      </button>
     </clr-dropdown-menu>
   </clr-dropdown>
 
   <ul class="nav">
     <li class="nav-item" *ngFor="let month of monthList; let i = index">
-      <a class="nav-link" uiSref="root.transactions" [uiParams]="{ month: i + 1 }" uiSrefActive="active">{{ month }}</a>
+      <a class="nav-link" [routerLink]="['/transactions', currentYear, i + 1]" routerLinkActive="active">{{ month }}</a>
     </li>
   </ul>
 </nav>

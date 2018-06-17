@@ -1,5 +1,4 @@
 import { NgModule, NgModuleFactoryLoader, SystemJsNgModuleLoader } from '@angular/core';
-import { UIView } from '@uirouter/angular';
 import { DecimalPipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 
@@ -61,7 +60,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: SystemJsNgModuleLoader
     }
   ],
-  bootstrap: [UIView]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

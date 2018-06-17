@@ -4,7 +4,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { FileDropModule } from 'ngx-file-drop';
 import { ClarityModule } from 'clarity-angular';
-import { UIRouterModule } from '@uirouter/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { AutocompleteComponent } from './form/autocomplete/autocomplete.component';
 import { FileDropComponent } from './form/file-drop/file-drop.component';
@@ -36,7 +35,6 @@ export class SharedModule {
     CommonModule,
     HttpClientModule,
     TranslateModule,
-    UIRouterModule,
     ClarityModule,
     FormsModule,
     FileDropModule

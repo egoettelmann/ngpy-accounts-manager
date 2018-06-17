@@ -1,25 +1,11 @@
-import { Ng2StateDeclaration, UIRouterModule } from '@uirouter/angular';
 import { AnalyticsViewComponent } from './analytics-view.component';
-import { CommonFunctions } from '../../../common/common-functions';
+import { RouterModule, Routes } from '@angular/router';
 
-export const STATES: Ng2StateDeclaration[] = [
+export const ROUTES: Routes = [
   {
-    name: 'main.analytics',
-    url: '/analytics/:year?{account}',
-    views: {
-      'content': AnalyticsViewComponent
-    },
-    params: {
-      year: {value: CommonFunctions.getCurrentYear},
-      account: {
-        type: 'int',
-        array: true,
-        dynamic: true
-      }
-    }
+    path: ':year',
+    component: AnalyticsViewComponent
   }
 ];
 
-export const AnalyticsViewRoutes = UIRouterModule.forChild({
-  states: STATES
-});
+export const AnalyticsViewRoutes = RouterModule.forChild(ROUTES);

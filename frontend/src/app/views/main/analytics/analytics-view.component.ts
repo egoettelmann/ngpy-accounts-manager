@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { StateService } from '@uirouter/angular';
 import { DecimalPipe } from '@angular/common';
 import { AccountsService } from '../../../services/accounts.service';
 import { CategoriesService } from '../../../services/categories.service';
 import { StatisticsService } from '../../../services/statistics.service';
 import { Category } from '../../../components/transactions/category';
 import { Account } from '../../../components/accounts/account';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: './analytics-view.component.html'
@@ -23,15 +23,17 @@ export class AnalyticsViewComponent implements OnInit {
   public detailsCredit: any[] = [];
   public detailsDebit: any[] = [];
 
-  constructor(private $state: StateService,
+  constructor(private route: ActivatedRoute,
+              private router: Router,
               private accountsService: AccountsService,
               private categoriesService: CategoriesService,
               private statisticsService: StatisticsService,
               private decimalPipe: DecimalPipe
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
-    this.currentYear = this.$state.params.year;
+    this.currentYear = this.route.snapshot.paramMap.get('year');
     this.accountsService.getAccounts().subscribe(data => {
       this.accounts = data;
     });
@@ -46,8 +48,11 @@ export class AnalyticsViewComponent implements OnInit {
   }
 
   private reload(accountIds: number[]) {
-    this.$state.go('root.analytics', {
-      account: accountIds
+    const year = this.route.snapshot.paramMap.get('year');
+    this.router.navigate(['/analytics', year], {
+      queryParams: {
+        account: accountIds
+      }
     });
     this.statisticsService.getAnalytics(this.currentYear, 'C', accountIds).subscribe(data => {
       this.graphOptionsCredit = this.buildChartOptions(data);
@@ -104,7 +109,7 @@ export class AnalyticsViewComponent implements OnInit {
       yAxis: {
         stackLabels: {
           enabled: true,
-          formatter: function() {
+          formatter: function () {
             return that.decimalPipe.transform(this.total, '1.2-2') + ' €';
           }
         }
@@ -114,7 +119,7 @@ export class AnalyticsViewComponent implements OnInit {
           stacking: 'normal',
           dataLabels: {
             enabled: true,
-            formatter: function() {
+            formatter: function () {
               return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
             }
           }

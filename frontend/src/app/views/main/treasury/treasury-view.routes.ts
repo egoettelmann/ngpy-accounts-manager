@@ -1,25 +1,11 @@
-import { Ng2StateDeclaration, UIRouterModule } from '@uirouter/angular';
 import { TreasuryViewComponent } from './treasury-view.component';
-import { CommonFunctions } from '../../../common/common-functions';
+import { RouterModule, Routes } from '@angular/router';
 
-export const STATES: Ng2StateDeclaration[] = [
+export const ROUTES: Routes = [
   {
-    name: 'main.treasury',
-    url: '/treasury/:year?{account}',
-    views: {
-      'content': TreasuryViewComponent
-    },
-    params: {
-      year: {value: CommonFunctions.getCurrentYear},
-      account: {
-        type: 'int',
-        array: true,
-        dynamic: true
-      }
-    }
+    path: ':year',
+    component: TreasuryViewComponent
   }
 ];
 
-export const TreasuryViewRoutes = UIRouterModule.forChild({
-  states: STATES
-});
+export const TreasuryViewRoutes = RouterModule.forChild(ROUTES);

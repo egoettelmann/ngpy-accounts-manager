@@ -1,16 +1,11 @@
-import { Ng2StateDeclaration, UIRouterModule } from '@uirouter/angular';
 import { DashboardViewComponent } from './dashboard-view.component';
+import { RouterModule, Routes } from '@angular/router';
 
-export const STATES: Ng2StateDeclaration[] = [
+export const ROUTES: Routes = [
   {
-    name: 'main.dashboard',
-    url: '',
-    views: {
-      'content': DashboardViewComponent
-    },
+    path: '',
+    component: DashboardViewComponent,
   }
 ];
 
-export const DashboardViewRoutes = UIRouterModule.forChild({
-  states: STATES
-});
+export const DashboardViewRoutes = RouterModule.forChild(ROUTES);

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { StateService } from '@uirouter/angular';
 import { DecimalPipe } from '@angular/common';
 import { AccountsService } from '../../../services/accounts.service';
 import { StatisticsService } from '../../../services/statistics.service';
@@ -7,6 +6,7 @@ import { TransactionsService } from '../../../services/transactions.service';
 import { Transaction } from '../../../components/transactions/transaction';
 import { Summary } from '../../../components/statistics/summary';
 import { Account } from '../../../components/accounts/account';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: './treasury-view.component.html'
@@ -22,7 +22,8 @@ export class TreasuryViewComponent implements OnInit {
   public summary: Summary;
   public accountsFilter: number[] = [];
 
-  constructor(private $state: StateService,
+  constructor(private route: ActivatedRoute,
+              private router: Router,
               private accountsService: AccountsService,
               private statisticsService: StatisticsService,
               private transactionsService: TransactionsService,
@@ -30,9 +31,10 @@ export class TreasuryViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentYear = this.$state.params.year;
-    if (this.$state.params.account) {
-      this.accountsFilter = this.$state.params.account;
+    this.currentYear = this.route.snapshot.paramMap.get('year');
+    if (this.route.snapshot.paramMap.has('account')) {
+      //this.accountsFilter = this.route.snapshot.paramMap.get('account');
+      this.accountsFilter = [];
     }
     this.accountsService.getAccounts().subscribe(data => {
       this.accounts = data;
@@ -45,12 +47,15 @@ export class TreasuryViewComponent implements OnInit {
   }
 
   private reload(accountIds: number[]) {
-    this.$state.go('root.treasury', {
-      account: accountIds
+    const year = this.route.snapshot.paramMap.get('year');
+    this.router.navigate(['/treasury', year], {
+      queryParams: {
+        account: accountIds
+      }
     });
-    this.loadEvolution(this.$state.params.year, accountIds);
-    this.loadSummary(this.$state.params.year, accountIds);
-    this.loadTops(this.$state.params.year, accountIds);
+    this.loadEvolution(year, accountIds);
+    this.loadSummary(year, accountIds);
+    this.loadTops(year, accountIds);
   }
 
   private loadEvolution(year: string, accounts: number[]) {

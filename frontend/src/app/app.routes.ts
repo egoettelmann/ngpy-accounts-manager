@@ -1,32 +1,22 @@
-import { Ng2StateDeclaration, UIRouterModule } from '@uirouter/angular';
 import 'rxjs/add/operator/toPromise';
 import { AppComponent } from './app.component';
+import { RouterModule, Routes } from '@angular/router';
 
-export const APP_STATES: Ng2StateDeclaration[] = [
+const ROUTES: Routes = [
   {
-    name: 'root',
-    abstract: true,
-    url: '',
-    component: AppComponent
-  },
-  {
-    name: 'login.**',
-    parent: 'root',
-    url: '/login',
-    loadChildren: './views/login/login-view.module#LoginViewModule'
-  },
-  {
-    name: 'main.**',
-    parent: 'root',
-    url: '',
-    loadChildren: './views/main/main-view.module#MainViewModule'
+    path: '',
+    component: AppComponent,
+    children: [
+      {
+        path: 'login',
+        loadChildren: './views/login/login-view.module#LoginViewModule'
+      },
+      {
+        path: '',
+        loadChildren: './views/main/main-view.module#MainViewModule'
+      }
+    ]
   }
 ];
 
-export const AppRoutes = UIRouterModule.forRoot({
-  states: APP_STATES,
-  initial: {
-    state: 'main.dashboard'
-  },
-  useHash: true
-});
+export const AppRoutes = RouterModule.forRoot(ROUTES, {useHash: true});

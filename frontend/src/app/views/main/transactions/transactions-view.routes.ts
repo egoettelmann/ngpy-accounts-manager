@@ -1,26 +1,11 @@
-import { Ng2StateDeclaration, UIRouterModule } from '@uirouter/angular';
 import { TransactionsViewComponent } from './transactions-view.component';
-import { CommonFunctions } from '../../../common/common-functions';
+import { RouterModule, Routes } from '@angular/router';
 
-export const STATES: Ng2StateDeclaration[] = [
+export const ROUTES: Routes = [
   {
-    name: 'main.transactions',
-    url: '/transactions/:year/:month?{account}',
-    views: {
-      'content': TransactionsViewComponent
-    },
-    params: {
-      year: {value: CommonFunctions.getCurrentYear},
-      month: {value: CommonFunctions.getCurrentMonth},
-      account: {
-        type: 'int',
-        array: true,
-        dynamic: true
-      }
-    }
+    path: ':year/:month',
+    component: TransactionsViewComponent
   }
 ];
 
-export const TransactionsViewRoutes = UIRouterModule.forChild({
-  states: STATES
-});
+export const TransactionsViewRoutes = RouterModule.forChild(ROUTES);

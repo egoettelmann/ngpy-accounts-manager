@@ -1,16 +1,11 @@
-import { Ng2StateDeclaration, UIRouterModule } from '@uirouter/angular';
 import { LoginViewComponent } from './login-view.component';
+import { RouterModule, Routes } from '@angular/router';
 
-const STATES: Ng2StateDeclaration[] = [
+const ROUTES: Routes = [
   {
-    name: 'login',
-    url: '',
-    views: {
-      '@': LoginViewComponent
-    }
+    path: '',
+    component: LoginViewComponent
   }
 ];
 
-export const LoginViewRoutes = UIRouterModule.forChild({
-  states: STATES
-});
+export const LoginViewRoutes = RouterModule.forChild(ROUTES);
