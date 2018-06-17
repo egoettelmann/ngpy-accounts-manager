@@ -8,9 +8,10 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class SessionService {
 
-  constructor(private http: HttpClient, private $state: StateService) {}
+  constructor(private http: HttpClient, private $state: StateService) {
+  }
 
-  login(loginForm: {username?: String, password?: String}): Observable<any> {
+  login(loginForm: { username?: String, password?: String }): Observable<any> {
     return this.http.post<any>('/rest/session/login', loginForm);
   }
 

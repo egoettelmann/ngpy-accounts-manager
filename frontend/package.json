@@ -27,7 +27,7 @@
     "@ngx-translate/http-loader": "2.0.1",
     "@types/highcharts": "5.0.21",
     "@types/lodash": "4.14.106",
-    "@uirouter/angular": "1.0.1",
+    "@uirouter/angular": "1.1.0",
     "@webcomponents/custom-elements": "1.0.9",
     "clarity-angular": "0.10.27",
     "clarity-icons": "0.10.27",

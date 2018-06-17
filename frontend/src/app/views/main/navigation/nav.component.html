@@ -1,0 +1,22 @@
+<header class="header-6">
+  <div class="header-nav">
+    <a uiSref="main.dashboard" uiSrefActive="active" class="nav-link">
+      <span class="nav-text">{{ 'i18n.components.navigation.dashboard' | translate }}</span>
+    </a>
+    <a uiSref="main.transactions" uiSrefActive="active" class="nav-link">
+      <span class="nav-text">{{ 'i18n.components.navigation.transactions' | translate }}</span>
+    </a>
+    <a uiSref="main.treasury" uiSrefActive="active" class="nav-link">
+      <span class="nav-text">{{ 'i18n.components.navigation.treasury' | translate }}</span>
+    </a>
+    <a uiSref="main.analytics" uiSrefActive="active" class="nav-link">
+      <span class="nav-text">{{ 'i18n.components.navigation.analytics' | translate }}</span>
+    </a>
+  </div>
+  <div class="header-actions">
+    <app-file-drop></app-file-drop>
+    <a (click)="clickLogout()" class="nav-link nav-icon logout">
+      <clr-icon shape="logout"></clr-icon>
+    </a>
+  </div>
+</header>

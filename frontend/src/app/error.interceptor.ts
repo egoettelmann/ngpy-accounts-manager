@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
-import {NotificationService} from './components/notification/notification.service';
-import {Notification} from './components/notification/notification';
 import { environment } from '../environments/environment';
+import { NotificationService } from './components/shared/notification/notification.service';
+import { Notification } from './components/shared/notification/notification';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Transaction } from '../modules/transactions/transaction';
+import { Transaction } from '../components/transactions/transaction';
 
 @Injectable()
 export class TransactionsService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getAll(year?: string, month?: string, accounts?: number[]): Observable<Transaction[]> {
     // Initialize Params Object

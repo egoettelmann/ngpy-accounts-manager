@@ -1,12 +1,13 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Summary } from '../modules/statistics/summary';
+import { Summary } from '../components/statistics/summary';
 
 @Injectable()
 export class StatisticsService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getGroupedByLabel(year: string, month: string, accounts: number[]): Observable<any> {
     // Initialize Params Object
