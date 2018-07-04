@@ -9,7 +9,8 @@ import { Account } from '../../../components/accounts/account';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  templateUrl: './treasury-view.component.html'
+  templateUrl: './treasury-view.component.html',
+  host: {'class': 'content-area'}
 })
 export class TreasuryViewComponent implements OnInit {
 

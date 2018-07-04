@@ -13,7 +13,8 @@ import { Account } from '../../../components/accounts/account';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  templateUrl: './transactions-view.component.html'
+  templateUrl: './transactions-view.component.html',
+  host: {'class': 'content-area'}
 })
 export class TransactionsViewComponent implements OnInit {
 

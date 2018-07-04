@@ -8,7 +8,8 @@ import { Account } from '../../../components/accounts/account';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  templateUrl: './analytics-view.component.html'
+  templateUrl: './analytics-view.component.html',
+  host: {'class': 'content-area'}
 })
 export class AnalyticsViewComponent implements OnInit {
 

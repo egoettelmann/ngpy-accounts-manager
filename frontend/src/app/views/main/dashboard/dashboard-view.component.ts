@@ -4,7 +4,8 @@ import { AccountsService } from '../../../services/accounts.service';
 import { Account } from '../../../components/accounts/account';
 
 @Component({
-  templateUrl: './dashboard-view.component.html'
+  templateUrl: './dashboard-view.component.html',
+  host: {'class': 'content-area'}
 })
 export class DashboardViewComponent implements OnInit {
 
@@ -14,7 +15,8 @@ export class DashboardViewComponent implements OnInit {
 
   constructor(private accountsService: AccountsService,
               private decimalPipe: DecimalPipe
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.accountsService.getAccounts().subscribe(data => {

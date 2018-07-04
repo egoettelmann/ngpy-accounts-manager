@@ -1,7 +1,9 @@
-<app-navigation></app-navigation>
+<div class="main-container">
+  <app-navigation></app-navigation>
 
-<div class="content-container">
-  <router-outlet class="content-area"></router-outlet>
+  <div class="content-container">
+    <router-outlet></router-outlet>
+  </div>
+
+  <app-notification-modal [type]="'ERROR'"></app-notification-modal>
 </div>
-
-<app-notification-modal [type]="'ERROR'"></app-notification-modal>
