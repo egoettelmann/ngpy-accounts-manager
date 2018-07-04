@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { FileDropModule } from 'ngx-file-drop';
-import { ClarityModule } from 'clarity-angular';
+import { ClarityModule } from '@clr/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { AutocompleteComponent } from './form/autocomplete/autocomplete.component';
 import { FileDropComponent } from './form/file-drop/file-drop.component';
