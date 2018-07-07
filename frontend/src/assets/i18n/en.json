@@ -1,6 +1,19 @@
 {
   "i18n.app.title": "Account Manager",
 
+  "i18n.months.1": "January",
+  "i18n.months.2": "February",
+  "i18n.months.3": "March",
+  "i18n.months.4": "April",
+  "i18n.months.5": "May",
+  "i18n.months.6": "June",
+  "i18n.months.7": "July",
+  "i18n.months.8": "August",
+  "i18n.months.9": "September",
+  "i18n.months.10": "October",
+  "i18n.months.11": "November",
+  "i18n.months.12": "December",
+
   "i18n.views.login.welcome.text": "Welcome to",
   "i18n.views.login.help-text": "Use your email or username to sign in",
   "i18n.views.login.loading": "Loading...",

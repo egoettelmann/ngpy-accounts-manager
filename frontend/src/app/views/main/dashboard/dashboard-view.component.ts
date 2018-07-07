@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { AccountsService } from '../../../services/accounts.service';
 import { Account } from '../../../components/accounts/account';
 
 @Component({
-  templateUrl: './dashboard-view.component.html',
-  host: {'class': 'content-area'}
+  templateUrl: './dashboard-view.component.html'
 })
 export class DashboardViewComponent implements OnInit {
+
+  @HostBinding('class') hostClass = 'content-area';
 
   public accounts: Account[];
   public total: number;
@@ -29,6 +30,12 @@ export class DashboardViewComponent implements OnInit {
     });
   }
 
+  /**
+   * Builds the chart options for HighCharts.
+   *
+   * @param data the graph data
+   * @returns the chart options
+   */
   buildChartOptions(data: Account[], total: number) {
     const that = this;
     const options = {

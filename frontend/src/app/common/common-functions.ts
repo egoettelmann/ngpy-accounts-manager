@@ -1,13 +1,55 @@
 export class CommonFunctions {
 
-  public static getCurrentYear(): string {
-    const d = new Date();
-    return String(d.getFullYear());
+  /**
+   * Get the list of months.
+   *
+   * @returns {number[]} the list of months starting at 1
+   */
+  public static getMonthsList(): number[] {
+    return Array.from(Array(12)).map((e, i) => i + 1);
   }
 
-  public static getCurrentMonth(): string {
-    const d = new Date();
-    return String(d.getMonth() + 1);
+  /**
+   * Gets a list of years from a given start year to the current year.
+   *
+   * @param {number} startYear the year to start from
+   * @returns {number[]} the list of years in descending order
+   */
+  public static getYearsList(startYear = 2014): number[] {
+    return Array.from(Array(CommonFunctions.getCurrentYear() - startYear + 1))
+      .map((e, i) => i + startYear)
+      .reverse();
+  }
+
+  /**
+   * Gets the current year.
+   *
+   * @returns {number} the current year
+   */
+  public static getCurrentYear(): number {
+    return new Date().getFullYear();
+  }
+
+  /**
+   * Gets the current months (with January = 1).
+   *
+   * @returns {number} the current month
+   */
+  public static getCurrentMonth(): number {
+    return new Date().getMonth() + 1;
+  }
+
+  /**
+   * Resizes an array.
+   *
+   * @param {number[]} arrayToResize the array to resize
+   * @param {number} placeholder the placeholder to set for new values
+   * @param {number} maxSize the max size of the array
+   */
+  public static resizeArray(arrayToResize: number[], placeholder: number, maxSize: number) {
+    for (let i = arrayToResize.length; i <= maxSize; i++) {
+      arrayToResize[i] = placeholder;
+    }
   }
 
 }

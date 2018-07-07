@@ -1,4 +1,4 @@
-import { NgModule, NgModuleFactoryLoader, SystemJsNgModuleLoader } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 
@@ -54,10 +54,6 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
       multi: true
-    },
-    {
-      provide: NgModuleFactoryLoader,
-      useClass: SystemJsNgModuleLoader
     }
   ],
   bootstrap: [AppComponent]

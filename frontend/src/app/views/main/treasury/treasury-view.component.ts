@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { AccountsService } from '../../../services/accounts.service';
 import { StatisticsService } from '../../../services/statistics.service';
@@ -7,21 +7,26 @@ import { Transaction } from '../../../components/transactions/transaction';
 import { Summary } from '../../../components/statistics/summary';
 import { Account } from '../../../components/accounts/account';
 import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+import { debounceTime, startWith } from 'rxjs/operators';
+import { CommonFunctions } from '../../../common/common-functions';
 
 @Component({
-  templateUrl: './treasury-view.component.html',
-  host: {'class': 'content-area'}
+  templateUrl: './treasury-view.component.html'
 })
 export class TreasuryViewComponent implements OnInit {
 
-  public yearList = [2018, 2017, 2016, 2015, 2014];
-  public currentYear: any;
+  @HostBinding('class') hostClass = 'content-area';
+
+  public yearList = CommonFunctions.getYearsList();
+  public currentYear: number;
+  public accountsFilter: number[] = [];
+
   public graphOptions: any;
   public accounts: Account[];
   public topTransactionsAsc: Transaction[];
   public topTransactionsDesc: Transaction[];
   public summary: Summary;
-  public accountsFilter: number[] = [];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -32,46 +37,97 @@ export class TreasuryViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentYear = this.route.snapshot.paramMap.get('year');
-    if (this.route.snapshot.paramMap.has('account')) {
-      //this.accountsFilter = this.route.snapshot.paramMap.get('account');
-      this.accountsFilter = [];
-    }
+    this.initOnChanges();
     this.accountsService.getAccounts().subscribe(data => {
       this.accounts = data;
     });
   }
 
+  /**
+   * Triggered on account change.
+   *
+   * @param {Account[]} accounts the new list of accounts
+   */
   changeAccounts(accounts: Account[]) {
-    const accountIds = accounts.length === this.accounts.length ? undefined : accounts.map(a => a.id);
-    this.reload(accountIds);
-  }
-
-  private reload(accountIds: number[]) {
-    const year = this.route.snapshot.paramMap.get('year');
-    this.router.navigate(['/treasury', year], {
+    this.accountsFilter = accounts.length === this.accounts.length ? undefined : accounts.map(a => a.id);
+    this.router.navigate(['treasury', this.currentYear], {
       queryParams: {
-        account: accountIds
+        account: this.accountsFilter ? this.accountsFilter.join(',') : undefined
       }
     });
-    this.loadEvolution(year, accountIds);
-    this.loadSummary(year, accountIds);
-    this.loadTops(year, accountIds);
   }
 
-  private loadEvolution(year: string, accounts: number[]) {
+  /**
+   * Listens on any route change to reload the data
+   */
+  private initOnChanges() {
+    combineLatest(
+      this.route.paramMap.pipe(startWith(undefined)),
+      this.route.queryParamMap.pipe(startWith(undefined))
+    ).pipe(
+      debounceTime(20)
+    ).subscribe(([paramMap, queryParamMap]) => {
+      let reload = false;
+      // Checking if any param has changed
+      if (paramMap) {
+        this.currentYear = +paramMap.get('year');
+        reload = true;
+      }
+      // Checking if any query param has changed
+      this.accountsFilter = undefined;
+      if (queryParamMap && queryParamMap.has('account')) {
+        this.accountsFilter = queryParamMap.get('account')
+          .split(',')
+          .map(a => +a);
+        reload = true;
+      }
+      // Reloading if necessary
+      if (reload) {
+        this.loadData();
+      }
+    });
+  }
+
+  /**
+   * Loads the data for the view
+   */
+  private loadData() {
+    this.loadEvolution(this.currentYear, this.accountsFilter);
+    this.loadSummary(this.currentYear, this.accountsFilter);
+    this.loadTops(this.currentYear, this.accountsFilter);
+  }
+
+  /**
+   * Loads the evolution data for the graph.
+   *
+   * @param {number} year the year to filter on
+   * @param {number[]} accounts the accounts to filter on
+   */
+  private loadEvolution(year: number, accounts: number[]) {
     this.statisticsService.getEvolution(year, accounts).subscribe(data => {
       this.graphOptions = this.buildChartOptions(data);
     });
   }
 
-  private loadSummary(year: string, accounts: number[]) {
+  /**
+   * Loads the summary.
+   *
+   * @param {number} year the year to filter on
+   * @param {number[]} accounts the accounts to filter on
+   */
+  private loadSummary(year: number, accounts: number[]) {
     this.statisticsService.getSummary(year, undefined, accounts).subscribe(data => {
       this.summary = data;
     });
   }
 
-  private loadTops(year: string, accounts: number[]) {
+  /**
+   * Loads the top transactions (highest credit and debit).
+   *
+   * @param {number} year the year to filter on
+   * @param {number[]} accounts the accounts to filter on
+   */
+  private loadTops(year: number, accounts: number[]) {
     this.transactionsService.getTop(10, true, year, undefined, accounts).subscribe(data => {
       this.topTransactionsAsc = data;
     });
@@ -80,7 +136,13 @@ export class TreasuryViewComponent implements OnInit {
     });
   }
 
-  buildChartOptions(data: any) {
+  /**
+   * Builds the chart options for HighCharts.
+   *
+   * @param data the graph data
+   * @returns the chart options
+   */
+  private buildChartOptions(data: any) {
     const that = this;
     const options = {
       tooltip: {

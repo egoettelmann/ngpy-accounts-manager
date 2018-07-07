@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/zip';
 import { LabelsService } from '../../../services/labels.service';
 import { TransactionsService } from '../../../services/transactions.service';
 import { StatisticsService } from '../../../services/statistics.service';
@@ -11,25 +9,29 @@ import { Summary } from '../../../components/statistics/summary';
 import { Label } from '../../../components/transactions/label';
 import { Account } from '../../../components/accounts/account';
 import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime, startWith } from 'rxjs/operators';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+import { zip } from 'rxjs/observable/zip';
+import { CommonFunctions } from '../../../common/common-functions';
 
 @Component({
-  templateUrl: './transactions-view.component.html',
-  host: {'class': 'content-area'}
+  templateUrl: './transactions-view.component.html'
 })
 export class TransactionsViewComponent implements OnInit {
 
-  public yearList = [2018, 2017, 2016, 2015, 2014];
-  public monthList = [
-    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-    'August', 'September', 'October', 'November', 'December'
-  ];
+  @HostBinding('class') hostClass = 'content-area';
+
+  public yearList = CommonFunctions.getYearsList();
+  public monthList = CommonFunctions.getMonthsList();
   public currentYear: number;
+  public currentMonth: number;
+  public accountsFilter: number[];
+
   public transactions: Transaction[];
   public graphOptions: any;
   public summary: Summary;
   public accounts: Account[];
   public labels: Label[];
-  public accountsFilter: number[] = [];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -42,13 +44,8 @@ export class TransactionsViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.route.snapshot);
-    this.currentYear = +this.route.snapshot.paramMap.get('year');
-    if (this.route.snapshot.paramMap.has('account')) {
-      //this.accountsFilter = this.$state.params.account;
-      this.accountsFilter = [];
-    }
-    Observable.zip(
+    this.initOnChanges();
+    zip(
       this.accountsService.getAccounts(),
       this.labelsService.getAll()
     ).subscribe(([accounts, labels]) => {
@@ -57,25 +54,125 @@ export class TransactionsViewComponent implements OnInit {
     });
   }
 
-  private loadTransactions(year: string, month: string, accounts: number[]) {
+  /**
+   * Triggered on account change.
+   *
+   * @param {Account[]} accounts the new list of accounts
+   */
+  changeAccounts(accounts: Account[]) {
+    this.accountsFilter = accounts.length === this.accounts.length ? undefined : accounts.map(a => a.id);
+    this.router.navigate(['transactions', this.currentYear, this.currentMonth], {
+      queryParams: {
+        account: this.accountsFilter ? this.accountsFilter.join(',') : undefined
+      }
+    });
+  }
+
+  /**
+   * FIXME: implement the backend call and review the input param
+   */
+  saveTransaction(patchEvent: PatchEvent<Transaction>) {
+    this.transactionsService.updateOne(patchEvent.model.id, patchEvent.changes).subscribe(data => {
+      console.log('SAVE', data);
+    });
+  }
+
+  /**
+   * FIXME: implemnt the backend call
+   */
+  deleteTransaction(transaction: Transaction) {
+    this.transactionsService.deleteOne(transaction).subscribe(data => {
+      console.log('DELETE', data);
+    });
+  }
+
+  /**
+   * Listens on any route change to reload the data
+   */
+  private initOnChanges() {
+    combineLatest(
+      this.route.paramMap.pipe(startWith(undefined)),
+      this.route.queryParamMap.pipe(startWith(undefined))
+    ).pipe(
+      debounceTime(20)
+    ).subscribe(([paramMap, queryParamMap]) => {
+      let reload = false;
+      // Checking if any param has changed
+      if (paramMap) {
+        this.currentYear = +paramMap.get('year');
+        this.currentMonth = +paramMap.get('month');
+        reload = true;
+      }
+      // Checking if any query param has changed
+      this.accountsFilter = undefined;
+      if (queryParamMap && queryParamMap.has('account')) {
+        this.accountsFilter = queryParamMap.get('account')
+          .split(',')
+          .map(a => +a);
+        reload = true;
+      }
+      // Reloading if necessary
+      if (reload) {
+        this.loadData();
+      }
+    });
+  }
+
+  /**
+   * Loads the data for the view
+   */
+  private loadData() {
+    this.loadTransactions(this.currentYear, this.currentMonth, this.accountsFilter);
+    this.loadSummary(this.currentYear, this.currentMonth, this.accountsFilter);
+    this.loadRepartition(this.currentYear, this.currentMonth, this.accountsFilter);
+  }
+
+  /**
+   * Loads the list of transactions.
+   *
+   * @param {number} year the year to filter on
+   * @param {number} month the month to filter on
+   * @param {number[]} accounts the accounts to filter on
+   */
+  private loadTransactions(year: number, month: number, accounts: number[]) {
     this.transactionsService.getAll(year, month, accounts).subscribe(data => {
       this.transactions = data.slice(0);
     });
   }
 
-  private loadSummary(year: string, month: string, accounts: number[]) {
+  /**
+   * Loads the summary.
+   *
+   * @param {number} year the year to filter on
+   * @param {number} month the month to filter on
+   * @param {number[]} accounts the accounts to filter on
+   */
+  private loadSummary(year: number, month: number, accounts: number[]) {
     this.statisticsService.getSummary(year, month, accounts).subscribe(data => {
       this.summary = data;
     });
   }
 
-  private loadRepartition(year: string, month: string, accounts: number[]) {
+  /**
+   * Loads the repartition data for building the graph.
+   *
+   * @param {number} year the year to filter on
+   * @param {number} month the month to filter on
+   * @param {number[]} accounts the accounts to filter on
+   */
+  private loadRepartition(year: number, month: number, accounts: number[]) {
     this.statisticsService.getGroupedByLabel(year, month, accounts).subscribe(data => {
       this.graphOptions = this.buildChartOptions(data);
     });
   }
 
-  buildChartOptions(data: any) {
+  /**
+   * Builds the chart options for HighCharts.
+   *
+   * @param data the graph data
+   * @returns the chart options
+   */
+  private buildChartOptions(data: any) {
     const that = this;
     const options = {
       chart: {
@@ -99,36 +196,6 @@ export class TransactionsViewComponent implements OnInit {
       options.series[0].data.push(d.value);
     }
     return options;
-  }
-
-  saveTransaction(patchEvent: PatchEvent<Transaction>) {
-    this.transactionsService.updateOne(patchEvent.model.id, patchEvent.changes).subscribe(data => {
-      console.log('SAVE', data);
-    });
-  }
-
-  deleteTransaction(transaction: Transaction) {
-    this.transactionsService.deleteOne(transaction).subscribe(data => {
-      console.log('DELETE', data);
-    });
-  }
-
-  changeAccounts(accounts: Account[]) {
-    const accountIds = accounts.length === this.accounts.length ? undefined : accounts.map(a => a.id);
-    this.reload(accountIds);
-  }
-
-  private reload(accountIds: number[]) {
-    const year = this.route.snapshot.paramMap.get('year');
-    const month = this.route.snapshot.paramMap.get('month');
-    this.router.navigate(['transactions', year, month], {
-      queryParams: {
-        account: accountIds
-      }
-    });
-    this.loadTransactions(year, month, accountIds);
-    this.loadSummary(year, month, accountIds);
-    this.loadRepartition(year, month, accountIds);
   }
 
 }

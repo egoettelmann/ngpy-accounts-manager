@@ -8,15 +8,20 @@
       <button *ngFor="let year of yearList"
               type="button"
               clrDropdownItem
-              [routerLink]="['/transactions', year]">
+              [routerLink]="['/transactions', year, currentMonth]">
         {{ year }}
       </button>
     </clr-dropdown-menu>
   </clr-dropdown>
 
   <ul class="nav">
-    <li class="nav-item" *ngFor="let month of monthList; let i = index">
-      <a class="nav-link" [routerLink]="['/transactions', currentYear, i + 1]" routerLinkActive="active">{{ month }}</a>
+    <li class="nav-item" *ngFor="let month of monthList">
+      <a class="nav-link"
+         [routerLink]="['/transactions', currentYear, month]"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ __change_detection_hack__: [ currentYear, currentMonth ] }">
+        {{ 'i18n.months.' + month | translate }}
+      </a>
     </li>
   </ul>
 </nav>
