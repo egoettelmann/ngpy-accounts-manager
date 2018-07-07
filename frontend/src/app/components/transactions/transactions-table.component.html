@@ -3,6 +3,7 @@
     <tr>
       <th>{{ 'i18n.modules.transactions.table.header.account' | translate }}</th>
       <th *ngIf="labels">{{ 'i18n.modules.transactions.table.header.label' | translate }}</th>
+      <th>&nbsp;</th>
       <th class="left">{{ 'i18n.modules.transactions.table.header.reference' | translate }}</th>
       <th>{{ 'i18n.modules.transactions.table.header.description' | translate }}</th>
       <th>{{ 'i18n.modules.transactions.table.header.value-date' | translate }}</th>
@@ -24,12 +25,26 @@
           </span>
         </span>
       </td>
-      <td *ngIf="labels" class="text-left">
+      <td *ngIf="editable && labels" class="text-left">
         <app-autocomplete [value]="transaction.label"
                           [options]="labels"
                           (onSelect)="changeLabel($event, transaction)"
                           (onCreate)="addLabel($event, transaction)">
         </app-autocomplete>
+      </td>
+      <td>
+        <span class="tooltip tooltip-sm tooltip-top-right"
+              role="tooltip"
+              aria-haspopup="true">
+          <clr-icon *ngIf="transaction.label.icon"
+                    class="is-solid"
+                    [attr.shape]="transaction.label.icon"
+                    [style.color]="transaction.label.color">
+          </clr-icon>
+          <span class="tooltip-content">
+            <span>{{ transaction.label?.name }}</span><br/>
+          </span>
+        </span>
       </td>
       <td class="text-left">{{ transaction.reference }}</td>
       <td class="text-left">{{ transaction.description }}</td>

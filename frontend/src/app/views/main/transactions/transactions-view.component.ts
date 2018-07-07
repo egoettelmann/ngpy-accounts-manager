@@ -73,16 +73,19 @@ export class TransactionsViewComponent implements OnInit {
    */
   saveTransaction(patchEvent: PatchEvent<Transaction>) {
     this.transactionsService.updateOne(patchEvent.model.id, patchEvent.changes).subscribe(data => {
-      console.log('SAVE', data);
+      this.loadData();
     });
   }
 
-  /**
-   * FIXME: implemnt the backend call
+  /***
+   * Deletes a given transaction.
+   * FIXME: add delete button to table
+   *
+   * @param {Transaction} transaction the transaction to delete
    */
   deleteTransaction(transaction: Transaction) {
     this.transactionsService.deleteOne(transaction).subscribe(data => {
-      console.log('DELETE', data);
+      this.loadData();
     });
   }
 
