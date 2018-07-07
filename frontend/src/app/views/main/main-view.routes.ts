@@ -1,4 +1,3 @@
-import 'rxjs/add/operator/toPromise';
 import { MainViewComponent } from './main-view.component';
 import { SessionService } from '../../services/session.service';
 import { RouterModule, Routes } from '@angular/router';

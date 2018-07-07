@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { _throw } from 'rxjs/observable/throw';
 
 @Injectable()
 export class SessionService implements Resolve<any> {
@@ -24,10 +24,12 @@ export class SessionService implements Resolve<any> {
   }
 
   getConnectedUser(): Observable<any> {
-    return this.http.get<any>('/rest/session/user').catch(err => {
-      this.router.navigate(['login']);
-      return Observable.throw('User not connected');
-    });
+    return this.http.get<any>('/rest/session/user').pipe(
+      catchError(err => {
+        this.router.navigate(['login']);
+        return _throw('User not connected');
+      })
+    );
   }
 
 }

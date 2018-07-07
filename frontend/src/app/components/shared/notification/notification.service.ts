@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {Notification} from './notification';
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
+import { filter } from 'rxjs/operators';
 
 type NotificationCallback = (notification: Notification) => void | any;
 
@@ -17,9 +16,9 @@ export class NotificationService {
   }
 
   subscribe(callback: NotificationCallback, type?: string): Subscription {
-    return this.handler
-      .filter(n => type === undefined || n.type === type)
-      .subscribe(callback);
+    return this.handler.pipe(
+      filter(n => type === undefined || n.type === type)
+    ).subscribe(callback);
   }
 
 }

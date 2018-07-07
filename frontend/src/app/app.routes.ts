@@ -1,5 +1,3 @@
-import 'rxjs/add/operator/toPromise';
-import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
 
 const ROUTES: Routes = [
