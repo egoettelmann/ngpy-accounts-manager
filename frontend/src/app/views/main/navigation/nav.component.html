@@ -3,13 +3,13 @@
     <a [routerLink]="['/dashboard']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.dashboard' | translate }}</span>
     </a>
-    <a [routerLink]="['/transactions', currentYear, currentMonth]" routerLinkActive="active" class="nav-link">
+    <a [routerLink]="['/transactions']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.transactions' | translate }}</span>
     </a>
-    <a [routerLink]="['/treasury', currentYear]" routerLinkActive="active" class="nav-link">
+    <a [routerLink]="['/treasury']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.treasury' | translate }}</span>
     </a>
-    <a [routerLink]="['/analytics', currentYear]" routerLinkActive="active" class="nav-link">
+    <a [routerLink]="['/analytics']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.analytics' | translate }}</span>
     </a>
   </div>

@@ -9,18 +9,13 @@ import { Router } from '@angular/router';
 })
 export class NavComponent implements OnInit {
 
-  currentYear: string;
-  currentMonth: string;
-
   constructor(
     private router: Router,
     private sessionService: SessionService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
-    const d = new Date();
-    this.currentYear = String(d.getFullYear());
-    this.currentMonth = String(d.getMonth() + 1);
   }
 
   clickLogout(): void {
