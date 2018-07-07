@@ -26,7 +26,7 @@ export class AutocompleteComponent implements OnChanges {
       && this.value.hasOwnProperty(this.valueAttribute)
       && this.options
     ) {
-      let filteredOptions = this.options
+      const filteredOptions = this.options
         .filter(o => o[this.valueAttribute] === this.value[this.valueAttribute])
         .slice();
       if (filteredOptions && filteredOptions.length > 0) {
@@ -38,7 +38,7 @@ export class AutocompleteComponent implements OnChanges {
   onChange(inputText) {
     if (inputText) {
       this.ngOptions = this.options.filter(o => {
-        let regExp = new RegExp(inputText, 'i');
+        const regExp = new RegExp(inputText, 'i');
         return regExp.test(o[this.labelAttribute]);
       }).slice();
     } else {
@@ -113,7 +113,7 @@ export class AutocompleteComponent implements OnChanges {
       && this.ngOptions
       && this.ngOptions.length > 0
     ) {
-      for (let i=0; i<this.ngOptions.length; i++) {
+      for (let i = 0; i < this.ngOptions.length; i++) {
         if (this.ngOptions[i][this.valueAttribute] === this.selectedModel[this.valueAttribute]) {
           return i;
         }

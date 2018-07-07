@@ -47,6 +47,7 @@ python index.py
 - Automatically create label if it does not exist
 - Create settings view for managing labels, categories and accounts
 - Add todo list on dashboard or alert bubbles on menu for inconsistent data
+- Add comment field to transactions
 - Improve transaction form
 - Add sort and filters on transactions table
 - Create global search

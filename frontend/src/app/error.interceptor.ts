@@ -5,6 +5,7 @@ import { environment } from '../environments/environment';
 import { NotificationService } from './components/shared/notification/notification.service';
 import { Notification } from './components/shared/notification/notification';
 import { catchError } from 'rxjs/operators';
+import { _throw } from 'rxjs/observable/throw';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -32,7 +33,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
           this.notificationService.broadcast(notif);
         }
-        return Observable.of(null);
+        return _throw(err);
       })
     );
   }
