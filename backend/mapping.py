@@ -17,6 +17,7 @@ class Mapper(ObjectMapper):
         self.create_map(Transaction, TransactionDbo)
         self.create_map(StatusDbo, Status)
         self.create_map(CategoryDbo, Category)
+        self.create_map(Category, CategoryDbo)
         self.create_map(UserDbo, User)
 
     def map_all(self, object_list, target_type):

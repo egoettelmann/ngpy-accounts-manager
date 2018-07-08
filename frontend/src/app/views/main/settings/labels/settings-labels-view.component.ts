@@ -73,7 +73,6 @@ export class SettingsLabelsViewComponent implements OnInit {
   }
 
   private onFormChange(value: Label) {
-    console.log('onFormChange', value);
     this.labelsService.saveOne(value).subscribe();
   }
 

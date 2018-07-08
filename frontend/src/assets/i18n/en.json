@@ -86,6 +86,7 @@
   "i18n.modules.statistics.summary.YEAR.result": "Yearly result",
 
   "i18n.views.settings.labels.title": "Labels",
+  "i18n.views.settings.categories.title": "Categories",
   "i18n.modules.labels.table.header.name": "Name",
   "i18n.modules.labels.table.header.icon": "Icon",
   "i18n.modules.labels.table.header.color": "Color",

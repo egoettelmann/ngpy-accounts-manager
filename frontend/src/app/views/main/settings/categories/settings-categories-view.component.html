@@ -1,26 +1,36 @@
-<table class="table" *ngIf="categories">
-  <thead>
-  <tr>
-    <th class="left">{{ 'i18n.modules.categories.table.header.name' | translate }}</th>
-    <th class="left">{{ 'i18n.modules.categories.table.header.type' | translate }}</th>
-    <th class="right">{{ 'i18n.modules.categories.table.header.labels' | translate }}</th>
-    <th>&nbsp;</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let category of categories">
-    <td class="left">
-      <span>{{ category.name }}</span>
-    </td>
-    <td class="left">
-      <span>{{ category.type }}</span>
-    </td>
-    <td class="right">{{ 0 }}</td>
-    <td>
-      <button type="button" class="btn btn-sm btn-icon btn-danger">
-        <clr-icon shape="trash" size="16"></clr-icon>
-      </button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<h3>{{ 'i18n.views.settings.categories.title' | translate }} <span class="badge">{{ formArray?.controls.length }}</span></h3>
+
+<form [formGroup]="form" *ngIf="form">
+  <table class="table" [formArrayName]="'categories'">
+    <thead>
+    <tr>
+      <th class="left">{{ 'i18n.modules.categories.table.header.name' | translate }}</th>
+      <th class="left">{{ 'i18n.modules.categories.table.header.type' | translate }}</th>
+      <th class="right">{{ 'i18n.modules.categories.table.header.labels' | translate }}</th>
+      <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let categoryForm of formArray.controls; let i = index;" [formGroupName]="i">
+      <td class="left">
+        <input type="text" [formControlName]="'name'" />
+      </td>
+      <td class="right">
+        <div class="select">
+          <select [formControlName]="'type'">
+            <option [value]="'C'">Credit</option>
+            <option [value]="'D'">Debit</option>
+            <option [value]="'M'">Transfer</option>
+          </select>
+        </div>
+      </td>
+      <td class="right">{{ 0 }}</td>
+      <td>
+        <button type="button" class="btn btn-sm btn-icon btn-danger" (click)="deleteCategory(categoryForm.value)">
+          <clr-icon shape="trash" size="16"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</form>

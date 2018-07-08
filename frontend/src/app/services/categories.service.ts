@@ -13,4 +13,11 @@ export class CategoriesService {
     return this.http.get<Category[]>('/rest/categories');
   }
 
+  saveOne(category: Category) {
+    return this.http.post('/rest/categories', category);
+  }
+
+  deleteOne(category: Category) {
+    return this.http.delete('/rest/categories/' + category.id);
+  }
 }

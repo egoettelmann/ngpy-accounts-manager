@@ -1,3 +1,4 @@
+from flask import request
 from flask_restful import marshal_with
 
 from ..modules import restful
@@ -21,3 +22,12 @@ class CategoryController():
     @marshal_with(Category.resource_fields)
     def get_one(self, category_id):
         return self.category_service.get_by_id(category_id)
+
+    @restful.route('/<int:category_id>', methods=['DELETE'])
+    def delete_one(self, category_id):
+        return self.category_service.delete_category(category_id)
+
+    @restful.route('', methods=['POST'])
+    def save_one(self):
+        category = request.get_json(force=True)
+        return self.category_service.save_category(Category(**category))
