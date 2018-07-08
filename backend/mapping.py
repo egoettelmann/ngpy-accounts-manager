@@ -13,6 +13,7 @@ class Mapper(ObjectMapper):
         self.create_map(LabelDbo, Label, {'category': lambda x: x.category})
         self.create_map(Label, LabelDbo)
         self.create_map(AccountDbo, Account)
+        self.create_map(Account, AccountDbo)
         self.create_map(TransactionDbo, Transaction, {'label': lambda x: x.label, 'account': lambda x: x.account})
         self.create_map(Transaction, TransactionDbo)
         self.create_map(StatusDbo, Status)

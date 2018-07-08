@@ -3,6 +3,7 @@ import hashlib
 
 from ..exceptions import FileImportException
 from ..models import Account, KeyValue
+from ...dbconnector.entities import AccountDbo
 from ...dbconnector.entities import TransactionDbo
 from ...modules.depynject import injectable
 
@@ -37,6 +38,14 @@ class AccountService():
         return self.mapper.map(
             self.repository.find_by_name(name),
             Account
+        )
+
+    def delete_account(self, account_id):
+        self.repository.delete_by_id(account_id)
+
+    def save_account(self, account):
+        self.repository.save_one(
+            self.mapper.map(account, AccountDbo)
         )
 
     def get_last_update(self, account_id):

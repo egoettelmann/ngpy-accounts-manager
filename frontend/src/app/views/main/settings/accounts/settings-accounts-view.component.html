@@ -1,3 +1,45 @@
+<h3>{{ 'i18n.views.settings.accounts.title' | translate }} <span class="badge">{{ formArray?.controls.length }}</span></h3>
+
+<form [formGroup]="form" *ngIf="form">
+  <table class="table" [formArrayName]="'accounts'">
+    <thead>
+    <tr>
+      <th class="left">{{ 'i18n.modules.accounts.table.header.name' | translate }}</th>
+      <th class="left">{{ 'i18n.modules.accounts.table.header.description' | translate }}</th>
+      <th class="left">{{ 'i18n.modules.accounts.table.header.color' | translate }}</th>
+      <th class="right">{{ 'i18n.modules.accounts.table.header.last-update' | translate }}</th>
+      <th class="right">{{ 'i18n.modules.accounts.table.header.total' | translate }}</th>
+      <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let accountForm of formArray.controls; let i = index;" [formGroupName]="i">
+      <td class="left">
+        <input type="text" [formControlName]="'name'" />
+      </td>
+      <td class="left">
+        <input type="text" [formControlName]="'description'" />
+      </td>
+      <td class="left">
+          <span class="badge"
+                [style.background]="accountForm.get('color').value">
+            <span>&nbsp;</span>
+          </span>
+        <input type="text" [formControlName]="'color'" />
+      </td>
+      <td class="right">{{ 0 }}</td>
+      <td class="right">{{ 0 }}</td>
+      <td>
+        <button type="button" class="btn btn-sm btn-icon btn-danger" (click)="deleteAccount(accountForm.value)">
+          <clr-icon shape="trash" size="16"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</form>
+
+
 <table class="table" *ngIf="accounts">
   <thead>
   <tr>

@@ -1,18 +1,16 @@
 <router-outlet></router-outlet>
 
-<nav class="sidenav" [clr-nav-level]="2">
-  <section class="sidenav-content">
-    <a [routerLink]="['./labels']" routerLinkActive="active" class="nav-link">
-      <span class="nav-text">{{ 'i18n.components.navigation.settings.labels' | translate }}</span>
-    </a>
-    <a [routerLink]="['./categories']" routerLinkActive="active" class="nav-link">
-      <span class="nav-text">{{ 'i18n.components.navigation.settings.categories' | translate }}</span>
-    </a>
-    <a [routerLink]="['./accounts']" routerLinkActive="active" class="nav-link">
-      <span class="nav-text">{{ 'i18n.components.navigation.settings.accounts' | translate }}</span>
-    </a>
-    <a [routerLink]="['./transactions']" routerLinkActive="active" class="nav-link">
-      <span class="nav-text">{{ 'i18n.components.navigation.settings.transactions' | translate }}</span>
-    </a>
-  </section>
-</nav>
+<clr-vertical-nav [clr-nav-level]="2">
+  <a clrVerticalNavLink [routerLink]="['./labels']" routerLinkActive="active">
+    <span class="nav-text">{{ 'i18n.components.navigation.settings.labels' | translate }}</span>
+  </a>
+  <a clrVerticalNavLink [routerLink]="['./categories']" routerLinkActive="active">
+    <span class="nav-text">{{ 'i18n.components.navigation.settings.categories' | translate }}</span>
+  </a>
+  <a clrVerticalNavLink [routerLink]="['./accounts']" routerLinkActive="active">
+    <span class="nav-text">{{ 'i18n.components.navigation.settings.accounts' | translate }}</span>
+  </a>
+  <!--<a clrVerticalNavLink [routerLink]="['./transactions']" routerLinkActive="active">-->
+    <!--<span class="nav-text">{{ 'i18n.components.navigation.settings.transactions' | translate }}</span>-->
+  <!--</a>-->
+</clr-vertical-nav>

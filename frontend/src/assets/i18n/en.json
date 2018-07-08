@@ -87,6 +87,7 @@
 
   "i18n.views.settings.labels.title": "Labels",
   "i18n.views.settings.categories.title": "Categories",
+  "i18n.views.settings.accounts.title": "Accounts",
   "i18n.modules.labels.table.header.name": "Name",
   "i18n.modules.labels.table.header.icon": "Icon",
   "i18n.modules.labels.table.header.color": "Color",
@@ -98,5 +99,6 @@
   "i18n.modules.accounts.table.header.name": "Name",
   "i18n.modules.accounts.table.header.description": "Description",
   "i18n.modules.accounts.table.header.color": "Color",
+  "i18n.modules.accounts.table.header.last-update": "Last Update",
   "i18n.modules.accounts.table.header.total": "Total"
 }

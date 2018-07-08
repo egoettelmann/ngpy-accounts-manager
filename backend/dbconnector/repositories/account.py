@@ -21,3 +21,20 @@ class AccountRepository():
 
     def find_by_name(self, name):
         return self.entity_manager.query(AccountDbo).filter(AccountDbo.name == name).first()
+
+    def delete_by_id(self, account_id):
+        self.entity_manager.query(AccountDbo).filter(AccountDbo.id == account_id).delete()
+        try:
+            self.entity_manager.get_session().commit()
+        except:
+            self.entity_manager.get_session().rollback()
+            raise
+
+    def save_one(self, account):
+        self.entity_manager.get_session().merge(account)
+        try:
+            self.entity_manager.get_session().commit()
+        except:
+            self.entity_manager.get_session().rollback()
+            raise
+        return True
