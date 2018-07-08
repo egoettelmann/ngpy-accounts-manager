@@ -44,7 +44,9 @@ def serve_page():
 
 @app.before_request
 def before_request():
-    if request.path.startswith(api.prefix) and not request.endpoint.startswith('SessionController'):
+    if request.method != 'OPTIONS'\
+            and request.path.startswith(api.prefix)\
+            and not request.endpoint.startswith('SessionController'):
         if 'logged_user_id' not in session:
             return api.return_exception(NotAuthenticatedException("Not authenticated"))
         else:

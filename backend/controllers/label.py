@@ -1,3 +1,4 @@
+from flask import request
 from flask_restful import marshal_with
 
 from ..modules import restful
@@ -25,3 +26,8 @@ class LabelController():
     @restful.route('/<int:label_id>', methods=['DELETE'])
     def delete_one(self, label_id):
         return self.label_service.delete_label(label_id)
+
+    @restful.route('', methods=['POST'])
+    def save_one(self):
+        label = request.get_json(force=True)
+        return self.label_service.save_label(Label(**label))

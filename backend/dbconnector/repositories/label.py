@@ -24,3 +24,12 @@ class LabelRepository():
         except:
             self.entity_manager.get_session().rollback()
             raise
+
+    def save_one(self, label):
+        self.entity_manager.get_session().merge(label)
+        try:
+            self.entity_manager.get_session().commit()
+        except:
+            self.entity_manager.get_session().rollback()
+            raise
+        return True

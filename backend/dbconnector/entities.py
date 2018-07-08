@@ -38,12 +38,15 @@ class LabelDbo(EntityManager.get_base()):
     transactions = relationship("TransactionDbo", backref="label")
     category_id = Column(Integer, ForeignKey('categories.id'))
 
-    def __init__(self, name=None, color=None):
+    def __init__(self, id=None, name=None, color=None, icon=None, category_id=None):
+        self.id = id
         self.name = name
         self.color = color
+        self.icon = icon
+        self.category_id = category_id
 
     def __repr__(self):
-        return '<LabelDbo %r>' % self.name
+        return '<LabelDbo %r, %r>' % (self.id, self.name)
 
 
 class CategoryDbo(EntityManager.get_base()):
@@ -52,6 +55,14 @@ class CategoryDbo(EntityManager.get_base()):
     name = Column(String(250), unique=True)
     type = Column(String(10))
     labels = relationship("LabelDbo", backref="category")
+
+    def __init__(self, id=None, name=None, type=None):
+        self.id = id
+        self.name = name
+        self.type = type
+
+    def __repr__(self):
+        return '<CategoryDbo %r, %r>' % (self.id, self.name)
 
 
 class StatusDbo(EntityManager.get_base()):

@@ -1,5 +1,6 @@
-from ...modules.depynject import injectable
 from ..models import Label
+from ...dbconnector.entities import LabelDbo
+from ...modules.depynject import injectable
 
 
 @injectable()
@@ -29,3 +30,8 @@ class LabelService():
 
     def delete_label(self, label_id):
         self.repository.delete_by_id(label_id)
+
+    def save_label(self, label):
+        self.repository.save_one(
+            self.mapper.map(label, LabelDbo)
+        )

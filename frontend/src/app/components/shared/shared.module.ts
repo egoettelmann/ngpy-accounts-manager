@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileDropModule } from 'ngx-file-drop';
 import { ClarityModule } from '@clr/angular';
 import { HttpClientModule } from '@angular/common/http';
@@ -37,6 +37,7 @@ export class SharedModule {
     TranslateModule,
     ClarityModule,
     FormsModule,
+    ReactiveFormsModule,
     FileDropModule
   ];
 

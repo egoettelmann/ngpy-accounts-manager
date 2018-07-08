@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TransactionsTableComponent } from './transactions-table.component';
 import { TransactionsFormComponent } from './transactions-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -14,7 +13,6 @@ import { SharedModule } from '../shared/shared.module';
     TransactionsFormComponent
   ],
   imports: [
-    ReactiveFormsModule,
     SharedModule
   ]
 })

@@ -1,37 +1,47 @@
-<table class="table" *ngIf="labels">
-  <thead>
-  <tr>
-    <th class="left">{{ 'i18n.modules.labels.table.header.name' | translate }}</th>
-    <th class="left">{{ 'i18n.modules.labels.table.header.icon' | translate }}</th>
-    <th class="left">{{ 'i18n.modules.labels.table.header.color' | translate }}</th>
-    <th class="right">{{ 'i18n.modules.labels.table.header.category' | translate }}</th>
-    <th class="right">{{ 'i18n.modules.labels.table.header.transactions' | translate }}</th>
-    <th>&nbsp;</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let label of labels">
-    <td class="left">
-      <span>{{ label.name }}</span>
-    </td>
-    <td class="left">
-      <clr-icon [attr.shape]="label.icon"></clr-icon>
-      <span>{{ label.icon }}</span>
-    </td>
-    <td class="left">
-        <span class="badge"
-              [style.background]="label.color">
-          <span>&nbsp;</span>
-        </span>
-      {{ label.color }}
-    </td>
-    <td class="right">{{ 0 }}</td>
-    <td class="right">{{ 0 }}</td>
-    <td>
-      <button type="button" class="btn btn-sm btn-icon btn-danger">
-        <clr-icon shape="trash" size="16"></clr-icon>
-      </button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<h3>{{ 'i18n.views.settings.labels.title' | translate }} <span class="badge">{{ formArray.controls.length }}</span></h3>
+
+<form [formGroup]="form" *ngIf="form">
+  <table class="table" [formArrayName]="'labels'">
+    <thead>
+    <tr>
+      <th class="left">{{ 'i18n.modules.labels.table.header.name' | translate }}</th>
+      <th class="left">{{ 'i18n.modules.labels.table.header.icon' | translate }}</th>
+      <th class="left">{{ 'i18n.modules.labels.table.header.color' | translate }}</th>
+      <th class="right">{{ 'i18n.modules.labels.table.header.category' | translate }}</th>
+      <th class="right">{{ 'i18n.modules.labels.table.header.transactions' | translate }}</th>
+      <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let labelForm of formArray.controls; let i = index;" [formGroupName]="i">
+      <td class="left">
+        <input type="text" [formControlName]="'name'" />
+      </td>
+      <td class="left">
+        <clr-icon [attr.shape]="labelForm.get('icon').value"></clr-icon>
+        <input type="text" [formControlName]="'icon'" />
+      </td>
+      <td class="left">
+          <span class="badge"
+                [style.background]="labelForm.get('color').value">
+            <span>&nbsp;</span>
+          </span>
+        <input type="text" [formControlName]="'color'" />
+      </td>
+      <td class="right">
+        <div class="select">
+          <select [formControlName]="'category_id'">
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+          </select>
+        </div>
+      </td>
+      <td class="right">{{ 0 }}</td>
+      <td>
+        <button type="button" class="btn btn-sm btn-icon btn-danger" (click)="deleteLabel(labelForm.value)">
+          <clr-icon shape="trash" size="16"></clr-icon>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</form>

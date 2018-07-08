@@ -10,7 +10,8 @@ class Mapper(ObjectMapper):
 
     def __init__(self):
         super(Mapper, self).__init__()
-        self.create_map(LabelDbo, Label)
+        self.create_map(LabelDbo, Label, {'category': lambda x: x.category})
+        self.create_map(Label, LabelDbo)
         self.create_map(AccountDbo, Account)
         self.create_map(TransactionDbo, Transaction, {'label': lambda x: x.label, 'account': lambda x: x.account})
         self.create_map(Transaction, TransactionDbo)

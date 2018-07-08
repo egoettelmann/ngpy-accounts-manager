@@ -17,4 +17,8 @@ export class LabelsService {
     return this.http.delete('/rest/labels/' + label.id);
   }
 
+  saveOne(label: Label) {
+    return this.http.post('/rest/labels', JSON.stringify(label));
+  }
+
 }

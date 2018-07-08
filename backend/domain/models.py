@@ -75,21 +75,6 @@ class GroupedValue(Patchable):
         self.value = value
 
 
-class Label(Patchable):
-    resource_fields = {
-        'id': fields.Integer,
-        'name': fields.String,
-        'color': fields.String,
-        'icon': fields.String,
-    }
-
-    def __init__(self, id=None, name=None, color=None, icon=None) -> None:
-        self.id = id
-        self.name = name
-        self.color = color
-        self.icon = icon
-
-
 class Category(Patchable):
     resource_fields = {
         'id': fields.Integer,
@@ -101,6 +86,27 @@ class Category(Patchable):
         self.id = id
         self.name = name
         self.type = type
+
+
+class Label(Patchable):
+    resource_fields = {
+        'id': fields.Integer,
+        'name': fields.String,
+        'color': fields.String,
+        'icon': fields.String,
+        'category': fields.Nested(Category.resource_fields)
+    }
+
+    def __init__(self, id=None, name=None, color=None, icon=None, category_id=None, category=None) -> None:
+        self.id = id
+        self.name = name
+        self.color = color
+        self.icon = icon
+        self.category_id = category_id
+        self.category = category
+
+    def __repr__(self):
+        return '<Label %r, %r>' % (self.id, self.name)
 
 
 class Summary(Patchable):
