@@ -1,5 +1,5 @@
-<header class="header-6">
-  <div class="header-nav">
+<clr-header class="header-6">
+  <div class="header-nav" [clr-nav-level]="1">
     <a [routerLink]="['/dashboard']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.dashboard' | translate }}</span>
     </a>
@@ -22,4 +22,4 @@
       <clr-icon shape="logout"></clr-icon>
     </a>
   </div>
-</header>
+</clr-header>

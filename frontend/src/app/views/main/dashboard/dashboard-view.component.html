@@ -1,10 +1,10 @@
 <div class="row">
-  <div class="col-xs-6">
+  <div class="col-xs-12 col-md-6">
     <div class="card">
       <div class="card-block">
         <h4 class="card-title row">
-          <div class="col-xs-6">{{ 'i18n.views.dashboard.accounts.total' | translate }}</div>
-          <div class="col-xs-6 text-right"><strong>{{ total | number:'1.2-2' }}&nbsp;€</strong></div>
+          <span class="col-xs-6">{{ 'i18n.views.dashboard.accounts.total' | translate }}</span>
+          <span class="col-xs-6 text-right"><strong>{{ total | number:'1.2-2' }}&nbsp;€</strong></span>
         </h4>
       </div>
     </div>
@@ -12,7 +12,7 @@
     <app-chart class="card" [title]="'i18n.views.dashboard.chart.title' | translate" [options]="graphOptions"></app-chart>
   </div>
 
-  <div class="col-xs-6">
+  <div class="col-xs-12 col-md-6">
     <app-account-card *ngFor="let account of accounts"
                       [account]="account">
     </app-account-card>

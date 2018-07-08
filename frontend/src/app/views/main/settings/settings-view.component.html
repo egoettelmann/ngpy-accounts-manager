@@ -1,6 +1,6 @@
 <router-outlet></router-outlet>
 
-<nav class="sidenav">
+<nav class="sidenav" [clr-nav-level]="2">
   <section class="sidenav-content">
     <a [routerLink]="['./labels']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.settings.labels' | translate }}</span>

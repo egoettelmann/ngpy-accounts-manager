@@ -2,11 +2,11 @@
   <thead>
     <tr>
       <th>{{ 'i18n.modules.transactions.table.header.account' | translate }}</th>
-      <th *ngIf="labels">{{ 'i18n.modules.transactions.table.header.label' | translate }}</th>
-      <th>&nbsp;</th>
-      <th class="left">{{ 'i18n.modules.transactions.table.header.reference' | translate }}</th>
+      <th *ngIf="labels" class="hidden-sm-down">{{ 'i18n.modules.transactions.table.header.label' | translate }}</th>
+      <th class="hidden-sm-down">&nbsp;</th>
+      <th class="left hidden-sm-down">{{ 'i18n.modules.transactions.table.header.reference' | translate }}</th>
       <th>{{ 'i18n.modules.transactions.table.header.description' | translate }}</th>
-      <th>{{ 'i18n.modules.transactions.table.header.value-date' | translate }}</th>
+      <th class="hidden-sm-down">{{ 'i18n.modules.transactions.table.header.value-date' | translate }}</th>
       <th>{{ 'i18n.modules.transactions.table.header.amount' | translate }}</th>
       <th *ngIf="editable">&nbsp;</th>
     </tr>
@@ -25,14 +25,14 @@
           </span>
         </span>
       </td>
-      <td *ngIf="editable && labels" class="text-left">
+      <td *ngIf="editable && labels" class="text-left hidden-sm-down">
         <app-autocomplete [value]="transaction.label"
                           [options]="labels"
                           (onSelect)="changeLabel($event, transaction)"
                           (onCreate)="addLabel($event, transaction)">
         </app-autocomplete>
       </td>
-      <td>
+      <td class="hidden-sm-down">
         <span class="tooltip tooltip-sm tooltip-top-right"
               role="tooltip"
               aria-haspopup="true">
@@ -46,9 +46,9 @@
           </span>
         </span>
       </td>
-      <td class="text-left">{{ transaction.reference }}</td>
+      <td class="text-left hidden-sm-down">{{ transaction.reference }}</td>
       <td class="text-left">{{ transaction.description }}</td>
-      <td class="text-center text-nowrap">{{ transaction.dateValue }}</td>
+      <td class="text-center text-nowrap hidden-sm-down">{{ transaction.dateValue }}</td>
       <td class="text-right">{{ transaction.amount | number:'1.2-2' }}&nbsp;€</td>
       <td *ngIf="editable"><clr-icon (click)="select(transaction)" shape="note" size="12"></clr-icon></td>
     </tr>
