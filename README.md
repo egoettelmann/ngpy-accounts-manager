@@ -26,6 +26,11 @@ python index.py
 
 ## Release Notes
 
+### `0.2.2`
+
+- Responsiveness on mobile improved
+- Added settings section for managing labels, categories and accounts
+
 ### `0.2.1`
 
 - Separated app into multiple modules that are lazy-loaded
@@ -39,13 +44,11 @@ python index.py
 
 - Review the lifecycle of the db's session
 - Review backend logging
-- Enhance app responsiveness
 - Create a native app with Angular ?
 
 ### Features
 
 - Automatically create label if it does not exist
-- Create settings view for managing labels, categories and accounts
 - Add todo list on dashboard or alert bubbles on menu for inconsistent data
 - Add comment field to transactions
 - Improve transaction form
