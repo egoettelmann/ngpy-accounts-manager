@@ -27,6 +27,10 @@ const ROUTES: Routes = [
         loadChildren: './analytics/analytics-view.module#AnalyticsViewModule'
       },
       {
+        path: 'settings',
+        loadChildren: './settings/settings-view.module#SettingsViewModule'
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

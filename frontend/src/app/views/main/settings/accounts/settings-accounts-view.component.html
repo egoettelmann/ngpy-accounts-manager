@@ -1,0 +1,30 @@
+<table class="table" *ngIf="accounts">
+  <thead>
+  <tr>
+    <th class="left">{{ 'i18n.modules.accounts.table.header.name' | translate }}</th>
+    <th class="left">{{ 'i18n.modules.accounts.table.header.description' | translate }}</th>
+    <th class="left">{{ 'i18n.modules.accounts.table.header.color' | translate }}</th>
+    <th class="right">{{ 'i18n.modules.accounts.table.header.total' | translate }}</th>
+    <th>&nbsp;</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let account of accounts">
+    <td class="left">
+      <span>{{ account.name }}</span>
+    </td>
+    <td class="left">
+      <span>{{ account.description }}</span>
+    </td>
+    <td class="left">
+        <span class="badge"
+              [style.background]="account.color">
+          <span>&nbsp;</span>
+        </span>
+      {{ account.color }}
+    </td>
+    <td class="right">{{ account.total }}</td>
+    <td>&nbsp;</td>
+  </tr>
+  </tbody>
+</table>

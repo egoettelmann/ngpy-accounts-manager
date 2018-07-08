@@ -43,6 +43,11 @@
   "i18n.components.navigation.transactions": "Transactions",
   "i18n.components.navigation.treasury": "Treasury",
   "i18n.components.navigation.analytics": "Analytics",
+  "i18n.components.navigation.settings": "Settings",
+  "i18n.components.navigation.settings.labels": "Labels",
+  "i18n.components.navigation.settings.categories": "Categories",
+  "i18n.components.navigation.settings.accounts": "Accounts",
+  "i18n.components.navigation.settings.transactions": "Transactions",
   "i18n.components.file-drop.header-text": "Upload a file",
 
   "i18n.modules.accounts.account-card.latest-transaction": "Latest transaction:",
@@ -78,5 +83,18 @@
   "i18n.modules.statistics.summary.YEAR.end": "End of year",
   "i18n.modules.statistics.summary.YEAR.debit": "Debit",
   "i18n.modules.statistics.summary.YEAR.credit": "Credit",
-  "i18n.modules.statistics.summary.YEAR.result": "Yearly result"
+  "i18n.modules.statistics.summary.YEAR.result": "Yearly result",
+
+  "i18n.modules.labels.table.header.name": "Name",
+  "i18n.modules.labels.table.header.icon": "Icon",
+  "i18n.modules.labels.table.header.color": "Color",
+  "i18n.modules.labels.table.header.category": "Category",
+  "i18n.modules.labels.table.header.transactions": "Transactions",
+  "i18n.modules.categories.table.header.name": "Name",
+  "i18n.modules.categories.table.header.type": "Type",
+  "i18n.modules.categories.table.header.labels": "Labels",
+  "i18n.modules.accounts.table.header.name": "Name",
+  "i18n.modules.accounts.table.header.description": "Description",
+  "i18n.modules.accounts.table.header.color": "Color",
+  "i18n.modules.accounts.table.header.total": "Total"
 }

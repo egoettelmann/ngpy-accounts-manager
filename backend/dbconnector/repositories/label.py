@@ -16,3 +16,11 @@ class LabelRepository():
 
     def find_by_name(self, name):
         return self.entity_manager.query(LabelDbo).filter(LabelDbo.name == name).first()
+
+    def delete_by_id(self, label_id):
+        self.entity_manager.query(LabelDbo).filter(LabelDbo.id == label_id).delete()
+        try:
+            self.entity_manager.get_session().commit()
+        except:
+            self.entity_manager.get_session().rollback()
+            raise

@@ -26,3 +26,6 @@ class LabelService():
         if not label:
             return Label(name, "#428bca", "unchecked")
         return self.mapper.map(label, Label)
+
+    def delete_label(self, label_id):
+        self.repository.delete_by_id(label_id)

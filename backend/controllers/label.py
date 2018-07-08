@@ -21,3 +21,7 @@ class LabelController():
     @marshal_with(Label.resource_fields)
     def get_one(self, label_id):
         return self.label_service.get_by_id(label_id)
+
+    @restful.route('/<int:label_id>', methods=['DELETE'])
+    def delete_one(self, label_id):
+        return self.label_service.delete_label(label_id)

@@ -13,4 +13,8 @@ export class LabelsService {
     return this.http.get<Label[]>('/rest/labels');
   }
 
+  deleteOne(label: Label) {
+    return this.http.delete('/rest/labels/' + label.id);
+  }
+
 }
