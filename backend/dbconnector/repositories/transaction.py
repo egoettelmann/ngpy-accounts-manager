@@ -20,6 +20,12 @@ class TransactionRepository():
     def get_by_id(self, transaction_id):
         return self.entity_manager.query(TransactionDbo).get(transaction_id)
 
+    def count(self, label_id=None):
+        query = self.entity_manager.query(TransactionDbo)
+        if label_id is not None:
+            query = query.filter(TransactionDbo.label_id == label_id)
+        return query.count()
+
     def delete_by_id(self, transaction_id):
         self.entity_manager.query(TransactionDbo).filter(TransactionDbo.id == transaction_id).delete()
         try:

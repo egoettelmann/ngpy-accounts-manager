@@ -9,10 +9,9 @@ from ..models import Transaction, KeyValue, GroupedValue
 @injectable()
 class TransactionService():
 
-    def __init__(self, transaction_repository, object_mapper, label_service):
+    def __init__(self, transaction_repository, object_mapper):
         self.repository = transaction_repository
         self.mapper = object_mapper
-        self.label_service = label_service
 
     def get_all_transactions(self, account_ids=None, year=None, month=None):
         date_from = self.get_date_from(year, month)
@@ -27,6 +26,9 @@ class TransactionService():
             self.repository.get_by_id(transaction_id),
             Transaction
         )
+
+    def count(self, label_id=None):
+        return self.repository.count(label_id)
 
     def delete_transaction(self, transaction_id):
         self.repository.delete_by_id(transaction_id)

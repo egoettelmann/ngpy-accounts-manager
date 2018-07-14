@@ -35,7 +35,11 @@
           </select>
         </div>
       </td>
-      <td class="right">{{ 0 }}</td>
+      <td class="right">
+        <span class="label" [ngClass]="labelForm.get('numTransactions').value > 0 ? 'label-info' : 'label-danger'">
+            {{ labelForm.get('numTransactions').value }}
+          </span>
+      </td>
       <td>
         <button type="button" class="btn btn-sm btn-icon btn-danger" (click)="deleteLabel(labelForm.value)">
           <clr-icon shape="trash" size="16"></clr-icon>

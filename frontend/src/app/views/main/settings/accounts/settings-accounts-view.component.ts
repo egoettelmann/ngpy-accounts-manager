@@ -50,7 +50,9 @@ export class SettingsAccountsViewComponent implements OnInit {
       'id': [account.id],
       'name': [account.name],
       'description': [account.description],
-      'color': [account.color]
+      'color': [account.color],
+      'lastUpdate': [{value: account.lastUpdate, disabled: true}],
+      'total': [{value: account.total, disabled: true}]
     });
 
     formGroup.valueChanges.pipe(

@@ -80,12 +80,14 @@ class Category(Patchable):
         'id': fields.Integer,
         'name': fields.String,
         'type': fields.String,
+        'numLabels': fields.Integer(attribute='num_labels'),
     }
 
-    def __init__(self, id=None, name=None, type=None) -> None:
+    def __init__(self, id=None, name=None, type=None, num_labels=None) -> None:
         self.id = id
         self.name = name
         self.type = type
+        self.num_labels = num_labels
 
 
 class Label(Patchable):
@@ -94,16 +96,18 @@ class Label(Patchable):
         'name': fields.String,
         'color': fields.String,
         'icon': fields.String,
-        'category': fields.Nested(Category.resource_fields)
+        'category': fields.Nested(Category.resource_fields),
+        'numTransactions': fields.Integer(attribute='num_transactions')
     }
 
-    def __init__(self, id=None, name=None, color=None, icon=None, category_id=None, category=None) -> None:
+    def __init__(self, id=None, name=None, color=None, icon=None, category_id=None, category=None, num_transactions=None) -> None:
         self.id = id
         self.name = name
         self.color = color
         self.icon = icon
         self.category_id = category_id
         self.category = category
+        self.num_transactions = num_transactions
 
     def __repr__(self):
         return '<Label %r, %r>' % (self.id, self.name)

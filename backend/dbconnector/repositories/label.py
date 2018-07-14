@@ -17,6 +17,12 @@ class LabelRepository():
     def find_by_name(self, name):
         return self.entity_manager.query(LabelDbo).filter(LabelDbo.name == name).first()
 
+    def count(self, category_id=None):
+        query = self.entity_manager.query(LabelDbo)
+        if category_id is not None:
+            query = query.filter(LabelDbo.category_id == category_id)
+        return query.count()
+
     def delete_by_id(self, label_id):
         self.entity_manager.query(LabelDbo).filter(LabelDbo.id == label_id).delete()
         try:

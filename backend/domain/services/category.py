@@ -6,15 +6,19 @@ from ...modules.depynject import injectable
 @injectable()
 class CategoryService():
 
-    def __init__(self, category_repository, object_mapper):
+    def __init__(self, category_repository, object_mapper, label_service):
         self.repository = category_repository
         self.mapper = object_mapper
+        self.label_service = label_service
 
     def get_all(self):
-        return self.mapper.map_all(
+        categories = self.mapper.map_all(
             self.repository.get_all(),
             Category
         )
+        for cat in categories:
+            cat.num_labels = self.label_service.count(cat.id)
+        return categories
 
     def get_by_id(self, category_id):
         return self.mapper.map(

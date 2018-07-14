@@ -60,7 +60,8 @@ export class SettingsLabelsViewComponent implements OnInit {
       'name': [label.name],
       'color': [label.color],
       'icon': [label.icon],
-      'category_id': [label.category.id]
+      'category_id': [label.category.id],
+      'numTransactions': [{value: label.numTransactions, disabled: true}]
     });
 
     formGroup.valueChanges.pipe(

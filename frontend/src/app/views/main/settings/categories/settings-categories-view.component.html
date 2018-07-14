@@ -13,7 +13,7 @@
     <tbody>
     <tr *ngFor="let categoryForm of formArray.controls; let i = index;" [formGroupName]="i">
       <td class="left">
-        <input type="text" [formControlName]="'name'" />
+        <input type="text" [formControlName]="'name'" size="45" />
       </td>
       <td class="right">
         <div class="select">
@@ -24,7 +24,11 @@
           </select>
         </div>
       </td>
-      <td class="right">{{ 0 }}</td>
+      <td class="right">
+        <span class="label" [ngClass]="categoryForm.get('numLabels').value > 0 ? 'label-info' : 'label-danger'">
+          {{ categoryForm.get('numLabels').value }}
+        </span>
+      </td>
       <td>
         <button type="button" class="btn btn-sm btn-icon btn-danger" (click)="deleteCategory(categoryForm.value)">
           <clr-icon shape="trash" size="16"></clr-icon>

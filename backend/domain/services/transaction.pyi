@@ -9,12 +9,11 @@ from ...mapping import Mapper
 class TransactionService():
     repository : TransactionRepository
     mapper : Mapper
-    label_service : LabelService
 
     def __init__(self,
                  transaction_repository : TransactionRepository,
-                 object_mapper : Mapper,
-                 label_service : LabelService) -> None : ...
+                 object_mapper : Mapper
+                 ) -> None : ...
 
     def get_all_transactions(self,
                              account_ids : list(int),
@@ -22,6 +21,8 @@ class TransactionService():
                              month : int) -> list(Transaction) : ...
 
     def get_transaction(self, transaction_id : int) -> Transaction : ...
+
+    def count(self, label_id : int) -> int : ...
 
     def delete_transaction(self, transaction_id : int) -> None : ...
 

@@ -49,7 +49,8 @@ export class SettingsCategoriesViewComponent implements OnInit {
     const formGroup = this.fb.group({
       'id': [category.id],
       'name': [category.name],
-      'type': [category.type]
+      'type': [category.type],
+      'numLabels': [{value: category.numLabels, disabled: true}]
     });
 
     formGroup.valueChanges.pipe(
