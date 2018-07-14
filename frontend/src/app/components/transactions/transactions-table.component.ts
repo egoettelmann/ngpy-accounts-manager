@@ -51,4 +51,8 @@ export class TransactionsTableComponent implements OnChanges, OnInit {
     this.onDelete.emit(transaction);
   }
 
+  getAmountColor(amount: number): string {
+    return amount < 0 ? 'text-danger' : 'text-success';
+  }
+
 }
