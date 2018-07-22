@@ -61,6 +61,7 @@ class TransactionRepository():
         query = self.filter_by_date_to(query, date_to)
         query = self.filter_by_sign(query, sign)
         query = query.group_by(LabelDbo.id)
+        query = query.group_by(LabelDbo.name)
         return query.all()
 
     def get_grouped_by_period(self, account_ids=None, date_from=None, date_to=None, period=None):
@@ -77,6 +78,7 @@ class TransactionRepository():
             query = query.group_by(extract('month', TransactionDbo.date_value))
         if period in ['day']:
             query = query.group_by(extract('day', TransactionDbo.date_value))
+        query = query.group_by(TransactionDbo.date_value)
         return query.all()
 
     def get_grouped_by_category_type(self, account_ids=None, date_from=None, date_to=None, category_type=None):
@@ -113,6 +115,7 @@ class TransactionRepository():
         query = self.filter_by_date_to(query, date_to)
         query = self.filter_by_category_type(query, category_type)
         query = query.group_by(LabelDbo.id)
+        query = query.group_by(CategoryDbo.name)
         return query.all()
 
     def get_total(self, account_ids=None, date_from=None, date_to=None, sign=None):
