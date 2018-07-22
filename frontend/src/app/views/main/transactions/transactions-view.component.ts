@@ -30,7 +30,7 @@ export class TransactionsViewComponent implements OnInit {
   public transactions: Transaction[];
   public graphOptions: any;
   public summary: Summary;
-  public accounts: Account[];
+  public accounts: Account[] = [];
   public labels: Label[];
 
   constructor(private route: ActivatedRoute,
@@ -44,6 +44,16 @@ export class TransactionsViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.route.snapshot.paramMap.has('year') || !this.route.snapshot.paramMap.has('month')) {
+      if (!this.route.snapshot.paramMap.has('year')) {
+        this.currentYear = CommonFunctions.getCurrentYear();
+      }
+      if (!this.route.snapshot.paramMap.has('month')) {
+        this.currentMonth = CommonFunctions.getCurrentMonth();
+      }
+      this.changeAccounts([]);
+      return;
+    }
     this.initOnChanges();
     zip(
       this.accountsService.getAccounts(),

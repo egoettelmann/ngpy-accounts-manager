@@ -23,7 +23,7 @@ export class TreasuryViewComponent implements OnInit {
   public accountsFilter: number[] = [];
 
   public graphOptions: any;
-  public accounts: Account[];
+  public accounts: Account[] = [];
   public topTransactionsAsc: Transaction[];
   public topTransactionsDesc: Transaction[];
   public summary: Summary;
@@ -37,6 +37,11 @@ export class TreasuryViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.route.snapshot.paramMap.has('year')) {
+      this.currentYear = CommonFunctions.getCurrentYear();
+      this.changeAccounts([]);
+      return;
+    }
     this.initOnChanges();
     this.accountsService.getAccounts().subscribe(data => {
       this.accounts = data;

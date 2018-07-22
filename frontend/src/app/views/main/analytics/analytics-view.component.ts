@@ -22,7 +22,7 @@ export class AnalyticsViewComponent implements OnInit {
   public currentYear: number;
   public accountsFilter: number[] = [];
 
-  public accounts: Account[];
+  public accounts: Account[] = [];
   public categories: Category[];
   public graphOptionsCredit: any;
   public graphOptionsDebit: any;
@@ -40,6 +40,11 @@ export class AnalyticsViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.route.snapshot.paramMap.has('year')) {
+      this.currentYear = CommonFunctions.getCurrentYear();
+      this.changeAccounts([]);
+      return;
+    }
     this.initOnChanges();
     zip(
       this.accountsService.getAccounts(),

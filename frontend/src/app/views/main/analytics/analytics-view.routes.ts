@@ -1,19 +1,17 @@
 import { AnalyticsViewComponent } from './analytics-view.component';
 import { RouterModule, Routes } from '@angular/router';
-import { CommonFunctions } from '../../../common/common-functions';
 
 export const ROUTES: Routes = [
   {
     path: '',
     children: [
       {
-        path: ':year',
+        path: '',
         component: AnalyticsViewComponent
       },
       {
-        path: '',
-        redirectTo: CommonFunctions.getCurrentYear().toString(),
-        pathMatch: 'full'
+        path: ':year',
+        component: AnalyticsViewComponent
       }
     ]
   }
