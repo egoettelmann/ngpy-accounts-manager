@@ -39,6 +39,7 @@ class LabelService():
         self.repository.delete_by_id(label_id)
 
     def save_label(self, label):
-        self.repository.save_one(
+        saved_label = self.repository.save_one(
             self.mapper.map(label, LabelDbo)
         )
+        return self.mapper.map(saved_label, Label)

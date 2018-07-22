@@ -52,4 +52,25 @@ export class CommonFunctions {
     }
   }
 
+  public static removeEmpty(obj: any): any {
+    if (Array.isArray(obj)) {
+      return obj
+        .filter(f => f != null)
+        .map((r, i) =>
+          CommonFunctions.removeEmpty(r)
+        );
+    } else if (typeof obj !== 'object') {
+      return obj;
+    } else {
+      return Object.keys(obj)
+        .filter(f => obj[f] != null)
+        .reduce(
+          (r, i) => {
+            return {...r, [i]: CommonFunctions.removeEmpty(obj[i])};
+          },
+          {}
+        );
+    }
+  }
+
 }

@@ -7,6 +7,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Category } from '../../../../components/transactions/category';
 import { CategoriesService } from '../../../../services/categories.service';
 import { zip } from 'rxjs/observable/zip';
+import { lock, SubscriptionLock } from '../../../../common/lock-subscriber';
 
 @Component({
   templateUrl: './settings-labels-view.component.html',
@@ -43,6 +44,13 @@ export class SettingsLabelsViewComponent implements OnInit {
     });
   }
 
+  addLabel() {
+    const newLabel = new Label(undefined, '', '', '', 0);
+    const control = this.buildFormControl(newLabel);
+    this.formArray.push(control);
+    this.onFormChange(control);
+  }
+
   private buildForm(labels: Label[]) {
     this.form = this.fb.group({
       'labels': this.fb.array([])
@@ -60,21 +68,32 @@ export class SettingsLabelsViewComponent implements OnInit {
       'name': [label.name],
       'color': [label.color],
       'icon': [label.icon],
-      'category_id': [label.category.id],
-      'numTransactions': [{value: label.numTransactions, disabled: true}]
+      'category_id': [label.category ? label.category.id : null],
+      'numTransactions': [label.numTransactions]
     });
+    this.disablePrivateFields(formGroup);
 
+    const saveLock = new SubscriptionLock();
     formGroup.valueChanges.pipe(
-      debounceTime(100)
-    ).subscribe(value => {
-      this.onFormChange(value);
+      debounceTime(500),
+      lock(saveLock)
+    ).subscribe((v) => {
+      this.onFormChange(formGroup, saveLock);
     });
 
     return formGroup;
   }
 
-  private onFormChange(value: Label) {
-    this.labelsService.saveOne(value).subscribe();
+  private onFormChange(formGroup: FormGroup, saveLock = new SubscriptionLock()) {
+    const value = formGroup.value;
+    this.labelsService.saveOne(value).subscribe(savedLabel => {
+      formGroup.patchValue({id: savedLabel.id}, {emitEvent: false});
+      saveLock.release();
+    });
+  }
+
+  private disablePrivateFields(formGroup: FormGroup) {
+    formGroup.get('numTransactions').disable({emitEvent: false});
   }
 
 }

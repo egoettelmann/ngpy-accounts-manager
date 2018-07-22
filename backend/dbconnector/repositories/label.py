@@ -32,10 +32,11 @@ class LabelRepository():
             raise
 
     def save_one(self, label):
-        self.entity_manager.get_session().merge(label)
+        saved_label = self.entity_manager.get_session().merge(label)
         try:
             self.entity_manager.get_session().commit()
         except:
             self.entity_manager.get_session().rollback()
             raise
-        return True
+        self.entity_manager.get_session().refresh(saved_label)
+        return saved_label

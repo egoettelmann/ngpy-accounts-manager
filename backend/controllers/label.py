@@ -28,6 +28,7 @@ class LabelController():
         return self.label_service.delete_label(label_id)
 
     @restful.route('', methods=['POST'])
+    @marshal_with(Label.resource_fields)
     def save_one(self):
         label = request.get_json(force=True)
         return self.label_service.save_label(Label(**label))
