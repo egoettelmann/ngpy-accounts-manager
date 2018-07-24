@@ -1,5 +1,11 @@
 <div class="row">
   <div class="col-xs-12 col-md-4">
+    <app-account-toggle *ngIf="accounts"
+                        [accounts]="accounts"
+                        [preSelected]="accountsFilter"
+                        (onChange)="changeAccounts($event)">
+    </app-account-toggle>
+
     <table class="table table-compact table-vertical">
       <tr>
         <th class="text-left align-middle" width="40%">{{ 'i18n.views.treasury.label.year-dropdown' | translate }}</th>
@@ -14,6 +20,8 @@
                       type="button"
                       clrDropdownItem
                       [routerLink]="['/treasury', year]">
+                <clr-icon *ngIf="year === currentYear" shape="check-circle" class="is-success"></clr-icon>
+                <span *ngIf="year !== currentYear" class="icon-empty">&nbsp;</span>
                 {{ year }}
               </button>
             </clr-dropdown-menu>
@@ -21,12 +29,6 @@
         </td>
       </tr>
     </table>
-
-    <app-account-toggle *ngIf="accounts"
-                        [accounts]="accounts"
-                        [preSelected]="accountsFilter"
-                        (onChange)="changeAccounts($event)">
-    </app-account-toggle>
 
     <app-summary [summary]="summary"></app-summary>
   </div>
