@@ -66,19 +66,18 @@ class TransactionRepository():
 
     def get_grouped_by_period(self, account_ids=None, date_from=None, date_to=None, period=None):
         query = self.entity_manager.query(
-            TransactionDbo.date_value.label('label'),
+            func.max(TransactionDbo.date_value).label('label'),
             func.sum(TransactionDbo.amount).label('value')
         )
         query = self.filter_by_accounts(query, account_ids)
         query = self.filter_by_date_from(query, date_from)
         query = self.filter_by_date_to(query, date_to)
-        if period in ['year', 'month', 'day']:
-            query = query.group_by(extract('year', TransactionDbo.date_value))
-        if period in ['month', 'day']:
-            query = query.group_by(extract('month', TransactionDbo.date_value))
         if period in ['day']:
             query = query.group_by(extract('day', TransactionDbo.date_value))
-        query = query.group_by(TransactionDbo.date_value)
+        if period in ['month', 'day']:
+            query = query.group_by(extract('month', TransactionDbo.date_value))
+        if period in ['year', 'month', 'day']:
+            query = query.group_by(extract('year', TransactionDbo.date_value))
         return query.all()
 
     def get_grouped_by_category_type(self, account_ids=None, date_from=None, date_to=None, category_type=None):
