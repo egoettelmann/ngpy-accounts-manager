@@ -69,7 +69,7 @@ class TransactionController():
 
     @restful.route('/upload-file', methods=['POST'])
     def upload_file(self):
-        tmp_folder = 'uploads'
+        tmp_folder = 'tmp'
         file = request.files['file']
         if file and self.allowed_file(file.filename):
             if not os.path.exists(tmp_folder):

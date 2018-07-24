@@ -3,4 +3,5 @@ venv
 *.iml
 *.db
 uploads/
+tmp/
 __pycache__/
