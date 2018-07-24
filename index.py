@@ -25,7 +25,7 @@ app = Flask(__name__,
             static_folder="frontend/dist",
             static_url_path=""
             )
-CORS(app, origins='http://localhost:4200', supports_credentials=True)
+CORS(app, origins='http://localhost:4210', supports_credentials=True)
 api = Api(app,
           prefix="/rest",
           di_provider=d_injector.provide,
