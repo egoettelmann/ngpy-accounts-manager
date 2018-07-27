@@ -1,3 +1,4 @@
+import os
 import csv
 import datetime
 import hashlib
@@ -19,7 +20,8 @@ class Parser:
         return transactions
 
     def get_account_name(self):
-        return self.filename.rsplit("_")[0].replace("uploads\\", "")
+        file_basename = os.path.basename(self.filename)
+        return file_basename.rsplit("_")[0]
 
     def create_transaction(self, row):
         date_compta = datetime.datetime.strptime(row[0], "%d/%m/%Y").date()

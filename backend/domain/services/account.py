@@ -93,7 +93,6 @@ class AccountService():
         parser = self.resolver.resolve(filename)
         account_name = parser.get_account_name()
         account = self.find_by_name(account_name)
-        print('Searching for ', account_name, ' found ', account)
         transactions = self.mapper.map_all(
             parser.parse(),
             TransactionDbo
