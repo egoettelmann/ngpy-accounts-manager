@@ -70,18 +70,12 @@ class TransactionController():
     @restful.route('/upload-file', methods=['POST'])
     def upload_file(self):
         tmp_folder = '/tmp'
-        print('received upload request')
         file = request.files['file']
-        print('uploaded', file.filename)
         if file and self.allowed_file(file.filename):
-            print('file is allowed')
             if not os.path.exists(tmp_folder):
-                print('folder does not exist' + tmp_folder)
                 os.makedirs(tmp_folder)
             filename = secure_filename(file.filename)
-            print('secured filename', filename)
             saved_filename = os.path.join(tmp_folder, filename)
-            print('saved filename', saved_filename)
             file.save(saved_filename)
-            print('file saved, importing')
             return self.account_service.import_file(saved_filename)
+        return False

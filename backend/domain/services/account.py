@@ -102,6 +102,6 @@ class AccountService():
             s = str(t.account_id) + t.reference + t.date_value.strftime("%Y-%m-%d") + "{0:.2f}".format(t.amount)
             t.hash = hashlib.md5(s.encode('utf-8')).hexdigest()
         try:
-            self.transaction_service.create_all(transactions)
+            return self.transaction_service.create_all(transactions)
         except Exception as e:
             raise FileImportException("Impossible to import file", cause=e)
