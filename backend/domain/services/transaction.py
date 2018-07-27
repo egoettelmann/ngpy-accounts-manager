@@ -13,11 +13,12 @@ class TransactionService():
         self.repository = transaction_repository
         self.mapper = object_mapper
 
-    def get_all_transactions(self, account_ids=None, year=None, month=None):
+    def get_all_transactions(self, account_ids=None, year=None, month=None, label_ids=None):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
+        labels = self.sanitize_label_ids(label_ids)
         return self.mapper.map_all(
-            self.repository.get_all(account_ids, date_from, date_to),
+            self.repository.get_all(account_ids, date_from, date_to, labels),
             Transaction
         )
 
@@ -113,6 +114,18 @@ class TransactionService():
                 date_to = date_to.replace(year=year)
                 date_to = date_to.replace(month=month+1)
         return date_to
+
+    @staticmethod
+    def sanitize_label_ids(label_ids=None):
+        if label_ids is not None:
+            labels = []
+            for label_id in label_ids:
+                if label_id == 'null':
+                    labels.append(None)
+                else:
+                    labels.append(label_id)
+            return labels
+        return None
 
     @staticmethod
     def map_to_key_value_list(entries):

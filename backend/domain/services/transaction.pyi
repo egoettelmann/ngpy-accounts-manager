@@ -18,7 +18,9 @@ class TransactionService():
     def get_all_transactions(self,
                              account_ids : list(int),
                              year : int,
-                             month : int) -> list(Transaction) : ...
+                             month : int,
+                             label_ids: list(int)
+                             ) -> list(Transaction) : ...
 
     def get_transaction(self, transaction_id : int) -> Transaction : ...
 
@@ -77,6 +79,9 @@ class TransactionService():
 
     @staticmethod
     def get_date_to(year : int, month : int) -> datetime.date : ...
+
+    @staticmethod
+    def sanitize_label_ids(label_ids: list(int)) -> list(int) : ...
 
     @staticmethod
     def map_to_key_value_list(entries : list(any)) -> list(KeyValue) : ...

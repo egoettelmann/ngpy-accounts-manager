@@ -1,4 +1,4 @@
-from sqlalchemy.sql.expression import extract, func, desc, label
+from sqlalchemy.sql.expression import extract, func, desc, label, or_
 
 from ..entities import LabelDbo, TransactionDbo, CategoryDbo
 from ...modules.depynject import injectable
@@ -10,11 +10,13 @@ class TransactionRepository():
     def __init__(self, entity_manager):
         self.entity_manager = entity_manager
 
-    def get_all(self, account_ids=None, date_from=None, date_to=None):
+    def get_all(self, account_ids=None, date_from=None, date_to=None, label_ids=None):
         query = self.entity_manager.query(TransactionDbo)
         query = self.filter_by_accounts(query, account_ids)
         query = self.filter_by_date_from(query, date_from)
         query = self.filter_by_date_to(query, date_to)
+        query = self.filter_by_labels(query, label_ids)
+        print('label_ids', label_ids)
         return query.order_by(TransactionDbo.date_value)
 
     def get_by_id(self, transaction_id):
@@ -171,7 +173,13 @@ class TransactionRepository():
     @staticmethod
     def filter_by_labels(query, label_ids=None):
         if label_ids is not None:
-            query = query.filter(TransactionDbo.label_id.in_(label_ids))
+            if None in label_ids:
+                query = query.filter(or_(
+                    TransactionDbo.label_id.is_(None),
+                    TransactionDbo.label_id.in_(label_ids)
+                ))
+            else:
+                query = query.filter(TransactionDbo.label_id.in_(label_ids))
         return query
 
     @staticmethod

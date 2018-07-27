@@ -29,7 +29,10 @@ class TransactionController():
         account_ids = request.args.get('account_ids')
         if account_ids is not None:
             account_ids = account_ids.split(',')
-        return self.transaction_service.get_all_transactions(account_ids, year, month)
+        label_ids = request.args.get('label_ids')
+        if label_ids is not None:
+            label_ids = label_ids.split(',')
+        return self.transaction_service.get_all_transactions(account_ids, year, month, label_ids)
 
     @restful.route('/top/<int:num_transactions>/<asc>')
     @marshal_with(Transaction.resource_fields)

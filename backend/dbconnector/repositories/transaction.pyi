@@ -26,7 +26,8 @@ class TransactionRepository():
     def get_all(self,
                 account_ids : list(int),
                 date_from : datetime.date,
-                date_to : datetime.date
+                date_to : datetime.date,
+                label_ids : list(int)
                 ) -> list(TransactionDbo) : ...
 
     def get_by_id(self, transaction_id : int) -> TransactionDbo : ...
