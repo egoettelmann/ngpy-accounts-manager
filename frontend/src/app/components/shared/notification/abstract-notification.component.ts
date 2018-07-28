@@ -1,4 +1,4 @@
-import {Input, OnChanges, SimpleChanges} from '@angular/core';
+import { ChangeDetectorRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import {NotificationService} from './notification.service';
 import {Notification} from './notification';
 import {Subscription} from 'rxjs/Subscription';
@@ -13,7 +13,10 @@ export abstract class AbstractNotificationComponent implements OnChanges {
   public showNotification = false;
   public translationPrefix = 'i18n.error.';
 
-  constructor(protected notificationService: NotificationService) {
+  constructor(
+    protected notificationService: NotificationService,
+    protected changeDetectorRef: ChangeDetectorRef
+  ) {
     this.startSubscription();
   }
 
@@ -36,6 +39,7 @@ export abstract class AbstractNotificationComponent implements OnChanges {
           this.dismiss
         );
       }
+      this.changeDetectorRef.detectChanges();
     }, this.type);
   }
 

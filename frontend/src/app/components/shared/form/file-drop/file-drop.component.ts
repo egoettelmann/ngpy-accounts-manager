@@ -1,6 +1,8 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { UploadFile, UploadEvent } from 'ngx-file-drop';
+import { UploadEvent, UploadFile } from 'ngx-file-drop';
 import { UploadService } from '../../../../services/upload.service';
+import { NotificationService } from '../../notification/notification.service';
+import { Notification } from '../../notification/notification';
 
 @Component({
   selector: 'app-file-drop',
@@ -12,16 +14,34 @@ export class FileDropComponent {
 
   public files: UploadFile[] = [];
 
-  constructor(private uploadService: UploadService) {}
+  constructor(
+    private uploadService: UploadService,
+    private notificationService: NotificationService
+  ) {}
 
-  public dropped(event: UploadEvent) {
-    this.files = event.files;
-    for (const file of event.files) {
-      file.fileEntry.file(f => {
-        this.uploadService.uploadFile(f, f.name).subscribe(() => {
-          console.log('uploaded', f.name);
+  public dropped(event: any) {
+    if (event instanceof UploadEvent) {
+      // This is a drop event
+      this.files = event.files;
+      for (const file of event.files) {
+        file.fileEntry.file(f => {
+          this.uploadFile(f);
         });
-      });
+      }
+    } else {
+      // This is an event triggered through input="file"
+      this.files = [];
+      for (const file of event.target.files) {
+        file.relativePath = file.name;
+        this.uploadFile(file);
+      }
     }
   }
+
+  private uploadFile(file: File) {
+    this.uploadService.uploadFile(file, file.name).subscribe(result => {
+      this.notificationService.broadcast(new Notification('SUCCESS', 'B200', 'file_import_success'));
+    });
+  }
+
 }

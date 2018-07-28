@@ -4,6 +4,7 @@ from flask import request
 from flask_restful import marshal_with
 from werkzeug.utils import secure_filename
 
+from ..domain.exceptions import FileImportException
 from ..domain.models import Transaction
 from ..modules import restful
 from ..modules.depynject import injectable
@@ -81,4 +82,4 @@ class TransactionController():
             saved_filename = os.path.join(tmp_folder, filename)
             file.save(saved_filename)
             return self.account_service.import_file(saved_filename)
-        return False
+        raise FileImportException("Impossible to import file")

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import {AbstractNotificationComponent} from '../abstract-notification.component';
 import {NotificationService} from '../notification.service';
 
@@ -29,8 +29,11 @@ export class NotificationModalComponent extends AbstractNotificationComponent {
     },
   };
 
-  constructor(protected notificationService: NotificationService) {
-    super(notificationService);
+  constructor(
+    protected notificationService: NotificationService,
+    protected changeDetectorRef: ChangeDetectorRef
+  ) {
+    super(notificationService, changeDetectorRef);
   }
 
 }
