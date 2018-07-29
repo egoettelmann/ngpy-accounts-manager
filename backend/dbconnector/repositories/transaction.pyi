@@ -98,6 +98,9 @@ class TransactionRepository():
     def filter_by_labels(query : Query, label_ids : list(int)) -> Query : ...
 
     @staticmethod
+    def filter_by_description(query : Query, description : str) -> Query : ...
+
+    @staticmethod
     def filter_by_category_type(query : Query, category_type : str) -> Query : ...
 
     @staticmethod

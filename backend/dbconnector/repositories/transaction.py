@@ -10,12 +10,13 @@ class TransactionRepository():
     def __init__(self, entity_manager):
         self.entity_manager = entity_manager
 
-    def get_all(self, account_ids=None, date_from=None, date_to=None, label_ids=None):
+    def get_all(self, account_ids=None, date_from=None, date_to=None, label_ids=None, description=None):
         query = self.entity_manager.query(TransactionDbo)
         query = self.filter_by_accounts(query, account_ids)
         query = self.filter_by_date_from(query, date_from)
         query = self.filter_by_date_to(query, date_to)
         query = self.filter_by_labels(query, label_ids)
+        query = self.filter_by_description(query, description)
         return query.order_by(TransactionDbo.date_value).limit(500)
 
     def get_by_id(self, transaction_id):
@@ -179,6 +180,12 @@ class TransactionRepository():
                 ))
             else:
                 query = query.filter(TransactionDbo.label_id.in_(label_ids))
+        return query
+
+    @staticmethod
+    def filter_by_description(query, description=None):
+        if description is not None:
+            query = query.filter(TransactionDbo.description.ilike('%' + description + '%'))
         return query
 
     @staticmethod

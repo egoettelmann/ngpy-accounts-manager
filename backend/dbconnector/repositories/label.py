@@ -9,7 +9,7 @@ class LabelRepository():
         self.entity_manager = entity_manager
 
     def get_all(self):
-        return self.entity_manager.query(LabelDbo).all()
+        return self.entity_manager.query(LabelDbo).order_by(LabelDbo.name).all()
 
     def get_by_id(self, label_id):
         return self.entity_manager.query(LabelDbo).get(label_id)

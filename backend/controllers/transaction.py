@@ -37,7 +37,8 @@ class TransactionController():
         label_ids = request.args.get('label_ids')
         if label_ids is not None:
             label_ids = list(map(lambda a: None if a == '' else int(a), label_ids.split(',')))
-        return self.transaction_service.get_all_transactions(account_ids, year, month, label_ids)
+        description = request.args.get('description')
+        return self.transaction_service.get_all_transactions(account_ids, year, month, label_ids, description)
 
     @restful.route('/top/<int:num_transactions>/<asc>')
     @marshal_with(Transaction.resource_fields)

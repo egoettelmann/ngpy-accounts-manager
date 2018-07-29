@@ -19,7 +19,8 @@ class TransactionService():
                              account_ids : list(int),
                              year : int,
                              month : int,
-                             label_ids: list(int)
+                             label_ids: list(int),
+                             description: str
                              ) -> list(Transaction) : ...
 
     def get_transaction(self, transaction_id : int) -> Transaction : ...

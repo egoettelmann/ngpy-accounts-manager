@@ -13,12 +13,12 @@ class TransactionService():
         self.repository = transaction_repository
         self.mapper = object_mapper
 
-    def get_all_transactions(self, account_ids=None, year=None, month=None, label_ids=None):
+    def get_all_transactions(self, account_ids=None, year=None, month=None, label_ids=None, description=None):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
         labels = self.sanitize_label_ids(label_ids)
         return self.mapper.map_all(
-            self.repository.get_all(account_ids, date_from, date_to, labels),
+            self.repository.get_all(account_ids, date_from, date_to, labels, description),
             Transaction
         )
 

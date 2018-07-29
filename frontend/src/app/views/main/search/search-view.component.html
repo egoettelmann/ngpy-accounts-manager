@@ -84,7 +84,9 @@
       <tr>
         <th class="text-left align-middle" width="40%">{{ 'i18n.views.transactions.label.desc-input' | translate }}</th>
         <td class="text-right">
-          <input type="text" />
+          <form (submit)="navigate()" autocomplete="off">
+            <input name="descFilter" [(ngModel)]="descFilter" type="text" autocomplete="off" />
+          </form>
         </td>
       </tr>
     </table>

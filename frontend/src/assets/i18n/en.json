@@ -29,6 +29,7 @@
   "i18n.views.transactions.label.year-dropdown.all": "All",
   "i18n.views.transactions.label.month-dropdown": "Month",
   "i18n.views.transactions.label.month-dropdown.all": "All",
+  "i18n.views.transactions.label.desc-input": "Description",
   "i18n.views.transactions.warning.too-many": "Not all transactions may be displayed, the current view is limited to 500 elements.",
   "i18n.views.treasury.label.year-dropdown": "Year",
   "i18n.views.treasury.chart.title": "Treasury history",

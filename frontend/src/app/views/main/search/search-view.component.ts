@@ -22,6 +22,7 @@ export class SearchViewComponent implements OnInit {
   public currentMonth: number;
   public accountsFilter: number[];
   public labelsFilter: number[];
+  public descFilter: string;
 
   public transactions: Transaction[];
   public accounts: Account[] = [];
@@ -62,6 +63,7 @@ export class SearchViewComponent implements OnInit {
           .split(',')
           .map(a => a === '' ? null : +a);
       }
+      this.descFilter = value.get('desc');
       this.loadData();
     });
   }
@@ -88,25 +90,28 @@ export class SearchViewComponent implements OnInit {
 
   saveTransaction(data: any) {}
 
-  private loadData() {
-    this.transactionsService.getAll(
-      this.currentYear,
-      this.currentMonth,
-      this.accountsFilter,
-      this.labelsFilter
-    ).subscribe(data => {
-      this.transactions = data.slice(0);
-    });
-  }
-
-  private navigate() {
+  navigate() {
+    console.log('desc', this.descFilter);
     this.router.navigate(['search'], {
       queryParams: {
         year: this.currentYear,
         month: this.currentMonth,
         account: this.accountsFilter ? this.accountsFilter.join(',') : undefined,
-        label: this.labelsFilter ? this.labelsFilter.join(',') : undefined
+        label: this.labelsFilter ? this.labelsFilter.join(',') : undefined,
+        desc: this.descFilter
       }
+    });
+  }
+
+  private loadData() {
+    this.transactionsService.getAll(
+      this.currentYear,
+      this.currentMonth,
+      this.accountsFilter,
+      this.labelsFilter,
+      this.descFilter
+    ).subscribe(data => {
+      this.transactions = data.slice(0);
     });
   }
 
