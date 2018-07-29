@@ -43,9 +43,13 @@ export class SearchViewComponent implements OnInit {
       this.accounts = accounts.slice(0);
       this.labels = labels.slice(0);
     });
+    this.initOnChanges();
+  }
+
+  initOnChanges() {
     this.route.queryParamMap.subscribe(value => {
-      this.currentYear = value.has('year') ? +value.get('year') : CommonFunctions.getCurrentYear();
-      this.currentMonth = value.has('month') ? +value.get('month') : CommonFunctions.getCurrentMonth();
+      this.currentYear = value.has('year') ? +value.get('year') : undefined;
+      this.currentMonth = value.has('month') ? +value.get('month') : undefined;
       this.accountsFilter = undefined;
       if (value.has('account')) {
         this.accountsFilter = value.get('account')
@@ -56,7 +60,7 @@ export class SearchViewComponent implements OnInit {
       if (value.has('label')) {
         this.labelsFilter = value.get('label')
           .split(',')
-          .map(a => +a);
+          .map(a => a === '' ? null : +a);
       }
       this.loadData();
     });

@@ -16,8 +16,7 @@ class TransactionRepository():
         query = self.filter_by_date_from(query, date_from)
         query = self.filter_by_date_to(query, date_to)
         query = self.filter_by_labels(query, label_ids)
-        print('label_ids', label_ids)
-        return query.order_by(TransactionDbo.date_value)
+        return query.order_by(TransactionDbo.date_value).limit(500)
 
     def get_by_id(self, transaction_id):
         return self.entity_manager.query(TransactionDbo).get(transaction_id)

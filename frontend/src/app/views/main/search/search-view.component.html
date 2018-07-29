@@ -1,4 +1,4 @@
-<h3>{{ 'i18n.views.transactions.list.title' | translate }}</h3>
+<h3>{{ 'i18n.views.transactions.list.title' | translate }} <span class="badge">{{ transactions?.length }}</span></h3>
 
 <div class="row">
   <div class="col-xs-12 col-md-4">
@@ -22,10 +22,17 @@
         <td class="text-right">
           <clr-dropdown class="col-xs-6 text-right">
             <button type="button" class="btn btn-link" clrDropdownTrigger>
-              {{ currentYear }}
+              {{ currentYear ? currentYear : ('i18n.views.transactions.label.year-dropdown.all' | translate) }}
               <clr-icon shape="caret down"></clr-icon>
             </button>
             <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
+              <button type="button"
+                      clrDropdownItem
+                      (click)="changeYear(undefined)">
+                <clr-icon *ngIf="!currentYear" shape="check-circle" class="is-success"></clr-icon>
+                <span *ngIf="currentYear" class="icon-empty">&nbsp;</span>
+                <span>{{ 'i18n.views.transactions.label.year-dropdown.all' | translate }}</span>
+              </button>
               <button *ngFor="let year of yearList"
                       type="button"
                       clrDropdownItem
@@ -46,10 +53,17 @@
         <td class="text-right">
           <clr-dropdown class="col-xs-6 text-right">
             <button type="button" class="btn btn-link" clrDropdownTrigger>
-              {{ 'i18n.months.' + currentMonth | translate }}
+              {{ currentMonth ? ('i18n.months.' + currentMonth | translate) : ('i18n.views.transactions.label.month-dropdown.all' | translate) }}
               <clr-icon shape="caret down"></clr-icon>
             </button>
             <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
+              <button type="button"
+                      clrDropdownItem
+                      (click)="changeMonth(undefined)">
+                <clr-icon *ngIf="!currentMonth" shape="check-circle" class="is-success"></clr-icon>
+                <span *ngIf="currentMonth" class="icon-empty">&nbsp;</span>
+                <span>{{ 'i18n.views.transactions.label.month-dropdown.all' | translate }}</span>
+              </button>
               <button *ngFor="let month of monthList"
                       type="button"
                       clrDropdownItem
@@ -74,6 +88,19 @@
         </td>
       </tr>
     </table>
+  </div>
+</div>
+
+<div class="row" *ngIf="transactions?.length === 500">
+  <div class="col-xs-12">
+    <clr-alert [clrAlertType]="'alert-warning'"
+               [clrAlertClosable]="false">
+      <div class="alert-item">
+        <span class="alert-text">
+          {{ 'i18n.views.transactions.warning.too-many' | translate }}
+        </span>
+      </div>
+    </clr-alert>
   </div>
 </div>
 

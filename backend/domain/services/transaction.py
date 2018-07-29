@@ -106,6 +106,8 @@ class TransactionService():
         date_to = datetime.date(datetime.date.today().year + 1, 1, 1)
         if year is not None:
             date_to = date_to.replace(year=year+1)
+        else:
+            year = datetime.date.today().year
         if month is not None:
             if month > 11:
                 date_to = date_to.replace(year=year+1)

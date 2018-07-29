@@ -25,14 +25,18 @@ class TransactionController():
     @restful.route('')
     @marshal_with(Transaction.resource_fields)
     def get_all(self):
-        year = int(request.args.get('year'))
-        month = int(request.args.get('month'))
+        year = request.args.get('year')
+        if year is not None:
+            year = int(year)
+        month = request.args.get('month')
+        if month is not None:
+            month = int(month)
         account_ids = request.args.get('account_ids')
         if account_ids is not None:
-            account_ids = account_ids.split(',')
+            account_ids = list(map(lambda a: int(a), account_ids.split(',')))
         label_ids = request.args.get('label_ids')
         if label_ids is not None:
-            label_ids = label_ids.split(',')
+            label_ids = list(map(lambda a: None if a == '' else int(a), label_ids.split(',')))
         return self.transaction_service.get_all_transactions(account_ids, year, month, label_ids)
 
     @restful.route('/top/<int:num_transactions>/<asc>')
