@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
 import { Router } from '@angular/router';
 
@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
+
+  @ViewChild('searchInput') searchInput: ElementRef;
 
   constructor(
     private router: Router,
@@ -22,6 +24,15 @@ export class NavComponent implements OnInit {
     this.sessionService.logout().subscribe(() => {
       this.router.navigate(['login']);
     });
+  }
+
+  search(value: string) {
+    this.router.navigate(['search'], {
+      queryParams: {
+        desc: value
+      }
+    });
+    this.searchInput.nativeElement.value = '';
   }
 
 }

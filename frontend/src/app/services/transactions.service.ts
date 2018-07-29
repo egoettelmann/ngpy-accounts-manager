@@ -24,7 +24,7 @@ export class TransactionsService {
       params = params.append('account_ids', accounts.join(','));
     }
     if (labelIds !== undefined) {
-      params = params.append('label_ids', accounts.join(','));
+      params = params.append('label_ids', labelIds.join(','));
     }
 
     return this.http.get<Transaction[]>('/rest/transactions', {params: params});

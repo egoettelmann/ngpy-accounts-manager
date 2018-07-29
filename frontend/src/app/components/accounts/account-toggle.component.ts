@@ -58,7 +58,7 @@ export class AccountToggleComponent implements OnChanges {
   private getSelectedAccounts() {
     return this.accounts.filter((a) => {
       return this.selectedAccounts.indexOf(a.id) > -1;
-    })
+    });
   }
 
 }

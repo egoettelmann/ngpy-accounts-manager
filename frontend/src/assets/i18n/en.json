@@ -45,6 +45,7 @@
   "i18n.components.navigation.transactions": "Transactions",
   "i18n.components.navigation.treasury": "Treasury",
   "i18n.components.navigation.analytics": "Analytics",
+  "i18n.components.navigation.search": "Search ...",
   "i18n.components.navigation.settings": "Settings",
   "i18n.components.navigation.settings.labels": "Labels",
   "i18n.components.navigation.settings.categories": "Categories",
@@ -64,6 +65,10 @@
   "i18n.modules.transactions.table.header.description": "Description",
   "i18n.modules.transactions.table.header.value-date": "Value date",
   "i18n.modules.transactions.table.header.amount": "Amount",
+  "i18n.modules.transactions.label-toggle.label": "Label(s)",
+  "i18n.modules.transactions.label-toggle.all-labels": "All labels",
+  "i18n.modules.transactions.label-toggle.no-label": "No label",
+  "i18n.modules.transactions.label-toggle.labels": " label(s)",
 
   "i18n.modules.statistics.summary.DAY.status": "Status",
   "i18n.modules.statistics.summary.DAY.balance": "Balance",

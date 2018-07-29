@@ -27,6 +27,10 @@ const ROUTES: Routes = [
         loadChildren: './analytics/analytics-view.module#AnalyticsViewModule'
       },
       {
+        path: 'search',
+        loadChildren: './search/search-view.module#SearchViewModule'
+      },
+      {
         path: 'settings',
         loadChildren: './settings/settings-view.module#SettingsViewModule'
       },
