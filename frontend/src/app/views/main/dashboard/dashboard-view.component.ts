@@ -2,31 +2,50 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { AccountsService } from '../../../services/accounts.service';
 import { Account } from '../../../components/accounts/account';
+import { TransactionsService } from '../../../services/transactions.service';
+import { zip } from 'rxjs/observable/zip';
+import { Router } from '@angular/router';
 
 @Component({
-  templateUrl: './dashboard-view.component.html'
+  templateUrl: './dashboard-view.component.html',
+  styleUrls: ['./dashboard-view.component.scss']
 })
 export class DashboardViewComponent implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 
   public accounts: Account[];
+  public unlabeledTransactions: number;
   public total: number;
   public graphOptions: any;
 
-  constructor(private accountsService: AccountsService,
+  constructor(private router: Router,
+              private accountsService: AccountsService,
+              private transactionsService: TransactionsService,
               private decimalPipe: DecimalPipe
   ) {
   }
 
   ngOnInit(): void {
-    this.accountsService.getAccounts().subscribe(data => {
-      this.accounts = data;
+    zip(
+      this.transactionsService.getAll(undefined, undefined, undefined, [null]),
+      this.accountsService.getAccounts()
+    ).subscribe(([transactions, accounts]) => {
+      this.unlabeledTransactions = transactions.length;
+      this.accounts = accounts;
       this.total = 0;
       for (const a of this.accounts) {
         this.total += a.total;
       }
-      this.graphOptions = this.buildChartOptions(data, this.total);
+      this.graphOptions = this.buildChartOptions(accounts, this.total);
+    });
+  }
+
+  goToUnlabeledTransactions() {
+    this.router.navigate(['search'], {
+      queryParams: {
+        label: ''
+      }
     });
   }
 
@@ -36,7 +55,7 @@ export class DashboardViewComponent implements OnInit {
    * @param data the graph data
    * @returns the chart options
    */
-  buildChartOptions(data: Account[], total: number) {
+  private buildChartOptions(data: Account[], total: number) {
     const that = this;
     const options = {
       chart: {

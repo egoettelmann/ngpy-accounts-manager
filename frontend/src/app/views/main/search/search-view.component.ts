@@ -98,7 +98,7 @@ export class SearchViewComponent implements OnInit {
         month: this.currentMonth,
         account: this.accountsFilter ? this.accountsFilter.join(',') : undefined,
         label: this.labelsFilter ? this.labelsFilter.join(',') : undefined,
-        desc: this.descFilter
+        desc: this.descFilter !== '' ? this.descFilter : undefined
       }
     });
   }

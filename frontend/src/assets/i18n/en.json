@@ -23,6 +23,8 @@
 
   "i18n.views.dashboard.accounts.total": "Total of all accounts:",
   "i18n.views.dashboard.chart.title": "Distribution by account",
+  "i18n.views.dashboard.error.unlabeled-transactions": "There are {{ num }} transactions that are attached to no label.",
+  "i18n.views.dashboard.error.unlabeled-transactions-fix": "Fix that",
   "i18n.views.transactions.list.title": "List of transactions",
   "i18n.views.transactions.chart.title": "Distribution by category",
   "i18n.views.transactions.label.year-dropdown": "Year",
