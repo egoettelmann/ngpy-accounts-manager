@@ -45,10 +45,17 @@ export class TransactionsTableComponent implements OnChanges, OnInit {
 
   changeTransaction(transaction: Transaction) {
     this.onChange.emit(new PatchEvent(transaction, transaction));
+    this.closeModal();
   }
 
   deleteTransaction(transaction: Transaction) {
     this.onDelete.emit(transaction);
+    this.closeModal();
+  }
+
+  closeModal() {
+    this.selectedTransaction = undefined;
+    this.showModal = false;
   }
 
   getAmountColor(amount: number): string {

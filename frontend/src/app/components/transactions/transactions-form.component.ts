@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Transaction } from './transaction';
+import { Label } from './label';
 
 @Component({
   selector: 'app-transactions-form',
@@ -8,53 +9,38 @@ import { Transaction } from './transaction';
 })
 export class TransactionsFormComponent implements OnChanges {
 
-  @Input() buttonLabel = 'i18n.transactions.form.button.add';
-  @Input() buttonDeleteLabel = 'i18n.transactions.form.button.delete';
   @Input() model: Transaction;
 
   @Output() onFormSubmit = new EventEmitter<Transaction>();
   @Output() onFormDelete = new EventEmitter<Transaction>();
+  @Output() onFormCancel = new EventEmitter<Transaction>();
 
   form: FormGroup;
 
-  constructor() {
-    this.buildForm();
-  }
-
-  buildForm() {
-    this.form = new FormGroup(
-      {
-        reference: new FormControl(
-          null,
-          Validators.required
-        ),
-        description: new FormControl(null),
-        dateValue: new FormControl(
-          null,
-          Validators.required
-        ),
-        amount: new FormControl(
-          null,
-          Validators.required
-        )
-      }
-    );
-  }
-
-  initFormData(data: any) {
-    if (data) {
-      this.form.patchValue(data);
-    }
+  constructor(private fb: FormBuilder) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.model && this.model) {
+      this.buildForm();
       this.initFormData(this.model);
     }
   }
 
-  getFormControls() {
-    return Object.keys(this.form.controls);
+  buildForm() {
+    this.form = this.fb.group(
+      {
+        'reference': [null, [Validators.required]],
+        'description': [null],
+        'dateValue': [null, [Validators.required]],
+        'amount': [null, [Validators.required]]
+      }
+    );
+  }
+
+  initFormData(data: Transaction) {
+    this.form.patchValue(data);
+    this.form.patchValue({ 'label_id': data.label.id });
   }
 
   submitForm() {
@@ -65,6 +51,11 @@ export class TransactionsFormComponent implements OnChanges {
   deleteTransaction() {
     const t = Object.assign({}, this.model);
     this.onFormDelete.emit(t);
+  }
+
+  cancel() {
+    const t = Object.assign({}, this.model);
+    this.onFormCancel.emit(t);
   }
 
 }

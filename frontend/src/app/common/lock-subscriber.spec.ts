@@ -3,7 +3,7 @@ import { interval } from 'rxjs/observable/interval';
 import { map, take } from 'rxjs/operators';
 import { lock, SubscriptionLock } from './lock-subscriber';
 
-fdescribe('LockSubscriber', () => {
+describe('LockSubscriber', () => {
 
   /**
    * -- 500ms -- 0 -- 500ms -- 1 -- 500ms -- 2 -- 500ms -- 3

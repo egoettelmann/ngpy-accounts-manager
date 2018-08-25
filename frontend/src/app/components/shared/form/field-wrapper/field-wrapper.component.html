@@ -1,0 +1,15 @@
+<div class="col-md-4 col-xs-12">
+  <label [for]="for">{{ i18nLabel | translate }}</label>
+</div>
+<div class="col-md-8 col-xs-12">
+  <label [for]="for"
+         aria-haspopup="true"
+         role="tooltip"
+         class="tooltip tooltip-validation tooltip-md"
+         [ngClass]="{'invalid': isValid()}">
+    <ng-content></ng-content>
+    <span class="tooltip-content" *ngIf="isValid()">
+              {{ ctrl.errors | json }}
+          </span>
+  </label>
+</div>

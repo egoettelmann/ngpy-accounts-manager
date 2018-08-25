@@ -76,6 +76,15 @@
   "i18n.modules.transactions.label-toggle.no-label": "No label",
   "i18n.modules.transactions.label-toggle.labels": " label(s)",
 
+  "i18n.modules.transactions.form.reference": "Reference",
+  "i18n.modules.transactions.form.description": "Description",
+  "i18n.modules.transactions.form.dateValue": "Value Date",
+  "i18n.modules.transactions.form.amount": "Amount",
+  "i18n.modules.transactions.form.label": "Label",
+  "i18n.transactions.form.button.cancel": "Cancel",
+  "i18n.transactions.form.button.delete": "Delete",
+  "i18n.transactions.form.button.save": "Save",
+
   "i18n.modules.statistics.summary.DAY.status": "Status",
   "i18n.modules.statistics.summary.DAY.balance": "Balance",
   "i18n.modules.statistics.summary.DAY.start": "Start of day",
