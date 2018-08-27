@@ -105,7 +105,9 @@ export class AutocompleteComponent implements OnChanges {
   }
 
   onFocusOut() {
-    this.ngOptions = undefined;
+    setTimeout(() => {
+      this.ngOptions = undefined;
+    });
   }
 
   private findCurrentIndex(): number {

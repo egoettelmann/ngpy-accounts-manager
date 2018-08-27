@@ -3,7 +3,7 @@
          [ngModel]="ngModel"
          class="autocomplete-input"
          (ngModelChange)="onChange($event)"
-         (keyup)="select($event)"
+         (keydown)="select($event)"
          (focusout)="onFocusOut()"/>
   <div class="autocomplete-options" *ngIf="ngOptions">
     <div *ngFor="let option of ngOptions"

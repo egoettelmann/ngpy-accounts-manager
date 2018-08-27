@@ -10,6 +10,7 @@ import { Label } from './label';
 export class TransactionsFormComponent implements OnChanges {
 
   @Input() model: Transaction;
+  @Input() labels: Label[];
 
   @Output() onFormSubmit = new EventEmitter<Transaction>();
   @Output() onFormDelete = new EventEmitter<Transaction>();
@@ -33,7 +34,8 @@ export class TransactionsFormComponent implements OnChanges {
         'reference': [null, [Validators.required]],
         'description': [null],
         'dateValue': [null, [Validators.required]],
-        'amount': [null, [Validators.required]]
+        'amount': [null, [Validators.required]],
+        'label_id': [null]
       }
     );
   }
@@ -41,6 +43,11 @@ export class TransactionsFormComponent implements OnChanges {
   initFormData(data: Transaction) {
     this.form.patchValue(data);
     this.form.patchValue({ 'label_id': data.label.id });
+  }
+
+  changeLabel(label: Label) {
+    console.log('changeLabel', label);
+    this.form.patchValue({ 'label_id': label.id });
   }
 
   submitForm() {

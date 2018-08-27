@@ -35,6 +35,16 @@
                [formControlName]="'amount'"
                type="text" />
       </app-field-wrapper>
+
+    <app-field-wrapper for="amount"
+                       [i18nLabel]="'i18n.modules.transactions.form.amount'"
+                       [ctrl]="form.get('amount')"
+                       class="form-group row">
+      <app-autocomplete [value]="model.label"
+                        [options]="labels"
+                        (onSelect)="changeLabel($event)">
+      </app-autocomplete>
+    </app-field-wrapper>
   </section>
 
   <div>

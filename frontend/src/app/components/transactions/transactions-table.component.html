@@ -68,11 +68,13 @@
 
 <clr-modal *ngIf="selectedTransaction"
            [(clrModalOpen)]="showModal"
+           [clrModalSize]="'lg'"
            [clrModalClosable]="false"
            [clrModalStaticBackdrop]="true">
   <h3 class="modal-title">{{ selectedTransaction.reference }}</h3>
   <div class="modal-body">
     <app-transactions-form [model]="selectedTransaction"
+                           [labels]="labels"
                            (onFormSubmit)="changeTransaction($event)"
                            (onFormCancel)="closeModal($event)"
                            (onFormDelete)="deleteTransaction($event)">
