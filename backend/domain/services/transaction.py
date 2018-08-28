@@ -81,7 +81,16 @@ class TransactionService():
         date_to = self.get_date_to(year, month)
         return self.repository.get_total(account_ids, date_from, date_to, sign)
 
+    def create_one(self, transaction):
+        return self.repository.save_one(
+            self.mapper.map(
+                transaction,
+                TransactionDbo
+            )
+        )
+
     def create_all(self, transactions):
+        # FIXME: should use domain model !
         return self.repository.create_all(transactions)
 
     def update_one(self, transaction):
