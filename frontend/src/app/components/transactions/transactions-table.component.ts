@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { PatchEvent, Transaction } from './transaction';
 import { Label } from './label';
 
@@ -6,7 +6,7 @@ import { Label } from './label';
   selector: 'app-transactions-table',
   templateUrl: './transactions-table.component.html'
 })
-export class TransactionsTableComponent implements OnChanges, OnInit {
+export class TransactionsTableComponent {
 
   @Input() transactions: Transaction[];
   @Input() labels: Label[];
@@ -15,17 +15,8 @@ export class TransactionsTableComponent implements OnChanges, OnInit {
   @Output() onChange = new EventEmitter<PatchEvent<Transaction>>();
   @Output() onDelete = new EventEmitter<Transaction>();
 
-  selectedTransaction: Transaction;
-  showModal = false;
-
-  ngOnInit(): void {}
-
-  ngOnChanges(changes) {}
-
-  select(transaction: Transaction) {
-    this.selectedTransaction = transaction;
-    this.showModal = true;
-  }
+  @ContentChild('actionButtons')
+  actionButtons: TemplateRef<any>;
 
   changeLabel(label: Label, transaction: Transaction) {
     if (label
@@ -41,21 +32,6 @@ export class TransactionsTableComponent implements OnChanges, OnInit {
     if (transaction) {
       console.log('Add new label', labelString);
     }
-  }
-
-  changeTransaction(transaction: Transaction) {
-    this.onChange.emit(new PatchEvent(transaction, transaction));
-    this.closeModal();
-  }
-
-  deleteTransaction(transaction: Transaction) {
-    this.onDelete.emit(transaction);
-    this.closeModal();
-  }
-
-  closeModal() {
-    this.selectedTransaction = undefined;
-    this.showModal = false;
   }
 
   getAmountColor(amount: number): string {

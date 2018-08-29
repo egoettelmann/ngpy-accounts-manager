@@ -4,7 +4,7 @@ import { LabelsService } from '../../../services/labels.service';
 import { TransactionsService } from '../../../services/transactions.service';
 import { StatisticsService } from '../../../services/statistics.service';
 import { AccountsService } from '../../../services/accounts.service';
-import { PatchEvent, Transaction } from '../../../components/transactions/transaction';
+import { Transaction } from '../../../components/transactions/transaction';
 import { Summary } from '../../../components/statistics/summary';
 import { Label } from '../../../components/transactions/label';
 import { Account } from '../../../components/accounts/account';
@@ -32,6 +32,9 @@ export class TransactionsViewComponent implements OnInit {
   public summary: Summary;
   public accounts: Account[] = [];
   public labels: Label[];
+
+  selectedTransaction: Transaction;
+  showModal = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -79,22 +82,56 @@ export class TransactionsViewComponent implements OnInit {
   }
 
   /**
-   * FIXME: implement the backend call and review the input param
+   * Opens the modal with the transaction form.
+   *
+   * @param transaction
    */
-  saveTransaction(patchEvent: PatchEvent<Transaction>) {
-    this.transactionsService.updateOne(patchEvent.model.id, patchEvent.changes).subscribe(data => {
-      this.loadData();
-    });
+  openModal(transaction: Transaction) {
+    this.selectedTransaction = transaction;
+    this.showModal = true;
+  }
+
+  /**
+   * Closes the modal with the transaction form.
+   */
+  closeModal() {
+    this.showModal = false;
+    this.selectedTransaction = undefined;
+  }
+
+  /**
+   * Opens the transaction form modal with a new transaction
+   */
+  addTransaction() {
+    const newTransaction = new Transaction(null, null, null, null, null);
+    console.log('addTransaction', newTransaction);
+    this.openModal(newTransaction);
+  }
+
+  /**
+   * Saves an existing or a new transaction.
+   *
+   * @param {Transaction} transaction the transaction to save
+   */
+  saveTransaction(transaction: Transaction) {
+    if (transaction.id != null) {
+      this.transactionsService.updateOne(transaction.id, transaction).subscribe(() => {
+        this.loadData();
+      });
+    } else {
+      this.transactionsService.createOne(transaction).subscribe(() => {
+        this.loadData();
+      });
+    }
   }
 
   /***
    * Deletes a given transaction.
-   * FIXME: add delete button to table
    *
    * @param {Transaction} transaction the transaction to delete
    */
   deleteTransaction(transaction: Transaction) {
-    this.transactionsService.deleteOne(transaction).subscribe(data => {
+    this.transactionsService.deleteOne(transaction).subscribe(() => {
       this.loadData();
     });
   }

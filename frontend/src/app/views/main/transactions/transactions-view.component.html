@@ -69,6 +69,35 @@
                             [labels]="labels"
                             [editable]="true"
                             (onChange)="saveTransaction($event)">
+      <ng-template #actionButtons
+                   let-transaction="transaction">
+        <clr-icon class="clickable"
+                  (click)="openModal(transaction)"
+                  shape="note"
+                  size="12">
+        </clr-icon>
+      </ng-template>
     </app-transactions-table>
   </div>
 </div>
+
+<button type="button" class="btn btn-sm btn-icon btn-info" (click)="addTransaction()">
+  <clr-icon shape="plus"></clr-icon>
+  <span>{{ 'i18n.views.transactions.list.add' | translate }}</span>
+</button>
+
+<clr-modal *ngIf="selectedTransaction"
+           [(clrModalOpen)]="showModal"
+           [clrModalSize]="'lg'"
+           [clrModalClosable]="false"
+           [clrModalStaticBackdrop]="true">
+  <h3 class="modal-title">{{ selectedTransaction.reference }}</h3>
+  <div class="modal-body">
+    <app-transactions-form [model]="selectedTransaction"
+                           [labels]="labels"
+                           (onFormSubmit)="saveTransaction($event)"
+                           (onFormCancel)="closeModal($event)"
+                           (onFormDelete)="deleteTransaction($event)">
+    </app-transactions-form>
+  </div>
+</clr-modal>

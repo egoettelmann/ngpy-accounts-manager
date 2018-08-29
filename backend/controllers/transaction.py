@@ -67,11 +67,11 @@ class TransactionController():
     def delete_one(self, transaction_id):
         self.transaction_service.delete_transaction(transaction_id)
 
-    @restful.route('/', methods=['PUT'])
+    @restful.route('', methods=['PUT'])
     @marshal_with(Transaction.resource_fields)
-    def update_one(self):
-        t = request.get_json(force=True)  # force flag necessary if 'Content-Type' is not 'application/json'
-        return self.transaction_service.create_one(t)
+    def create_one(self):
+        transaction = request.get_json(force=True)  # force flag necessary if 'Content-Type' is not 'application/json'
+        return self.transaction_service.create_one(Transaction(**transaction))
 
     @restful.route('/<int:transaction_id>', methods=['POST'])
     @marshal_with(Transaction.resource_fields)

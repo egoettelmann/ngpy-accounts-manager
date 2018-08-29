@@ -60,24 +60,8 @@
         <span>{{ transaction.amount | number:'1.2-2' }}&nbsp;€</span>
       </td>
       <td *ngIf="editable">
-        <clr-icon class="clickable" (click)="select(transaction)" shape="note" size="12"></clr-icon>
+        <ng-container *ngTemplateOutlet="actionButtons;context:{'transaction': transaction}"></ng-container>
       </td>
     </tr>
   </tbody>
 </table>
-
-<clr-modal *ngIf="selectedTransaction"
-           [(clrModalOpen)]="showModal"
-           [clrModalSize]="'lg'"
-           [clrModalClosable]="false"
-           [clrModalStaticBackdrop]="true">
-  <h3 class="modal-title">{{ selectedTransaction.reference }}</h3>
-  <div class="modal-body">
-    <app-transactions-form [model]="selectedTransaction"
-                           [labels]="labels"
-                           (onFormSubmit)="changeTransaction($event)"
-                           (onFormCancel)="closeModal($event)"
-                           (onFormDelete)="deleteTransaction($event)">
-    </app-transactions-form>
-  </div>
-</clr-modal>

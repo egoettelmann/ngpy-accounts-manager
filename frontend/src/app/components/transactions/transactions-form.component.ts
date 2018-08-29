@@ -42,7 +42,9 @@ export class TransactionsFormComponent implements OnChanges {
 
   initFormData(data: Transaction) {
     this.form.patchValue(data);
-    this.form.patchValue({ 'label_id': data.label.id });
+    if (data.label != null) {
+      this.form.patchValue({ 'label_id': data.label.id });
+    }
   }
 
   changeLabel(label: Label) {
