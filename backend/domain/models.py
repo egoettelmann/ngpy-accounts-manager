@@ -133,9 +133,9 @@ class Status:
     'description': types.String,
     'dateValue': types.DateTime(attribute='date_value', dt_format="iso8601"),
     'amount': types.Float,
-    'label_id': types.Integer(ignore_on_format=True),
+    'label_id': types.Integer(attribute='label.id', ignore_on_format=True),
     'label': types.Nested(Label, ignore_on_parse=True),
-    'account_id': types.Integer(ignore_on_format=True),
+    'account_id': types.Integer(attribute='account.id', ignore_on_format=True),
     'account': types.Nested(Account, ignore_on_parse=True)
 })
 class Transaction:

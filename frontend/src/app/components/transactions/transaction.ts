@@ -11,13 +11,6 @@ export class Transaction {
   public label: Label;
   public account: Account;
 
-  constructor(id: number, reference: string, description: string, dateValue: Date, amount: number) {
-    this.id = id;
-    this.reference = reference;
-    this.description = description;
-    this.dateValue = dateValue;
-    this.amount = amount;
-  }
 }
 
 export class PatchEvent<T> {

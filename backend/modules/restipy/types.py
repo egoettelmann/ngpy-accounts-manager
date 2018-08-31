@@ -216,7 +216,7 @@ class Integer(Raw):
         specified.
     """
 
-    def __init__(self, default=0, **kwargs):
+    def __init__(self, default=None, **kwargs):
         super(Integer, self).__init__(default=default, **kwargs)
 
     def format(self, value):

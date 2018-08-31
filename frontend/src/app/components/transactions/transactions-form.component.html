@@ -2,42 +2,54 @@
       (ngSubmit)="submitForm()">
 
   <section class="form-block compact">
-      <app-field-wrapper for="reference"
-                         [i18nLabel]="'i18n.modules.transactions.form.reference'"
-                         [ctrl]="form.get('reference')"
-                         class="form-group row">
-        <input id="reference"
-               [formControlName]="'reference'"
-               type="text" />
-      </app-field-wrapper>
-      <app-field-wrapper for="description"
-                         [i18nLabel]="'i18n.modules.transactions.form.description'"
-                         [ctrl]="form.get('description')"
-                         class="form-group row">
+    <app-field-wrapper for="account"
+                       [i18nLabel]="'i18n.modules.transactions.form.account'"
+                       [ctrl]="form.get('account_id')"
+                       class="form-group row">
+      <select id="account"
+              [formControlName]="'account_id'">
+        <option *ngFor="let account of accounts"
+                [value]="account.id">
+          {{ account.name }} - {{ account.description }}
+        </option>
+      </select>
+    </app-field-wrapper>
+    <app-field-wrapper for="reference"
+                       [i18nLabel]="'i18n.modules.transactions.form.reference'"
+                       [ctrl]="form.get('reference')"
+                       class="form-group row">
+      <input id="reference"
+             [formControlName]="'reference'"
+             type="text"/>
+    </app-field-wrapper>
+    <app-field-wrapper for="description"
+                       [i18nLabel]="'i18n.modules.transactions.form.description'"
+                       [ctrl]="form.get('description')"
+                       class="form-group row">
         <textarea id="description"
                   [formControlName]="'description'"
                   rows="3">
         </textarea>
-      </app-field-wrapper>
-      <app-field-wrapper for="dateValue"
-                         [i18nLabel]="'i18n.modules.transactions.form.dateValue'"
-                         [ctrl]="form.get('dateValue')"
-                         class="form-group row">
-        <input id="dateValue"
-               [formControlName]="'dateValue'"
-               type="text" />
-      </app-field-wrapper>
-      <app-field-wrapper for="amount"
-                         [i18nLabel]="'i18n.modules.transactions.form.amount'"
-                         [ctrl]="form.get('amount')"
-                         class="form-group row">
-        <input id="amount"
-               [formControlName]="'amount'"
-               type="text" />
-      </app-field-wrapper>
-
+    </app-field-wrapper>
+    <app-field-wrapper for="dateValue"
+                       [i18nLabel]="'i18n.modules.transactions.form.dateValue'"
+                       [ctrl]="form.get('dateValue')"
+                       class="form-group row">
+      <input id="dateValue"
+             [formControlName]="'dateValue'"
+             type="text"/>
+    </app-field-wrapper>
     <app-field-wrapper for="amount"
                        [i18nLabel]="'i18n.modules.transactions.form.amount'"
+                       [ctrl]="form.get('amount')"
+                       class="form-group row">
+      <input id="amount"
+             [formControlName]="'amount'"
+             type="text"/>
+    </app-field-wrapper>
+
+    <app-field-wrapper for="amount"
+                       [i18nLabel]="'i18n.modules.transactions.form.label'"
                        [ctrl]="form.get('amount')"
                        class="form-group row">
       <app-autocomplete [value]="model.label"

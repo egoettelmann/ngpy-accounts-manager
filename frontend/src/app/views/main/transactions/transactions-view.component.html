@@ -95,6 +95,7 @@
   <div class="modal-body">
     <app-transactions-form [model]="selectedTransaction"
                            [labels]="labels"
+                           [accounts]="accounts"
                            (onFormSubmit)="saveTransaction($event)"
                            (onFormCancel)="closeModal($event)"
                            (onFormDelete)="deleteTransaction($event)">

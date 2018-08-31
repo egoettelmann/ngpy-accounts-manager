@@ -103,8 +103,7 @@ export class TransactionsViewComponent implements OnInit {
    * Opens the transaction form modal with a new transaction
    */
   addTransaction() {
-    const newTransaction = new Transaction(null, null, null, null, null);
-    console.log('addTransaction', newTransaction);
+    const newTransaction = new Transaction();
     this.openModal(newTransaction);
   }
 
@@ -117,10 +116,12 @@ export class TransactionsViewComponent implements OnInit {
     if (transaction.id != null) {
       this.transactionsService.updateOne(transaction.id, transaction).subscribe(() => {
         this.loadData();
+        this.closeModal();
       });
     } else {
       this.transactionsService.createOne(transaction).subscribe(() => {
         this.loadData();
+        this.closeModal();
       });
     }
   }
@@ -133,6 +134,7 @@ export class TransactionsViewComponent implements OnInit {
   deleteTransaction(transaction: Transaction) {
     this.transactionsService.deleteOne(transaction).subscribe(() => {
       this.loadData();
+      this.closeModal();
     });
   }
 
