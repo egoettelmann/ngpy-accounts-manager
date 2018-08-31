@@ -13,7 +13,7 @@ from backend.dbconnector.manager import EntityManager
 from backend.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
 from backend.modules.depynject import Depynject
 from backend.modules.di_providers import RequestDiProvider
-from backend.modules.restful import Api
+from backend.modules.restipy import Api
 
 rdi_provider = RequestDiProvider()
 d_injector = Depynject(providers={

@@ -1,31 +1,12 @@
-from collections import MutableMapping
-
-from flask_restful import fields
-
-
-class Patchable(MutableMapping):
-
-    def __getitem__(self, item):
-        return getattr(self, item)
-
-    def __setitem__(self, item, value):
-        setattr(self, item, value)
-
-    def __iter__(self):
-        pass
-
-    def __delitem__(self, key):
-        pass
-
-    def __len__(self):
-        pass
+from ..modules import restipy
+from ..modules.restipy import types
 
 
-class User(Patchable):
-    resource_fields = {
-        'id': fields.Integer,
-        'login': fields.String,
-    }
+@restipy.convertible({
+    'id': types.Integer,
+    'login': types.String,
+})
+class User:
 
     def __init__(self, id=None, login=None, password=None):
         self.id = id
@@ -33,15 +14,15 @@ class User(Patchable):
         self.password = password
 
 
-class Account(Patchable):
-    resource_fields = {
-        'id': fields.Integer,
-        'name': fields.String,
-        'description': fields.String,
-        'total': fields.Float,
-        'color': fields.String,
-        'lastUpdate': fields.DateTime(attribute="last_update", dt_format="iso8601")
-    }
+@restipy.convertible({
+    'id': types.Integer,
+    'name': types.String,
+    'description': types.String,
+    'total': types.Float,
+    'color': types.String,
+    'lastUpdate': types.DateTime(attribute='last_update', dt_format='iso8601', ignore_on_parse=True)
+})
+class Account:
 
     def __init__(self, id=None, name=None, description=None, total=None, color=None):
         self.id = id
@@ -51,23 +32,23 @@ class Account(Patchable):
         self.color = color
 
 
-class KeyValue(Patchable):
-    resource_fields = {
-        'label': fields.String,
-        'value': fields.Float
-    }
+@restipy.convertible({
+    'label': types.String,
+    'value': types.Float
+})
+class KeyValue:
 
     def __init__(self, label=None, value=None) -> None:
         self.label = label
         self.value = value
 
 
-class GroupedValue(Patchable):
-    resource_fields = {
-        'category': fields.String,
-        'label': fields.String,
-        'value': fields.Float
-    }
+@restipy.convertible({
+    'category': types.String,
+    'label': types.String,
+    'value': types.Float
+})
+class GroupedValue:
 
     def __init__(self, category=None, label=None, value=None) -> None:
         self.category = category
@@ -75,13 +56,13 @@ class GroupedValue(Patchable):
         self.value = value
 
 
-class Category(Patchable):
-    resource_fields = {
-        'id': fields.Integer,
-        'name': fields.String,
-        'type': fields.String,
-        'numLabels': fields.Integer(attribute='num_labels'),
-    }
+@restipy.convertible({
+    'id': types.Integer,
+    'name': types.String,
+    'type': types.String,
+    'numLabels': types.Integer(attribute='num_labels', ignore_on_parse=True),
+})
+class Category:
 
     def __init__(self, id=None, name=None, type=None, num_labels=None) -> None:
         self.id = id
@@ -90,17 +71,19 @@ class Category(Patchable):
         self.num_labels = num_labels
 
 
-class Label(Patchable):
-    resource_fields = {
-        'id': fields.Integer,
-        'name': fields.String,
-        'color': fields.String,
-        'icon': fields.String,
-        'category': fields.Nested(Category.resource_fields),
-        'numTransactions': fields.Integer(attribute='num_transactions')
-    }
+@restipy.convertible({
+    'id': types.Integer,
+    'name': types.String,
+    'color': types.String,
+    'icon': types.String,
+    'category_id': types.Integer(ignore_on_format=True),
+    'category': types.Nested(Category, ignore_on_parse=True),
+    'numTransactions': types.Integer(attribute='num_transactions', ignore_on_parse=True)
+})
+class Label:
 
-    def __init__(self, id=None, name=None, color=None, icon=None, category_id=None, category=None, num_transactions=None) -> None:
+    def __init__(self, id=None, name=None, color=None, icon=None, category_id=None, category=None,
+                 num_transactions=None) -> None:
         self.id = id
         self.name = name
         self.color = color
@@ -113,16 +96,17 @@ class Label(Patchable):
         return '<Label %r, %r>' % (self.id, self.name)
 
 
-class Summary(Patchable):
-    resource_fields = {
-        'amountStart': fields.Float(attribute='amount_start'),
-        'amountEnd': fields.Float(attribute='amount_end'),
-        'totalCredit': fields.Float(attribute='total_credit'),
-        'totalDebit': fields.Float(attribute='total_debit'),
-        'periodType': fields.String(attribute='period_type')
-    }
+@restipy.convertible({
+    'amountStart': types.Float(attribute='amount_start', ignore_on_parse=True),
+    'amountEnd': types.Float(attribute='amount_end', ignore_on_parse=True),
+    'totalCredit': types.Float(attribute='total_credit', ignore_on_parse=True),
+    'totalDebit': types.Float(attribute='total_debit', ignore_on_parse=True),
+    'periodType': types.String(attribute='period_type', ignore_on_parse=True)
+})
+class Summary:
 
-    def __init__(self, amount_start=None, amount_end=None, total_credit=None, total_debit=None, period_type=None) -> None:
+    def __init__(self, amount_start=None, amount_end=None, total_credit=None, total_debit=None,
+                 period_type=None) -> None:
         self.amount_start = amount_start
         self.amount_end = amount_end
         self.total_credit = total_credit
@@ -130,12 +114,12 @@ class Summary(Patchable):
         self.period_type = period_type
 
 
-class Status(Patchable):
-    resource_fields = {
-        'accountId': fields.Integer(attribute='account_id'),
-        'date': fields.DateTime(dt_format="iso8601"),
-        'value': fields.Float,
-    }
+@restipy.convertible({
+    'accountId': types.Integer(attribute='account_id'),
+    'date': types.DateTime(dt_format="iso8601"),
+    'value': types.Float,
+})
+class Status:
 
     def __init__(self, account_id=None, date=None, value=0):
         self.account_id = account_id
@@ -143,18 +127,22 @@ class Status(Patchable):
         self.value = value
 
 
-class Transaction(Patchable):
-    resource_fields = {
-        'id': fields.Integer,
-        'reference': fields.String,
-        'description': fields.String,
-        'dateValue': fields.DateTime(attribute='date_value', dt_format="iso8601"),
-        'amount': fields.Float,
-        'label': fields.Nested(Label.resource_fields),
-        'account': fields.Nested(Account.resource_fields)
-    }
+@restipy.convertible({
+    'id': types.Integer,
+    'reference': types.String,
+    'description': types.String,
+    'dateValue': types.DateTime(attribute='date_value', dt_format="iso8601"),
+    'amount': types.Float,
+    'label_id': types.Integer(ignore_on_format=True),
+    'label': types.Nested(Label, ignore_on_parse=True),
+    'account_id': types.Integer(ignore_on_format=True),
+    'account': types.Nested(Account, ignore_on_parse=True)
+})
+class Transaction:
 
-    def __init__(self, id=None, account_id=None, date_compta=None, date_operation=None, description=None, reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None, label=None, account=None):
+    def __init__(self, id=None, account_id=None, date_compta=None, date_operation=None, description=None,
+                 reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None, label=None,
+                 account=None):
         self.id = id
         self.account_id = account_id
         self.date_compta = date_compta

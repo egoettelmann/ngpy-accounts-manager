@@ -1,17 +1,16 @@
 import os
 
 from flask import request
-from flask_restful import marshal_with
 from werkzeug.utils import secure_filename
 
 from ..domain.exceptions import FileImportException
 from ..domain.models import Transaction
-from ..modules import restful
+from ..modules import restipy
 from ..modules.depynject import injectable
 
 
 @injectable()
-@restful.prefix('/transactions')
+@restipy.prefix('/transactions')
 class TransactionController():
 
     def __init__(self, transaction_service, account_service):
@@ -22,8 +21,8 @@ class TransactionController():
     def allowed_file(filename):
         return '.' in filename and filename.rsplit('.', 1)[1] in ['csv']
 
-    @restful.route('')
-    @marshal_with(Transaction.resource_fields)
+    @restipy.route('')
+    @restipy.format_as(Transaction)
     def get_all(self):
         year = request.args.get('year')
         if year is not None:
@@ -40,8 +39,8 @@ class TransactionController():
         description = request.args.get('description')
         return self.transaction_service.get_all_transactions(account_ids, year, month, label_ids, description)
 
-    @restful.route('/top/<int:num_transactions>/<asc>')
-    @marshal_with(Transaction.resource_fields)
+    @restipy.route('/top/<int:num_transactions>/<asc>')
+    @restipy.format_as(Transaction)
     def get_top_transactions(self, num_transactions, asc):
         year = request.args.get('year')
         if year is not None:
@@ -58,31 +57,28 @@ class TransactionController():
             ascending = True
         return self.transaction_service.get_top_transactions(num_transactions, ascending, account_ids, year, month)
 
-    @restful.route('/<int:transaction_id>')
-    @marshal_with(Transaction.resource_fields)
+    @restipy.route('/<int:transaction_id>')
+    @restipy.format_as(Transaction)
     def get_one(self, transaction_id):
         return self.transaction_service.get_transaction(transaction_id)
 
-    @restful.route('/<int:transaction_id>', methods=['DELETE'])
+    @restipy.route('/<int:transaction_id>', methods=['DELETE'])
     def delete_one(self, transaction_id):
         self.transaction_service.delete_transaction(transaction_id)
 
-    @restful.route('', methods=['PUT'])
-    @marshal_with(Transaction.resource_fields)
-    def create_one(self):
-        transaction = request.get_json(force=True)  # force flag necessary if 'Content-Type' is not 'application/json'
-        return self.transaction_service.create_one(Transaction(**transaction))
+    @restipy.route('', methods=['PUT'])
+    @restipy.format_as(Transaction)
+    @restipy.parse_as(Transaction)
+    def create_one(self, transaction):
+        return self.transaction_service.create_one(transaction)
 
-    @restful.route('/<int:transaction_id>', methods=['POST'])
-    @marshal_with(Transaction.resource_fields)
-    def update_one(self, transaction_id):
-        patch = request.get_json(force=True)  # force flag necessary if 'Content-Type' is not 'application/json'
-        t = self.transaction_service.get_transaction(transaction_id)
-        for key, value in patch.items():
-            t[key] = value
-        return self.transaction_service.update_one(t)
+    @restipy.route('/<int:transaction_id>', methods=['POST'])
+    @restipy.format_as(Transaction)
+    @restipy.parse_as(Transaction)
+    def update_one(self, transaction_id, transaction):
+        return self.transaction_service.update_one(transaction)
 
-    @restful.route('/upload-file', methods=['POST'])
+    @restipy.route('/upload-file', methods=['POST'])
     def upload_file(self):
         tmp_folder = '/tmp'
         file = request.files['file']

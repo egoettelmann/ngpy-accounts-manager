@@ -1,4 +1,4 @@
-from ..modules.restful import DefaultExceptionHandler
+from ..modules.restipy import DefaultExceptionHandler
 
 
 class BaseAppException(Exception):

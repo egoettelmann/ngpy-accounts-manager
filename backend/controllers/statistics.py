@@ -1,13 +1,12 @@
 from flask import request
-from flask_restful import marshal_with
 
-from ..modules import restful
-from ..modules.depynject import injectable
 from ..domain.models import KeyValue, GroupedValue, Summary
+from ..modules import restipy
+from ..modules.depynject import injectable
 
 
 @injectable()
-@restful.prefix('/stats')
+@restipy.prefix('/stats')
 class StatisticsController():
 
     def __init__(self, statistics_service, account_service, transaction_service):
@@ -15,8 +14,8 @@ class StatisticsController():
         self.account_service = account_service
         self.transaction_service = transaction_service
 
-    @restful.route('/repartition')
-    @marshal_with(KeyValue.resource_fields)
+    @restipy.route('/repartition')
+    @restipy.format_as(KeyValue)
     def get_repartition(self):
         year = int(request.args.get('year'))
         month = int(request.args.get('month'))
@@ -25,8 +24,8 @@ class StatisticsController():
             account_ids = account_ids.split(',')
         return self.transaction_service.get_total_by_labels(account_ids, year, month)
 
-    @restful.route('/treasury')
-    @marshal_with(KeyValue.resource_fields)
+    @restipy.route('/treasury')
+    @restipy.format_as(KeyValue)
     def get_treasury(self):
         year = int(request.args.get('year'))
         account_ids = request.args.get('account_ids')
@@ -34,8 +33,8 @@ class StatisticsController():
             account_ids = account_ids.split(',')
         return self.account_service.get_evolution_for_year(account_ids, year)
 
-    @restful.route('/summary')
-    @marshal_with(Summary.resource_fields)
+    @restipy.route('/summary')
+    @restipy.format_as(Summary)
     def get_summary(self):
         year = int(request.args.get('year'))
         month = request.args.get('month')
@@ -46,8 +45,8 @@ class StatisticsController():
             account_ids = account_ids.split(',')
         return self.statistics_service.get_summary(account_ids, year, month)
 
-    @restful.route('/analytics')
-    @marshal_with(GroupedValue.resource_fields)
+    @restipy.route('/analytics')
+    @restipy.format_as(GroupedValue)
     def get_analytics(self):
         category_type = request.args.get('category_type')
         year = int(request.args.get('year'))
@@ -56,8 +55,8 @@ class StatisticsController():
             account_ids = account_ids.split(',')
         return self.transaction_service.get_total_by_category_type(account_ids, year, category_type)
 
-    @restful.route('/analytics/details')
-    @marshal_with(GroupedValue.resource_fields)
+    @restipy.route('/analytics/details')
+    @restipy.format_as(GroupedValue)
     def get_analytics_details(self):
         category_type = request.args.get('category_type')
         year = int(request.args.get('year'))

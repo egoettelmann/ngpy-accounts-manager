@@ -1,53 +1,7 @@
 from flask.helpers import make_response
 from flask.json import jsonify
-from flask_restful import marshal_with, fields
 
-__PREFIX_LIST__ = {}
-__ROUTES_LIST__ = {}
-
-
-def prefix(rule, **options):
-    """
-    To be used as decorator to define a prefix for a controller class.
-    This decorator should be present on any class defining restful routes.
-
-    :param rule: the url rule
-    :param options: the options
-    :return: the decorated class
-    """
-    def decorator(c):
-        __PREFIX_LIST__[c.__qualname__] = {
-            'reference': c,
-            'rule': rule,
-            'options': options
-        }
-        return c
-
-    return decorator
-
-
-def route(rule, **options):
-    """
-    To be used as decorator to define a method as a route.
-
-    :param rule: the url rule
-    :param options: any options you can pass to flasks 'add_url_rule' (or @app.route decorator)
-    :return: the decorated method
-    """
-    def decorator(f):
-        classpath = f.__qualname__.split('.')
-        if len(classpath) > 1:
-            classname = classpath[0]
-            if classname not in __ROUTES_LIST__:
-                __ROUTES_LIST__[classname] = []
-            __ROUTES_LIST__[classname].append({
-                'function': f,
-                'rule': rule,
-                'options': options
-            })
-        return f
-
-    return decorator
+from .errors import DefaultExceptionHandler
 
 
 def default_di_provider(class_ref):
@@ -63,6 +17,8 @@ def default_di_provider(class_ref):
 
 
 class Api:
+    PREFIX_LIST = {}
+    ROUTES_LIST = {}
 
     def __init__(self,
                  app,
@@ -88,15 +44,15 @@ class Api:
         :return:
         """
         classname = class_ref.__qualname__
-        if classname in __ROUTES_LIST__:
+        if classname in Api.ROUTES_LIST:
             full_prefix = ''
             if options is not None and 'prefix' in options:
                 full_prefix = full_prefix + options.prefix
-            if classname not in __PREFIX_LIST__:
+            if classname not in Api.PREFIX_LIST:
                 raise Exception('Route annotation defined on class without prefix')
-            full_prefix = full_prefix + __PREFIX_LIST__[classname]['rule']
-            instance = self.di_provider(__PREFIX_LIST__[classname]['reference'])
-            for r in __ROUTES_LIST__[classname]:
+            full_prefix = full_prefix + Api.PREFIX_LIST[classname]['rule']
+            instance = self.di_provider(Api.PREFIX_LIST[classname]['reference'])
+            for r in Api.ROUTES_LIST[classname]:
                 endpoint = r['options'].pop('endpoint', r['function'].__qualname__)
                 full_rule = full_prefix + r['rule']
                 self.add_route(full_rule, endpoint, r['function'], r['options'], instance=instance)
@@ -144,24 +100,6 @@ class Api:
             code
         )
 
-    def route(self, rule, **options):
-        """
-        Defines a rest endpoint:
-         - the 'api' prefix is added to the url_rule
-         - the return object is returned as json
-
-        :param rule: the url rule
-        :param options: any options you can pass to flasks 'add_url_rule' (or @app.route decorator)
-        :return: the decorated function
-        """
-
-        def decorator(f):
-            endpoint = options.pop('endpoint', f.__qualname__)
-            self.add_route(rule, endpoint, f, options)
-            return f
-
-        return decorator
-
     def wrap(self, f, pre=None, post=None, instance=None):
         """
         Wraps a function with a pre and/or a post function.
@@ -175,6 +113,7 @@ class Api:
         :param instance: the instance of the controller
         :return: the wrapped function
         """
+
         def wrapper(*args, **kwargs):
             bound_handler = f
             if instance is not None:
@@ -193,44 +132,48 @@ class Api:
 
         return wrapper
 
+    @staticmethod
+    def prefix(rule, **options):
+        """
+        To be used as decorator to define a prefix for a controller class.
+        This decorator should be present on any class defining restful routes.
 
-class ErrorMessage:
-    resource_fields = {
-        'code': fields.String,
-        'message': fields.String
-    }
+        :param rule: the url rule
+        :param options: the options
+        :return: the decorated class
+        """
 
-    def __init__(self, code, message):
-        self.code = code
-        self.message = message
+        def decorator(c):
+            Api.PREFIX_LIST[c.__qualname__] = {
+                'reference': c,
+                'rule': rule,
+                'options': options
+            }
+            return c
 
+        return decorator
 
-class DefaultExceptionHandler:
+    @staticmethod
+    def route(rule, **options):
+        """
+        To be used as decorator to define a method as a route.
 
-    def __init__(self):
-        self.exceptions = []
-        self.add(Exception, 'T500')
+        :param rule: the url rule
+        :param options: any options you can pass to flasks 'add_url_rule' (or @app.route decorator)
+        :return: the decorated method
+        """
 
-    def add(self, exception_ref, code, message='internal_error', http_status=500):
-        self.exceptions.append({
-            'reference': exception_ref,
-            'error': ErrorMessage(code, message),
-            'status': http_status
-        })
+        def decorator(f):
+            classpath = f.__qualname__.split('.')
+            if len(classpath) > 1:
+                classname = classpath[0]
+                if classname not in Api.ROUTES_LIST:
+                    Api.ROUTES_LIST[classname] = []
+                Api.ROUTES_LIST[classname].append({
+                    'function': f,
+                    'rule': rule,
+                    'options': options
+                })
+            return f
 
-    def handle(self, e, idx=None):
-        if idx is None:
-            idx = len(self.exceptions) - 1
-        if idx >= len(self.exceptions) or idx < 0:
-            raise e
-        if isinstance(e, self.exceptions[idx]['reference']):
-            return (
-                self.build(self.exceptions[idx]['error']),
-                self.exceptions[idx]['status']
-            )
-        else:
-            return self.handle(e, idx-1)
-
-    @marshal_with(ErrorMessage.resource_fields)
-    def build(self, em):
-        return em
+        return decorator
