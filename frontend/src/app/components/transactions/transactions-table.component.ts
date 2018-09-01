@@ -12,7 +12,7 @@ export class TransactionsTableComponent {
   @Input() labels: Label[];
   @Input() editable = false;
 
-  @Output() onChange = new EventEmitter<PatchEvent<Transaction>>();
+  @Output() onChange = new EventEmitter<Transaction>();
   @Output() onDelete = new EventEmitter<Transaction>();
 
   @ContentChild('actionButtons')
@@ -24,7 +24,8 @@ export class TransactionsTableComponent {
       && transaction.label
       && label.id !== undefined
       && label.id !== transaction.label.id) {
-      this.onChange.emit(new PatchEvent(transaction, { label_id: label.id }));
+      const newTransaction = Object.assign({}, transaction, { label_id: label.id });
+      this.onChange.emit(newTransaction);
     }
   }
 

@@ -75,7 +75,7 @@ class TransactionController():
     @restipy.route('/<int:transaction_id>', methods=['POST'])
     @restipy.format_as(Transaction)
     @restipy.parse_as(Transaction)
-    def update_one(self, transaction_id, transaction):
+    def update_one(self, transaction, transaction_id):
         return self.transaction_service.update_one(transaction)
 
     @restipy.route('/upload-file', methods=['POST'])

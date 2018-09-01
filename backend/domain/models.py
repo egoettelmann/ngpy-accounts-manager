@@ -3,8 +3,8 @@ from ..modules.restipy import types
 
 
 @restipy.convertible({
-    'id': types.Integer,
-    'login': types.String,
+    'id': types.Integer(),
+    'login': types.String(),
 })
 class User:
 
@@ -15,11 +15,11 @@ class User:
 
 
 @restipy.convertible({
-    'id': types.Integer,
-    'name': types.String,
-    'description': types.String,
-    'total': types.Float,
-    'color': types.String,
+    'id': types.Integer(),
+    'name': types.String(),
+    'description': types.String(),
+    'total': types.Float(ignore_on_parse=True),
+    'color': types.String(),
     'lastUpdate': types.DateTime(attribute='last_update', dt_format='iso8601', ignore_on_parse=True)
 })
 class Account:
@@ -33,8 +33,8 @@ class Account:
 
 
 @restipy.convertible({
-    'label': types.String,
-    'value': types.Float
+    'label': types.String(),
+    'value': types.Float()
 })
 class KeyValue:
 
@@ -44,9 +44,9 @@ class KeyValue:
 
 
 @restipy.convertible({
-    'category': types.String,
-    'label': types.String,
-    'value': types.Float
+    'category': types.String(),
+    'label': types.String(),
+    'value': types.Float()
 })
 class GroupedValue:
 
@@ -57,9 +57,9 @@ class GroupedValue:
 
 
 @restipy.convertible({
-    'id': types.Integer,
-    'name': types.String,
-    'type': types.String,
+    'id': types.Integer(),
+    'name': types.String(),
+    'type': types.String(),
     'numLabels': types.Integer(attribute='num_labels', ignore_on_parse=True),
 })
 class Category:
@@ -72,11 +72,11 @@ class Category:
 
 
 @restipy.convertible({
-    'id': types.Integer,
-    'name': types.String,
-    'color': types.String,
-    'icon': types.String,
-    'category_id': types.Integer(ignore_on_format=True),
+    'id': types.Integer(),
+    'name': types.String(),
+    'color': types.String(),
+    'icon': types.String(),
+    'category_id': types.Integer(),
     'category': types.Nested(Category, ignore_on_parse=True),
     'numTransactions': types.Integer(attribute='num_transactions', ignore_on_parse=True)
 })
@@ -117,7 +117,7 @@ class Summary:
 @restipy.convertible({
     'accountId': types.Integer(attribute='account_id'),
     'date': types.DateTime(dt_format="iso8601"),
-    'value': types.Float,
+    'value': types.Float(),
 })
 class Status:
 
@@ -128,14 +128,14 @@ class Status:
 
 
 @restipy.convertible({
-    'id': types.Integer,
-    'reference': types.String,
-    'description': types.String,
+    'id': types.Integer(),
+    'reference': types.String(),
+    'description': types.String(),
     'dateValue': types.DateTime(attribute='date_value', dt_format="iso8601"),
-    'amount': types.Float,
-    'label_id': types.Integer(attribute='label.id', ignore_on_format=True),
+    'amount': types.Float(),
+    'label_id': types.Integer(),
     'label': types.Nested(Label, ignore_on_parse=True),
-    'account_id': types.Integer(attribute='account.id', ignore_on_format=True),
+    'account_id': types.Integer(),
     'account': types.Nested(Account, ignore_on_parse=True)
 })
 class Transaction:

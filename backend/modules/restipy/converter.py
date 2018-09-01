@@ -35,6 +35,8 @@ class Converter:
 
         items = {}
         for k, v in fields.items():
+            if v.ignore_on_format:
+                continue
             if isinstance(v, dict):
                 items[k] = Converter.serialize(data, v)
             else:
@@ -74,6 +76,8 @@ class Converter:
 
         items = {}
         for k, v in fields.items():
+            if v.ignore_on_parse:
+                continue
             key = k
             if hasattr(v, 'attribute') and v.attribute is not None:
                 key = v.attribute
@@ -82,8 +86,7 @@ class Converter:
             else:
                 value_type = make(v)
                 value = value_type.extract(k, data, parsing=True)
-                if value is not None:
-                    items[key] = value_type.parse(value)
+                items[key] = value_type.parse(value)
         return target_class(**items)
 
     @staticmethod

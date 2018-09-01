@@ -125,12 +125,6 @@ class Raw(object):
         :exception SerializationException: In case of formatting problem
         """
 
-        if self.ignore_on_parse and parsing:
-            return None
-
-        if self.ignore_on_format and not parsing:
-            return None
-
         if parsing:
             value = get_value(key, obj)
         else:
@@ -169,12 +163,6 @@ class Nested(Raw):
         return Converter.deserialize(value, fields, self.nested)
 
     def extract(self, key, obj, parsing=False):
-        if self.ignore_on_parse and parsing:
-            return None
-
-        if self.ignore_on_format and not parsing:
-            return None
-
         if parsing:
             value = get_value(key, obj)
         else:
@@ -195,6 +183,9 @@ class String(Raw):
     be converted to :class:`unicode` in python2 and :class:`str` in
     python3.
     """
+
+    def __init__(self, **kwargs):
+        super(String, self).__init__(**kwargs)
 
     def format(self, value):
         try:
@@ -244,6 +235,9 @@ class Boolean(Raw):
     ``False``.
     """
 
+    def __init__(self, **kwargs):
+        super(Boolean, self).__init__(**kwargs)
+
     def format(self, value):
         return bool(value)
 
@@ -257,6 +251,9 @@ class Float(Raw):
     ex : 3.141592653589793 3.1415926535897933e-06 3.141592653589793e+24 nan inf
     -inf
     """
+
+    def __init__(self, **kwargs):
+        super(Float, self).__init__(**kwargs)
 
     def format(self, value):
         try:

@@ -46,12 +46,6 @@ export class TransactionsFormComponent implements OnChanges {
 
   initFormData(data: Transaction) {
     this.form.patchValue(data);
-    if (data.account != null) {
-      this.form.patchValue({ 'account_id': data.account.id });
-    }
-    if (data.label != null) {
-      this.form.patchValue({ 'label_id': data.label.id });
-    }
   }
 
   changeLabel(label: Label) {
@@ -60,7 +54,6 @@ export class TransactionsFormComponent implements OnChanges {
 
   submitForm() {
     const t = Object.assign({}, this.model, this.form.value);
-    console.log('emitting', t, this.model, this.form.value);
     this.onFormSubmit.emit(t);
   }
 

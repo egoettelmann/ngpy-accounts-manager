@@ -3,8 +3,8 @@ from .converter import Converter
 
 
 @Converter.convertible({
-    'code': StringType,
-    'message': StringType
+    'code': StringType(),
+    'message': StringType()
 })
 class ErrorMessage:
 
