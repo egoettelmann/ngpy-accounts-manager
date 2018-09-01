@@ -1,8 +1,7 @@
 ﻿from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.sql.schema import Table, Column, ForeignKey
-from sqlalchemy.sql.sqltypes import Integer
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.pool import QueuePool
 
 from ..modules.depynject import inject, injectable
 
@@ -14,19 +13,25 @@ class EntityManager:
     def __init__(self, db_file_path, name='default'):
         self.db_file_path = db_file_path
         self.base = self.get_base(name)
-        self.engine = create_engine(self.db_file_path, convert_unicode=True)
+        self.engine = create_engine(
+            self.db_file_path,
+            connect_args={'check_same_thread': False},
+            convert_unicode=True,
+            poolclass=QueuePool,
+            pool_size=20,
+            max_overflow=0
+        )
         self.session_maker = sessionmaker(
             autocommit=False,
             autoflush=False,
             bind=self.engine
         )
-        self.base.query = self.get_session().query_property()
         self.association_tables = {}
 
     @inject()
     def get_session(self, request_scoped_session=None):
         if request_scoped_session is None:
-            return scoped_session(self.session_maker)  # TODO: not ok, can't a session object be used ?
+            return scoped_session(self.session_maker)
         return request_scoped_session()
 
     def query(self, *args, **kwargs):
@@ -47,3 +52,7 @@ class RequestScopedSession:
 
     def __call__(self, *args, **kwargs):
         return self.session
+
+    def close(self):
+        if self.session is not None:
+            self.session.close()

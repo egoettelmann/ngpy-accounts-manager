@@ -53,10 +53,11 @@ def before_request():
             print('user ' + str(session['logged_user_id']))
 
 
-@app.after_request
-def after_request(resp):
+@app.teardown_request
+def teardown_request(exception):
     rdi_provider.clear()
-    return resp
+    if exception is not None:
+        print('App teardown with', exception)
 
 
 api.register(AccountController)

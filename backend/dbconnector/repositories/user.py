@@ -1,6 +1,5 @@
-from ...modules.depynject import injectable
-
 from ..entities import UserDbo
+from ...modules.depynject import injectable
 
 
 @injectable()
