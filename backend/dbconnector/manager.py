@@ -13,9 +13,13 @@ class EntityManager:
     def __init__(self, db_file_path, name='default'):
         self.db_file_path = db_file_path
         self.base = self.get_base(name)
+        connect_args = {}
+        if self.db_file_path.startswith('sqlite'):
+            # This option is specific to sqlite
+            connect_args['check_same_thread'] = False
         self.engine = create_engine(
             self.db_file_path,
-            connect_args={'check_same_thread': False},
+            connect_args=connect_args,
             convert_unicode=True,
             poolclass=QueuePool,
             pool_size=20,

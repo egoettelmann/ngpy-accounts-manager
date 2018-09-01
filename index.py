@@ -4,11 +4,11 @@ from flask import Flask, request, session
 from flask_cors import CORS
 
 from backend.controllers.account import AccountController
+from backend.controllers.category import CategoryController
 from backend.controllers.label import LabelController
 from backend.controllers.session import SessionController
 from backend.controllers.statistics import StatisticsController
 from backend.controllers.transaction import TransactionController
-from backend.controllers.category import CategoryController
 from backend.dbconnector.manager import EntityManager
 from backend.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
 from backend.modules.depynject import Depynject
@@ -44,8 +44,8 @@ def serve_page():
 
 @app.before_request
 def before_request():
-    if request.method != 'OPTIONS'\
-            and request.path.startswith(api.prefix)\
+    if request.method != 'OPTIONS' \
+            and request.path.startswith(api.prefix) \
             and not request.endpoint.startswith('SessionController'):
         if 'logged_user_id' not in session:
             return api.return_exception(NotAuthenticatedException("Not authenticated"))
