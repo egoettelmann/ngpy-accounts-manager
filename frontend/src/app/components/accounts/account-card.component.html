@@ -4,13 +4,13 @@
       <strong>{{ account.name }}</strong> - {{ account.description }}
     </h4>
     <p class="card-text">
-      <span>{{ 'i18n.modules.accounts.account-card.latest-transaction' | translate }}</span>
+      <span>{{ 'i18n.components.accounts.account-card.latest-transaction' | translate }}</span>
       <span>{{ account.lastUpdate | date:'dd/MM/yyyy' }}</span>
     </p>
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
-      <strong>{{ 'i18n.modules.accounts.account-card.total' | translate }}</strong>
+      <strong>{{ 'i18n.components.accounts.account-card.total' | translate }}</strong>
       <span>{{ account.total | number:'1.2-2' }} €</span>
     </li>
   </ul>

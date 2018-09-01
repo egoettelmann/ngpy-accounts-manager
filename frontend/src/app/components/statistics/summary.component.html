@@ -1,25 +1,25 @@
 <table *ngIf="summary" class="table">
   <thead>
     <tr>
-      <th colspan="2">{{ 'i18n.modules.statistics.summary.' + summary.periodType + '.status' | translate }}</th>
-      <th colspan="2">{{ 'i18n.modules.statistics.summary.' + summary.periodType + '.balance' | translate }}</th>
+      <th colspan="2">{{ 'i18n.components.statistics.summary.' + summary.periodType + '.status' | translate }}</th>
+      <th colspan="2">{{ 'i18n.components.statistics.summary.' + summary.periodType + '.balance' | translate }}</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td class="text-left">{{ 'i18n.modules.statistics.summary.' + summary.periodType + '.start' | translate }}</td>
+      <td class="text-left">{{ 'i18n.components.statistics.summary.' + summary.periodType + '.start' | translate }}</td>
       <td class="text-right" [ngClass]="getAmountColor(summary.amountStart)">{{ summary.amountStart | number:'1.2-2' }}&nbsp;€</td>
-      <td class="text-left">{{ 'i18n.modules.statistics.summary.' + summary.periodType + '.debit' | translate }}</td>
+      <td class="text-left">{{ 'i18n.components.statistics.summary.' + summary.periodType + '.debit' | translate }}</td>
       <td class="text-right" [ngClass]="getAmountColor(summary.totalDebit)">{{ summary.totalDebit | number:'1.2-2' }}&nbsp;€</td>
     </tr>
     <tr>
-      <td class="text-left">{{ 'i18n.modules.statistics.summary.' + summary.periodType + '.end' | translate }}</td>
+      <td class="text-left">{{ 'i18n.components.statistics.summary.' + summary.periodType + '.end' | translate }}</td>
       <td class="text-right font-weight-bold" [ngClass]="getAmountColor(summary.amountEnd)">{{ summary.amountEnd | number:'1.2-2' }}&nbsp;€</td>
-      <td class="text-left">{{ 'i18n.modules.statistics.summary.' + summary.periodType + '.credit' | translate }}</td>
+      <td class="text-left">{{ 'i18n.components.statistics.summary.' + summary.periodType + '.credit' | translate }}</td>
       <td class="text-right" [ngClass]="getAmountColor(summary.totalCredit)">{{ summary.totalCredit | number:'1.2-2' }}&nbsp;€</td>
     </tr>
     <tr>
-      <td class="text-left">{{ 'i18n.modules.statistics.summary.' + summary.periodType + '.result' | translate }}</td>
+      <td class="text-left">{{ 'i18n.components.statistics.summary.' + summary.periodType + '.result' | translate }}</td>
       <td class="text-right font-weight-bold" [ngClass]="getAmountColor(result)">{{ result | number:'1.2-2' }}&nbsp;€</td>
       <td class="text-left">&nbsp;</td>
       <td class="text-right" [ngClass]="getAmountColor(performance)">

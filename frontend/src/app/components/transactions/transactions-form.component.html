@@ -3,7 +3,7 @@
 
   <section class="form-block compact">
     <app-field-wrapper for="account"
-                       [i18nLabel]="'i18n.modules.transactions.form.account'"
+                       [i18nLabel]="'i18n.components.transactions.form.account'"
                        [ctrl]="form.get('account_id')"
                        class="form-group row">
       <select id="account"
@@ -15,7 +15,7 @@
       </select>
     </app-field-wrapper>
     <app-field-wrapper for="reference"
-                       [i18nLabel]="'i18n.modules.transactions.form.reference'"
+                       [i18nLabel]="'i18n.components.transactions.form.reference'"
                        [ctrl]="form.get('reference')"
                        class="form-group row">
       <input id="reference"
@@ -23,7 +23,7 @@
              type="text"/>
     </app-field-wrapper>
     <app-field-wrapper for="description"
-                       [i18nLabel]="'i18n.modules.transactions.form.description'"
+                       [i18nLabel]="'i18n.components.transactions.form.description'"
                        [ctrl]="form.get('description')"
                        class="form-group row">
         <textarea id="description"
@@ -32,7 +32,7 @@
         </textarea>
     </app-field-wrapper>
     <app-field-wrapper for="dateValue"
-                       [i18nLabel]="'i18n.modules.transactions.form.dateValue'"
+                       [i18nLabel]="'i18n.components.transactions.form.dateValue'"
                        [ctrl]="form.get('dateValue')"
                        class="form-group row">
       <input id="dateValue"
@@ -40,7 +40,7 @@
              type="text"/>
     </app-field-wrapper>
     <app-field-wrapper for="amount"
-                       [i18nLabel]="'i18n.modules.transactions.form.amount'"
+                       [i18nLabel]="'i18n.components.transactions.form.amount'"
                        [ctrl]="form.get('amount')"
                        class="form-group row">
       <input id="amount"
@@ -49,7 +49,7 @@
     </app-field-wrapper>
 
     <app-field-wrapper for="amount"
-                       [i18nLabel]="'i18n.modules.transactions.form.label'"
+                       [i18nLabel]="'i18n.components.transactions.form.label'"
                        [ctrl]="form.get('amount')"
                        class="form-group row">
       <app-autocomplete [value]="model.label"
@@ -63,17 +63,17 @@
     <button [disabled]="!form.valid"
             class="btn btn-primary"
             type="submit">
-      {{ 'i18n.transactions.form.button.save' | translate }}
+      {{ 'i18n.components.transactions.form.button.save' | translate }}
     </button>
     <button class="btn btn-danger"
             type="button"
             (click)="deleteTransaction()">
-      {{ 'i18n.transactions.form.button.delete' | translate }}
+      {{ 'i18n.components.transactions.form.button.delete' | translate }}
     </button>
     <button class="btn btn-secondary"
             type="button"
             (click)="cancel()">
-      {{ 'i18n.transactions.form.button.cancel' | translate }}
+      {{ 'i18n.components.transactions.form.button.cancel' | translate }}
     </button>
   </div>
 

@@ -1,10 +1,10 @@
 <table class="table table-compact table-vertical">
   <tr>
-    <th class="text-left align-middle" width="40%">{{ 'i18n.modules.transactions.label-toggle.label' | translate }}</th>
+    <th class="text-left align-middle" width="40%">{{ 'i18n.components.transactions.label-toggle.label' | translate }}</th>
     <td class="text-right">
       <clr-dropdown *ngIf="labels">
         <button type="button" class="btn btn-link" clrDropdownTrigger>
-          {{ selectedLabels ? (selectedLabels?.length + ('i18n.modules.transactions.label-toggle.labels' | translate)) : ('i18n.modules.transactions.label-toggle.all-labels' | translate) }}
+          {{ selectedLabels ? (selectedLabels?.length + ('i18n.components.transactions.label-toggle.labels' | translate)) : ('i18n.components.transactions.label-toggle.all-labels' | translate) }}
           <clr-icon shape="caret down"></clr-icon>
         </button>
         <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
@@ -13,14 +13,14 @@
                   (click)="toggleAllLabels()">
             <clr-icon *ngIf="!selectedLabels" shape="check-circle" class="is-success"></clr-icon>
             <clr-icon *ngIf="selectedLabels" shape="circle"></clr-icon>
-            <span>{{ 'i18n.modules.transactions.label-toggle.all-labels' | translate }}</span>
+            <span>{{ 'i18n.components.transactions.label-toggle.all-labels' | translate }}</span>
           </button>
           <button type="button"
                   clrDropdownItem
                   (click)="toggleLabel(null)">
             <clr-icon *ngIf="isSelected(null)" shape="check-circle" class="is-success"></clr-icon>
             <clr-icon *ngIf="!isSelected(null)" shape="circle"></clr-icon>
-            <span>{{ 'i18n.modules.transactions.label-toggle.no-label' | translate }}</span>
+            <span>{{ 'i18n.components.transactions.label-toggle.no-label' | translate }}</span>
           </button>
           <button *ngFor="let label of labels"
                   type="button"
