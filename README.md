@@ -6,7 +6,7 @@ Small webapp to manage accounts with some statistics.
 
 ## Tech Stack
 
-- Angular 4
+- Angular 5
 - Flask / SQLAlchemy
 
 ## Installation and run
@@ -25,6 +25,12 @@ python index.py
 ```
 
 ## Release Notes
+
+### `0.3.0`
+
+- Created global search
+- Improved transaction form
+- Added alert message on dashboard for unassigned transactions
 
 ### `0.2.2`
 
@@ -48,11 +54,12 @@ python index.py
 
 ### Features
 
-- Automatically create label if it does not exist
-- Add todo list on dashboard or alert bubbles on menu for inconsistent data
+- Automatically create label if it does not exist on transaction table
+- Improve alerts on dashboard:
+  - labels without category
+  - labels without transactions
+  - last account update that is too old
 - Add comment field to transactions
-- Improve transaction form
 - Add sort and filters on transactions table
-- Create global search
 - Add document section for RIB
 - Some machine learning on existing labels for auto-importing transactions
