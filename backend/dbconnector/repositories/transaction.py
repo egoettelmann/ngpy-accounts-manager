@@ -76,10 +76,13 @@ class TransactionRepository():
         query = self.filter_by_date_to(query, date_to)
         if period in ['day']:
             query = query.group_by(extract('day', TransactionDbo.date_value))
+            query = query.order_by(extract('day', TransactionDbo.date_value))
         if period in ['month', 'day']:
             query = query.group_by(extract('month', TransactionDbo.date_value))
+            query = query.order_by(extract('month', TransactionDbo.date_value))
         if period in ['year', 'month', 'day']:
             query = query.group_by(extract('year', TransactionDbo.date_value))
+            query = query.order_by(extract('year', TransactionDbo.date_value))
         return query.all()
 
     def get_grouped_by_category_type(self, account_ids=None, date_from=None, date_to=None, category_type=None):
