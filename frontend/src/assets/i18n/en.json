@@ -36,7 +36,6 @@
   "i18n.views.transactions.list.add": "Add a new transaction",
   "i18n.views.transactions.warning.too-many": "Not all transactions may be displayed, the current view is limited to 500 elements.",
 
-  "i18n.views.treasury.label.year-dropdown": "Year",
   "i18n.views.treasury.chart.title": "Treasury history",
   "i18n.views.treasury.top-list.title": "Top transactions",
 
@@ -58,7 +57,6 @@
   "i18n.views.settings.labels.table.header.category": "Category",
   "i18n.views.settings.labels.table.header.transactions": "Transactions",
 
-  "i18n.views.analytics.label.year-dropdown": "Year",
   "i18n.views.analytics.table.title": "Movements between accounts by quarter",
   "i18n.views.analytics.table.no-entries": "No entries",
   "i18n.views.analytics.chart.credit.title": "Crediting transactions by quarter",
@@ -76,6 +74,9 @@
   "i18n.components.navigation.settings.categories": "Categories",
   "i18n.components.navigation.settings.accounts": "Accounts",
   "i18n.components.navigation.settings.transactions": "Transactions",
+
+  "i18n.components.dates.label.year-dropdown": "Year",
+  "i18n.components.dates.label.month-dropdown": "Month",
 
   "i18n.components.file-drop.header-text": "Upload a file",
 

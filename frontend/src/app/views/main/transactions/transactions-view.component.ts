@@ -20,8 +20,6 @@ export class TransactionsViewComponent implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  public yearList = CommonFunctions.getYearsList();
-  public monthList = CommonFunctions.getMonthsList();
   public currentYear: number;
   public currentMonth: number;
   public accountsFilter: number[];

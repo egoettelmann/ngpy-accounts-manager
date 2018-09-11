@@ -6,29 +6,9 @@
                         (onChange)="changeAccounts($event)">
     </app-account-toggle>
 
-    <table class="table table-compact table-vertical">
-      <tr>
-        <th class="text-left align-middle" width="40%">{{ 'i18n.views.analytics.label.year-dropdown' | translate }}</th>
-        <td class="text-right">
-          <clr-dropdown class="col-xs-6 text-right">
-            <button type="button" class="btn btn-link" clrDropdownTrigger>
-              {{ currentYear }}
-              <clr-icon shape="caret down"></clr-icon>
-            </button>
-            <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
-              <button *ngFor="let year of yearList"
-                      type="button"
-                      clrDropdownItem
-                      (click)="changeYear(year)">
-                <clr-icon *ngIf="year === currentYear" shape="check-circle" class="is-success"></clr-icon>
-                <span *ngIf="year !== currentYear" class="icon-empty">&nbsp;</span>
-                {{ year }}
-              </button>
-            </clr-dropdown-menu>
-          </clr-dropdown>
-        </td>
-      </tr>
-    </table>
+    <app-year-toggle [currentYear]="currentYear"
+                     (onChange)="changeYear($event)">
+    </app-year-toggle>
   </div>
   <div class="col-xs-12 col-md-8">
     <table class="table table-vertical">

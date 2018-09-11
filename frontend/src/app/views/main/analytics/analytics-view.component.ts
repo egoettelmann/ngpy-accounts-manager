@@ -17,7 +17,6 @@ export class AnalyticsViewComponent implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  public yearList = CommonFunctions.getYearsList();
   public currentYear: number;
   public accountsFilter: number[] = [];
 

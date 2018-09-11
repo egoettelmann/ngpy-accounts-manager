@@ -6,53 +6,13 @@
                         (onChange)="changeAccounts($event)">
     </app-account-toggle>
 
-    <table class="table table-compact table-vertical">
-      <tr>
-        <th class="text-left align-middle" width="40%">{{ 'i18n.views.transactions.label.year-dropdown' | translate }}</th>
-        <td class="text-right">
-          <clr-dropdown class="col-xs-6 text-right">
-            <button type="button" class="btn btn-link" clrDropdownTrigger>
-              {{ currentYear }}
-              <clr-icon shape="caret down"></clr-icon>
-            </button>
-            <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
-              <button *ngFor="let year of yearList"
-                      type="button"
-                      clrDropdownItem
-                      (click)="changeYear(year)">
-                <clr-icon *ngIf="year === currentYear" shape="check-circle" class="is-success"></clr-icon>
-                <span *ngIf="year !== currentYear" class="icon-empty">&nbsp;</span>
-                {{ year }}
-              </button>
-            </clr-dropdown-menu>
-          </clr-dropdown>
-        </td>
-      </tr>
-    </table>
+    <app-year-toggle [currentYear]="currentYear"
+                     (onChange)="changeYear($event)">
+    </app-year-toggle>
 
-    <table class="table table-compact table-vertical">
-      <tr>
-        <th class="text-left align-middle" width="40%">{{ 'i18n.views.transactions.label.month-dropdown' | translate }}</th>
-        <td class="text-right">
-          <clr-dropdown class="col-xs-6 text-right">
-            <button type="button" class="btn btn-link" clrDropdownTrigger>
-              {{ 'i18n.months.' + currentMonth | translate }}
-              <clr-icon shape="caret down"></clr-icon>
-            </button>
-            <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
-              <button *ngFor="let month of monthList"
-                      type="button"
-                      clrDropdownItem
-                      (click)="changeMonth(month)">
-                <clr-icon *ngIf="month === currentMonth" shape="check-circle" class="is-success"></clr-icon>
-                <span *ngIf="month !== currentMonth" class="icon-empty">&nbsp;</span>
-                {{ 'i18n.months.' + month | translate }}
-              </button>
-            </clr-dropdown-menu>
-          </clr-dropdown>
-        </td>
-      </tr>
-    </table>
+    <app-month-toggle [currentMonth]="currentMonth"
+                      (onChange)="changeMonth($event)">
+    </app-month-toggle>
 
     <app-summary [summary]="summary"></app-summary>
   </div>

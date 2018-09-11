@@ -5,6 +5,7 @@ import { SharedModule } from '../../../components/shared/shared.module';
 import { AccountsModule } from '../../../components/accounts/accounts.module';
 import { StatisticsModule } from '../../../components/statistics/statistics.module';
 import { TransactionsModule } from '../../../components/transactions/transactions.module';
+import { DatesModule } from '../../../components/dates/dates.module';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { TransactionsModule } from '../../../components/transactions/transaction
   ],
   imports: [
     SharedModule,
+    DatesModule,
     AccountsModule,
     StatisticsModule,
     TransactionsModule,
