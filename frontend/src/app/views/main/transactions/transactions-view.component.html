@@ -19,7 +19,7 @@
               <button *ngFor="let year of yearList"
                       type="button"
                       clrDropdownItem
-                      [routerLink]="['/transactions', year, currentMonth]">
+                      (click)="changeYear(year)">
                 <clr-icon *ngIf="year === currentYear" shape="check-circle" class="is-success"></clr-icon>
                 <span *ngIf="year !== currentYear" class="icon-empty">&nbsp;</span>
                 {{ year }}
@@ -43,7 +43,7 @@
               <button *ngFor="let month of monthList"
                       type="button"
                       clrDropdownItem
-                      [routerLink]="['/transactions', currentYear, month]">
+                      (click)="changeMonth(month)">
                 <clr-icon *ngIf="month === currentMonth" shape="check-circle" class="is-success"></clr-icon>
                 <span *ngIf="month !== currentMonth" class="icon-empty">&nbsp;</span>
                 {{ 'i18n.months.' + month | translate }}

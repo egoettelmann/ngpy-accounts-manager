@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, Location } from '@angular/common';
 import { AccountsService } from '../../../services/accounts.service';
 import { StatisticsService } from '../../../services/statistics.service';
 import { TransactionsService } from '../../../services/transactions.service';
@@ -7,9 +7,8 @@ import { Transaction } from '../../../components/transactions/transaction';
 import { Summary } from '../../../components/statistics/summary';
 import { Account } from '../../../components/accounts/account';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { debounceTime, startWith } from 'rxjs/operators';
 import { CommonFunctions } from '../../../common/common-functions';
+import * as _ from 'lodash';
 
 @Component({
   templateUrl: './treasury-view.component.html'
@@ -23,13 +22,14 @@ export class TreasuryViewComponent implements OnInit {
   public accountsFilter: number[] = [];
 
   public graphOptions: any;
-  public accounts: Account[] = [];
+  public accounts: Account[];
   public topTransactionsAsc: Transaction[];
   public topTransactionsDesc: Transaction[];
   public summary: Summary;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
+              private location: Location,
               private accountsService: AccountsService,
               private statisticsService: StatisticsService,
               private transactionsService: TransactionsService,
@@ -37,14 +37,10 @@ export class TreasuryViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.route.snapshot.paramMap.has('year')) {
-      this.currentYear = CommonFunctions.getCurrentYear();
-      this.changeAccounts([]);
-      return;
-    }
-    this.initOnChanges();
+    this.initData();
     this.accountsService.getAccounts().subscribe(data => {
       this.accounts = data;
+      this.reloadData();
     });
   }
 
@@ -54,52 +50,56 @@ export class TreasuryViewComponent implements OnInit {
    * @param {Account[]} accounts the new list of accounts
    */
   changeAccounts(accounts: Account[]) {
-    this.accountsFilter = accounts.length === this.accounts.length ? undefined : accounts.map(a => a.id);
-    this.router.navigate(['treasury', this.currentYear], {
-      queryParams: {
-        account: this.accountsFilter ? this.accountsFilter.join(',') : undefined
-      }
-    });
+    const newFilter = accounts.length === this.accounts.length ? [] : accounts.map(a => a.id);
+    if (!_.isEqual(this.accountsFilter, newFilter)) {
+      this.accountsFilter = newFilter;
+      this.reloadData();
+    }
   }
 
   /**
-   * Listens on any route change to reload the data
+   * Triggered on year change.
+   *
+   * @param year
    */
-  private initOnChanges() {
-    combineLatest(
-      this.route.paramMap.pipe(startWith(undefined)),
-      this.route.queryParamMap.pipe(startWith(undefined))
-    ).pipe(
-      debounceTime(20)
-    ).subscribe(([paramMap, queryParamMap]) => {
-      let reload = false;
-      // Checking if any param has changed
-      if (paramMap) {
-        this.currentYear = +paramMap.get('year');
-        reload = true;
-      }
-      // Checking if any query param has changed
-      this.accountsFilter = undefined;
-      if (queryParamMap && queryParamMap.has('account')) {
-        this.accountsFilter = queryParamMap.get('account')
-          .split(',')
-          .map(a => +a);
-        reload = true;
-      }
-      // Reloading if necessary
-      if (reload) {
-        this.loadData();
-      }
-    });
+  changeYear(year: number) {
+    this.currentYear = year;
+    this.reloadData();
+  }
+
+  /**
+   * Initializes the component with the data from the route
+   */
+  private initData() {
+    if (!this.route.snapshot.paramMap.has('year')) {
+      this.currentYear = CommonFunctions.getCurrentYear();
+    } else {
+      this.currentYear = +this.route.snapshot.paramMap.get('year');
+    }
+    if (!this.route.snapshot.queryParamMap.has('account')) {
+      this.accountsFilter = [];
+    } else {
+      this.accountsFilter = this.route.snapshot.queryParamMap.get('account')
+        .split(',')
+        .map(a => +a);
+    }
   }
 
   /**
    * Loads the data for the view
    */
-  private loadData() {
-    this.loadEvolution(this.currentYear, this.accountsFilter);
-    this.loadSummary(this.currentYear, this.accountsFilter);
-    this.loadTops(this.currentYear, this.accountsFilter);
+  private reloadData() {
+    const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
+    this.loadEvolution(this.currentYear, accounts);
+    this.loadSummary(this.currentYear, accounts);
+    this.loadTops(this.currentYear, accounts);
+
+    const url = this.router.createUrlTree(['treasury', this.currentYear], {
+      queryParams: {
+        'account': accounts ? accounts.join(',') : undefined
+      }
+    }).toString();
+    this.location.go(url);
   }
 
   /**

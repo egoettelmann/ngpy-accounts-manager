@@ -12,7 +12,7 @@ export class GraphComponent implements OnChanges {
   @Input() title: string;
   @Input() options: any;
 
-  @ViewChild("graphContainer") graphContainer: ElementRef;
+  @ViewChild('graphContainer') graphContainer: ElementRef;
 
   private defaultOptions = {
     chart: {

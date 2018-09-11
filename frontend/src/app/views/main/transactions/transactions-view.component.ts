@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, Location } from '@angular/common';
 import { LabelsService } from '../../../services/labels.service';
 import { TransactionsService } from '../../../services/transactions.service';
 import { StatisticsService } from '../../../services/statistics.service';
@@ -9,10 +9,9 @@ import { Summary } from '../../../components/statistics/summary';
 import { Label } from '../../../components/transactions/label';
 import { Account } from '../../../components/accounts/account';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, startWith } from 'rxjs/operators';
-import { combineLatest } from 'rxjs/observable/combineLatest';
 import { zip } from 'rxjs/observable/zip';
 import { CommonFunctions } from '../../../common/common-functions';
+import * as _ from 'lodash';
 
 @Component({
   templateUrl: './transactions-view.component.html'
@@ -30,7 +29,7 @@ export class TransactionsViewComponent implements OnInit {
   public transactions: Transaction[];
   public graphOptions: any;
   public summary: Summary;
-  public accounts: Account[] = [];
+  public accounts: Account[];
   public labels: Label[];
 
   selectedTransaction: Transaction;
@@ -38,6 +37,7 @@ export class TransactionsViewComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
+              private location: Location,
               private labelsService: LabelsService,
               private transactionsService: TransactionsService,
               private statisticsService: StatisticsService,
@@ -47,23 +47,14 @@ export class TransactionsViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.route.snapshot.paramMap.has('year') || !this.route.snapshot.paramMap.has('month')) {
-      if (!this.route.snapshot.paramMap.has('year')) {
-        this.currentYear = CommonFunctions.getCurrentYear();
-      }
-      if (!this.route.snapshot.paramMap.has('month')) {
-        this.currentMonth = CommonFunctions.getCurrentMonth();
-      }
-      this.changeAccounts([]);
-      return;
-    }
-    this.initOnChanges();
+    this.initData();
     zip(
       this.accountsService.getAccounts(),
       this.labelsService.getAll()
     ).subscribe(([accounts, labels]) => {
       this.accounts = accounts.slice(0);
       this.labels = labels.slice(0);
+      this.reloadData();
     });
   }
 
@@ -73,12 +64,31 @@ export class TransactionsViewComponent implements OnInit {
    * @param {Account[]} accounts the new list of accounts
    */
   changeAccounts(accounts: Account[]) {
-    this.accountsFilter = accounts.length === this.accounts.length ? undefined : accounts.map(a => a.id);
-    this.router.navigate(['transactions', this.currentYear, this.currentMonth], {
-      queryParams: {
-        account: this.accountsFilter ? this.accountsFilter.join(',') : undefined
-      }
-    });
+    const newFilter = accounts.length === this.accounts.length ? [] : accounts.map(a => a.id);
+    if (!_.isEqual(this.accountsFilter, newFilter)) {
+      this.accountsFilter = newFilter;
+      this.reloadData();
+    }
+  }
+
+  /**
+   * Triggered on year change.
+   *
+   * @param year
+   */
+  changeYear(year: number) {
+    this.currentYear = year;
+    this.reloadData();
+  }
+
+  /**
+   * Triggerd on month change.
+   *
+   * @param month
+   */
+  changeMonth(month: number) {
+    this.currentMonth = month;
+    this.reloadData();
   }
 
   /**
@@ -115,12 +125,12 @@ export class TransactionsViewComponent implements OnInit {
   saveTransaction(transaction: Transaction) {
     if (transaction.id != null) {
       this.transactionsService.updateOne(transaction.id, transaction).subscribe(() => {
-        this.loadData();
+        this.reloadData();
         this.closeModal();
       });
     } else {
       this.transactionsService.createOne(transaction).subscribe(() => {
-        this.loadData();
+        this.reloadData();
         this.closeModal();
       });
     }
@@ -133,50 +143,49 @@ export class TransactionsViewComponent implements OnInit {
    */
   deleteTransaction(transaction: Transaction) {
     this.transactionsService.deleteOne(transaction).subscribe(() => {
-      this.loadData();
+      this.reloadData();
       this.closeModal();
     });
   }
 
   /**
-   * Listens on any route change to reload the data
+   * Initializes the component with the data from the route
    */
-  private initOnChanges() {
-    combineLatest(
-      this.route.paramMap.pipe(startWith(undefined)),
-      this.route.queryParamMap.pipe(startWith(undefined))
-    ).pipe(
-      debounceTime(20)
-    ).subscribe(([paramMap, queryParamMap]) => {
-      let reload = false;
-      // Checking if any param has changed
-      if (paramMap) {
-        this.currentYear = +paramMap.get('year');
-        this.currentMonth = +paramMap.get('month');
-        reload = true;
-      }
-      // Checking if any query param has changed
-      this.accountsFilter = undefined;
-      if (queryParamMap && queryParamMap.has('account')) {
-        this.accountsFilter = queryParamMap.get('account')
-          .split(',')
-          .map(a => +a);
-        reload = true;
-      }
-      // Reloading if necessary
-      if (reload) {
-        this.loadData();
-      }
-    });
+  private initData() {
+    if (!this.route.snapshot.paramMap.has('year')) {
+      this.currentYear = CommonFunctions.getCurrentYear();
+    } else {
+      this.currentYear = +this.route.snapshot.paramMap.get('year');
+    }
+    if (!this.route.snapshot.paramMap.has('month')) {
+      this.currentMonth = CommonFunctions.getCurrentMonth();
+    } else {
+      this.currentMonth = +this.route.snapshot.paramMap.get('month');
+    }
+    if (!this.route.snapshot.queryParamMap.has('account')) {
+      this.accountsFilter = [];
+    } else {
+      this.accountsFilter = this.route.snapshot.queryParamMap.get('account')
+        .split(',')
+        .map(a => +a);
+    }
   }
 
   /**
    * Loads the data for the view
    */
-  private loadData() {
-    this.loadTransactions(this.currentYear, this.currentMonth, this.accountsFilter);
-    this.loadSummary(this.currentYear, this.currentMonth, this.accountsFilter);
-    this.loadRepartition(this.currentYear, this.currentMonth, this.accountsFilter);
+  private reloadData() {
+    const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
+    this.loadTransactions(this.currentYear, this.currentMonth, accounts);
+    this.loadSummary(this.currentYear, this.currentMonth, accounts);
+    this.loadRepartition(this.currentYear, this.currentMonth, accounts);
+
+    const url = this.router.createUrlTree(['transactions', this.currentYear, this.currentMonth], {
+      queryParams: {
+        'account': accounts ? accounts.join(',') : undefined
+      }
+    }).toString();
+    this.location.go(url);
   }
 
   /**

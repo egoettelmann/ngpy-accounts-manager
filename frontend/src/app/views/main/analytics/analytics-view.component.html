@@ -19,7 +19,7 @@
               <button *ngFor="let year of yearList"
                       type="button"
                       clrDropdownItem
-                      [routerLink]="['/analytics', year]">
+                      (click)="changeYear(year)">
                 <clr-icon *ngIf="year === currentYear" shape="check-circle" class="is-success"></clr-icon>
                 <span *ngIf="year !== currentYear" class="icon-empty">&nbsp;</span>
                 {{ year }}

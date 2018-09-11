@@ -59,6 +59,9 @@ python index.py
   - labels without category
   - labels without transactions
   - last account update that is too old
+- Add possibility to close a period at a given date
+  - Impossible to change amount or account of a transaction before this date
+  - Period can only be closed at a date of 30 days before the current day
 - Add comment field to transactions
 - Add sort and filters on transactions table
 - Add document section for RIB
