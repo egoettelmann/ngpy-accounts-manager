@@ -1,3 +1,5 @@
+-- Since Sqlite does not support schema, remove the 'public' schema
+
 DROP TABLE IF EXISTS public."user";
 DROP TABLE IF EXISTS public."categories";
 DROP TABLE IF EXISTS public."status";
