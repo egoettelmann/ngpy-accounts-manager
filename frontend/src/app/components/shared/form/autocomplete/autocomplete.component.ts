@@ -7,6 +7,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 })
 export class AutocompleteComponent implements OnChanges {
 
+  @Input() uuid: string;
   @Input() value: any;
   @Input() options: any[];
   @Input() valueAttribute = 'id';

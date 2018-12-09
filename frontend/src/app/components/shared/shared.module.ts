@@ -11,6 +11,7 @@ import { GraphComponent } from './graph/graph.component';
 import { NotificationMessageComponent } from './notification/message/notification-message.component';
 import { NotificationModalComponent } from './notification/modal/notification-modal.component';
 import { FieldWrapperComponent } from './form/field-wrapper/field-wrapper.component';
+import { KeepFocusDirective } from '../../directives/keep-focus.directive';
 
 @NgModule({
   declarations: SharedModule.COMPONENTS_LIST,
@@ -30,7 +31,8 @@ export class SharedModule {
     FieldWrapperComponent,
     GraphComponent,
     NotificationMessageComponent,
-    NotificationModalComponent
+    NotificationModalComponent,
+    KeepFocusDirective
   ];
 
   static MODULE_LIST = [

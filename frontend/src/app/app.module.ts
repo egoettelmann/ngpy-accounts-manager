@@ -18,6 +18,7 @@ import { SessionService } from './services/session.service';
 import { UploadService } from './services/upload.service';
 import { SharedModule } from './components/shared/shared.module';
 import { NotificationService } from './components/shared/notification/notification.service';
+import { KeepFocusService } from './directives/keep-focus.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -50,6 +51,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LabelsService,
     CategoriesService,
     NotificationService,
+    KeepFocusService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,

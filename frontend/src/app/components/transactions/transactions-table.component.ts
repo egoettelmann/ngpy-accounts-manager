@@ -1,5 +1,5 @@
 import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
-import { PatchEvent, Transaction } from './transaction';
+import { Transaction } from './transaction';
 import { Label } from './label';
 
 @Component({

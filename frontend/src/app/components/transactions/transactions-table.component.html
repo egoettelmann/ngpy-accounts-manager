@@ -26,7 +26,8 @@
         </span>
       </td>
       <td *ngIf="editable && labels" class="text-left hidden-sm-down">
-        <app-autocomplete [value]="transaction.label"
+        <app-autocomplete [uuid]="transaction.id"
+                          [value]="transaction.label"
                           [options]="labels"
                           (onSelect)="changeLabel($event, transaction)"
                           (onCreate)="addLabel($event, transaction)">
