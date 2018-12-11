@@ -21,6 +21,7 @@ from .dbconnector.repositories.user import UserRepository
 from .domain.services.status import StatusService
 from .domain.services.account import AccountService
 from .domain.services.label import LabelService
+from .domain.services.notification import NotificationService
 from .domain.services.statistics import StatisticsService
 from .domain.services.transaction import TransactionService
 from .domain.services.category import CategoryService

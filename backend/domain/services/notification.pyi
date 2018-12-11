@@ -1,0 +1,3 @@
+class NotificationService():
+
+    def send_email(self) -> None : ...

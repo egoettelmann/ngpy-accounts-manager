@@ -7,8 +7,9 @@ from ..modules.depynject import injectable
 @restipy.prefix('/accounts')
 class AccountController():
 
-    def __init__(self, account_service):
+    def __init__(self, account_service, notification_service):
         self.account_service = account_service
+        self.notification_service = notification_service
 
     @restipy.route('')
     @restipy.format_as(Account)
@@ -29,3 +30,7 @@ class AccountController():
     @restipy.parse_as(Account)
     def save_one(self, account):
         return self.account_service.save_account(account)
+
+    @restipy.route('test-email')
+    def save_one(self):
+        return self.notification_service.send_email()
