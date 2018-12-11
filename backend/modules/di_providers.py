@@ -27,3 +27,12 @@ class RequestDiProvider:
                 if callable(close_op):
                     v.close()
             g.pop('injectable_objects', None)
+
+
+class SimplePrototypeDiProvider:
+
+    def __init__(self):
+        self.di_list = {}
+
+    def provide(self, class_ref, i_args, di_instance):
+        return di_instance.create_new_instance(class_ref, i_args)
