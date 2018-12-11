@@ -31,6 +31,6 @@ class AccountController():
     def save_one(self, account):
         return self.account_service.save_account(account)
 
-    @restipy.route('test-email')
-    def save_one(self):
+    @restipy.route('/test-email')
+    def test_email(self):
         return self.notification_service.send_email()
