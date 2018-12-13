@@ -1,0 +1,31 @@
+{% extends "layouts/email.html" %}
+
+{% block content %}
+
+{% set p_style = "font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;" %}
+
+<p style="{{ p_style }}">You have {{ reminder_number }} reminder(s).</p>
+
+<p style="{{ p_style }} color: #848484;">---</p>
+
+{% for notif in notifications %}
+<p style="{{ p_style }}">
+    <span style="color: #848484; font-size: 13px;">[{{ notif.label }}]</span><br />
+    {% if notif.level == 'ERROR' %}
+        <span style="color: #9E2927; font-size: 13px;">{{ notif.level }}</span><br />
+    {% elif notif.level == 'WARNING' %}
+        <span style="color: #e8bf67; font-size: 13px;">{{ notif.level }}</span><br />
+    {% else %}
+        <span style="color: #2E2E2E; font-size: 13px;">{{ notif.level }}</span><br />
+    {% endif %}
+    <span style="color: #2E2E2E; font-size: 11px;">Last update on: {{ notif.value }}</span>
+</p>
+{% endfor %}
+
+<p style="{{ p_style }} color: #848484;">---</p>
+
+<p style="margin-top: 1em;">
+    <small style="color:#8899a6;text-decoration:none;"></small>
+</p>
+
+{% endblock %}

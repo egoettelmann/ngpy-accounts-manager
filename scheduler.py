@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 import index
 
+from backend.domain.models import Notification
 from backend.domain.services.notification import NotificationService
 from backend.domain.services.account import AccountService
 from backend.modules.di_providers import SimplePrototypeDiProvider
@@ -21,36 +22,30 @@ error_limit = datetime.date(datetime.today() - timedelta(days=80))
 
 max_level = 0
 notification_level = None
-notification_content = ''
+notifications = []
 
 for acc in accounts_list:
-    acc_content = None
     print('Account ' + acc.name + ' last updated on ', acc.last_update)
-    if acc.last_update < info_limit:
-        max_level = max(max_level, 1)
-        acc_content = 'INFO: ' \
-                      + 'Account ' + acc.name \
-                      + ' has been updated on ' + str(acc.last_update)
-        if max_level == 1:
-            notification_level = 'INFO'
-    if acc.last_update < warn_limit:
-        max_level = max(max_level, 2)
-        acc_content = 'WARN: ' \
-                      + 'Account ' + acc.name \
-                      + ' has been updated on ' + str(acc.last_update)
-        if max_level == 2:
-            notification_level = 'WARNING'
     if acc.last_update < error_limit:
         max_level = max(max_level, 3)
-        acc_content = 'ERROR: ' \
-                      + 'Account ' + acc.name \
-                      + ' has been updated on ' + str(acc.last_update)
+        notif = Notification(acc.name, 'ERROR', str(acc.last_update))
+        notifications.append(notif)
         if max_level == 3:
             notification_level = 'ERROR'
-    if acc_content is not None:
-        notification_content = notification_content + '\n' + acc_content
+    elif acc.last_update < warn_limit:
+        max_level = max(max_level, 2)
+        notif = Notification(acc.name, 'WARNING', str(acc.last_update))
+        notifications.append(notif)
+        if max_level == 2:
+            notification_level = 'WARNING'
+    elif acc.last_update < info_limit:
+        max_level = max(max_level, 1)
+        notif = Notification(acc.name, 'INFO', str(acc.last_update))
+        notifications.append(notif)
+        if max_level == 1:
+            notification_level = 'INFO'
 
-print('Notification: ', notification_level, notification_content)
+print('Notification max_level=', notification_level)
 
 if notification_level is not None:
-    notification_service.send_notification(notification_level, notification_content)
+    notification_service.send_reminder(notification_level, notifications, 'elio.goettelmann@gmail.com')

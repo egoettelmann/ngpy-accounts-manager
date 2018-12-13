@@ -1,5 +1,7 @@
+import jinja2
 import sendgrid
 import os
+
 from sendgrid.helpers.mail import *
 from ...modules.depynject import injectable
 
@@ -7,14 +9,39 @@ from ...modules.depynject import injectable
 @injectable()
 class NotificationService():
 
-    def send_notification(self, level, content):
-        sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
-        from_email = Email("ngpy-accounts-manager@github.com")
-        subject = "NgPy-Accounts-Manager: " + level
-        to_email = Email("elio.goettelmann@gmail.com")
-        content = Content("text/plain", content)
-        mail = Mail(from_email, subject, to_email, content)
-        response = sg.client.mail.send.post(request_body=mail.get())
+    def __init__(self):
+        self.mailer = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+        self.app_url = os.environ.get('APP_URL')
+        self.from_email = os.environ.get('SENDGRID_USERNAME')
+
+    def send_reminder(self, max_level, notifications, user_email):
+        title = '[NgPy-Accounts-Manager] Reminder: ' + max_level
+        html = self.build_template(
+            'emails/reminder.html',
+            title,
+            reminder_number=len(notifications),
+            notifications=notifications
+        )
+        self.send_email(title, html, user_email)
+
+    def build_template(self, template, title, **context):
+        env = jinja2.Environment(
+            loader=jinja2.PackageLoader('backend', 'templates')
+        )
+        tpl_engine = env.get_template(template)
+        return tpl_engine.render(
+            APP_NAME='NgPy-Accounts-Manager',
+            APP_URL=self.app_url,
+            TITLE=title,
+            **context
+        )
+
+    def send_email(self, email_object, email_content, email_destination):
+        from_email = Email(self.from_email)
+        to_email = Email(email_destination)
+        html_content = Content('text/html', email_content)
+        mail_obj = Mail(from_email, email_object, to_email, html_content)
+        response = self.mailer.client.mail.send.post(request_body=mail_obj.get())
         print(response.status_code)
         print(response.body)
         print(response.headers)

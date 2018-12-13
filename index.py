@@ -22,12 +22,12 @@ d_injector = Depynject(providers={
 e_handler = ApplicationExceptionHandler()
 
 app = Flask(__name__,
-            static_folder="frontend/dist",
-            static_url_path=""
+            static_folder='frontend/dist',
+            static_url_path=''
             )
 CORS(app, origins='http://localhost:4210', supports_credentials=True)
 api = Api(app,
-          prefix="/rest",
+          prefix='/rest',
           di_provider=d_injector.provide,
           exception_handler=e_handler
           )
@@ -37,9 +37,9 @@ em = EntityManager(os.environ['DATABASE_URL'])
 d_injector.register_singleton(em)
 
 
-@app.route("/")
+@app.route('/')
 def serve_page():
-    return app.send_static_file("index.html")
+    return app.send_static_file('index.html')
 
 
 @app.before_request
@@ -48,7 +48,7 @@ def before_request():
             and request.path.startswith(api.prefix) \
             and not request.endpoint.startswith('SessionController'):
         if 'logged_user_id' not in session:
-            return api.return_exception(NotAuthenticatedException("Not authenticated"))
+            return api.return_exception(NotAuthenticatedException('Not authenticated'))
         else:
             print('user ' + str(session['logged_user_id']))
 

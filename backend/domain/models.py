@@ -159,3 +159,16 @@ class Transaction:
 
     def __repr__(self):
         return '<Transaction %r, %r>' % (self.reference, self.label)
+
+
+@restipy.convertible({
+    'label': types.String(),
+    'level': types.String(),
+    'value': types.String()
+})
+class Notification:
+
+    def __init__(self, label=None, level=None, value=None) -> None:
+        self.label = label
+        self.level = level
+        self.value = value
