@@ -1,6 +1,6 @@
 ﻿from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Column, ForeignKey
-from sqlalchemy.sql.sqltypes import Date, Numeric, Integer, String
+from sqlalchemy.sql.sqltypes import Date, Numeric, Integer, String, Boolean
 
 from .manager import EntityManager
 
@@ -19,13 +19,15 @@ class AccountDbo(EntityManager.get_base()):
     description = Column(String(250))
     transactions = relationship("TransactionDbo", backref="account")
     color = Column(String(50))
+    notify = Column(Boolean())
     status = relationship("StatusDbo", backref="account")
 
-    def __init__(self, id=None,  name=None, description=None, color=None):
+    def __init__(self, id=None,  name=None, description=None, color=None, notify=None):
         self.id = id
         self.name = name
         self.description = description
         self.color = color
+        self.notify = notify
 
     def __repr__(self):
         return '<Account %r>' % self.name

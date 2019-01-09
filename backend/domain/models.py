@@ -20,16 +20,18 @@ class User:
     'description': types.String(),
     'total': types.Float(ignore_on_parse=True),
     'color': types.String(),
+    'notify': types.Boolean(),
     'lastUpdate': types.DateTime(attribute='last_update', dt_format='iso8601', ignore_on_parse=True)
 })
 class Account:
 
-    def __init__(self, id=None, name=None, description=None, total=None, color=None):
+    def __init__(self, id=None, name=None, description=None, total=None, color=None, notify=None):
         self.id = id
         self.name = name
         self.description = description
         self.total = total
         self.color = color
+        self.notify = notify
 
 
 @restipy.convertible({

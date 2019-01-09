@@ -7,6 +7,7 @@
       <th class="text-left">{{ 'i18n.views.settings.accounts.table.header.name' | translate }}</th>
       <th class="text-left">{{ 'i18n.views.settings.accounts.table.header.description' | translate }}</th>
       <th class="text-left">{{ 'i18n.views.settings.accounts.table.header.color' | translate }}</th>
+      <th class="text-right">{{ 'i18n.views.settings.accounts.table.header.notify' | translate }}</th>
       <th class="text-right">{{ 'i18n.views.settings.accounts.table.header.last-update' | translate }}</th>
       <th class="text-right">{{ 'i18n.views.settings.accounts.table.header.total' | translate }}</th>
       <th>&nbsp;</th>
@@ -18,7 +19,7 @@
         <input type="text" [formControlName]="'name'" />
       </td>
       <td class="text-left">
-        <input type="text" [formControlName]="'description'" size="60" />
+        <input type="text" [formControlName]="'description'" size="40" />
       </td>
       <td class="text-left">
           <span class="badge"
@@ -26,6 +27,9 @@
             <span>&nbsp;</span>
           </span>
         <input type="text" [formControlName]="'color'" />
+      </td>
+      <td class="text-center">
+        <input type="checkbox" [formControlName]="'notify'" clrCheckbox />
       </td>
       <td class="text-right">{{ accountForm.get('lastUpdate').value }}</td>
       <td class="text-right">{{ accountForm.get('total').value | number:'1.2-2' }}&nbsp;€</td>

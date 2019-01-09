@@ -51,6 +51,7 @@ export class SettingsAccountsViewComponent implements OnInit {
       'name': [account.name],
       'description': [account.description],
       'color': [account.color],
+      'notify': [account.notify],
       'lastUpdate': [{value: account.lastUpdate, disabled: true}],
       'total': [{value: account.total, disabled: true}]
     });

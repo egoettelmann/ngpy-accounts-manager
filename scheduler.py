@@ -25,6 +25,8 @@ notification_level = None
 notifications = []
 
 for acc in accounts_list:
+    if not acc.notify:
+        continue
     print('Account ' + acc.name + ' last updated on ', acc.last_update)
     if acc.last_update < error_limit:
         max_level = max(max_level, 3)

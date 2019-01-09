@@ -46,6 +46,7 @@
   "i18n.views.settings.accounts.table.header.name": "Name",
   "i18n.views.settings.accounts.table.header.description": "Description",
   "i18n.views.settings.accounts.table.header.color": "Color",
+  "i18n.views.settings.accounts.table.header.notify": "Notify",
   "i18n.views.settings.accounts.table.header.last-update": "Last Update",
   "i18n.views.settings.accounts.table.header.total": "Total",
   "i18n.views.settings.categories.table.header.name": "Name",
