@@ -1,6 +1,7 @@
 import os
 import csv
 import datetime
+import hashlib
 
 from ..models import Transaction
 
@@ -33,6 +34,10 @@ class Parser:
         description = row[2]
         amount = float(str(row[6]))
         reference = row[1]
+        if reference == "":
+            r = str(date_compta) + description + str(amount)
+            ref = hashlib.md5(r.encode('utf-8')).hexdigest().upper()
+            reference = ''.join([x for idx, x in enumerate(ref) if idx in [1, 3, 5, 7, 9, 11, 13]])
         transaction = Transaction(date_compta=date_compta,
                                   date_operation=date_operation,
                                   description=description,
