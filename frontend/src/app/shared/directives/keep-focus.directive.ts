@@ -1,5 +1,5 @@
 import { Directive, ElementRef, HostListener, Input, OnInit } from '@angular/core';
-import { KeepFocusService } from './keep-focus.service';
+import { KeepFocusService } from '../../core/services/keep-focus.service';
 
 @Directive({
   selector: '[keepFocus]'

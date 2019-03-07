@@ -16,7 +16,7 @@ import { TransactionsService } from './services/rest/transactions.service';
 import { LabelsService } from './services/rest/labels.service';
 import { CategoriesService } from './services/rest/categories.service';
 import { NotificationService } from './services/notification.service';
-import { KeepFocusService } from '../shared/directives/keep-focus.service';
+import { KeepFocusService } from './services/keep-focus.service';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { SharedModule } from '../shared/shared.module';
 
