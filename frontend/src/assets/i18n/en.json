@@ -1,4 +1,16 @@
 {
+  "i18n.error.T500": "Technical exception",
+  "i18n.error.internal_error": "An internal server exception occurred",
+  "i18n.error.unhandled_server_error": "An unexpected error occurred",
+  "i18n.error.A400": "Bad credentials",
+  "i18n.error.wrong_login_or_password": "Wrong login or password, please try again",
+  "i18n.error.A403": "Not authenticated",
+  "i18n.error.not_authenticated": "You are currently not authenticated, please login",
+  "i18n.error.A409": "File import failed",
+  "i18n.error.file_import_failed": "Impossible to upload the provided file",
+  "i18n.error.B200": "File import successful",
+  "i18n.error.file_import_success": "The provided file has been uploaded successfully",
+
   "i18n.app.title": "Account Manager",
 
   "i18n.months.1": "January",
@@ -80,6 +92,7 @@
   "i18n.components.dates.label.month-dropdown": "Month",
 
   "i18n.components.file-drop.header-text": "Upload a file",
+  "i18n.components.notification.modal.button.ok": "OK",
 
   "i18n.components.statistics.table.header.label": "Label",
   "i18n.components.statistics.table.header.percentage": "Percentage",
