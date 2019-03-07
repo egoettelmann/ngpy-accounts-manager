@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { SessionService } from '../../services/rest/session.service';
+import { SessionRestService } from '../../services/rest/session-rest.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +13,7 @@ export class NavComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private sessionService: SessionService
+    private sessionService: SessionRestService
   ) {
   }
 

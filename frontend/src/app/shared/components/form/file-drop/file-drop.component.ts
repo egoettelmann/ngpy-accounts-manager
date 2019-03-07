@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
-import { UploadService } from '../../../../core/services/rest/upload.service';
+import { UploadRestService } from '../../../../core/services/rest/upload-rest.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Notification } from '../../../../core/models/notification';
 
@@ -15,7 +15,7 @@ export class FileDropComponent {
   public files: UploadFile[] = [];
 
   constructor(
-    private uploadService: UploadService,
+    private uploadService: UploadRestService,
     private notificationService: NotificationService
   ) {}
 

@@ -1,8 +1,8 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { LoginViewComponent } from './core/views/login/login-view.component';
-import { MainViewComponent } from './core/views/main/main-view.component';
-import { SessionService } from './core/services/rest/session.service';
+import { LoginComponent } from './core/views/login/login.component';
+import { MainComponent } from './core/views/main/main.component';
+import { SessionRestService } from './core/services/rest/session-rest.service';
 
 const routes: Routes = [
   {
@@ -10,38 +10,38 @@ const routes: Routes = [
     children: [
       {
         path: 'login',
-        component: LoginViewComponent
+        component: LoginComponent
       },
       {
         path: '',
-        component: MainViewComponent,
+        component: MainComponent,
         resolve: {
-          connectedUser: SessionService
+          connectedUser: SessionRestService
         },
         children: [
           {
             path: 'dashboard',
-            loadChildren: './features/dashboard/dashboard-view.module#DashboardViewModule'
+            loadChildren: './features/dashboard/dashboard.module#DashboardModule'
           },
           {
             path: 'transactions',
-            loadChildren: './features/transactions/transactions-view.module#TransactionsViewModule'
+            loadChildren: './features/transactions/transactions.module#TransactionsModule'
           },
           {
             path: 'treasury',
-            loadChildren: './features/treasury/treasury-view.module#TreasuryViewModule'
+            loadChildren: './features/treasury/treasury.module#TreasuryModule'
           },
           {
             path: 'analytics',
-            loadChildren: './features/analytics/analytics-view.module#AnalyticsViewModule'
+            loadChildren: './features/analytics/analytics.module#AnalyticsModule'
           },
           {
             path: 'search',
-            loadChildren: './features/search/search-view.module#SearchViewModule'
+            loadChildren: './features/search/search.module#SearchModule'
           },
           {
             path: 'settings',
-            loadChildren: './features/settings/settings-view.module#SettingsViewModule'
+            loadChildren: './features/settings/settings.module#SettingsModule'
           },
           {
             path: '',

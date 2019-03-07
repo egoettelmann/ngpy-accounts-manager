@@ -2,19 +2,19 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { NavComponent } from './components/navigation/nav.component';
-import { LoginViewComponent } from './views/login/login-view.component';
-import { MainViewComponent } from './views/main/main-view.component';
+import { LoginComponent } from './views/login/login.component';
+import { MainComponent } from './views/main/main.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DecimalPipe } from '@angular/common';
-import { SessionService } from './services/rest/session.service';
-import { UploadService } from './services/rest/upload.service';
-import { AccountsService } from './services/rest/accounts.service';
-import { StatisticsService } from './services/rest/statistics.service';
-import { TransactionsService } from './services/rest/transactions.service';
-import { LabelsService } from './services/rest/labels.service';
-import { CategoriesService } from './services/rest/categories.service';
+import { SessionRestService } from './services/rest/session-rest.service';
+import { UploadRestService } from './services/rest/upload-rest.service';
+import { AccountsRestService } from './services/rest/accounts-rest.service';
+import { StatisticsRestService } from './services/rest/statistics-rest.service';
+import { TransactionsRestService } from './services/rest/transactions-rest.service';
+import { LabelsRestService } from './services/rest/labels-rest.service';
+import { CategoriesRestService } from './services/rest/categories-rest.service';
 import { NotificationService } from './services/notification.service';
 import { KeepFocusService } from './services/keep-focus.service';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
@@ -48,8 +48,8 @@ export class CoreModule {
    */
   static COMPONENTS_LIST = [
     NavComponent,
-    LoginViewComponent,
-    MainViewComponent
+    LoginComponent,
+    MainComponent
   ];
 
   /**
@@ -72,13 +72,13 @@ export class CoreModule {
    */
   static SERVICE_LIST = [
     /** REST services */
-    SessionService,
-    UploadService,
-    AccountsService,
-    StatisticsService,
-    TransactionsService,
-    LabelsService,
-    CategoriesService,
+    SessionRestService,
+    UploadRestService,
+    AccountsRestService,
+    StatisticsRestService,
+    TransactionsRestService,
+    LabelsRestService,
+    CategoriesRestService,
     /** App services */
     NotificationService,
     KeepFocusService
