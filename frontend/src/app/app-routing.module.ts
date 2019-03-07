@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { LoginComponent } from './core/views/login/login.component';
 import { MainComponent } from './core/views/main/main.component';
-import { SessionRestService } from './core/services/rest/session-rest.service';
+import { AuthenticatedGuard } from './core/guards/authenticated.guard';
 
 const routes: Routes = [
   {
@@ -15,9 +15,7 @@ const routes: Routes = [
       {
         path: '',
         component: MainComponent,
-        resolve: {
-          connectedUser: SessionRestService
-        },
+        canActivate: [AuthenticatedGuard],
         children: [
           {
             path: 'dashboard',

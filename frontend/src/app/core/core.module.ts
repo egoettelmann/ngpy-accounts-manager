@@ -19,6 +19,8 @@ import { NotificationService } from './services/notification.service';
 import { KeepFocusService } from './services/keep-focus.service';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { SharedModule } from '../shared/shared.module';
+import { AuthenticatedGuard } from './guards/authenticated.guard';
+import { AuthenticationService } from './services/authentication.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -37,7 +39,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ...CoreModule.COMPONENTS_LIST
   ],
   providers: [
-    ...CoreModule.SERVICE_LIST,
     ...CoreModule.PROVIDER_LIST
   ]
 })
@@ -68,9 +69,9 @@ export class CoreModule {
   ];
 
   /**
-   * Core services (root scope)
+   * Services, pipes, interceptors, guards, etc.
    */
-  static SERVICE_LIST = [
+  static PROVIDER_LIST = [
     /** REST services */
     SessionRestService,
     UploadRestService,
@@ -79,16 +80,19 @@ export class CoreModule {
     TransactionsRestService,
     LabelsRestService,
     CategoriesRestService,
-    /** App services */
-    NotificationService,
-    KeepFocusService
-  ];
 
-  /**
-   * Pipes, interceptors, guards, etc.
-   */
-  static PROVIDER_LIST = [
+    /** App services */
+    AuthenticationService,
+    NotificationService,
+    KeepFocusService,
+
+    /** Pipes */
     DecimalPipe,
+
+    /** Guards */
+    AuthenticatedGuard,
+
+    /** Interceptors */
     {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorInterceptor,
