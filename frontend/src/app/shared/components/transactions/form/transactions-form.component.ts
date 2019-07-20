@@ -27,7 +27,6 @@ export class TransactionsFormComponent implements OnChanges {
     if (changes.model && this.model) {
       this.buildForm();
       this.initFormData(this.model);
-      console.log('ngOnChanges', changes, this.model);
     }
   }
 

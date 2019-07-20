@@ -48,6 +48,9 @@ export class SearchComponent implements OnInit {
     this.initOnChanges();
   }
 
+  /**
+   * Init query param change listeners
+   */
   initOnChanges() {
     this.route.queryParamMap.subscribe(value => {
       this.currentYear = value.has('year') ? +value.get('year') : undefined;
@@ -69,30 +72,61 @@ export class SearchComponent implements OnInit {
     });
   }
 
+  /**
+   * Change the year to filter on.
+   *
+   * @param year the new year
+   */
   changeYear(year: number) {
     this.currentYear = year;
     this.navigate();
   }
 
+  /**
+   * Change the month to filter on.
+   *
+   * @param month the new month
+   */
   changeMonth(month: number) {
     this.currentMonth = month;
     this.navigate();
   }
 
+  /**
+   * Change the accounts to filter on.
+   *
+   * @param accounts the new list of accounts
+   */
   changeAccounts(accounts: Account[]) {
     this.accountsFilter = accounts.length === this.accounts.length ? undefined : accounts.map(a => a.id);
     this.navigate();
   }
 
+  /**
+   * Change the labels to filter on.
+   *
+   * @param labels the new list of labels
+   */
   changeLabels(labels: number[]) {
     this.labelsFilter = labels;
     this.navigate();
   }
 
-  saveTransaction(data: any) {}
+  /**
+   * Saves a transaction.
+   *
+   * @param transaction the transaction to save
+   */
+  saveTransaction(transaction: Transaction) {
+    this.transactionsService.updateOne(transaction.id, transaction).subscribe(() => {
+      this.loadData();
+    });
+  }
 
+  /**
+   * Reload the current page with the new query params.
+   */
   navigate() {
-    console.log('desc', this.descFilter);
     this.router.navigate(['search'], {
       queryParams: {
         year: this.currentYear,
@@ -104,6 +138,9 @@ export class SearchComponent implements OnInit {
     });
   }
 
+  /**
+   * Loads the data based on the selected filters
+   */
   private loadData() {
     this.transactionsService.getAll(
       this.currentYear,
