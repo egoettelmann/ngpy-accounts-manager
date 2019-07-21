@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Transaction } from '../../../../core/models/transaction';
-import { Label } from '../../../../core/models/label';
-import { Account } from '../../../../core/models/account';
+import { Account, Label, Transaction } from '../../../../core/models/api.models';
 
 @Component({
   selector: 'app-transactions-form',

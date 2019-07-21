@@ -1,6 +1,5 @@
 import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
-import { Transaction } from '../../../../core/models/transaction';
-import { Label } from '../../../../core/models/label';
+import { Label, Transaction } from '../../../../core/models/api.models';
 
 @Component({
   selector: 'app-transactions-table',

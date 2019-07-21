@@ -1,9 +1,9 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoriesRestService } from '../../../../core/services/rest/categories-rest.service';
-import { Category } from '../../../../core/models/category';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { Category } from '../../../../core/models/api.models';
 
 @Component({
   templateUrl: './settings-categories.component.html',

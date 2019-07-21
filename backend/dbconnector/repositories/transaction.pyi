@@ -7,13 +7,13 @@ from ..manager import EntityManager
 
 
 class QKeyValue:
-    label: str
+    key: str
     value: float
 
 
-class QGroupedValue:
-    category: str
-    label: str
+class QCompositeKeyValue:
+    key_one: str
+    key_two: str
     value: float
 
 
@@ -65,14 +65,14 @@ class TransactionRepository():
                                      date_from : datetime.date,
                                      date_to : datetime.date,
                                      category_type : str
-                                     ) -> list(QGroupedValue) : ...
+                                     ) -> list(QCompositeKeyValue) : ...
 
     def get_grouped_by_labels_and_category_type(self,
                                                 account_ids : list(int),
                                                 date_from : datetime.date,
                                                 date_to : datetime.date,
                                                 category_type : str
-                                                ) -> list(QGroupedValue) : ...
+                                                ) -> list(QCompositeKeyValue) : ...
 
     def get_total(self,
                   account_ids : list(int),

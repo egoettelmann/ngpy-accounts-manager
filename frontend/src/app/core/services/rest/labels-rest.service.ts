@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Label } from '../../models/label';
+import { Label } from '../../models/api.models';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 
 @Injectable()

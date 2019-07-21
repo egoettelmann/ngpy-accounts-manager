@@ -1,6 +1,6 @@
 from flask import request
 
-from ..domain.models import KeyValue, GroupedValue, Summary
+from ..domain.models import KeyValue, CompositeKeyValue, Summary
 from ..modules import restipy
 from ..modules.depynject import injectable
 
@@ -46,7 +46,7 @@ class StatisticsController():
         return self.statistics_service.get_summary(account_ids, year, month)
 
     @restipy.route('/analytics')
-    @restipy.format_as(GroupedValue)
+    @restipy.format_as(CompositeKeyValue)
     def get_analytics(self):
         category_type = request.args.get('category_type')
         year = int(request.args.get('year'))
@@ -56,7 +56,7 @@ class StatisticsController():
         return self.transaction_service.get_total_by_category_type(account_ids, year, category_type)
 
     @restipy.route('/analytics/details')
-    @restipy.format_as(GroupedValue)
+    @restipy.format_as(CompositeKeyValue)
     def get_analytics_details(self):
         category_type = request.args.get('category_type')
         year = int(request.args.get('year'))

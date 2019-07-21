@@ -1,11 +1,11 @@
-<clr-stack-view *ngIf="groupedDetails">
+<clr-stack-view *ngIf="data">
   <clr-stack-block>
     <clr-stack-label>{{ 'i18n.components.statistics.table.header.label' | translate }}</clr-stack-label>
     <clr-stack-content class="stacked-column-2 text-right">{{ 'i18n.components.statistics.table.header.amount' | translate }}</clr-stack-content>
     <clr-stack-content class="stacked-column-2 text-right">{{ 'i18n.components.statistics.table.header.percentage' | translate }}</clr-stack-content>
   </clr-stack-block>
 
-  <clr-stack-block *ngFor="let group of groupedDetails" [clrSbExpanded]="expanded">
+  <clr-stack-block *ngFor="let group of data" [clrSbExpanded]="expanded">
     <clr-stack-label>{{ group.label }}</clr-stack-label>
     <clr-stack-content class="stacked-column-2 text-right">{{ group.amount | number:'1.2-2' }}&nbsp;€</clr-stack-content>
     <clr-stack-content class="stacked-column-2 text-right">{{ group.percentage | number:'1.2-2' }}&nbsp;%</clr-stack-content>

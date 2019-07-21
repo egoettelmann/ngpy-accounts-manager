@@ -3,12 +3,12 @@ import { Location } from '@angular/common';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { CategoriesRestService } from '../../../core/services/rest/categories-rest.service';
 import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
-import { Category } from '../../../core/models/category';
-import { Account } from '../../../core/models/account';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { zip } from 'rxjs/observable/zip';
 import * as _ from 'lodash';
+import { Account, Category, CompositeKeyValue } from '../../../core/models/api.models';
+import { ChartSerie, GroupedValue } from '../../../core/models/domain.models';
 
 @Component({
   templateUrl: './analytics.component.html',
@@ -23,11 +23,11 @@ export class AnalyticsComponent implements OnInit {
 
   public accounts: Account[];
   public categories: Category[];
-  public analyticsCredit: any[];
-  public analyticsDebit: any[];
-  public tableMovements: any[] = [];
-  public detailsCredit: any[] = [];
-  public detailsDebit: any[] = [];
+  public analyticsCredit: CompositeKeyValue[];
+  public analyticsDebit: CompositeKeyValue[];
+  public tableMovements: ChartSerie[] = [];
+  public detailsCredit: GroupedValue[] = [];
+  public detailsDebit: GroupedValue[] = [];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -109,10 +109,10 @@ export class AnalyticsComponent implements OnInit {
       this.tableMovements = this.buildTable(data);
     });
     this.statisticsService.getAnalyticsDetails(this.currentYear, 'C', accounts).subscribe(data => {
-      this.detailsCredit = data;
+      this.detailsCredit = this.consolidateDetails(data);
     });
     this.statisticsService.getAnalyticsDetails(this.currentYear, 'D', accounts).subscribe(data => {
-      this.detailsDebit = data;
+      this.detailsDebit = this.consolidateDetails(data);
     });
 
     const url = this.router.createUrlTree(['analytics', this.currentYear], {
@@ -129,15 +129,15 @@ export class AnalyticsComponent implements OnInit {
    * @param {any[]} data the data to aggregate
    * @returns {any[]} the aggregated data for the table
    */
-  private buildTable(data: any[]) {
-    const movements = [];
+  private buildTable(data: CompositeKeyValue[]): ChartSerie[] {
+    const movements: ChartSerie[] = [];
     const series = {};
     for (const d of data) {
-      const categoryIdx = parseInt(d.category, 10) - 1;
-      if (!series.hasOwnProperty(d.label)) {
-        series[d.label] = [0, 0, 0, 0];
+      const categoryIdx = parseInt(d.keyOne, 10) - 1;
+      if (!series.hasOwnProperty(d.keyTwo)) {
+        series[d.keyTwo] = [0, 0, 0, 0];
       }
-      series[d.label][categoryIdx] = d.value;
+      series[d.keyTwo][categoryIdx] = d.value;
     }
     for (const key in series) {
       if (series.hasOwnProperty(key)) {
@@ -148,6 +148,41 @@ export class AnalyticsComponent implements OnInit {
       }
     }
     return movements;
+  }
+
+  /**
+   * Consolidates the data into groups.
+   *
+   * @param details the list of details
+   */
+  private consolidateDetails(details: CompositeKeyValue[]): any[] {
+    const groupsByCategory = {};
+    let total = 0;
+    for (let i in details) {
+      let detail = details[i];
+      if (!groupsByCategory.hasOwnProperty(detail.keyOne)) {
+        groupsByCategory[detail.keyOne] = [];
+      }
+      groupsByCategory[detail.keyOne].push({
+        label: detail.keyTwo,
+        amount: detail.value,
+        percentage: 0
+      });
+      total += detail.value;
+    }
+    const groupsWithDetails = [];
+    for (let g in groupsByCategory) {
+      const gd = {
+        label: g,
+        amount: groupsByCategory[g].reduce((t, a) => t + a.amount, 0),
+        details: groupsByCategory[g].sort((g1, g2) => Math.abs(g2.amount) - Math.abs(g1.amount)),
+        percentage: 0
+      };
+      groupsByCategory[g].map(g => g.percentage = g.amount / total * 100);
+      gd.percentage = gd.amount / total * 100;
+      groupsWithDetails.push(gd);
+    }
+    return groupsWithDetails.sort((g1, g2) => Math.abs(g2.amount) - Math.abs(g1.amount));
   }
 
 }

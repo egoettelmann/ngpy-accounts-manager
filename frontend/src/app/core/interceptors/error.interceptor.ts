@@ -3,7 +3,6 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../environments/environment';
 import { NotificationService } from '../services/notification.service';
-import { Notification } from '../models/notification';
 import { catchError } from 'rxjs/operators';
 import { _throw } from 'rxjs/observable/throw';
 
@@ -26,7 +25,11 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(apiReq).pipe(
       catchError((err: any) => {
         if (err instanceof HttpErrorResponse) {
-          const notif = new Notification('ERROR', 'T500', 'unhandled_server_error');
+          const notif = {
+            type: 'ERROR',
+            code: 'T500',
+            content: 'unhandled_server_error'
+          };
           if (err.error !== undefined) {
             notif.code = err.error.code;
             notif.content = err.error.message;

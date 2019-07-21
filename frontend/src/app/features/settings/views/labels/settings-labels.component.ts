@@ -1,13 +1,12 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
-import { Label } from '../../../../core/models/label';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-import { Category } from '../../../../core/models/category';
 import { CategoriesRestService } from '../../../../core/services/rest/categories-rest.service';
 import { zip } from 'rxjs/observable/zip';
 import { lock, SubscriptionLock } from '../../../../shared/utils/lock-subscriber';
+import { Category, Label } from '../../../../core/models/api.models';
 
 @Component({
   templateUrl: './settings-labels.component.html',
@@ -17,7 +16,7 @@ export class SettingsLabelsComponent implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  categories: Category[];
+  categories: Category [];
   form: FormGroup;
   formArray: FormArray;
 
@@ -45,7 +44,7 @@ export class SettingsLabelsComponent implements OnInit {
   }
 
   addLabel() {
-    const newLabel = new Label(undefined, '', '', '', 0);
+    const newLabel = {} as Label;
     const control = this.buildFormControl(newLabel);
     this.formArray.push(control);
     this.onFormChange(control);

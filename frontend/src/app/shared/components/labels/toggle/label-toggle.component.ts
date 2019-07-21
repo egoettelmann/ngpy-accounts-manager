@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { Label } from '../../../../core/models/label';
+import { Label } from '../../../../core/models/api.models';
 
 @Component({
   selector: 'app-label-toggle',

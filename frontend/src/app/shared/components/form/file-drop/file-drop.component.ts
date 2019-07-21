@@ -2,7 +2,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
 import { UploadRestService } from '../../../../core/services/rest/upload-rest.service';
 import { NotificationService } from '../../../../core/services/notification.service';
-import { Notification } from '../../../../core/models/notification';
 
 @Component({
   selector: 'app-file-drop',
@@ -39,8 +38,12 @@ export class FileDropComponent {
   }
 
   private uploadFile(file: File) {
-    this.uploadService.uploadFile(file, file.name).subscribe(result => {
-      this.notificationService.broadcast(new Notification('SUCCESS', 'B200', 'file_import_success'));
+    this.uploadService.uploadFile(file, file.name).subscribe(() => {
+      this.notificationService.broadcast({
+        type: 'SUCCESS',
+        code: 'B200',
+        content: 'file_import_success'
+      });
     });
   }
 

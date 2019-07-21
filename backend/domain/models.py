@@ -35,26 +35,26 @@ class Account:
 
 
 @restipy.convertible({
-    'label': types.String(),
+    'key': types.String(),
     'value': types.Float()
 })
 class KeyValue:
 
-    def __init__(self, label=None, value=None) -> None:
-        self.label = label
+    def __init__(self, key=None, value=None) -> None:
+        self.key = key
         self.value = value
 
 
 @restipy.convertible({
-    'category': types.String(),
-    'label': types.String(),
+    'keyOne': types.String(attribute='key_one'),
+    'keyTwo': types.String(attribute='key_two'),
     'value': types.Float()
 })
-class GroupedValue:
+class CompositeKeyValue:
 
-    def __init__(self, category=None, label=None, value=None) -> None:
-        self.category = category
-        self.label = label
+    def __init__(self, key_one=None, key_two=None, value=None) -> None:
+        self.key_one = key_one
+        self.key_two = key_two
         self.value = value
 
 

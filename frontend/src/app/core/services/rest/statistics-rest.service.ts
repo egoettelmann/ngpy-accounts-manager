@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Summary } from '../../models/summary';
+import { CompositeKeyValue, KeyValue, Summary } from '../../models/api.models';
 
 @Injectable()
 export class StatisticsRestService {
@@ -9,7 +9,7 @@ export class StatisticsRestService {
   constructor(private http: HttpClient) {
   }
 
-  getGroupedByLabel(year: number, month: number, accounts: number[]): Observable<any> {
+  getGroupedByLabel(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -23,7 +23,7 @@ export class StatisticsRestService {
     if (accounts !== undefined) {
       params = params.append('account_ids', accounts.join(','));
     }
-    return this.http.get<any>('/rest/stats/repartition', {params: params});
+    return this.http.get<KeyValue[]>('/rest/stats/repartition', {params: params});
   }
 
   getSummary(year?: number, month?: number, accounts?: number[]): Observable<Summary> {
@@ -43,7 +43,7 @@ export class StatisticsRestService {
     return this.http.get<any>('/rest/stats/summary', {params: params});
   }
 
-  getEvolution(year: number, accounts?: number[]): Observable<any> {
+  getEvolution(year: number, accounts?: number[]): Observable<KeyValue[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -54,10 +54,10 @@ export class StatisticsRestService {
     if (accounts !== undefined) {
       params = params.append('account_ids', accounts.join(','));
     }
-    return this.http.get<any>('/rest/stats/treasury', {params: params});
+    return this.http.get<KeyValue[]>('/rest/stats/treasury', {params: params});
   }
 
-  getAnalytics(year?: number, categoryType?: string, accounts?: number[]): Observable<any> {
+  getAnalytics(year?: number, categoryType?: string, accounts?: number[]): Observable<CompositeKeyValue[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -71,10 +71,10 @@ export class StatisticsRestService {
     if (accounts !== undefined) {
       params = params.append('account_ids', accounts.join(','));
     }
-    return this.http.get<any>('/rest/stats/analytics', {params: params});
+    return this.http.get<CompositeKeyValue[]>('/rest/stats/analytics', {params: params});
   }
 
-  getAnalyticsDetails(year?: number, categoryType?: string, accounts?: number[]): Observable<any> {
+  getAnalyticsDetails(year?: number, categoryType?: string, accounts?: number[]): Observable<CompositeKeyValue[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -88,7 +88,7 @@ export class StatisticsRestService {
     if (accounts !== undefined) {
       params = params.append('account_ids', accounts.join(','));
     }
-    return this.http.get<any>('/rest/stats/analytics/details', {params: params});
+    return this.http.get<CompositeKeyValue[]>('/rest/stats/analytics/details', {params: params});
   }
 
 }

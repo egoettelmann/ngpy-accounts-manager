@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { Account } from '../../../../core/models/account';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Account } from '../../../../core/models/api.models';
 
 @Component({
   selector: 'app-account-toggle',

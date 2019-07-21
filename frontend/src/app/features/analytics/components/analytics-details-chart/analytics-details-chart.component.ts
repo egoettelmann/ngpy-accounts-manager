@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { CommonFunctions } from '../../../../shared/utils/common-functions';
+import { GroupedValue } from '../../../../core/models/domain.models';
 
 @Component({
   selector: 'app-analytics-details-chart',
@@ -9,7 +9,7 @@ import { CommonFunctions } from '../../../../shared/utils/common-functions';
 })
 export class AnalyticsDetailsChartComponent implements OnChanges {
 
-  @Input() data: any[];
+  @Input() data: GroupedValue[];
 
   public chartOptions: any;
 
@@ -69,10 +69,9 @@ export class AnalyticsDetailsChartComponent implements OnChanges {
       }]
     };
 
-    const groupedDetails = CommonFunctions.consolidateDetails(data);
     let categories = [];
     const series = [];
-    for (const group of groupedDetails) {
+    for (const group of data) {
       // Adding categories
       categories.push({
         name: group.label,

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Transaction } from '../../models/transaction';
+import { Transaction } from '../../models/api.models';
 
 @Injectable()
 export class TransactionsRestService {

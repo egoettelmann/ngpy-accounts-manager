@@ -44,7 +44,7 @@
 
     <app-analytics-details-chart [data]="detailsCredit"></app-analytics-details-chart>
 
-    <app-grouped-details-table [details]="detailsCredit"></app-grouped-details-table>
+    <app-analytics-details-table [data]="detailsCredit"></app-analytics-details-table>
   </div>
   <div class="col-xs-12 col-md-6">
     <app-analytics-quarterly-chart [chartTitle]="'i18n.views.analytics.chart.credit.title' | translate"
@@ -55,7 +55,7 @@
 
     <app-analytics-details-chart [data]="detailsDebit"></app-analytics-details-chart>
 
-    <app-grouped-details-table [details]="detailsDebit" [expanded]="false"></app-grouped-details-table>
+    <app-analytics-details-table [data]="detailsDebit" [expanded]="false"></app-analytics-details-table>
   </div>
 </div>
 

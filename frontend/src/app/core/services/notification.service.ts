@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Notification} from '../models/notification';
-import {Subject} from 'rxjs/Subject';
-import {Subscription} from 'rxjs/Subscription';
+import { Injectable } from '@angular/core';
+import { Notification } from '../models/domain.models';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 import { filter } from 'rxjs/operators';
 
 type NotificationCallback = (notification: Notification) => void | any;

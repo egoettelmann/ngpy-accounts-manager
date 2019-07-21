@@ -1,10 +1,10 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
-import { Account } from '../../../core/models/account';
 import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
 import { zip } from 'rxjs/observable/zip';
 import { Router } from '@angular/router';
+import { Account } from '../../../core/models/api.models';
 
 @Component({
   templateUrl: './dashboard.component.html',

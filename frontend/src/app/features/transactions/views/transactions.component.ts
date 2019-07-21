@@ -4,14 +4,11 @@ import { LabelsRestService } from '../../../core/services/rest/labels-rest.servi
 import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
 import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
-import { Transaction } from '../../../core/models/transaction';
-import { Summary } from '../../../core/models/summary';
-import { Label } from '../../../core/models/label';
-import { Account } from '../../../core/models/account';
 import { ActivatedRoute, Router } from '@angular/router';
 import { zip } from 'rxjs/observable/zip';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import * as _ from 'lodash';
+import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
 
 @Component({
   templateUrl: './transactions.component.html',
@@ -232,7 +229,7 @@ export class TransactionsComponent implements OnInit {
    * @param data the graph data
    * @returns the chart options
    */
-  private buildChartOptions(data: any) {
+  private buildChartOptions(data: KeyValue[]) {
     const that = this;
     const options = {
       chart: {
@@ -252,7 +249,7 @@ export class TransactionsComponent implements OnInit {
       }]
     };
     for (const d of data) {
-      options.xAxis.categories.push(d.label);
+      options.xAxis.categories.push(d.key);
       options.series[0].data.push(d.value);
     }
     return options;

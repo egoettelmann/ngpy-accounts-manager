@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { CommonFunctions } from '../../../../shared/utils/common-functions';
+import { CompositeKeyValue } from '../../../../core/models/api.models';
 
 @Component({
   selector: 'app-analytics-quarterly-chart',
@@ -10,7 +11,7 @@ import { CommonFunctions } from '../../../../shared/utils/common-functions';
 export class AnalyticsQuarterlyChartComponent implements OnChanges {
 
   @Input() chartTitle: string;
-  @Input() data: any[];
+  @Input() data: CompositeKeyValue[];
 
   public chartOptions: any;
 
@@ -32,7 +33,7 @@ export class AnalyticsQuarterlyChartComponent implements OnChanges {
    * @param data the graph data
    * @returns the chart options
    */
-  private buildChartOptions(data: any) {
+  private buildChartOptions(data: CompositeKeyValue[]) {
     const that = this;
     const options = {
       chart: {
@@ -72,11 +73,11 @@ export class AnalyticsQuarterlyChartComponent implements OnChanges {
     let categories = [];
     const series = {};
     for (const d of data) {
-      const categoryIdx = parseInt(d.category, 10) - 1;
+      const categoryIdx = parseInt(d.keyOne, 10) - 1;
       CommonFunctions.resizeArray(categories, 0, categoryIdx);
-      categories[categoryIdx] = 'Q' + d.category;
-      if (!series.hasOwnProperty(d.label)) {
-        series[d.label] = [];
+      categories[categoryIdx] = 'Q' + d.keyOne;
+      if (!series.hasOwnProperty(d.keyTwo)) {
+        series[d.keyTwo] = [];
       }
       categories = categories.map((value, idx) => {
         if (value === 0) {
@@ -84,8 +85,8 @@ export class AnalyticsQuarterlyChartComponent implements OnChanges {
         }
         return value;
       });
-      CommonFunctions.resizeArray(series[d.label], 0, categoryIdx);
-      series[d.label][categoryIdx] = d.value;
+      CommonFunctions.resizeArray(series[d.keyTwo], 0, categoryIdx);
+      series[d.keyTwo][categoryIdx] = d.value;
     }
     options.xAxis.categories = categories;
     for (const key in series) {

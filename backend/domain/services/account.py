@@ -86,7 +86,7 @@ class AccountService():
         for e in entries:
             if e.value is not None:
                 start_amount = start_amount + e.value
-            values.append(KeyValue(e.label, start_amount))
+            values.append(KeyValue(e.key, start_amount))
         return values
 
     def import_file(self, filename):

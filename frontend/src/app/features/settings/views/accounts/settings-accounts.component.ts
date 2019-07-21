@@ -1,9 +1,9 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Account } from '../../../../core/models/account';
 import { AccountsRestService } from '../../../../core/services/rest/accounts-rest.service';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { Account } from '../../../../core/models/api.models';
 
 @Component({
   templateUrl: './settings-accounts.component.html',

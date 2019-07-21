@@ -3,12 +3,10 @@ import { DecimalPipe, Location } from '@angular/common';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
 import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
-import { Transaction } from '../../../core/models/transaction';
-import { Summary } from '../../../core/models/summary';
-import { Account } from '../../../core/models/account';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import * as _ from 'lodash';
+import { Account, KeyValue, Summary, Transaction } from '../../../core/models/api.models';
 
 @Component({
   templateUrl: './treasury.component.html',
@@ -147,7 +145,7 @@ export class TreasuryComponent implements OnInit {
    * @param data the graph data
    * @returns the chart options
    */
-  private buildChartOptions(data: any) {
+  private buildChartOptions(data: KeyValue[]) {
     const that = this;
     const options = {
       tooltip: {
@@ -164,7 +162,7 @@ export class TreasuryComponent implements OnInit {
       }]
     };
     for (const d of data) {
-      options.xAxis.categories.push(d.label);
+      options.xAxis.categories.push(d.key);
       options.series[0].data.push(d.value);
     }
     return options;

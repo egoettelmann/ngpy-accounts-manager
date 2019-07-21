@@ -3,7 +3,7 @@ import datetime
 from ...dbconnector.entities import TransactionDbo
 from ...modules.depynject import injectable
 
-from ..models import Transaction, KeyValue, GroupedValue
+from ..models import Transaction, KeyValue, CompositeKeyValue
 
 
 @injectable()
@@ -142,12 +142,12 @@ class TransactionService():
     def map_to_key_value_list(entries):
         values = []
         for kv in entries:
-            values.append(KeyValue(kv.label, kv.value))
+            values.append(KeyValue(kv.key, kv.value))
         return values
 
     @staticmethod
     def map_to_grouped_value_list(entries):
         values = []
         for kv in entries:
-            values.append(GroupedValue(kv.category, kv.label, kv.value))
+            values.append(CompositeKeyValue(kv.key_one, kv.key_two, kv.value))
         return values

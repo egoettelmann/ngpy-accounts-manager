@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Account } from '../../../../core/models/account';
+import { Account } from '../../../../core/models/api.models';
 
 @Component({
   selector: 'app-account-card',

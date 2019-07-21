@@ -16,7 +16,6 @@ import { AccountCardComponent } from './components/accounts/card/account-card.co
 import { AccountToggleComponent } from './components/accounts/toggle/account-toggle.component';
 import { MonthToggleComponent } from './components/dates/month-toggle/month-toggle.component';
 import { YearToggleComponent } from './components/dates/year-toggle/year-toggle.component';
-import { GroupedDetailsTableComponent } from './components/statistics/grouped-details/grouped-details-table.component';
 import { SummaryComponent } from './components/statistics/summary/summary.component';
 import { TransactionsFormComponent } from './components/transactions/form/transactions-form.component';
 import { LabelToggleComponent } from './components/labels/toggle/label-toggle.component';
@@ -47,7 +46,6 @@ export class SharedModule {
     AccountToggleComponent,
     MonthToggleComponent,
     YearToggleComponent,
-    GroupedDetailsTableComponent,
     SummaryComponent,
     TransactionsFormComponent,
     LabelToggleComponent,

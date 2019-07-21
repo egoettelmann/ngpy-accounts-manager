@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {Summary} from '../../../../core/models/summary';
+import { Summary } from '../../../../core/models/api.models';
 
 @Component({
   selector: 'app-summary',
