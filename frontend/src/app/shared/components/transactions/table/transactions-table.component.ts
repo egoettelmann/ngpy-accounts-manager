@@ -14,8 +14,7 @@ export class TransactionsTableComponent {
   @Output() onChange = new EventEmitter<Transaction>();
   @Output() onDelete = new EventEmitter<Transaction>();
 
-  @ContentChild('actionButtons')
-  actionButtons: TemplateRef<any>;
+  @ContentChild('actionButtons', { static: false }) actionButtons: TemplateRef<any>;
 
   changeLabel(label: Label, transaction: Transaction) {
     if (label

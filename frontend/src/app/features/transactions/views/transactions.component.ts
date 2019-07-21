@@ -5,7 +5,7 @@ import { TransactionsRestService } from '../../../core/services/rest/transaction
 import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { zip } from 'rxjs/observable/zip';
+import { zip } from 'rxjs';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';

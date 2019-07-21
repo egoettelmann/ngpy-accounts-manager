@@ -1,11 +1,5 @@
-import { Subscriber } from 'rxjs/Subscriber';
-import { TeardownLogic } from 'rxjs/Subscription';
-import { MonoTypeOperatorFunction } from 'rxjs/interfaces';
-import { Observable } from 'rxjs/Observable';
-import { Operator } from 'rxjs/Operator';
-import { Subject } from 'rxjs/Subject';
 import { catchError, filter } from 'rxjs/operators';
-import { _throw } from 'rxjs/observable/throw';
+import { MonoTypeOperatorFunction, Observable, Operator, Subject, Subscriber, TeardownLogic, throwError } from 'rxjs';
 
 /**
  * Locks all subscription with a given subscription lock.
@@ -105,7 +99,7 @@ class LockSubscriber<T> extends Subscriber<T> {
         filter((b) => !b),
         catchError((err) => {
           this.destination.error(err);
-          return _throw(err);
+          return throwError(err);
         })
       ).subscribe(() => {
         this.lockNext();

@@ -5,7 +5,7 @@ import { CategoriesRestService } from '../../../core/services/rest/categories-re
 import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
-import { zip } from 'rxjs/observable/zip';
+import { zip } from 'rxjs';
 import * as _ from 'lodash';
 import { Account, Category, CompositeKeyValue } from '../../../core/models/api.models';
 import { ChartSerie, GroupedValue } from '../../../core/models/domain.models';

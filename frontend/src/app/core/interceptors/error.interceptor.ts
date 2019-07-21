@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../environments/environment';
 import { NotificationService } from '../services/notification.service';
 import { catchError } from 'rxjs/operators';
-import { _throw } from 'rxjs/observable/throw';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -36,7 +35,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
           this.notificationService.broadcast(notif);
         }
-        return _throw(err);
+        return throwError(err);
       })
     );
   }

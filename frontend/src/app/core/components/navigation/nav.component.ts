@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class NavComponent implements OnInit {
 
-  @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
 
   constructor(
     private router: Router,

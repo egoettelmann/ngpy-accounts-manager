@@ -2,7 +2,7 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
-import { zip } from 'rxjs/observable/zip';
+import { zip } from 'rxjs';
 import { Router } from '@angular/router';
 import { Account } from '../../../core/models/api.models';
 

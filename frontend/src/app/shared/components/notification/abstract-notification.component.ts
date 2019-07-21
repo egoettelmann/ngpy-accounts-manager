@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NotificationService } from '../../../core/services/notification.service';
-import { Subscription } from 'rxjs/Subscription';
 import { Notification } from '../../../core/models/domain.models';
+import { Subscription } from 'rxjs';
 
 export abstract class AbstractNotificationComponent implements OnChanges {
 

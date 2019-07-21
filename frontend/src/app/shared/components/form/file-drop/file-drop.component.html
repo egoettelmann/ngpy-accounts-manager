@@ -1,10 +1,11 @@
 <div class="center">
-  <file-drop [headertext]="'i18n.components.file-drop.header-text' | translate"
-             customstyle="file-drop"
-             (click)="fileInput.click()"
-             (onFileDrop)="dropped($event)">
-  </file-drop>
-  <input #fileInput class="hidden-xs-up" type="file" (change)="dropped($event)" />
+  <ngx-file-drop [dropZoneLabel]="'i18n.components.file-drop.header-text' | translate"
+                 [dropZoneClassName]="'file-drop'"
+                 [contentClassName]="'content'"
+                 (click)="fileInput.click()"
+                 (onFileDrop)="dropped($event)">
+    <input #fileInput class="hidden-xs-up" type="file" (change)="input($event)" />
+  </ngx-file-drop>
 </div>
 
 <app-notification-modal [type]="'SUCCESS'"></app-notification-modal>

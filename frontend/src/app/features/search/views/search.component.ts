@@ -1,11 +1,11 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { zip } from 'rxjs/observable/zip';
 import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
 import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { Account, Label, Transaction } from '../../../core/models/api.models';
+import { zip } from 'rxjs';
 
 @Component({
   templateUrl: './search.component.html',

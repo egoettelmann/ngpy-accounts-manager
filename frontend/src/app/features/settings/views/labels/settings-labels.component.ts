@@ -4,7 +4,7 @@ import { LabelsRestService } from '../../../../core/services/rest/labels-rest.se
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { CategoriesRestService } from '../../../../core/services/rest/categories-rest.service';
-import { zip } from 'rxjs/observable/zip';
+import { zip } from 'rxjs';
 import { lock, SubscriptionLock } from '../../../../shared/utils/lock-subscriber';
 import { Category, Label } from '../../../../core/models/api.models';
 
