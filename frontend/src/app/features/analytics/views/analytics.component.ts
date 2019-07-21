@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { DecimalPipe, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { CategoriesRestService } from '../../../core/services/rest/categories-rest.service';
 import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
@@ -23,8 +23,8 @@ export class AnalyticsComponent implements OnInit {
 
   public accounts: Account[];
   public categories: Category[];
-  public graphOptionsCredit: any;
-  public graphOptionsDebit: any;
+  public analyticsCredit: any[];
+  public analyticsDebit: any[];
   public tableMovements: any[] = [];
   public detailsCredit: any[] = [];
   public detailsDebit: any[] = [];
@@ -34,11 +34,13 @@ export class AnalyticsComponent implements OnInit {
               private location: Location,
               private accountsService: AccountsRestService,
               private categoriesService: CategoriesRestService,
-              private statisticsService: StatisticsRestService,
-              private decimalPipe: DecimalPipe
+              private statisticsService: StatisticsRestService
   ) {
   }
 
+  /**
+   * Initializes the component
+   */
   ngOnInit(): void {
     this.initData();
     zip(
@@ -92,13 +94,16 @@ export class AnalyticsComponent implements OnInit {
     }
   }
 
+  /**
+   * Reload the data
+   */
   private reloadData() {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
     this.statisticsService.getAnalytics(this.currentYear, 'C', accounts).subscribe(data => {
-      this.graphOptionsCredit = this.buildChartOptions(data);
+      this.analyticsCredit = data;
     });
     this.statisticsService.getAnalytics(this.currentYear, 'D', accounts).subscribe(data => {
-      this.graphOptionsDebit = this.buildChartOptions(data);
+      this.analyticsDebit = data;
     });
     this.statisticsService.getAnalytics(this.currentYear, 'M', accounts).subscribe(data => {
       this.tableMovements = this.buildTable(data);
@@ -143,79 +148,6 @@ export class AnalyticsComponent implements OnInit {
       }
     }
     return movements;
-  }
-
-  /**
-   * Builds the chart options for HighCharts.
-   *
-   * @param data the graph data
-   * @returns the chart options
-   */
-  private buildChartOptions(data: any) {
-    const that = this;
-    const options = {
-      chart: {
-        type: 'column'
-      },
-      tooltip: {
-        formatter: function () {
-          return '<b>' + this.series.name + '</b><br/>'
-            + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
-            + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
-        }
-      },
-      xAxis: {
-        categories: []
-      },
-      yAxis: {
-        stackLabels: {
-          enabled: true,
-          formatter: function () {
-            return that.decimalPipe.transform(this.total, '1.2-2') + ' €';
-          }
-        }
-      },
-      plotOptions: {
-        column: {
-          stacking: 'normal',
-          dataLabels: {
-            enabled: true,
-            formatter: function () {
-              return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
-            }
-          }
-        }
-      },
-      series: []
-    };
-    let categories = [];
-    const series = {};
-    for (const d of data) {
-      const categoryIdx = parseInt(d.category, 10) - 1;
-      CommonFunctions.resizeArray(categories, 0, categoryIdx);
-      categories[categoryIdx] = 'Q' + d.category;
-      if (!series.hasOwnProperty(d.label)) {
-        series[d.label] = [];
-      }
-      categories = categories.map((value, idx) => {
-        if (value === 0) {
-          return 'Q' + (idx + 1);
-        }
-        return value;
-      });
-      CommonFunctions.resizeArray(series[d.label], 0, categoryIdx);
-      series[d.label][categoryIdx] = d.value;
-    }
-    options.xAxis.categories = categories;
-    for (const key in series) {
-      if (series.hasOwnProperty(key)) {
-        options.series.push({
-          name: key,
-          data: series[key]
-        });
-      }
-    }
-    return options;
   }
 
 }
