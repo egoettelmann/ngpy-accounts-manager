@@ -188,7 +188,7 @@ export class AnalyticsComponent implements OnInit {
       },
       series: []
     };
-    const categories = [];
+    let categories = [];
     const series = {};
     for (const d of data) {
       const categoryIdx = parseInt(d.category, 10) - 1;
@@ -197,6 +197,12 @@ export class AnalyticsComponent implements OnInit {
       if (!series.hasOwnProperty(d.label)) {
         series[d.label] = [];
       }
+      categories = categories.map((value, idx) => {
+        if (value === 0) {
+          return 'Q' + (idx + 1);
+        }
+        return value;
+      });
       CommonFunctions.resizeArray(series[d.label], 0, categoryIdx);
       series[d.label][categoryIdx] = d.value;
     }

@@ -1,3 +1,4 @@
+from sqlalchemy import cast, Integer
 from sqlalchemy.sql.expression import extract, func, desc, label, or_
 
 from ..entities import LabelDbo, TransactionDbo, CategoryDbo
@@ -86,7 +87,7 @@ class TransactionRepository():
         return query.all()
 
     def get_grouped_by_category_type(self, account_ids=None, date_from=None, date_to=None, category_type=None):
-        quarter_expr = (extract('month', TransactionDbo.date_value) + 2) / 3  # quarter of year
+        quarter_expr = cast((extract('month', TransactionDbo.date_value) + 2) / 3, Integer)  # quarter of year
         query = self.entity_manager.query(
             label('category', quarter_expr),
             CategoryDbo.name.label('label'),
