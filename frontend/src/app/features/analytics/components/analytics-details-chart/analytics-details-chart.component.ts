@@ -46,8 +46,26 @@ export class AnalyticsDetailsChartComponent implements OnChanges {
       },
       plotOptions: {
         pie: {
-          shadow: false,
           center: ['50%', '50%']
+        },
+        series: {
+          point: {
+            events: {
+              legendItemClick: function () {
+                const parentName = this.name;
+                const details = this.series.chart.series[1].data;
+                details.forEach((point) => {
+                  if (point.parent === parentName) {
+                    if (point.visible) {
+                      point.setVisible(false);
+                    } else {
+                      point.setVisible(true);
+                    }
+                  }
+                });
+              }
+            }
+          }
         }
       },
       series: [{
@@ -55,17 +73,15 @@ export class AnalyticsDetailsChartComponent implements OnChanges {
         size: '60%',
         data: [],
         dataLabels: {
-          formatter: function () {
-            return this.y > 5 ? this.point.name : null;
-          },
-          color: '#000000',
-          distance: -30
-        }
+          enabled: false
+        },
+        showInLegend: true
       }, {
         name: 'labels',
         size: '80%',
         innerSize: '60%',
-        data: []
+        data: [],
+        allowPointSelect: true
       }]
     };
 
@@ -84,7 +100,8 @@ export class AnalyticsDetailsChartComponent implements OnChanges {
         series.push({
           name: details.label,
           y: details.percentage,
-          data: details.amount
+          data: details.amount,
+          parent: group.label
         })
       }
     }
