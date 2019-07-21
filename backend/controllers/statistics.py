@@ -48,12 +48,13 @@ class StatisticsController():
     @restipy.route('/analytics')
     @restipy.format_as(CompositeKeyValue)
     def get_analytics(self):
+        quarterly = request.args.get('quarterly') == 'true'
         category_type = request.args.get('category_type')
         year = int(request.args.get('year'))
         account_ids = request.args.get('account_ids')
         if account_ids is not None:
             account_ids = account_ids.split(',')
-        return self.transaction_service.get_total_by_category_type(account_ids, year, category_type)
+        return self.transaction_service.get_total_by_category_type(account_ids, year, category_type, quarterly)
 
     @restipy.route('/analytics/details')
     @restipy.format_as(CompositeKeyValue)

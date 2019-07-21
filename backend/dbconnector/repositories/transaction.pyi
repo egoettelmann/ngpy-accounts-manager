@@ -64,7 +64,8 @@ class TransactionRepository():
                                      account_ids : list(int),
                                      date_from : datetime.date,
                                      date_to : datetime.date,
-                                     category_type : str
+                                     category_type : str,
+                                     quarterly : bool
                                      ) -> list(QCompositeKeyValue) : ...
 
     def get_grouped_by_labels_and_category_type(self,

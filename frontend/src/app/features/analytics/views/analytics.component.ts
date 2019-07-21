@@ -20,6 +20,7 @@ export class AnalyticsComponent implements OnInit {
 
   public currentYear: number;
   public accountsFilter: number[] = [];
+  public quarterly = true;
 
   public accounts: Account[];
   public categories: Category[];
@@ -77,6 +78,33 @@ export class AnalyticsComponent implements OnInit {
   }
 
   /**
+   * Triggered on period change.
+   *
+   * @param quarterly
+   */
+  changePeriod(quarterly: boolean) {
+    this.quarterly = quarterly;
+    this.reloadData();
+  }
+
+  /**
+   * Gets the label for the period select.
+   *
+   * @param quarterly
+   */
+  public getPeriodSelectLabel(quarterly: boolean) {
+    return quarterly ? 'i18n.views.analytics.period.select.quarterly' : 'i18n.views.analytics.period.select.monthly';
+  }
+
+  get creditChartTitle() {
+    return this.quarterly ? 'i18n.views.analytics.quarterly.chart.credit.title' : 'i18n.views.analytics.monthly.chart.credit.title';
+  }
+
+  get debitChartTitle() {
+    return this.quarterly ? 'i18n.views.analytics.quarterly.chart.debit.title' : 'i18n.views.analytics.monthly.chart.debit.title';
+  }
+
+  /**
    * Initializes the component with the data from the route
    */
   private initData() {
@@ -99,13 +127,13 @@ export class AnalyticsComponent implements OnInit {
    */
   private reloadData() {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
-    this.statisticsService.getAnalytics(this.currentYear, 'C', accounts).subscribe(data => {
+    this.statisticsService.getAnalytics(this.currentYear, 'C', accounts, this.quarterly).subscribe(data => {
       this.analyticsCredit = data;
     });
-    this.statisticsService.getAnalytics(this.currentYear, 'D', accounts).subscribe(data => {
+    this.statisticsService.getAnalytics(this.currentYear, 'D', accounts, this.quarterly).subscribe(data => {
       this.analyticsDebit = data;
     });
-    this.statisticsService.getAnalytics(this.currentYear, 'M', accounts).subscribe(data => {
+    this.statisticsService.getAnalytics(this.currentYear, 'M', accounts, this.quarterly).subscribe(data => {
       this.tableMovements = this.buildTable(data);
     });
     this.statisticsService.getAnalyticsDetails(this.currentYear, 'C', accounts).subscribe(data => {

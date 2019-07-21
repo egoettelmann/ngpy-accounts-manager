@@ -12,6 +12,7 @@ export class AnalyticsQuarterlyChartComponent implements OnChanges {
 
   @Input() chartTitle: string;
   @Input() data: CompositeKeyValue[];
+  @Input() prefix: string = '';
 
   public chartOptions: any;
 
@@ -75,13 +76,13 @@ export class AnalyticsQuarterlyChartComponent implements OnChanges {
     for (const d of data) {
       const categoryIdx = parseInt(d.keyOne, 10) - 1;
       CommonFunctions.resizeArray(categories, 0, categoryIdx);
-      categories[categoryIdx] = 'Q' + d.keyOne;
+      categories[categoryIdx] = this.prefix + d.keyOne;
       if (!series.hasOwnProperty(d.keyTwo)) {
         series[d.keyTwo] = [];
       }
       categories = categories.map((value, idx) => {
         if (value === 0) {
-          return 'Q' + (idx + 1);
+          return this.prefix + (idx + 1);
         }
         return value;
       });

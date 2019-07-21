@@ -57,7 +57,7 @@ export class StatisticsRestService {
     return this.http.get<KeyValue[]>('/rest/stats/treasury', {params: params});
   }
 
-  getAnalytics(year?: number, categoryType?: string, accounts?: number[]): Observable<CompositeKeyValue[]> {
+  getAnalytics(year?: number, categoryType?: string, accounts?: number[], quarterly = true): Observable<CompositeKeyValue[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -71,6 +71,7 @@ export class StatisticsRestService {
     if (accounts !== undefined) {
       params = params.append('account_ids', accounts.join(','));
     }
+    params = params.append('quarterly', ''+quarterly);
     return this.http.get<CompositeKeyValue[]>('/rest/stats/analytics', {params: params});
   }
 

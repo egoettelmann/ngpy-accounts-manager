@@ -55,7 +55,8 @@ class TransactionService():
     def get_total_by_category_type(self,
                                    account_ids : list(int),
                                    year : int,
-                                   category_type : str
+                                   category_type : str,
+                                   quarterly : bool
                                    ) -> CompositeKeyValue : ...
 
     def get_total_by_labels_and_category_type(self,

@@ -54,7 +54,7 @@ class TransactionRepository():
 
     def get_grouped_by_labels(self, account_ids=None, date_from=None, date_to=None, sign=None):
         query = self.entity_manager.query(
-            LabelDbo.name.label('key'),
+            label('key', LabelDbo.name),
             func.sum(TransactionDbo.amount).label('value')
         ).join(
             LabelDbo.transactions
@@ -86,12 +86,15 @@ class TransactionRepository():
             query = query.order_by(extract('year', TransactionDbo.date_value))
         return query.all()
 
-    def get_grouped_by_category_type(self, account_ids=None, date_from=None, date_to=None, category_type=None):
-        quarter_expr = cast((extract('month', TransactionDbo.date_value) + 2) / 3, Integer)  # quarter of year
+    def get_grouped_by_category_type(self, account_ids=None, date_from=None, date_to=None, category_type=None, quarterly=True):
+        if quarterly:
+            quarter_expr = cast((extract('month', TransactionDbo.date_value) + 2) / 3, Integer)
+        else:
+            quarter_expr = extract('month', TransactionDbo.date_value)
         query = self.entity_manager.query(
             label('key_one', quarter_expr),
-            CategoryDbo.name.label('key_two'),
-            func.sum(TransactionDbo.amount).label('value')
+            label('key_two', CategoryDbo.name),
+            label('value', func.sum(TransactionDbo.amount))
         ).join(
             CategoryDbo.labels
         ).join(
@@ -107,9 +110,9 @@ class TransactionRepository():
 
     def get_grouped_by_labels_and_category_type(self, account_ids=None, date_from=None, date_to=None, category_type=None):
         query = self.entity_manager.query(
-            CategoryDbo.name.label('key_one'),
-            LabelDbo.name.label('key_two'),
-            func.sum(TransactionDbo.amount).label('value')
+            label('key_one', CategoryDbo.name),
+            label('key_two', LabelDbo.name),
+            label('value', func.sum(TransactionDbo.amount))
         ).join(
             CategoryDbo.labels
         ).join(
@@ -125,7 +128,7 @@ class TransactionRepository():
 
     def get_total(self, account_ids=None, date_from=None, date_to=None, sign=None):
         query = self.entity_manager.query(
-            func.sum(TransactionDbo.amount).label('total')
+            label('total', func.sum(TransactionDbo.amount))
         )
         query = self.filter_by_accounts(query, account_ids)
         query = self.filter_by_date_from(query, date_from)
