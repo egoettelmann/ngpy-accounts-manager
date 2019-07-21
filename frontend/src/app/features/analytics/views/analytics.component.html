@@ -39,21 +39,28 @@
     <app-analytics-quarterly-chart [chartTitle]="'i18n.views.analytics.chart.credit.title' | translate"
                                    [data]="analyticsCredit">
     </app-analytics-quarterly-chart>
+  </div>
 
-    <h3>{{ 'i18n.views.analytics.table.credit.title' | translate }}</h3>
+  <div class="col-xs-12 col-md-6">
+    <app-analytics-quarterly-chart [chartTitle]="'i18n.views.analytics.chart.debit.title' | translate"
+                                   [data]="analyticsDebit">
+    </app-analytics-quarterly-chart>
+  </div>
+</div>
 
-    <app-analytics-details-chart [data]="detailsCredit"></app-analytics-details-chart>
+<div class="row">
+  <div class="col-xs-12 col-md-6">
+    <app-analytics-details-chart [chartTitle]="'i18n.views.analytics.table.credit.title' | translate"
+                                 [data]="detailsCredit">
+    </app-analytics-details-chart>
 
     <app-analytics-details-table [data]="detailsCredit"></app-analytics-details-table>
   </div>
+
   <div class="col-xs-12 col-md-6">
-    <app-analytics-quarterly-chart [chartTitle]="'i18n.views.analytics.chart.credit.title' | translate"
-                                   [data]="analyticsDebit">
-    </app-analytics-quarterly-chart>
-
-    <h3>{{ 'i18n.views.analytics.table.debit.title' | translate }}</h3>
-
-    <app-analytics-details-chart [data]="detailsDebit"></app-analytics-details-chart>
+    <app-analytics-details-chart [chartTitle]="'i18n.views.analytics.table.debit.title' | translate"
+                                 [data]="detailsDebit">
+    </app-analytics-details-chart>
 
     <app-analytics-details-table [data]="detailsDebit" [expanded]="false"></app-analytics-details-table>
   </div>

@@ -74,8 +74,8 @@
   "i18n.views.analytics.table.no-entries": "No entries",
   "i18n.views.analytics.chart.credit.title": "Crediting transactions by quarter",
   "i18n.views.analytics.chart.debit.title": "Debiting transactions by quarter",
-  "i18n.views.analytics.table.credit.title": "Credit details",
-  "i18n.views.analytics.table.debit.title": "Debit details",
+  "i18n.views.analytics.table.credit.title": "Crediting transactions by category",
+  "i18n.views.analytics.table.debit.title": "Debiting transactions by category",
 
   "i18n.components.navigation.dashboard": "Dashboard",
   "i18n.components.navigation.transactions": "Transactions",

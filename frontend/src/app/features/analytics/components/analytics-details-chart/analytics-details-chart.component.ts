@@ -10,6 +10,7 @@ import { GroupedValue } from '../../../../core/models/domain.models';
 export class AnalyticsDetailsChartComponent implements OnChanges {
 
   @Input() data: GroupedValue[];
+  @Input() chartTitle: string;
 
   public chartOptions: any;
 
