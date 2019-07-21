@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { AnalyticsComponent } from './views/analytics.component';
 import { AnalyticsRoutingModule } from './analytics-routing.module';
 import { SharedModule } from '../../shared/shared.module';
-import { AnalyticsChartComponent } from './components/analytics-chart/analytics-chart.component';
+import { AnalyticsQuarterlyChartComponent } from './components/analytics-quarterly-chart/analytics-quarterly-chart.component';
+import { AnalyticsDetailsChartComponent } from './components/analytics-details-chart/analytics-details-chart.component';
 
 @NgModule({
   declarations: [
     AnalyticsComponent,
-    AnalyticsChartComponent
+    AnalyticsDetailsChartComponent,
+    AnalyticsQuarterlyChartComponent
   ],
   imports: [
     SharedModule,

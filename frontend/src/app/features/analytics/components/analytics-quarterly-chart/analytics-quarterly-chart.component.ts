@@ -3,11 +3,11 @@ import { DecimalPipe } from '@angular/common';
 import { CommonFunctions } from '../../../../shared/utils/common-functions';
 
 @Component({
-  selector: 'app-analytics-chart',
-  templateUrl: './analytics-chart.component.html',
-  styleUrls: ['./analytics-chart.component.scss']
+  selector: 'app-analytics-quarterly-chart',
+  templateUrl: './analytics-quarterly-chart.component.html',
+  styleUrls: ['./analytics-quarterly-chart.component.scss']
 })
-export class AnalyticsChartComponent implements OnChanges {
+export class AnalyticsQuarterlyChartComponent implements OnChanges {
 
   @Input() chartTitle: string;
   @Input() data: any[];
