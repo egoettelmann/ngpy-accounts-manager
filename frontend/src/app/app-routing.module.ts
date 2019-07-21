@@ -19,27 +19,27 @@ const routes: Routes = [
         children: [
           {
             path: 'dashboard',
-            loadChildren: './features/dashboard/dashboard.module#DashboardModule'
+            loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule)
           },
           {
             path: 'transactions',
-            loadChildren: './features/transactions/transactions.module#TransactionsModule'
+            loadChildren: () => import('./features/transactions/transactions.module').then(m => m.TransactionsModule)
           },
           {
             path: 'treasury',
-            loadChildren: './features/treasury/treasury.module#TreasuryModule'
+            loadChildren: () => import('./features/treasury/treasury.module').then(m => m.TreasuryModule)
           },
           {
             path: 'analytics',
-            loadChildren: './features/analytics/analytics.module#AnalyticsModule'
+            loadChildren: () => import('./features/analytics/analytics.module').then(m => m.AnalyticsModule)
           },
           {
             path: 'search',
-            loadChildren: './features/search/search.module#SearchModule'
+            loadChildren: () => import('./features/search/search.module').then(m => m.SearchModule)
           },
           {
             path: 'settings',
-            loadChildren: './features/settings/settings.module#SettingsModule'
+            loadChildren: () => import('./features/settings/settings.module').then(m => m.SettingsModule)
           },
           {
             path: '',
