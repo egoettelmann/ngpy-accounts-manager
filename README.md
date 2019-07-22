@@ -26,7 +26,7 @@ python index.py
 
 ## Release Notes
 
-### `0.4.0`
+### `0.4.1`
 
 - Added scheduler for sending notifications
 - Refactored frontend app structure
