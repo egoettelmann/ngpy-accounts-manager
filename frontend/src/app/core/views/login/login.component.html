@@ -7,12 +7,14 @@
     </div>
     <div class="login-group">
       <input [(ngModel)]="loginForm.username"
+             clrInput
              name="username"
              class="username"
              type="text"
              id="login_username"
              [placeholder]="'i18n.views.login.form.placeholder.username' | translate">
       <input [(ngModel)]="loginForm.password"
+             clrInput
              name="password"
              class="password"
              type="password"
