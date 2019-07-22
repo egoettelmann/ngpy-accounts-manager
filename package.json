@@ -5,6 +5,6 @@
     "postinstall": "npm install --prefix frontend && npm run build --prefix frontend"
   },
   "engines": {
-    "node": "10.3.0"
+    "node": "10.13.0"
   }
 }
