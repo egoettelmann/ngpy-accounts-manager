@@ -13,7 +13,9 @@
       <span class="nav-text">{{ 'i18n.components.navigation.analytics' | translate }}</span>
     </a>
   </div>
-  <form class="search" (submit)="search(searchInput.value)" autocomplete="off">
+  <form class="search clr-hidden-sm-down"
+        (submit)="search(searchInput.value)"
+        autocomplete="off">
     <label for="search_input">
       <input #searchInput
              id="search_input"
@@ -23,8 +25,15 @@
     </label>
   </form>
   <div class="header-actions">
+    <a [routerLink]="['/search']"
+       routerLinkActive="active"
+       class="nav-link nav-icon clr-hidden-md-up">
+      <clr-icon shape="search"></clr-icon>
+    </a>
     <app-file-drop></app-file-drop>
-    <a [routerLink]="['/settings']" routerLinkActive="active" class="nav-link nav-icon">
+    <a [routerLink]="['/settings']"
+       routerLinkActive="active"
+       class="nav-link nav-icon clr-hidden-sm-down">
       <clr-icon shape="cog"></clr-icon>
     </a>
     <a (click)="clickLogout()" class="nav-link nav-icon logout">

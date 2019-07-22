@@ -2,11 +2,11 @@
   <thead>
     <tr>
       <th>{{ 'i18n.components.transactions.table.header.account' | translate }}</th>
-      <th *ngIf="labels" class="hidden-sm-down">{{ 'i18n.components.transactions.table.header.label' | translate }}</th>
-      <th class="hidden-sm-down">&nbsp;</th>
-      <th class="left hidden-sm-down">{{ 'i18n.components.transactions.table.header.reference' | translate }}</th>
+      <th *ngIf="labels" class="clr-hidden-sm-down">{{ 'i18n.components.transactions.table.header.label' | translate }}</th>
+      <th class="clr-hidden-sm-down">&nbsp;</th>
+      <th class="left clr-hidden-sm-down">{{ 'i18n.components.transactions.table.header.reference' | translate }}</th>
       <th>{{ 'i18n.components.transactions.table.header.description' | translate }}</th>
-      <th class="hidden-sm-down">{{ 'i18n.components.transactions.table.header.value-date' | translate }}</th>
+      <th class="clr-hidden-sm-down">{{ 'i18n.components.transactions.table.header.value-date' | translate }}</th>
       <th>{{ 'i18n.components.transactions.table.header.amount' | translate }}</th>
       <th *ngIf="editable">&nbsp;</th>
     </tr>
@@ -25,7 +25,7 @@
           </span>
         </span>
       </td>
-      <td *ngIf="editable && labels" class="text-left hidden-sm-down">
+      <td *ngIf="editable && labels" class="text-left clr-hidden-sm-down">
         <app-autocomplete [uuid]="transaction.id"
                           [value]="transaction.label"
                           [options]="labels"
@@ -33,7 +33,7 @@
                           (onCreate)="addLabel($event, transaction)">
         </app-autocomplete>
       </td>
-      <td class="hidden-sm-down">
+      <td class="clr-hidden-sm-down">
         <span class="tooltip tooltip-sm tooltip-top-right"
               role="tooltip"
               aria-haspopup="true">
@@ -47,13 +47,13 @@
           </span>
         </span>
       </td>
-      <td class="text-left hidden-sm-down">
+      <td class="text-left clr-hidden-sm-down">
         {{ transaction.reference }}
       </td>
       <td class="text-left">
         {{ transaction.description }}
       </td>
-      <td class="text-center text-nowrap hidden-sm-down">
+      <td class="text-center text-nowrap clr-hidden-sm-down">
         {{ transaction.dateValue }}
       </td>
       <td class="text-right"

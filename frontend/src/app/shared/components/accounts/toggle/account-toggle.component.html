@@ -8,7 +8,7 @@
             {{ selectedAccounts?.length === accounts?.length ? ('i18n.components.accounts.account-toggle.all-accounts' | translate) : selectedAccounts?.length + ('i18n.components.accounts.account-toggle.accounts' | translate) }}
             <clr-icon shape="caret down"></clr-icon>
           </button>
-          <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+          <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
             <button type="button"
                     clrDropdownItem
                     (click)="toggleAllAccounts()">
