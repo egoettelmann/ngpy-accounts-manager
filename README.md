@@ -56,13 +56,13 @@ python index.py
 
 ### Tech
 
+- Unit tests
 - Review the lifecycle of the db's session
 - Review backend logging
 - Create a native app with Angular ?
 
 ### Features
 
-- Unit tests
 - Automatically create label if it does not exist on transaction table
 - Improve alerts on dashboard:
   - labels without category
