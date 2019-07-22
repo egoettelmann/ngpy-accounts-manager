@@ -6,7 +6,7 @@ Small webapp to manage accounts with some statistics.
 
 ## Tech Stack
 
-- Angular 5
+- Angular 8
 - Flask / SQLAlchemy
 
 ## Installation and run
@@ -25,6 +25,14 @@ python index.py
 ```
 
 ## Release Notes
+
+### `0.4.0`
+
+- Added scheduler for sending notifications
+- Refactored frontend app structure
+- Added analytics details charts
+- Migrated to Angular 8 and Clarity 2
+- Improved responsiveness
 
 ### `0.3.0`
 
@@ -54,6 +62,7 @@ python index.py
 
 ### Features
 
+- Unit tests
 - Automatically create label if it does not exist on transaction table
 - Improve alerts on dashboard:
   - labels without category
