@@ -1,29 +1,32 @@
-<div class="row">
-  <div class="col-xs-12 col-md-4">
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-md-4">
+    <!-- Account select-->
     <app-account-toggle *ngIf="accounts"
                         [accounts]="accounts"
                         [preSelected]="accountsFilter"
                         (onChange)="changeAccounts($event)">
     </app-account-toggle>
 
+    <!-- Year select -->
     <app-year-toggle [currentYear]="currentYear"
                      (onChange)="changeYear($event)">
     </app-year-toggle>
 
+    <!-- Summary -->
     <app-summary [summary]="summary"></app-summary>
   </div>
-  <div class="col-xs-12 col-md-8">
+  <div class="clr-col-12 clr-col-md-8">
     <app-chart class="card" [title]="'i18n.views.treasury.chart.title' | translate" [options]="graphOptions"></app-chart>
   </div>
 </div>
 
 <h3>{{ 'i18n.views.treasury.top-list.title' | translate }}</h3>
 
-<div class="row">
-  <div class="col-xs-12 col-md-6">
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-md-6">
     <app-transactions-table [transactions]="topTransactionsAsc"></app-transactions-table>
   </div>
-  <div class="col-xs-12 col-md-6">
+  <div class="clr-col-12 clr-col-md-6">
     <app-transactions-table [transactions]="topTransactionsDesc"></app-transactions-table>
   </div>
 </div>

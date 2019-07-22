@@ -1,6 +1,6 @@
 <h3>{{ 'i18n.views.settings.labels.title' | translate }} <span class="badge">{{ formArray?.controls.length }}</span></h3>
 
-<form [formGroup]="form" *ngIf="form">
+<form [formGroup]="form" *ngIf="form" class="clr-form">
   <table class="table" [formArrayName]="'labels'">
     <thead>
     <tr>
@@ -15,25 +15,23 @@
     <tbody>
     <tr *ngFor="let labelForm of formArray.controls; let i = index;" [formGroupName]="i">
       <td class="left">
-        <input type="text" [formControlName]="'name'" />
+        <input class="clr-input w-100" type="text" [formControlName]="'name'" />
       </td>
       <td class="left">
         <clr-icon [attr.shape]="labelForm.get('icon').value"></clr-icon>
-        <input type="text" [formControlName]="'icon'" />
+        <input class="clr-input" type="text" [formControlName]="'icon'" />
       </td>
       <td class="left">
           <span class="badge"
                 [style.background]="labelForm.get('color').value">
             <span>&nbsp;</span>
           </span>
-        <input type="text" [formControlName]="'color'" />
+        <input class="clr-input" type="text" [formControlName]="'color'" />
       </td>
       <td class="right">
-        <div class="select">
-          <select [formControlName]="'category_id'">
-            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-          </select>
-        </div>
+        <select [formControlName]="'category_id'" clrSelect>
+          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        </select>
       </td>
       <td class="right">
         <span class="label" [ngClass]="labelForm.get('numTransactions').value > 0 ? 'label-info' : 'label-danger'">

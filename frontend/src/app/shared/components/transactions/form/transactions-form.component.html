@@ -1,12 +1,14 @@
 <form [formGroup]="form"
-      (ngSubmit)="submitForm()">
+      (ngSubmit)="submitForm()"
+      class="clr-form">
 
   <section class="form-block compact">
     <app-field-wrapper for="account"
                        [i18nLabel]="'i18n.components.transactions.form.account'"
                        [ctrl]="form.get('account_id')"
-                       class="form-group row">
+                       class="form-group clr-row mb-1">
       <select id="account"
+              clrSelect
               [formControlName]="'account_id'">
         <option *ngFor="let account of accounts"
                 [value]="account.id">
@@ -17,41 +19,49 @@
     <app-field-wrapper for="reference"
                        [i18nLabel]="'i18n.components.transactions.form.reference'"
                        [ctrl]="form.get('reference')"
-                       class="form-group row">
+                       class="form-group clr-row mb-1">
       <input id="reference"
+             clrInput
              [formControlName]="'reference'"
+             class="w-100"
              type="text"/>
     </app-field-wrapper>
     <app-field-wrapper for="description"
                        [i18nLabel]="'i18n.components.transactions.form.description'"
                        [ctrl]="form.get('description')"
-                       class="form-group row">
+                       class="form-group clr-row mb-1">
         <textarea id="description"
+                  clrTextarea
                   [formControlName]="'description'"
+                  class="w-100"
                   rows="3">
         </textarea>
     </app-field-wrapper>
     <app-field-wrapper for="dateValue"
                        [i18nLabel]="'i18n.components.transactions.form.dateValue'"
                        [ctrl]="form.get('dateValue')"
-                       class="form-group row">
+                       class="form-group clr-row mb-1">
       <input id="dateValue"
+             clrInput
              [formControlName]="'dateValue'"
+             class="w-100"
              type="text"/>
     </app-field-wrapper>
     <app-field-wrapper for="amount"
                        [i18nLabel]="'i18n.components.transactions.form.amount'"
                        [ctrl]="form.get('amount')"
-                       class="form-group row">
+                       class="form-group clr-row mb-1">
       <input id="amount"
+             clrInput
              [formControlName]="'amount'"
+             class="w-100"
              type="text"/>
     </app-field-wrapper>
 
     <app-field-wrapper for="amount"
                        [i18nLabel]="'i18n.components.transactions.form.label'"
                        [ctrl]="form.get('amount')"
-                       class="form-group row">
+                       class="form-group clr-row mb-1">
       <app-autocomplete [value]="model.label"
                         [options]="labels"
                         (onSelect)="changeLabel($event)">

@@ -1,28 +1,26 @@
 <h3>{{ 'i18n.views.settings.categories.title' | translate }} <span class="badge">{{ formArray?.controls.length }}</span></h3>
 
-<form [formGroup]="form" *ngIf="form">
-  <table class="table" [formArrayName]="'categories'">
+<form [formGroup]="form" *ngIf="form" class="clr-form">
+  <table class="table card-shadow" [formArrayName]="'categories'">
     <thead>
     <tr>
-      <th class="left">{{ 'i18n.views.settings.categories.table.header.name' | translate }}</th>
-      <th class="left">{{ 'i18n.views.settings.categories.table.header.type' | translate }}</th>
-      <th class="right">{{ 'i18n.views.settings.categories.table.header.labels' | translate }}</th>
-      <th>&nbsp;</th>
+      <th class="left" width="40%">{{ 'i18n.views.settings.categories.table.header.name' | translate }}</th>
+      <th class="left" width="40%">{{ 'i18n.views.settings.categories.table.header.type' | translate }}</th>
+      <th class="right" width="15%">{{ 'i18n.views.settings.categories.table.header.labels' | translate }}</th>
+      <th width="10%">&nbsp;</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let categoryForm of formArray.controls; let i = index;" [formGroupName]="i">
       <td class="left">
-        <input type="text" [formControlName]="'name'" size="45" />
+        <input class="clr-input w-100" type="text" [formControlName]="'name'" size="45" />
       </td>
       <td class="right">
-        <div class="select">
-          <select [formControlName]="'type'">
-            <option [value]="'C'">Credit</option>
-            <option [value]="'D'">Debit</option>
-            <option [value]="'M'">Transfer</option>
-          </select>
-        </div>
+        <select clrSelect [formControlName]="'type'">
+          <option [value]="'C'">Credit</option>
+          <option [value]="'D'">Debit</option>
+          <option [value]="'M'">Transfer</option>
+        </select>
       </td>
       <td class="right">
         <span class="label" [ngClass]="categoryForm.get('numLabels').value > 0 ? 'label-info' : 'label-danger'">

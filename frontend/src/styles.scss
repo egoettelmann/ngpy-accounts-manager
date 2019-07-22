@@ -9,3 +9,35 @@
 .clickable {
   cursor: pointer;
 }
+
+:focus {
+  outline: none !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.mb-1 {
+  margin-bottom: .5rem;
+}
+
+.card-shadow {
+  box-shadow: 0 0.125rem 0 0 #d7d7d7;
+}
+
+.clr-form-control {
+  margin-top: 0 !important;
+
+  .clr-control-container {
+    width: 100%;
+
+    .clr-select-wrapper {
+      width: 100%;
+
+      select {
+        width: 100%;
+      }
+    }
+  }
+}

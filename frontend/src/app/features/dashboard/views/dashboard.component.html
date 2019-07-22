@@ -1,5 +1,5 @@
-<div class="row" *ngIf="unlabeledTransactions > 0">
-  <div class="col-xs-12">
+<div class="clr-row" *ngIf="unlabeledTransactions > 0">
+  <div class="clr-col-12">
     <clr-alert [clrAlertType]="'alert-danger'"
                [clrAlertClosable]="false">
       <div class="alert-item">
@@ -16,13 +16,13 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-xs-12 col-md-6">
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-md-6">
     <div class="card">
       <div class="card-block">
-        <h4 class="card-title row">
-          <span class="col-xs-6">{{ 'i18n.views.dashboard.accounts.total' | translate }}</span>
-          <span class="col-xs-6 text-right"><strong>{{ total | number:'1.2-2' }}&nbsp;€</strong></span>
+        <h4 class="card-title clr-row">
+          <span class="clr-col-6">{{ 'i18n.views.dashboard.accounts.total' | translate }}</span>
+          <span class="clr-col-6 text-right"><strong>{{ total | number:'1.2-2' }}&nbsp;€</strong></span>
         </h4>
       </div>
     </div>
@@ -30,7 +30,7 @@
     <app-chart class="card" [title]="'i18n.views.dashboard.chart.title' | translate" [options]="graphOptions"></app-chart>
   </div>
 
-  <div class="col-xs-12 col-md-6">
+  <div class="clr-col-12 clr-col-md-6">
     <app-account-card *ngFor="let account of accounts"
                       [account]="account">
     </app-account-card>

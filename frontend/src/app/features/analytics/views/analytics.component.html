@@ -1,5 +1,5 @@
-<div class="row">
-  <div class="col-xs-12 col-md-4">
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-md-4">
 
     <!-- Account select -->
     <app-account-toggle *ngIf="accounts"
@@ -14,11 +14,12 @@
     </app-year-toggle>
 
     <!-- Period select-->
-    <table class="table table-compact table-vertical">
+    <table class="table table-compact table-vertical card-shadow">
+      <tbody>
       <tr>
         <th class="text-left align-middle" width="40%">{{ 'i18n.views.analytics.period.select.title' | translate }}</th>
         <td class="text-right">
-          <clr-dropdown class="col-xs-6 text-right">
+          <clr-dropdown class="text-right">
             <button type="button" class="btn btn-link" clrDropdownTrigger>
               {{ getPeriodSelectLabel(quarterly) | translate }}
               <clr-icon shape="caret down"></clr-icon>
@@ -36,15 +37,19 @@
           </clr-dropdown>
         </td>
       </tr>
+      </tbody>
     </table>
   </div>
-  <div class="col-xs-12 col-md-8">
-    <table class="table table-vertical">
+
+  <!-- Movements table -->
+  <div class="clr-col-12 clr-col-md-8">
+    <table class="table table-vertical table-compact card-shadow">
+      <tbody>
       <tr>
-        <td width="20%">
+        <th width="20%">
           <span *ngIf="quarterly">{{ 'i18n.views.analytics.quarterly.table.title' | translate }}</span>
           <span *ngIf="!quarterly">{{ 'i18n.views.analytics.monthly.table.title' | translate }}</span>
-        </td>
+        </th>
         <th *ngFor="let idx of (quarterly ? [1, 2, 3, 4] : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])" class="text-right">
           <span>{{ (quarterly ? 'Q' : '') + idx }}</span>
         </th>
@@ -63,19 +68,20 @@
           <span>{{ 'i18n.views.analytics.table.no-entries' | translate }}</span>
         </td>
       </tr>
+      </tbody>
     </table>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-xs-12 col-md-6">
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-md-6">
     <app-analytics-quarterly-chart [chartTitle]="creditChartTitle | translate"
                                    [prefix]="quarterly ? 'Q' : ''"
                                    [data]="analyticsCredit">
     </app-analytics-quarterly-chart>
   </div>
 
-  <div class="col-xs-12 col-md-6">
+  <div class="clr-col-12 clr-col-md-6">
     <app-analytics-quarterly-chart [chartTitle]="debitChartTitle | translate"
                                    [prefix]="quarterly ? 'Q' : ''"
                                    [data]="analyticsDebit">
@@ -83,8 +89,8 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-xs-12 col-md-6">
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-md-6">
     <app-analytics-details-chart [chartTitle]="'i18n.views.analytics.table.credit.title' | translate"
                                  [data]="detailsCredit">
     </app-analytics-details-chart>
@@ -92,7 +98,7 @@
     <app-analytics-details-table [data]="detailsCredit"></app-analytics-details-table>
   </div>
 
-  <div class="col-xs-12 col-md-6">
+  <div class="clr-col-12 clr-col-md-6">
     <app-analytics-details-chart [chartTitle]="'i18n.views.analytics.table.debit.title' | translate"
                                  [data]="detailsDebit">
     </app-analytics-details-chart>

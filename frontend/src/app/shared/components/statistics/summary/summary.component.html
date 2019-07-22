@@ -1,4 +1,4 @@
-<table *ngIf="summary" class="table">
+<table *ngIf="summary" class="table card-shadow">
   <thead>
     <tr>
       <th colspan="2">{{ 'i18n.components.statistics.summary.' + summary.periodType + '.status' | translate }}</th>
@@ -25,7 +25,7 @@
       <td class="text-right" [ngClass]="getAmountColor(performance)">
         <clr-icon *ngIf="performance >= 0" shape="plus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></clr-icon>
         <clr-icon *ngIf="performance < 0" shape="minus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></clr-icon>
-        <span>{{ performance | number:'1.2-2' }}&nbsp;%</span>
+        <span>&nbsp;{{ performance | number:'1.2-2' }}&nbsp;%</span>
       </td>
     </tr>
   </tbody>

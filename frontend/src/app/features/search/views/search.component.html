@@ -1,13 +1,16 @@
 <h3>{{ 'i18n.views.transactions.list.title' | translate }} <span class="badge">{{ transactions?.length }}</span></h3>
 
-<div class="row">
-  <div class="col-xs-12 col-md-4">
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-md-4">
+
+    <!-- Account select -->
     <app-account-toggle *ngIf="accounts"
                         [accounts]="accounts"
                         [preSelected]="accountsFilter"
                         (onChange)="changeAccounts($event)">
     </app-account-toggle>
 
+    <!-- Label select -->
     <app-label-toggle *ngIf="labels"
                       [labels]="labels"
                       [value]="labelsFilter"
@@ -15,12 +18,14 @@
     </app-label-toggle>
   </div>
 
-  <div class="col-xs-12 col-md-4">
-    <table class="table table-compact table-vertical">
+  <!-- Year select -->
+  <div class="clr-col-12 clr-col-md-4">
+    <table class="table table-compact table-vertical card-shadow">
+      <tbody>
       <tr>
         <th class="text-left align-middle" width="40%">{{ 'i18n.views.transactions.label.year-dropdown' | translate }}</th>
         <td class="text-right">
-          <clr-dropdown class="col-xs-6 text-right">
+          <clr-dropdown class="text-right">
             <button type="button" class="btn btn-link" clrDropdownTrigger>
               {{ currentYear ? currentYear : ('i18n.views.transactions.label.year-dropdown.all' | translate) }}
               <clr-icon shape="caret down"></clr-icon>
@@ -45,13 +50,16 @@
           </clr-dropdown>
         </td>
       </tr>
+      </tbody>
     </table>
 
-    <table class="table table-compact table-vertical">
+    <!-- Month select -->
+    <table class="table table-compact table-vertical card-shadow">
+      <tbody>
       <tr>
         <th class="text-left align-middle" width="40%">{{ 'i18n.views.transactions.label.month-dropdown' | translate }}</th>
         <td class="text-right">
-          <clr-dropdown class="col-xs-6 text-right">
+          <clr-dropdown class="text-right">
             <button type="button" class="btn btn-link" clrDropdownTrigger>
               {{ currentMonth ? ('i18n.months.' + currentMonth | translate) : ('i18n.views.transactions.label.month-dropdown.all' | translate) }}
               <clr-icon shape="caret down"></clr-icon>
@@ -76,25 +84,33 @@
           </clr-dropdown>
         </td>
       </tr>
+      </tbody>
     </table>
   </div>
 
-  <div class="col-xs-12 col-md-4">
-    <table class="table table-compact table-vertical">
+  <!-- Text search -->
+  <div class="clr-col-12 clr-col-md-4">
+    <table class="table table-compact table-vertical card-shadow">
+      <tbody>
       <tr>
         <th class="text-left align-middle" width="40%">{{ 'i18n.views.transactions.label.desc-input' | translate }}</th>
         <td class="text-right">
-          <form (submit)="navigate()" autocomplete="off">
-            <input name="descFilter" [(ngModel)]="descFilter" type="text" autocomplete="off" />
+          <form class="clr-form" (submit)="navigate()" autocomplete="off">
+            <input class="clr-input w-100"
+                   name="descFilter"
+                   [(ngModel)]="descFilter"
+                   type="text"
+                   autocomplete="off" />
           </form>
         </td>
       </tr>
+      </tbody>
     </table>
   </div>
 </div>
 
-<div class="row" *ngIf="transactions?.length === 500">
-  <div class="col-xs-12">
+<div class="clr-row" *ngIf="transactions?.length === 500">
+  <div class="clr-col-12">
     <clr-alert [clrAlertType]="'alert-warning'"
                [clrAlertClosable]="false">
       <div class="alert-item">
@@ -106,8 +122,8 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-xs-12">
+<div class="clr-row">
+  <div class="clr-col-12">
     <app-transactions-table [transactions]="transactions"
                             [labels]="labels"
                             [editable]="true"
