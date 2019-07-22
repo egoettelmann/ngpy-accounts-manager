@@ -1,7 +1,7 @@
 <h3>{{ 'i18n.views.settings.labels.title' | translate }} <span class="badge">{{ formArray?.controls.length }}</span></h3>
 
 <form [formGroup]="form" *ngIf="form" class="clr-form">
-  <table class="table" [formArrayName]="'labels'">
+  <table class="table card-shadow" [formArrayName]="'labels'">
     <thead>
     <tr>
       <th class="left">{{ 'i18n.views.settings.labels.table.header.name' | translate }}</th>

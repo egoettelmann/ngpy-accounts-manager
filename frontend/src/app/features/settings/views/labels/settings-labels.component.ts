@@ -44,7 +44,12 @@ export class SettingsLabelsComponent implements OnInit {
   }
 
   addLabel() {
-    const newLabel = {} as Label;
+    const newLabel = {
+      name: '',
+      color: '',
+      icon: '',
+      numTransactions: 0
+    } as Label;
     const control = this.buildFormControl(newLabel);
     this.formArray.push(control);
     this.onFormChange(control);

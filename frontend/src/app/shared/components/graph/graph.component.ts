@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import * as _ from 'lodash';
 
@@ -7,7 +7,7 @@ import * as _ from 'lodash';
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.scss']
 })
-export class GraphComponent implements OnChanges {
+export class GraphComponent implements OnChanges, AfterViewInit {
 
   @Input() title: string;
   @Input() options: any;
@@ -37,6 +37,16 @@ export class GraphComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options != null && this.options) {
+      this.drawChart();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.drawChart();
+  }
+
+  private drawChart() {
+    if (this.options && this.graphContainer) {
       const opts = _.merge({}, this.defaultOptions, this.options);
       Highcharts.chart(this.graphContainer.nativeElement, opts);
     }
