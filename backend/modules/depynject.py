@@ -1,4 +1,4 @@
-import inspect
+import logging, inspect
 
 __INJECTABLE_LIST__ = {}
 __INJECTING_LIST__ = {}
@@ -67,14 +67,14 @@ def inject(silent=False, **hints):
                         if arg_name in hints and isinstance(hints[arg_name], str):
                             # Is there a hint given as a string ?
                             resolve_name = hints[arg_name]
-                        print('Injecting [' + arg_name + '=' + resolve_name + '] in method ' + m.__qualname__)
+                        logging.debug('Injecting [%s=%s] in method %s', arg_name, resolve_name, m.__qualname__)
                         try:
                             kwargs[arg_name] = instance.provide(resolve_name)
                         except InjectionError as e:
                             if not silent:
                                 raise e
             else:
-                print('Invoked ' + m.__qualname__ + ' with @inject but no DI context bound (is the class injectable ?)')
+                logging.error('Invoked %s with @inject but no DI context bound, is the class injectable ?', m.__qualname__)
             return m(*args, **kwargs)
 
         return wrapper
@@ -119,7 +119,7 @@ class Depynject:
             injectable(scope=scope, **options)(class_ref)
         for m in __INJECTABLE_LIST__[classname]['injecting_methods']:
             if __INJECTING_LIST__[m]['bound_instance'] is None:
-                print('method is bound to instance !')
+                logging.debug('Method %s successfully bound to instance', m)
                 __INJECTING_LIST__[m]['bound_instance'] = self
         if i_scope is None:
             i_scope = __INJECTABLE_LIST__[classname]['scope']
@@ -158,7 +158,7 @@ class Depynject:
         arg_instances = {}
         for arg in arguments:
             arg_instances[arg] = self.__provide_by_name__(arg)
-        print('Creating new instance of ' + str(class_ref.__qualname__))
+        logging.debug('Creating new instance of %s', class_ref.__qualname__)
         return class_ref(**arg_instances)
 
     def register_singleton(self, instance, name=None):

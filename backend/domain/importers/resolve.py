@@ -1,4 +1,4 @@
-import csv
+import csv, logging
 from itertools import islice
 
 from .bpalc import Parser as BplacParser
@@ -19,15 +19,16 @@ class Resolver:
         cr = csv.reader(open(filename, "rt"), delimiter=';')
         num_cols = len(nth(cr, 0))
         if num_cols == 7:
-            print('Parsing as BPALC')
+            logging.info('Parsing file as BPALC format')
             return BplacParser(filename)
         elif num_cols == 6 or num_cols == 5:
-            print('Parsing as ING')
+            logging.info('Parsing file as ING (FR) format')
             return IngParser(filename)
         elif num_cols == 18:
-            print('Parsing as ING (LUX)')
+            logging.info('Parsing file as ING (LU) format')
             return IngLuxParser(filename)
         else:
+            logging.error('Impossible to find appropriate parser')
             raise ResolveError('Cannot resolve importer for file with ' + str(num_cols) + ' columns')
 
 

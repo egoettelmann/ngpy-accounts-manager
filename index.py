@@ -1,3 +1,4 @@
+import logging
 import os
 
 from flask import Flask, request, session
@@ -14,6 +15,8 @@ from backend.domain.exceptions import ApplicationExceptionHandler, NotAuthentica
 from backend.modules.depynject import Depynject
 from backend.modules.di_providers import RequestDiProvider
 from backend.modules.restipy import Api
+
+logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
 
 rdi_provider = RequestDiProvider()
 d_injector = Depynject(providers={
@@ -38,7 +41,8 @@ d_injector.register_singleton(em)
 
 
 @app.route('/')
-def serve_page():
+def serve_app():
+    logging.info('Loading index page')
     return app.send_static_file('index.html')
 
 
@@ -48,16 +52,17 @@ def before_request():
             and request.path.startswith(api.prefix) \
             and not request.endpoint.startswith('SessionController'):
         if 'logged_user_id' not in session:
+            logging.warning('User is not authenticated')
             return api.return_exception(NotAuthenticatedException('Not authenticated'))
         else:
-            print('user ' + str(session['logged_user_id']))
+            logging.debug('Request from user %s', session['logged_user_id'])
 
 
 @app.teardown_request
 def teardown_request(exception):
     rdi_provider.clear()
     if exception is not None:
-        print('App teardown with', exception)
+        logging.critical('App teardown due to exception %s', exception)
 
 
 api.register(AccountController)

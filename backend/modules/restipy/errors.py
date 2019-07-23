@@ -1,3 +1,5 @@
+import logging
+
 from .types import String as StringType
 from .converter import Converter
 
@@ -30,8 +32,10 @@ class DefaultExceptionHandler:
         if idx is None:
             idx = len(self.exceptions) - 1
         if idx >= len(self.exceptions) or idx < 0:
+            logging.error('An unhandled error occurred: %s', e)
             raise e
         if isinstance(e, self.exceptions[idx]['reference']):
+            logging.error('An error occurred while handling request: ', e)
             return (
                 self.build(self.exceptions[idx]['error']),
                 self.exceptions[idx]['status']

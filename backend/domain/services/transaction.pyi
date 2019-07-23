@@ -50,7 +50,7 @@ class TransactionService():
                             year : int,
                             month : int,
                             period : str
-                            ) -> KeyValue : ...
+                            ) -> list(KeyValue) : ...
 
     def get_total_by_category_type(self,
                                    account_ids : list(int),

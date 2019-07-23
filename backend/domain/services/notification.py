@@ -1,6 +1,6 @@
 import jinja2
 import sendgrid
-import os
+import os, logging
 
 from sendgrid.helpers.mail import *
 from ...modules.depynject import injectable
@@ -42,6 +42,6 @@ class NotificationService():
         html_content = Content('text/html', email_content)
         mail_obj = Mail(from_email, email_object, to_email, html_content)
         response = self.mailer.client.mail.send.post(request_body=mail_obj.get())
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
+        logging.debug('Email sent with status_code=%s', response.status_code)
+        logging.debug('Email sent with headers=%s', response.headers)
+        logging.debug('Email sent with body=%s', response.body)

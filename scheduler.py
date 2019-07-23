@@ -1,3 +1,5 @@
+import logging
+
 from datetime import datetime, timedelta
 
 import index
@@ -27,7 +29,7 @@ notifications = []
 for acc in accounts_list:
     if not acc.notify:
         continue
-    print('Account ' + acc.name + ' last updated on ', acc.last_update)
+    logging.info('Account %s last updated on %s', acc.name, acc.last_update)
     if acc.last_update < error_limit:
         max_level = max(max_level, 3)
         notif = Notification(acc.name, 'ERROR', str(acc.last_update))
@@ -47,7 +49,7 @@ for acc in accounts_list:
         if max_level == 1:
             notification_level = 'INFO'
 
-print('Notification max_level=', notification_level)
+logging.info('Notification max level: %s', notification_level)
 
 if notification_level is not None:
     notification_service.send_reminder(notification_level, notifications, 'elio.goettelmann@gmail.com')
