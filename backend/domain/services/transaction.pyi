@@ -35,7 +35,8 @@ class TransactionService():
                              ascending : bool,
                              account_ids : list(int),
                              year : int,
-                             month : int
+                             month : int,
+                             label_ids : list(int)
                              ) -> Transaction : ...
 
     def get_total_by_labels(self,
@@ -70,7 +71,9 @@ class TransactionService():
                   account_ids : list(int),
                   year : int,
                   month : int,
-                  sign : bool) -> float : ...
+                  sign : bool,
+                  label_ids : list(int)
+                  ) -> float : ...
 
     def create_one(self, transaction : Transaction) -> bool : ...
 

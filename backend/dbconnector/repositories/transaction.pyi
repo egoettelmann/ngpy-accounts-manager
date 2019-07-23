@@ -44,7 +44,8 @@ class TransactionRepository():
                              ascending : bool,
                              account_ids : list(int),
                              date_from : datetime.date,
-                             date_to : datetime.date
+                             date_to : datetime.date,
+                             label_ids : list(int)
                              ) -> list(TransactionDbo) : ...
 
     def get_grouped_by_labels(self,
@@ -81,7 +82,8 @@ class TransactionRepository():
                   account_ids : list(int),
                   date_from : datetime.date,
                   date_to : datetime.date,
-                  sign : bool
+                  sign : bool,
+                  label_ids : list(int)
                   ) -> float : ...
 
     def create_all(self, transactions : list(TransactionDbo)) -> bool : ...

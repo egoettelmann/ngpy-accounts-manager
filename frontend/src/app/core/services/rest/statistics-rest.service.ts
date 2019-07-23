@@ -26,7 +26,7 @@ export class StatisticsRestService {
     return this.http.get<KeyValue[]>('/rest/stats/repartition', {params: params});
   }
 
-  getSummary(year?: number, month?: number, accounts?: number[]): Observable<Summary> {
+  getSummary(year?: number, month?: number, accounts?: number[], labelIds?: number[]): Observable<Summary> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -39,6 +39,9 @@ export class StatisticsRestService {
     }
     if (accounts !== undefined) {
       params = params.append('account_ids', accounts.join(','));
+    }
+    if (labelIds !== undefined) {
+      params = params.append('label_ids', labelIds.join(','));
     }
     return this.http.get<any>('/rest/stats/summary', {params: params});
   }

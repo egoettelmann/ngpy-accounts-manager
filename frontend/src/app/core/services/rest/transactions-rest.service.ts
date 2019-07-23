@@ -39,7 +39,7 @@ export class TransactionsRestService {
     return this.http.get<Transaction[]>('/rest/transactions', {params: params});
   }
 
-  getTop(numTransactions: number, ascending: boolean, year?: number, month?: string, accounts?: number[]): Observable<Transaction[]> {
+  getTop(numTransactions: number, ascending: boolean, year?: number, month?: string, accounts?: number[], labelIds?: number[]): Observable<Transaction[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -53,7 +53,9 @@ export class TransactionsRestService {
     if (accounts !== undefined) {
       params = params.append('account_ids', accounts.join(','));
     }
-
+    if (labelIds !== undefined) {
+      params = params.append('label_ids', labelIds.join(','));
+    }
     return this.http.get<Transaction[]>('/rest/transactions/top/' + numTransactions + '/' + ascending, {params: params});
   }
 

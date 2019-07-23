@@ -16,4 +16,6 @@ class StatisticsService():
     def get_summary(self,
                     account_ids : list(int),
                     year : int,
-                    month : int) -> Summary : ...
+                    month : int,
+                    label_ids : list(int)
+                    ) -> Summary : ...

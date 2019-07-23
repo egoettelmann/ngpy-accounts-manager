@@ -41,7 +41,7 @@ class TransactionRepository():
         query = self.filter_by_accounts(query, account_ids)
         return query.order_by(desc(TransactionDbo.date_value)).first()
 
-    def get_top_transactions(self, num_transactions, ascending, account_ids=None, date_from=None, date_to=None):
+    def get_top_transactions(self, num_transactions, ascending, account_ids=None, date_from=None, date_to=None, label_ids=None):
         query = self.entity_manager.query(TransactionDbo)
         query = self.filter_by_accounts(query, account_ids)
         query = self.filter_by_date_from(query, date_from)
@@ -50,6 +50,7 @@ class TransactionRepository():
             query = query.order_by(TransactionDbo.amount)
         else:
             query = query.order_by(desc(TransactionDbo.amount))
+        query = self.filter_by_labels(query, label_ids)
         return query.limit(num_transactions).all()
 
     def get_grouped_by_labels(self, account_ids=None, date_from=None, date_to=None, sign=None):
@@ -127,7 +128,7 @@ class TransactionRepository():
         query = query.group_by(CategoryDbo.name)
         return query.all()
 
-    def get_total(self, account_ids=None, date_from=None, date_to=None, sign=None):
+    def get_total(self, account_ids=None, date_from=None, date_to=None, sign=None, label_ids=None):
         query = self.entity_manager.query(
             label('total', func.sum(TransactionDbo.amount))
         )
@@ -135,7 +136,9 @@ class TransactionRepository():
         query = self.filter_by_date_from(query, date_from)
         query = self.filter_by_date_to(query, date_to)
         query = self.filter_by_sign(query, sign)
-        return query.scalar()
+        query = self.filter_by_labels(query, label_ids)
+        total = query.scalar()
+        return 0 if total is None else total
 
     def create_all(self, transactions):
         for transaction in transactions:

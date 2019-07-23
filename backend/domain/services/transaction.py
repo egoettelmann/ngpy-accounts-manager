@@ -40,11 +40,11 @@ class TransactionService():
             Transaction
         )
 
-    def get_top_transactions(self, num_transactions, ascending, account_ids, year, month):
+    def get_top_transactions(self, num_transactions, ascending, account_ids, year, month, label_ids):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
         return self.mapper.map_all(
-            self.repository.get_top_transactions(num_transactions, ascending, account_ids, date_from, date_to),
+            self.repository.get_top_transactions(num_transactions, ascending, account_ids, date_from, date_to, label_ids),
             Transaction
         )
 
@@ -76,10 +76,10 @@ class TransactionService():
             self.repository.get_grouped_by_labels_and_category_type(account_ids, date_from, date_to, category_type)
         )
 
-    def get_total(self, account_ids=None, year=None, month=None, sign=None):
+    def get_total(self, account_ids=None, year=None, month=None, sign=None, label_ids=None):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
-        return self.repository.get_total(account_ids, date_from, date_to, sign)
+        return self.repository.get_total(account_ids, date_from, date_to, sign, label_ids)
 
     def create_one(self, transaction):
         return self.repository.save_one(

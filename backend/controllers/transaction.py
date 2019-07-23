@@ -55,7 +55,10 @@ class TransactionController():
         ascending = False
         if asc == 'true':
             ascending = True
-        return self.transaction_service.get_top_transactions(num_transactions, ascending, account_ids, year, month)
+        label_ids = request.args.get('label_ids')
+        if label_ids is not None:
+            label_ids = list(map(lambda a: None if a == '' else int(a), label_ids.split(',')))
+        return self.transaction_service.get_top_transactions(num_transactions, ascending, account_ids, year, month, label_ids)
 
     @restipy.route('/<int:transaction_id>')
     @restipy.format_as(Transaction)

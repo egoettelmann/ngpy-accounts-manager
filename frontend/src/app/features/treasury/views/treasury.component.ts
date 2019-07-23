@@ -119,8 +119,8 @@ export class TreasuryComponent implements OnInit {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
     const labels = this.labelsFilter;
     this.loadEvolution(this.currentYear, accounts, labels);
-    this.loadSummary(this.currentYear, accounts);
-    this.loadTops(this.currentYear, accounts);
+    this.loadSummary(this.currentYear, accounts, labels);
+    this.loadTops(this.currentYear, accounts, labels);
 
     const url = this.router.createUrlTree(['treasury', this.currentYear], {
       queryParams: {
@@ -149,9 +149,10 @@ export class TreasuryComponent implements OnInit {
    *
    * @param {number} year the year to filter on
    * @param {number[]} accounts the accounts to filter on
+   * @param {number[]} labels the labels to filter on
    */
-  private loadSummary(year: number, accounts: number[]) {
-    this.statisticsService.getSummary(year, undefined, accounts).subscribe(data => {
+  private loadSummary(year: number, accounts: number[], labels: number[]) {
+    this.statisticsService.getSummary(year, undefined, accounts, labels).subscribe(data => {
       this.summary = data;
     });
   }
@@ -161,12 +162,13 @@ export class TreasuryComponent implements OnInit {
    *
    * @param {number} year the year to filter on
    * @param {number[]} accounts the accounts to filter on
+   * @param {number[]} labels the labels to filter on
    */
-  private loadTops(year: number, accounts: number[]) {
-    this.transactionsService.getTop(10, true, year, undefined, accounts).subscribe(data => {
+  private loadTops(year: number, accounts: number[], labels: number[]) {
+    this.transactionsService.getTop(10, true, year, undefined, accounts, labels).subscribe(data => {
       this.topTransactionsAsc = data;
     });
-    this.transactionsService.getTop(10, false, year, undefined, accounts).subscribe(data => {
+    this.transactionsService.getTop(10, false, year, undefined, accounts, labels).subscribe(data => {
       this.topTransactionsDesc = data;
     });
   }

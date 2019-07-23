@@ -11,12 +11,12 @@ class StatisticsService():
         self.transaction_service = transaction_service
         self.account_service = account_service
 
-    def get_summary(self, account_ids=None, year=None, month=None):
+    def get_summary(self, account_ids=None, year=None, month=None, label_ids=None):
         date_from = self.transaction_service.get_date_from(year, month)
         date_to = self.transaction_service.get_date_to(year, month)
 
-        total_debit = self.transaction_service.get_total(account_ids, year, month, False)
-        total_credit = self.transaction_service.get_total(account_ids, year, month, True)
+        total_debit = self.transaction_service.get_total(account_ids, year, month, False, label_ids)
+        total_credit = self.transaction_service.get_total(account_ids, year, month, True, label_ids)
         if account_ids is None:
             account_ids = []
             accounts = self.account_service.get_all_accounts()
