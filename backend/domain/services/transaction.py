@@ -55,11 +55,11 @@ class TransactionService():
             self.repository.get_grouped_by_labels(account_ids, date_from, date_to, sign)
         )
 
-    def get_total_by_period(self, account_ids=None, year=None, month=None, period=None):
+    def get_total_by_period(self, account_ids=None, year=None, month=None, period=None, label_ids=None):
         date_from = self.get_date_from(year, month)
         date_to = self.get_date_to(year, month)
         return self.map_to_key_value_list(
-            self.repository.get_grouped_by_period(account_ids, date_from, date_to, period)
+            self.repository.get_grouped_by_period(account_ids, date_from, date_to, period, label_ids)
         )
 
     def get_total_by_category_type(self, account_ids=None, year=None, category_type=None, quarterly=True):

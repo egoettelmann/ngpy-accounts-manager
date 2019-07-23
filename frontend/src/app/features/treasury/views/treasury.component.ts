@@ -6,7 +6,9 @@ import { TransactionsRestService } from '../../../core/services/rest/transaction
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import * as _ from 'lodash';
-import { Account, KeyValue, Summary, Transaction } from '../../../core/models/api.models';
+import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
+import { zip } from 'rxjs';
+import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
 
 @Component({
   templateUrl: './treasury.component.html',
@@ -18,9 +20,11 @@ export class TreasuryComponent implements OnInit {
 
   public currentYear: number;
   public accountsFilter: number[] = [];
+  public labelsFilter: number[];
 
   public graphOptions: any;
   public accounts: Account[];
+  public labels: Label[];
   public topTransactionsAsc: Transaction[];
   public topTransactionsDesc: Transaction[];
   public summary: Summary;
@@ -29,6 +33,7 @@ export class TreasuryComponent implements OnInit {
               private router: Router,
               private location: Location,
               private accountsService: AccountsRestService,
+              private labelsService: LabelsRestService,
               private statisticsService: StatisticsRestService,
               private transactionsService: TransactionsRestService,
               private decimalPipe: DecimalPipe) {
@@ -36,8 +41,12 @@ export class TreasuryComponent implements OnInit {
 
   ngOnInit(): void {
     this.initData();
-    this.accountsService.getAccounts().subscribe(data => {
-      this.accounts = data;
+    zip(
+      this.accountsService.getAccounts(),
+      this.labelsService.getAll()
+    ).subscribe(([accounts, labels]) => {
+      this.accounts = accounts;
+      this.labels = labels;
       this.reloadData();
     });
   }
@@ -51,6 +60,19 @@ export class TreasuryComponent implements OnInit {
     const newFilter = accounts.length === this.accounts.length ? [] : accounts.map(a => a.id);
     if (!_.isEqual(this.accountsFilter, newFilter)) {
       this.accountsFilter = newFilter;
+      this.reloadData();
+    }
+  }
+
+  /**
+   * Triggered on label change.
+   *
+   * @param {number[]} labels the new list of label ids
+   */
+  changeLabels(labels: number[]) {
+    const newFilter = labels;
+    if (!_.isEqual(this.labelsFilter, newFilter)) {
+      this.labelsFilter = newFilter;
       this.reloadData();
     }
   }
@@ -81,6 +103,13 @@ export class TreasuryComponent implements OnInit {
         .split(',')
         .map(a => +a);
     }
+    if (!this.route.snapshot.queryParamMap.has('labels')) {
+      this.labelsFilter = undefined;
+    } else {
+      this.labelsFilter = this.route.snapshot.queryParamMap.get('labels')
+        .split(',')
+        .map(a => +a);
+    }
   }
 
   /**
@@ -88,13 +117,15 @@ export class TreasuryComponent implements OnInit {
    */
   private reloadData() {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
-    this.loadEvolution(this.currentYear, accounts);
+    const labels = this.labelsFilter;
+    this.loadEvolution(this.currentYear, accounts, labels);
     this.loadSummary(this.currentYear, accounts);
     this.loadTops(this.currentYear, accounts);
 
     const url = this.router.createUrlTree(['treasury', this.currentYear], {
       queryParams: {
-        'account': accounts ? accounts.join(',') : undefined
+        'account': accounts ? accounts.join(',') : undefined,
+        'labels': labels ? labels.join(',') : undefined
       }
     }).toString();
     this.location.go(url);
@@ -105,9 +136,10 @@ export class TreasuryComponent implements OnInit {
    *
    * @param {number} year the year to filter on
    * @param {number[]} accounts the accounts to filter on
+   * @param {number[]} labels the labels to filter on
    */
-  private loadEvolution(year: number, accounts: number[]) {
-    this.statisticsService.getEvolution(year, accounts).subscribe(data => {
+  private loadEvolution(year: number, accounts: number[], labels: number[]) {
+    this.statisticsService.getEvolution(year, accounts, labels).subscribe(data => {
       this.graphOptions = this.buildChartOptions(data);
     });
   }

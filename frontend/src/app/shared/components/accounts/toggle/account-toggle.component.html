@@ -12,17 +12,17 @@
             <button type="button"
                     clrDropdownItem
                     (click)="toggleAllAccounts()">
-              <clr-icon *ngIf="selectedAccounts?.length === accounts?.length" shape="check-circle" class="is-success"></clr-icon>
+              <clr-icon *ngIf="selectedAccounts?.length === accounts?.length" shape="success-standard" class="is-success"></clr-icon>
               <clr-icon *ngIf="selectedAccounts?.length !== accounts?.length" shape="circle"></clr-icon>
-              <span>{{ 'i18n.components.accounts.account-toggle.all-accounts' | translate }}</span>
+              <span>&nbsp;{{ 'i18n.components.accounts.account-toggle.all-accounts' | translate }}</span>
             </button>
             <button *ngFor="let account of accounts"
                     type="button"
                     clrDropdownItem
                     (click)="toggleAccount(account)">
-              <clr-icon *ngIf="isSelected(account)" shape="check-circle" class="is-success"></clr-icon>
+              <clr-icon *ngIf="isSelected(account)" shape="success-standard" class="is-success"></clr-icon>
               <clr-icon *ngIf="!isSelected(account)" shape="circle"></clr-icon>
-              <span>{{ account.name }} - {{ account.description }}</span>
+              <span>&nbsp;{{ account.name }} - {{ account.description }}</span>
             </button>
           </clr-dropdown-menu>
         </clr-dropdown>

@@ -12,24 +12,24 @@
           <button type="button"
                   clrDropdownItem
                   (click)="toggleAllLabels()">
-            <clr-icon *ngIf="!selectedLabels" shape="check-circle" class="is-success"></clr-icon>
+            <clr-icon *ngIf="!selectedLabels" shape="success-standard" class="is-success"></clr-icon>
             <clr-icon *ngIf="selectedLabels" shape="circle"></clr-icon>
-            <span>{{ 'i18n.components.transactions.label-toggle.all-labels' | translate }}</span>
+            <span>&nbsp;{{ 'i18n.components.transactions.label-toggle.all-labels' | translate }}</span>
           </button>
           <button type="button"
                   clrDropdownItem
                   (click)="toggleLabel(null)">
-            <clr-icon *ngIf="isSelected(null)" shape="check-circle" class="is-success"></clr-icon>
+            <clr-icon *ngIf="isSelected(null)" shape="success-standard" class="is-success"></clr-icon>
             <clr-icon *ngIf="!isSelected(null)" shape="circle"></clr-icon>
-            <span>{{ 'i18n.components.transactions.label-toggle.no-label' | translate }}</span>
+            <span>&nbsp;{{ 'i18n.components.transactions.label-toggle.no-label' | translate }}</span>
           </button>
           <button *ngFor="let label of labels"
                   type="button"
                   clrDropdownItem
                   (click)="toggleLabel(label.id)">
-            <clr-icon *ngIf="isSelected(label.id)" shape="check-circle" class="is-success"></clr-icon>
+            <clr-icon *ngIf="isSelected(label.id)" shape="success-standard" class="is-success"></clr-icon>
             <clr-icon *ngIf="!isSelected(label.id)" shape="circle"></clr-icon>
-            <span>{{ label.name }}</span>
+            <span>&nbsp;{{ label.name }}</span>
           </button>
         </clr-dropdown-menu>
       </clr-dropdown>

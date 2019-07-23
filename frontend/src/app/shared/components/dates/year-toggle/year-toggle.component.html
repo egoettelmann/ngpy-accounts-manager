@@ -13,9 +13,9 @@
                   type="button"
                   clrDropdownItem
                   (click)="changeYear(year)">
-            <clr-icon *ngIf="year === currentYear" shape="check-circle" class="is-success"></clr-icon>
+            <clr-icon *ngIf="year === currentYear" shape="success-standard" class="is-success"></clr-icon>
             <span *ngIf="year !== currentYear" class="icon-empty">&nbsp;</span>
-            {{ year }}
+            &nbsp;{{ year }}
           </button>
         </clr-dropdown-menu>
       </clr-dropdown>

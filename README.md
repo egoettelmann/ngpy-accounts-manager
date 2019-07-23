@@ -58,7 +58,6 @@ python index.py
 
 - Unit tests
 - Review the lifecycle of the db's session
-- Review backend logging
 - Create a native app with Angular ?
 
 ### Features

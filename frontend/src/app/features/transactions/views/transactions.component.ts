@@ -218,7 +218,7 @@ export class TransactionsComponent implements OnInit {
    * @param {number[]} accounts the accounts to filter on
    */
   private loadRepartition(year: number, month: number, accounts: number[]) {
-    this.statisticsService.getGroupedByLabel(year, month, accounts).subscribe(data => {
+    this.statisticsService.getRepartition(year, month, accounts).subscribe(data => {
       this.graphOptions = this.buildChartOptions(data);
     });
   }

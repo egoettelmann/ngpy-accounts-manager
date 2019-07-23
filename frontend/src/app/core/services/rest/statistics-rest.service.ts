@@ -9,7 +9,7 @@ export class StatisticsRestService {
   constructor(private http: HttpClient) {
   }
 
-  getGroupedByLabel(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {
+  getRepartition(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -43,7 +43,7 @@ export class StatisticsRestService {
     return this.http.get<any>('/rest/stats/summary', {params: params});
   }
 
-  getEvolution(year: number, accounts?: number[]): Observable<KeyValue[]> {
+  getEvolution(year: number, accounts?: number[], labelIds?: number[]): Observable<KeyValue[]> {
     // Initialize Params Object
     let params = new HttpParams();
 
@@ -54,7 +54,10 @@ export class StatisticsRestService {
     if (accounts !== undefined) {
       params = params.append('account_ids', accounts.join(','));
     }
-    return this.http.get<KeyValue[]>('/rest/stats/treasury', {params: params});
+    if (labelIds !== undefined) {
+      params = params.append('label_ids', labelIds.join(','));
+    }
+    return this.http.get<KeyValue[]>('/rest/stats/evolution', {params: params});
   }
 
   getAnalytics(year?: number, categoryType?: string, accounts?: number[], quarterly = true): Observable<CompositeKeyValue[]> {

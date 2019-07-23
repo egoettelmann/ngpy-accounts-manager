@@ -29,9 +29,9 @@
                       type="button"
                       clrDropdownItem
                       (click)="changePeriod(period)">
-                <clr-icon *ngIf="period === quarterly" shape="check-circle" class="is-success"></clr-icon>
+                <clr-icon *ngIf="period === quarterly" shape="success-standard" class="is-success"></clr-icon>
                 <span *ngIf="period !== quarterly" class="icon-empty">&nbsp;</span>
-                {{ getPeriodSelectLabel(period) | translate }}
+                &nbsp;{{ getPeriodSelectLabel(period) | translate }}
               </button>
             </clr-dropdown-menu>
           </clr-dropdown>

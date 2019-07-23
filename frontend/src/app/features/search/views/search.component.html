@@ -34,17 +34,17 @@
               <button type="button"
                       clrDropdownItem
                       (click)="changeYear(undefined)">
-                <clr-icon *ngIf="!currentYear" shape="check-circle" class="is-success"></clr-icon>
+                <clr-icon *ngIf="!currentYear" shape="success-standard" class="is-success"></clr-icon>
                 <span *ngIf="currentYear" class="icon-empty">&nbsp;</span>
-                <span>{{ 'i18n.views.transactions.label.year-dropdown.all' | translate }}</span>
+                <span>&nbsp;{{ 'i18n.views.transactions.label.year-dropdown.all' | translate }}</span>
               </button>
               <button *ngFor="let year of yearList"
                       type="button"
                       clrDropdownItem
                       (click)="changeYear(year)">
-                <clr-icon *ngIf="year === currentYear" shape="check-circle" class="is-success"></clr-icon>
+                <clr-icon *ngIf="year === currentYear" shape="success-standard" class="is-success"></clr-icon>
                 <span *ngIf="year !== currentYear" class="icon-empty">&nbsp;</span>
-                {{ year }}
+                &nbsp;{{ year }}
               </button>
             </clr-dropdown-menu>
           </clr-dropdown>
@@ -68,17 +68,17 @@
               <button type="button"
                       clrDropdownItem
                       (click)="changeMonth(undefined)">
-                <clr-icon *ngIf="!currentMonth" shape="check-circle" class="is-success"></clr-icon>
+                <clr-icon *ngIf="!currentMonth" shape="success-standard" class="is-success"></clr-icon>
                 <span *ngIf="currentMonth" class="icon-empty">&nbsp;</span>
-                <span>{{ 'i18n.views.transactions.label.month-dropdown.all' | translate }}</span>
+                <span>&nbsp;{{ 'i18n.views.transactions.label.month-dropdown.all' | translate }}</span>
               </button>
               <button *ngFor="let month of monthList"
                       type="button"
                       clrDropdownItem
                       (click)="changeMonth(month)">
-                <clr-icon *ngIf="month === currentMonth" shape="check-circle" class="is-success"></clr-icon>
+                <clr-icon *ngIf="month === currentMonth" shape="success-standard" class="is-success"></clr-icon>
                 <span *ngIf="month !== currentMonth" class="icon-empty">&nbsp;</span>
-                {{ 'i18n.months.' + month | translate }}
+                &nbsp;{{ 'i18n.months.' + month | translate }}
               </button>
             </clr-dropdown-menu>
           </clr-dropdown>
