@@ -1,7 +1,8 @@
-from sqlalchemy import cast, Integer, String
+from sqlalchemy import cast, Integer
 from sqlalchemy.sql.expression import extract, func, desc, label, or_
 
 from ..entities import LabelDbo, TransactionDbo, CategoryDbo
+from ...domain.models import PeriodType
 from ...modules.depynject import injectable
 
 
@@ -76,13 +77,13 @@ class TransactionRepository():
         query = self.filter_by_accounts(query, account_ids)
         query = self.filter_by_date_from(query, date_from)
         query = self.filter_by_date_to(query, date_to)
-        if period in ['day']:
+        if period in [PeriodType.DAY]:
             query = query.group_by(extract('day', TransactionDbo.date_value))
             query = query.order_by(extract('day', TransactionDbo.date_value))
-        if period in ['month', 'day']:
+        if period in [PeriodType.MONTH, PeriodType.DAY]:
             query = query.group_by(extract('month', TransactionDbo.date_value))
             query = query.order_by(extract('month', TransactionDbo.date_value))
-        if period in ['year', 'month', 'day']:
+        if period in [PeriodType.YEAR, PeriodType.MONTH, PeriodType.DAY]:
             query = query.group_by(extract('year', TransactionDbo.date_value))
             query = query.order_by(extract('year', TransactionDbo.date_value))
         query = self.filter_by_labels(query, label_ids)

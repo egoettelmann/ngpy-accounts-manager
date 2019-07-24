@@ -3,7 +3,7 @@ import datetime
 from ...dbconnector.entities import TransactionDbo
 from ...modules.depynject import injectable
 
-from ..models import Transaction, KeyValue, CompositeKeyValue
+from ..models import Transaction, KeyValue, CompositeKeyValue, PeriodType
 
 
 @injectable()
@@ -63,9 +63,9 @@ class TransactionService():
         for kv in entries:
             keys = str(kv.key).split('-')
             key = keys[0]
-            if period in ['month', 'day']:
+            if period in [PeriodType.MONTH, PeriodType.DAY]:
                 key = key + '-' + keys[1]
-            if period in ['day']:
+            if period in [PeriodType.DAY]:
                 key = key + '-' + keys[2]
             values.append(KeyValue(key, kv.value))
         return values

@@ -2,6 +2,7 @@ import datetime
 
 from ..models import KeyValue
 from ..models import Summary
+from ..models import PeriodType
 from ...modules.depynject import injectable
 
 
@@ -17,7 +18,7 @@ class StatisticsService():
         if year is None:
             year = int(datetime.datetime.now().strftime("%Y"))
 
-        return self.transaction_service.get_total_by_period(account_ids, year, month, 'month', label_ids, sign)
+        return self.transaction_service.get_total_by_period(account_ids, year, month, PeriodType.MONTH, label_ids, sign)
 
     def get_evolution_for_year(self, account_ids=None, year=None):
         if year is None:
@@ -25,7 +26,7 @@ class StatisticsService():
         date_from = datetime.date(year, 1, 1)
         start_amount = 0
 
-        entries = self.transaction_service.get_total_by_period(account_ids, year, None, 'month')
+        entries = self.transaction_service.get_total_by_period(account_ids, year, None, PeriodType.MONTH)
 
         if account_ids is None:
             account_ids = []
@@ -60,9 +61,7 @@ class StatisticsService():
             amount_start = amount_start + self.account_service.get_account_total(acc_id, date_from)
             amount_end = amount_end + self.account_service.get_account_total(acc_id, date_to)
 
-        period_type = 'YEAR'
-        if month is not None:
-            period_type = 'MONTH'
+        period_type = PeriodType.YEAR if month is None else PeriodType.MONTH
 
         return Summary(
             amount_start,

@@ -4,6 +4,7 @@ from sqlalchemy.orm.query import Query
 
 from ..entities import TransactionDbo
 from ..manager import EntityManager
+from ...domain.models import PeriodType
 
 
 class QKeyValue:
@@ -59,7 +60,7 @@ class TransactionRepository():
                               account_ids : list(int),
                               date_from : datetime.date,
                               date_to : datetime.date,
-                              period : str,
+                              period : PeriodType,
                               label_ids : list(int),
                               sign : bool
                               ) -> list(QKeyValue) : ...

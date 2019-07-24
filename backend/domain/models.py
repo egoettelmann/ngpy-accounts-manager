@@ -1,5 +1,13 @@
+from enum import Enum
+
 from ..modules import restipy
 from ..modules.restipy import types
+
+
+class PeriodType():
+    DAY = 'DAY'
+    MONTH = 'MONTH'
+    YEAR = 'YEAR'
 
 
 @restipy.convertible({

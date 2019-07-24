@@ -1,6 +1,6 @@
 import datetime
 
-from ..models import Transaction, KeyValue, CompositeKeyValue
+from ..models import Transaction, KeyValue, CompositeKeyValue, PeriodType
 from ...dbconnector.repositories.transaction import TransactionRepository
 from ...mapping import Mapper
 
@@ -50,7 +50,7 @@ class TransactionService():
                             account_ids : list(int),
                             year : int,
                             month : int,
-                            period : str,
+                            period : PeriodType,
                             label_ids : list(int),
                             sign : bool
                             ) -> list(KeyValue) : ...
