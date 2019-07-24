@@ -37,10 +37,4 @@ class AccountService():
 
     def get_account_total(self, account_id : int, date : datetime.date) -> float : ...
 
-    def get_evolution_for_year(self,
-                               account_ids : list(int),
-                               year : int,
-                               label_ids : list(int)
-                               ) -> list(KeyValue) : ...
-
     def import_file(self, filename : str) -> bool : ...

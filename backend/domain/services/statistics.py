@@ -1,6 +1,8 @@
-from ...modules.depynject import injectable
+import datetime
 
+from ..models import KeyValue
 from ..models import Summary
+from ...modules.depynject import injectable
 
 
 @injectable()
@@ -10,6 +12,30 @@ class StatisticsService():
         self.mapper = object_mapper
         self.transaction_service = transaction_service
         self.account_service = account_service
+
+    def get_evolution_for_year(self, account_ids=None, year=None, label_ids=None):
+        if year is None:
+            year = int(datetime.datetime.now().strftime("%Y"))
+        date_from = datetime.date(year, 1, 1)
+        start_amount = 0
+
+        entries = self.transaction_service.get_total_by_period(account_ids, year, None, 'month', label_ids)
+
+        if account_ids is None:
+            account_ids = []
+            for acc in self.account_service.get_all_accounts():
+                account_ids.append(acc.id)
+        for acc_id in account_ids:
+            account_total = self.account_service.get_account_total(acc_id, date_from)
+            if account_total is not None:
+                start_amount = start_amount + account_total
+
+        values = [KeyValue(str(year) + '-01-01', start_amount)]
+        for e in entries:
+            if e.value is not None:
+                start_amount = start_amount + e.value
+            values.append(KeyValue(e.key, start_amount))
+        return values
 
     def get_summary(self, account_ids=None, year=None, month=None, label_ids=None):
         date_from = self.transaction_service.get_date_from(year, month)

@@ -34,7 +34,7 @@ class StatisticsController():
         label_ids = request.args.get('label_ids')
         if label_ids is not None:
             label_ids = list(map(lambda a: None if a == '' else int(a), label_ids.split(',')))
-        return self.account_service.get_evolution_for_year(account_ids, year, label_ids)
+        return self.statistics_service.get_evolution_for_year(account_ids, year, label_ids)
 
     @restipy.route('/summary')
     @restipy.format_as(Summary)
