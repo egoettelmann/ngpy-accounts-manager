@@ -51,7 +51,8 @@ class TransactionService():
                             year : int,
                             month : int,
                             period : str,
-                            label_ids : list(int)
+                            label_ids : list(int),
+                            sign : bool
                             ) -> list(KeyValue) : ...
 
     def get_total_by_category_type(self,

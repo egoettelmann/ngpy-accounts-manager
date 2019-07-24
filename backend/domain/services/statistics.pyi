@@ -18,7 +18,8 @@ class StatisticsService():
                                   account_ids : list(int),
                                   year : int,
                                   month : int,
-                                  label_ids : list(int)
+                                  label_ids : list(int),
+                                  sign : bool
                                   ) -> list(KeyValue) : ...
 
     def get_evolution_for_year(self,

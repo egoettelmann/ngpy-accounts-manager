@@ -24,7 +24,7 @@ export class StatisticsRestService {
     return this.http.get<KeyValue[]>('/rest/stats/repartition', {params: params});
   }
 
-  getAggregation(year?: number, month?: number, accounts?: number[], labelIds?: number[]): Observable<KeyValue[]> {
+  getAggregation(year?: number, month?: number, accounts?: number[], labelIds?: number[], credit?: boolean): Observable<KeyValue[]> {
     let params = new HttpParams();
 
     if (year !== undefined) {
@@ -38,6 +38,9 @@ export class StatisticsRestService {
     }
     if (labelIds !== undefined) {
       params = params.append('label_ids', labelIds.join(','));
+    }
+    if (credit !== undefined) {
+      params = params.append('credit', ''+credit);
     }
     return this.http.get<any>('/rest/stats/aggregation', {params: params});
   }

@@ -13,11 +13,11 @@ class StatisticsService():
         self.transaction_service = transaction_service
         self.account_service = account_service
 
-    def get_aggregation_by_period(self, account_ids=None, year=None, month=None, label_ids=None):
+    def get_aggregation_by_period(self, account_ids=None, year=None, month=None, label_ids=None, sign=None):
         if year is None:
             year = int(datetime.datetime.now().strftime("%Y"))
 
-        return self.transaction_service.get_total_by_period(account_ids, year, month, 'month', label_ids)
+        return self.transaction_service.get_total_by_period(account_ids, year, month, 'month', label_ids, sign)
 
     def get_evolution_for_year(self, account_ids=None, year=None):
         if year is None:
@@ -36,7 +36,7 @@ class StatisticsService():
             if account_total is not None:
                 start_amount = start_amount + account_total
 
-        values = [KeyValue(str(year) + '-01-01', start_amount)]
+        values = [KeyValue(str(year) + '-01', start_amount)]
         for e in entries:
             if e.value is not None:
                 start_amount = start_amount + e.value

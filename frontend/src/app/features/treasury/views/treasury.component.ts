@@ -28,7 +28,8 @@ export class TreasuryComponent implements OnInit {
   public topTransactionsDesc: Transaction[];
   public summary: Summary;
   public evolution: KeyValue[];
-  public aggregation: KeyValue[];
+  public aggregationCredit: KeyValue[];
+  public aggregationDebit: KeyValue[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -153,8 +154,11 @@ export class TreasuryComponent implements OnInit {
    * @param {number[]} labels the labels to filter on
    */
   private loadAggregation(year: number, accounts: number[], labels: number[]) {
-    this.statisticsService.getAggregation(year, undefined, accounts, labels).subscribe(data => {
-      this.aggregation = data;
+    this.statisticsService.getAggregation(year, undefined, accounts, labels, true).subscribe(data => {
+      this.aggregationCredit = data;
+    });
+    this.statisticsService.getAggregation(year, undefined, accounts, labels, false).subscribe(data => {
+      this.aggregationDebit = data;
     });
   }
 

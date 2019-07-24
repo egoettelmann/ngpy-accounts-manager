@@ -46,7 +46,10 @@ class StatisticsController():
         label_ids = request.args.get('label_ids')
         if label_ids is not None:
             label_ids = list(map(lambda a: None if a == '' else int(a), label_ids.split(',')))
-        return self.statistics_service.get_aggregation_by_period(account_ids, year, month, label_ids)
+        sign = request.args.get('credit')
+        if sign is not None:
+            sign = sign == 'true'
+        return self.statistics_service.get_aggregation_by_period(account_ids, year, month, label_ids, sign)
 
     @restipy.route('/summary')
     @restipy.format_as(Summary)

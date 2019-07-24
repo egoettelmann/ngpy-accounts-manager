@@ -10,7 +10,8 @@ import { KeyValue } from '../../../../core/models/api.models';
 export class TreasuryEvolutionChartComponent implements OnChanges {
 
   @Input() evolutionData: KeyValue[];
-  @Input() aggregationData: KeyValue[];
+  @Input() aggregationCreditData: KeyValue[];
+  @Input() aggregationDebitData: KeyValue[];
   @Input() chartTitle: string;
 
   public chartOptions: any;
@@ -22,8 +23,11 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
    * Triggered chen the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if ((changes.evolutionData || changes.aggregationData) && this.evolutionData && this.aggregationData) {
-      this.chartOptions = this.buildChartOptions(this.evolutionData, this.aggregationData);
+    if (
+      (changes.evolutionData || changes.aggregationCreditData || changes.aggregationDebitData)
+      && this.evolutionData && this.aggregationCreditData && this.aggregationDebitData
+    ) {
+      this.chartOptions = this.buildChartOptions(this.evolutionData, this.aggregationCreditData, this.aggregationDebitData);
     }
   }
 
@@ -31,10 +35,11 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
    * Builds the chart options for HighCharts.
    *
    * @param evolution the graph data for the evolution part
-   * @param aggregation the graph data for the aggregation part
+   * @param aggregationCredit the graph data for the aggregation part (credit)
+   * @param aggregationDebit the graph data for the aggregation part (debit)
    * @returns the chart options
    */
-  private buildChartOptions(evolution: KeyValue[], aggregation: KeyValue[]) {
+  private buildChartOptions(evolution: KeyValue[], aggregationCredit: KeyValue[], aggregationDebit: KeyValue[]) {
     const that = this;
     const options = {
       tooltip: {
@@ -48,7 +53,13 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
       series: [{
         type: 'column',
         data: [],
-        showInLegend: false
+        showInLegend: false,
+        stacking: 'normal'
+      }, {
+        type: 'column',
+        data: [],
+        showInLegend: false,
+        stacking: 'normal'
       }, {
         data: [],
         showInLegend: false
@@ -56,15 +67,23 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
     };
     evolution.forEach(eItem => {
       options.xAxis.categories.push(eItem.key);
-      options.series[1].data.push(eItem.value);
+      options.series[2].data.push(eItem.value);
 
-      aggregation.forEach(aItem => {
+      aggregationCredit.forEach(aItem => {
         if (aItem.key === eItem.key) {
           options.series[0].data.push(aItem.value);
         }
       });
-      if (options.series[1].data.length > options.series[0].data.length) {
+      aggregationDebit.forEach(aItem => {
+        if (aItem.key === eItem.key) {
+          options.series[1].data.push(aItem.value);
+        }
+      });
+      if (options.series[2].data.length > options.series[0].data.length) {
         options.series[0].data.push(0);
+      }
+      if (options.series[2].data.length > options.series[1].data.length) {
+        options.series[1].data.push(0);
       }
     });
     return options;
