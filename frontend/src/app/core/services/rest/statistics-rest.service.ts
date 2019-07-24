@@ -10,10 +10,8 @@ export class StatisticsRestService {
   }
 
   getRepartition(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {
-    // Initialize Params Object
     let params = new HttpParams();
 
-    // Begin assigning parameters
     if (year !== undefined) {
       params = params.append('year', year.toString());
     }
@@ -26,11 +24,27 @@ export class StatisticsRestService {
     return this.http.get<KeyValue[]>('/rest/stats/repartition', {params: params});
   }
 
-  getSummary(year?: number, month?: number, accounts?: number[], labelIds?: number[]): Observable<Summary> {
-    // Initialize Params Object
+  getAggregation(year?: number, month?: number, accounts?: number[], labelIds?: number[]): Observable<KeyValue[]> {
     let params = new HttpParams();
 
-    // Begin assigning parameters
+    if (year !== undefined) {
+      params = params.append('year', year.toString());
+    }
+    if (month !== undefined) {
+      params = params.append('month', month.toString());
+    }
+    if (accounts !== undefined) {
+      params = params.append('account_ids', accounts.join(','));
+    }
+    if (labelIds !== undefined) {
+      params = params.append('label_ids', labelIds.join(','));
+    }
+    return this.http.get<any>('/rest/stats/aggregation', {params: params});
+  }
+
+  getSummary(year?: number, month?: number, accounts?: number[], labelIds?: number[]): Observable<Summary> {
+    let params = new HttpParams();
+
     if (year !== undefined) {
       params = params.append('year', year.toString());
     }
@@ -46,28 +60,21 @@ export class StatisticsRestService {
     return this.http.get<any>('/rest/stats/summary', {params: params});
   }
 
-  getEvolution(year: number, accounts?: number[], labelIds?: number[]): Observable<KeyValue[]> {
-    // Initialize Params Object
+  getEvolution(year: number, accounts?: number[]): Observable<KeyValue[]> {
     let params = new HttpParams();
 
-    // Begin assigning parameters
     if (year !== undefined) {
       params = params.append('year', year.toString());
     }
     if (accounts !== undefined) {
       params = params.append('account_ids', accounts.join(','));
     }
-    if (labelIds !== undefined) {
-      params = params.append('label_ids', labelIds.join(','));
-    }
     return this.http.get<KeyValue[]>('/rest/stats/evolution', {params: params});
   }
 
   getAnalytics(year?: number, categoryType?: string, accounts?: number[], quarterly = true): Observable<CompositeKeyValue[]> {
-    // Initialize Params Object
     let params = new HttpParams();
 
-    // Begin assigning parameters
     if (year !== undefined) {
       params = params.append('year', year.toString());
     }
@@ -82,10 +89,8 @@ export class StatisticsRestService {
   }
 
   getAnalyticsDetails(year?: number, categoryType?: string, accounts?: number[]): Observable<CompositeKeyValue[]> {
-    // Initialize Params Object
     let params = new HttpParams();
 
-    // Begin assigning parameters
     if (year !== undefined) {
       params = params.append('year', year.toString());
     }

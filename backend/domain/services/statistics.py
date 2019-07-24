@@ -13,13 +13,19 @@ class StatisticsService():
         self.transaction_service = transaction_service
         self.account_service = account_service
 
-    def get_evolution_for_year(self, account_ids=None, year=None, label_ids=None):
+    def get_aggregation_by_period(self, account_ids=None, year=None, month=None, label_ids=None):
+        if year is None:
+            year = int(datetime.datetime.now().strftime("%Y"))
+
+        return self.transaction_service.get_total_by_period(account_ids, year, month, 'month', label_ids)
+
+    def get_evolution_for_year(self, account_ids=None, year=None):
         if year is None:
             year = int(datetime.datetime.now().strftime("%Y"))
         date_from = datetime.date(year, 1, 1)
         start_amount = 0
 
-        entries = self.transaction_service.get_total_by_period(account_ids, year, None, 'month', label_ids)
+        entries = self.transaction_service.get_total_by_period(account_ids, year, None, 'month')
 
         if account_ids is None:
             account_ids = []

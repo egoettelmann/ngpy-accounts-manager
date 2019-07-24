@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { DecimalPipe, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
 import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
@@ -22,12 +22,13 @@ export class TreasuryComponent implements OnInit {
   public accountsFilter: number[] = [];
   public labelsFilter: number[];
 
-  public graphOptions: any;
   public accounts: Account[];
   public labels: Label[];
   public topTransactionsAsc: Transaction[];
   public topTransactionsDesc: Transaction[];
   public summary: Summary;
+  public evolution: KeyValue[];
+  public aggregation: KeyValue[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -35,8 +36,8 @@ export class TreasuryComponent implements OnInit {
               private accountsService: AccountsRestService,
               private labelsService: LabelsRestService,
               private statisticsService: StatisticsRestService,
-              private transactionsService: TransactionsRestService,
-              private decimalPipe: DecimalPipe) {
+              private transactionsService: TransactionsRestService
+  ) {
   }
 
   ngOnInit(): void {
@@ -118,8 +119,9 @@ export class TreasuryComponent implements OnInit {
   private reloadData() {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
     const labels = this.labelsFilter;
-    this.loadEvolution(this.currentYear, accounts, labels);
-    this.loadSummary(this.currentYear, accounts, labels);
+    this.loadSummary(this.currentYear, accounts);
+    this.loadEvolution(this.currentYear, accounts);
+    this.loadAggregation(this.currentYear, accounts, labels);
     this.loadTops(this.currentYear, accounts, labels);
 
     const url = this.router.createUrlTree(['treasury', this.currentYear], {
@@ -132,15 +134,27 @@ export class TreasuryComponent implements OnInit {
   }
 
   /**
-   * Loads the evolution data for the graph.
+   * Loads the evolution data.
+   *
+   * @param {number} year the year to filter on
+   * @param {number[]} accounts the accounts to filter on
+   */
+  private loadEvolution(year: number, accounts: number[]) {
+    this.statisticsService.getEvolution(year, accounts).subscribe(data => {
+      this.evolution = data;
+    });
+  }
+
+  /**
+   * Loads the aggregation data.
    *
    * @param {number} year the year to filter on
    * @param {number[]} accounts the accounts to filter on
    * @param {number[]} labels the labels to filter on
    */
-  private loadEvolution(year: number, accounts: number[], labels: number[]) {
-    this.statisticsService.getEvolution(year, accounts, labels).subscribe(data => {
-      this.graphOptions = this.buildChartOptions(data);
+  private loadAggregation(year: number, accounts: number[], labels: number[]) {
+    this.statisticsService.getAggregation(year, undefined, accounts, labels).subscribe(data => {
+      this.aggregation = data;
     });
   }
 
@@ -149,10 +163,9 @@ export class TreasuryComponent implements OnInit {
    *
    * @param {number} year the year to filter on
    * @param {number[]} accounts the accounts to filter on
-   * @param {number[]} labels the labels to filter on
    */
-  private loadSummary(year: number, accounts: number[], labels: number[]) {
-    this.statisticsService.getSummary(year, undefined, accounts, labels).subscribe(data => {
+  private loadSummary(year: number, accounts: number[]) {
+    this.statisticsService.getSummary(year, undefined, accounts).subscribe(data => {
       this.summary = data;
     });
   }
@@ -171,35 +184,6 @@ export class TreasuryComponent implements OnInit {
     this.transactionsService.getTop(10, false, year, undefined, accounts, labels).subscribe(data => {
       this.topTransactionsDesc = data;
     });
-  }
-
-  /**
-   * Builds the chart options for HighCharts.
-   *
-   * @param data the graph data
-   * @returns the chart options
-   */
-  private buildChartOptions(data: KeyValue[]) {
-    const that = this;
-    const options = {
-      tooltip: {
-        formatter: function () {
-          return '' + this.x + ': <b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>';
-        }
-      },
-      xAxis: {
-        categories: []
-      },
-      series: [{
-        data: [],
-        showInLegend: false
-      }]
-    };
-    for (const d of data) {
-      options.xAxis.categories.push(d.key);
-      options.series[0].data.push(d.value);
-    }
-    return options;
   }
 
 }

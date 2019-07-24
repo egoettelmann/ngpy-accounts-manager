@@ -31,10 +31,22 @@ class StatisticsController():
         account_ids = request.args.get('account_ids')
         if account_ids is not None:
             account_ids = account_ids.split(',')
+        return self.statistics_service.get_evolution_for_year(account_ids, year)
+
+    @restipy.route('/aggregation')
+    @restipy.format_as(KeyValue)
+    def get_aggregation(self):
+        year = int(request.args.get('year'))
+        month = request.args.get('month')
+        if month is not None:
+            month = int(month)
+        account_ids = request.args.get('account_ids')
+        if account_ids is not None:
+            account_ids = account_ids.split(',')
         label_ids = request.args.get('label_ids')
         if label_ids is not None:
             label_ids = list(map(lambda a: None if a == '' else int(a), label_ids.split(',')))
-        return self.statistics_service.get_evolution_for_year(account_ids, year, label_ids)
+        return self.statistics_service.get_aggregation_by_period(account_ids, year, month, label_ids)
 
     @restipy.route('/summary')
     @restipy.format_as(Summary)

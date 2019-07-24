@@ -23,7 +23,10 @@
     <app-summary [summary]="summary"></app-summary>
   </div>
   <div class="clr-col-12 clr-col-md-8">
-    <app-chart class="card" [title]="'i18n.views.treasury.chart.title' | translate" [options]="graphOptions"></app-chart>
+    <app-treasury-evolution-chart [chartTitle]="'i18n.views.treasury.chart.title' | translate"
+                                  [evolutionData]="evolution"
+                                  [aggregationData]="aggregation">
+    </app-treasury-evolution-chart>
   </div>
 </div>
 
