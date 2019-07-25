@@ -48,6 +48,9 @@
   "i18n.views.transactions.list.add": "Add a new transaction",
   "i18n.views.transactions.warning.too-many": "Not all transactions may be displayed, the current view is limited to 500 elements.",
 
+  "i18n.views.treasury.chart.credits": "Credits",
+  "i18n.views.treasury.chart.debits": "Debits",
+  "i18n.views.treasury.chart.evolution": "Evolution",
   "i18n.views.treasury.chart.title": "Treasury history",
   "i18n.views.treasury.top-list.title": "Top transactions",
 

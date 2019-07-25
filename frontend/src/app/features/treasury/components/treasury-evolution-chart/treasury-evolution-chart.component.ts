@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { KeyValue } from '../../../../core/models/api.models';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-treasury-evolution-chart',
@@ -16,7 +17,9 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
 
   public chartOptions: any;
 
-  constructor(private decimalPipe: DecimalPipe) {
+  constructor(private translateService: TranslateService,
+              private decimalPipe: DecimalPipe
+  ) {
   }
 
   /**
@@ -51,18 +54,18 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
         categories: []
       },
       series: [{
+        name: this.translateService.instant('i18n.views.treasury.chart.credits'),
         type: 'column',
         data: [],
-        showInLegend: false,
         stacking: 'normal'
       }, {
+        name: this.translateService.instant('i18n.views.treasury.chart.debits'),
         type: 'column',
         data: [],
-        showInLegend: false,
         stacking: 'normal'
       }, {
-        data: [],
-        showInLegend: false
+        name: this.translateService.instant('i18n.views.treasury.chart.evolution'),
+        data: []
       }]
     };
     evolution.forEach(eItem => {
