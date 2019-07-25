@@ -21,6 +21,7 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { SharedModule } from '../shared/shared.module';
 import { AuthenticatedGuard } from './guards/authenticated.guard';
 import { AuthenticationService } from './services/authentication.service';
+import { ResponsiveService } from './services/responsive.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -85,6 +86,7 @@ export class CoreModule {
     AuthenticationService,
     NotificationService,
     KeepFocusService,
+    ResponsiveService,
 
     /** Pipes */
     DecimalPipe,
@@ -94,13 +96,13 @@ export class CoreModule {
 
     /** Interceptors */
     {
-    provide: HTTP_INTERCEPTORS,
-    useClass: ErrorInterceptor,
-    multi: true
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
     }
   ];
 
-  constructor (@Optional() @SkipSelf() parentModule: CoreModule) {
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     if (parentModule) {
       throw new Error('CoreModule is already loaded. Import it in the AppModule only');
     }

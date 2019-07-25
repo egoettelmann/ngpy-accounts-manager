@@ -27,7 +27,9 @@
       </div>
     </div>
 
-    <app-chart class="card" [title]="'i18n.views.dashboard.chart.title' | translate" [options]="graphOptions"></app-chart>
+    <app-dashboard-accounts-chart [chartTitle]="'i18n.views.dashboard.chart.title' | translate"
+                                  [accounts]="accounts">
+    </app-dashboard-accounts-chart>
   </div>
 
   <div class="clr-col-12 clr-col-md-6">

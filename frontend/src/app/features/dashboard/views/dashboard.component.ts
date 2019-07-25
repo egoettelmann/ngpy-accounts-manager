@@ -1,5 +1,4 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
 import { zip } from 'rxjs';
@@ -17,12 +16,10 @@ export class DashboardComponent implements OnInit {
   public accounts: Account[];
   public unlabeledTransactions: number;
   public total: number;
-  public graphOptions: any;
 
   constructor(private router: Router,
               private accountsService: AccountsRestService,
-              private transactionsService: TransactionsRestService,
-              private decimalPipe: DecimalPipe
+              private transactionsService: TransactionsRestService
   ) {
   }
 
@@ -37,7 +34,6 @@ export class DashboardComponent implements OnInit {
       for (const a of this.accounts) {
         this.total += a.total;
       }
-      this.graphOptions = this.buildChartOptions(accounts, this.total);
     });
   }
 
@@ -47,40 +43,6 @@ export class DashboardComponent implements OnInit {
         label: ''
       }
     });
-  }
-
-  /**
-   * Builds the chart options for HighCharts.
-   *
-   * @param data the graph data
-   * @returns the chart options
-   */
-  private buildChartOptions(data: Account[], total: number) {
-    const that = this;
-    const options = {
-      chart: {
-        type: 'pie'
-      },
-      tooltip: {
-        formatter: function () {
-          return '<b>' + this.point.name + '</b><br/>'
-            + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
-            + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
-        }
-      },
-      series: [{
-        data: [],
-        showInLegend: false
-      }]
-    };
-    for (const d of data) {
-      options.series[0].data.push({
-        name: d.description,
-        color: d.color,
-        y: d.total
-      });
-    }
-    return options;
   }
 
 }

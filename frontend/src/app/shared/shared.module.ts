@@ -21,6 +21,7 @@ import { TransactionsFormComponent } from './components/transactions/form/transa
 import { LabelToggleComponent } from './components/labels/toggle/label-toggle.component';
 import { TransactionsTableComponent } from './components/transactions/table/transactions-table.component';
 import { RouterModule } from '@angular/router';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: SharedModule.COMPONENTS_LIST,
@@ -54,6 +55,7 @@ export class SharedModule {
 
   static MODULE_LIST = [
     CommonModule,
+    LayoutModule,
     HttpClientModule,
     TranslateModule,
     RouterModule,
