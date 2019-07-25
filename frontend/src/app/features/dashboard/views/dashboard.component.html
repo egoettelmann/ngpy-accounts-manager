@@ -1,8 +1,9 @@
 <div class="clr-row" *ngIf="unlabeledTransactions > 0">
   <div class="clr-col-12">
-    <clr-alert [clrAlertType]="'alert-danger'"
+    <clr-alert [clrAlertType]="'danger'"
+               [clrAlertIcon]="'exclamation-circle'"
                [clrAlertClosable]="false">
-      <div class="alert-item">
+      <clr-alert-item>
         <span class="alert-text">
           {{ 'i18n.views.dashboard.error.unlabeled-transactions' | translate:{num: unlabeledTransactions} }}
         </span>
@@ -11,7 +12,7 @@
             {{ 'i18n.views.dashboard.error.unlabeled-transactions-fix' | translate }}
           </a>
         </div>
-      </div>
+      </clr-alert-item>
     </clr-alert>
   </div>
 </div>

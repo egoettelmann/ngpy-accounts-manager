@@ -22,6 +22,10 @@
   margin-bottom: .5rem;
 }
 
+.mr-1 {
+  margin-right: .5rem;
+}
+
 .card-shadow {
   box-shadow: 0 0.125rem 0 0 #d7d7d7;
 }
@@ -39,5 +43,21 @@
         width: 100%;
       }
     }
+  }
+}
+
+.text-danger {
+  color: #e12200;
+}
+
+.text-success {
+  color: #2f8400;
+}
+
+@media (max-width: 767px) {
+  .truncate-md-170 {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

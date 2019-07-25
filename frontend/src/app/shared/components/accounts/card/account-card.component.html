@@ -1,16 +1,17 @@
 <div class="card">
   <div class="card-block">
     <h4 class="card-title" [ngStyle]="{'color': account.color}">
-      <strong>{{ account.name }}</strong> - {{ account.description }}
+      <strong>{{ account.description }}</strong><br/>
+      <span class="account-name">{{ account.name }}</span>
     </h4>
     <p class="card-text">
-      <span>{{ 'i18n.components.accounts.account-card.latest-transaction' | translate }}</span>
+      <span class="mr-1">{{ 'i18n.components.accounts.account-card.latest-transaction' | translate }}</span>
       <span>{{ account.lastUpdate | date:'dd/MM/yyyy' }}</span>
     </p>
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
-      <strong>{{ 'i18n.components.accounts.account-card.total' | translate }}</strong>
+      <strong class="mr-1">{{ 'i18n.components.accounts.account-card.total' | translate }}</strong>
       <span>&nbsp;{{ account.total | number:'1.2-2' }} €</span>
     </li>
   </ul>
