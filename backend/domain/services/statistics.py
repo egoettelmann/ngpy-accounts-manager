@@ -37,7 +37,7 @@ class StatisticsService():
             if account_total is not None:
                 start_amount = start_amount + account_total
 
-        values = [KeyValue(str(year) + '-01', start_amount)]
+        values = [KeyValue(str(year - 1) + '-12', start_amount)]
         for e in entries:
             if e.value is not None:
                 start_amount = start_amount + e.value
