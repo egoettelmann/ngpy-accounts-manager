@@ -55,6 +55,7 @@ export class DashboardAccountsChartComponent implements OnInit, OnChanges {
       series: [{
         data: [],
         showInLegend: !this.isMediumOrUp,
+        innerSize: '60%',
         dataLabels: {
           enabled: this.isMediumOrUp
         },
