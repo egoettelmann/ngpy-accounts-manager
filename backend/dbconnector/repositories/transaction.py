@@ -55,9 +55,10 @@ class TransactionRepository():
         return query.limit(num_transactions).all()
 
     def get_grouped_by_labels(self, account_ids=None, date_from=None, date_to=None, sign=None):
+        value_expr = func.sum(TransactionDbo.amount)
         query = self.entity_manager.query(
             label('key', LabelDbo.name),
-            func.sum(TransactionDbo.amount).label('value')
+            label('value', value_expr)
         ).join(
             LabelDbo.transactions
         )
@@ -67,6 +68,7 @@ class TransactionRepository():
         query = self.filter_by_sign(query, sign)
         query = query.group_by(LabelDbo.id)
         query = query.group_by(LabelDbo.name)
+        query = query.order_by(desc(value_expr))
         return query.all()
 
     def get_grouped_by_period(self, account_ids=None, date_from=None, date_to=None, period=None, label_ids=None, sign=None):
