@@ -1,8 +1,14 @@
+# IDE related files
 .idea
-venv
 *.iml
-*.db
+
+# Build related files
+venv
 *.pyc
+__pycache__/
+
+# Application instance specific files
+*.db
 uploads/
 tmp/
-__pycache__/
+version.txt

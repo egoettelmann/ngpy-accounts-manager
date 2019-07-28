@@ -4,6 +4,7 @@ from ..domain.services.user import UserService
 
 class SessionController():
     user_service: UserService
+    app_properties: dict
 
     def login(self) -> dict: ...
 

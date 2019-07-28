@@ -2,3 +2,14 @@
   background: url("https://source.unsplash.com/1920x1080/weekly?water,nature,rocks") right;
   background-size: cover;
 }
+
+.login-footer {
+  padding-top: .5rem;
+  text-align: center;
+
+  .login-version {
+    font-size: 0.5rem;
+    color: darkgray;
+  }
+}
+

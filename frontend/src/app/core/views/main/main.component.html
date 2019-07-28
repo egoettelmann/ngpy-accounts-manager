@@ -1,8 +1,14 @@
 <clr-main-container>
   <app-navigation></app-navigation>
 
+  <!-- The page content -->
   <div class="content-container">
-    <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
+  </div>
+
+  <!-- The footer -->
+  <div *ngIf="appProperties" class="app-footer">
+    <span class="app-version">{{ appProperties.version}}</span>
   </div>
 
   <app-notification-modal [type]="'ERROR'"></app-notification-modal>

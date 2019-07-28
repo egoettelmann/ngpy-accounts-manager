@@ -13,8 +13,13 @@ from ..modules.depynject import injectable
 @restipy.prefix('/session')
 class SessionController():
 
-    def __init__(self, user_service):
+    def __init__(self, user_service, app_properties):
         self.user_service = user_service
+        self.app_properties = app_properties
+
+    @restipy.route('/properties', methods=['GET'])
+    def properties(self):
+        return self.app_properties
 
     @restipy.route('/login', methods=['POST'])
     def login(self):

@@ -16,28 +16,44 @@ from backend.modules.depynject import Depynject
 from backend.modules.di_providers import RequestDiProvider
 from backend.modules.restipy import Api
 
+# Configuring Logging
 logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
 
+# Configuring Dependency Injection
 rdi_provider = RequestDiProvider()
 d_injector = Depynject(providers={
     'request': rdi_provider.provide
 })
+
+# Configuring Exception Handling
 e_handler = ApplicationExceptionHandler()
 
+# Building the app
 app = Flask(__name__,
             static_folder='frontend/dist',
             static_url_path=''
             )
+app.secret_key = os.environ['SESSION_SECRET_KEY']
+
+# Configuring CORS
 CORS(app, origins='http://localhost:4210', supports_credentials=True)
+
+# Building the api (the Restful app)
 api = Api(app,
           prefix='/rest',
           di_provider=d_injector.provide,
           exception_handler=e_handler
           )
 
-app.secret_key = os.environ['SESSION_SECRET_KEY']
+# Configuring Entity Manager
 em = EntityManager(os.environ['DATABASE_URL'])
 d_injector.register_singleton(em)
+
+# Registering the App Properties
+app_properties = {}
+with open('version.txt', 'r') as version_file:
+    app_properties['version'] = version_file.read()
+d_injector.register_singleton(app_properties, 'app_properties')
 
 
 @app.route('/')
@@ -48,6 +64,7 @@ def serve_app():
 
 @app.before_request
 def before_request():
+    logging.info('REQUESTING %s %s', request.path, request.endpoint)
     if request.method != 'OPTIONS' \
             and request.path.startswith(api.prefix) \
             and not request.endpoint.startswith('SessionController'):

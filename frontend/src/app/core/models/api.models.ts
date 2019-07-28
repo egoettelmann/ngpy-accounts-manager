@@ -26,6 +26,10 @@ export class CompositeKeyValue {
   public value: number;
 }
 
+export class AppProperties {
+  public version: string;
+}
+
 export class Label {
   public id: number;
   public name: string;

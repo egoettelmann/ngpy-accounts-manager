@@ -6,23 +6,28 @@
       <h5 class="hint">{{ 'i18n.views.login.help-text' | translate }}</h5>
     </div>
     <div class="login-group">
-      <input [(ngModel)]="loginForm.username"
-             clrInput
-             name="username"
-             class="username"
-             type="text"
-             id="login_username"
-             [placeholder]="'i18n.views.login.form.placeholder.username' | translate">
-      <input [(ngModel)]="loginForm.password"
-             clrInput
-             name="password"
-             class="password"
-             type="password"
-             id="login_password"
-             [placeholder]="'i18n.views.login.form.placeholder.password' | translate">
-      <app-notification-message></app-notification-message>
+      <div [hidden]="formIsLoading">
+        <input [(ngModel)]="loginForm.username"
+               clrInput
+               name="username"
+               class="username"
+               type="text"
+               id="login_username"
+               [placeholder]="'i18n.views.login.form.placeholder.username' | translate">
+        <input [(ngModel)]="loginForm.password"
+               clrInput
+               name="password"
+               class="password"
+               type="password"
+               id="login_password"
+               [placeholder]="'i18n.views.login.form.placeholder.password' | translate">
+        <app-notification-message></app-notification-message>
+      </div>
       <div class="spinner spinner-sm" [hidden]="!formIsLoading">{{ 'i18n.views.login.loading' | translate }}</div>
       <button type="submit" class="btn btn-primary" [hidden]="formIsLoading">{{ 'i18n.views.login.form.button.submit' | translate }}</button>
+    </div>
+    <div *ngIf="appProperties" class="login-footer">
+      <span class="login-version">{{ appProperties.version }}</span>
     </div>
   </form>
 </div>
