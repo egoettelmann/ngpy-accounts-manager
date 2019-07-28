@@ -60,7 +60,7 @@ export class AnalyticsQuarterlyChartComponent implements OnChanges {
       },
       plotOptions: {
         column: {
-          stacking: 'normal',
+          stacking: 'percent',
           dataLabels: {
             enabled: true,
             formatter: function () {
