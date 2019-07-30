@@ -1,8 +1,9 @@
-import datetime
+from datetime import datetime, timedelta
 import hashlib
+import logging
 
 from ..exceptions import FileImportException
-from ..models import Account, KeyValue
+from ..models import Account, Notification
 from ...dbconnector.entities import AccountDbo
 from ...dbconnector.entities import TransactionDbo
 from ...modules.depynject import injectable
@@ -81,3 +82,38 @@ class AccountService():
             return self.transaction_service.create_all(transactions)
         except Exception as e:
             raise FileImportException("Impossible to import file", cause=e)
+
+    def get_notification_levels(self):
+        accounts_list = self.get_all_accounts()
+
+        info_limit = datetime.date(datetime.today() - timedelta(days=30))
+        warn_limit = datetime.date(datetime.today() - timedelta(days=60))
+        error_limit = datetime.date(datetime.today() - timedelta(days=80))
+
+        max_level = 0
+        notification_level = None
+        notifications = []
+
+        for acc in accounts_list:
+            if not acc.notify:
+                continue
+            logging.info('Account %s last updated on %s', acc.name, acc.last_update)
+            if acc.last_update < error_limit:
+                max_level = max(max_level, 3)
+                notif = Notification(acc.name, 'ERROR', str(acc.last_update))
+                notifications.append(notif)
+                if max_level == 3:
+                    notification_level = 'ERROR'
+            elif acc.last_update < warn_limit:
+                max_level = max(max_level, 2)
+                notif = Notification(acc.name, 'WARNING', str(acc.last_update))
+                notifications.append(notif)
+                if max_level == 2:
+                    notification_level = 'WARNING'
+            elif acc.last_update < info_limit:
+                max_level = max(max_level, 1)
+                notif = Notification(acc.name, 'INFO', str(acc.last_update))
+                notifications.append(notif)
+                if max_level == 1:
+                    notification_level = 'INFO'
+        return notification_level, notifications

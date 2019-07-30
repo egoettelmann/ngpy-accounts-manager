@@ -1,53 +1,37 @@
 import logging
+import os
 
-from datetime import datetime, timedelta
-
-import index
-
-from backend.domain.models import Notification
-from backend.domain.services.notification import NotificationService
+from backend.dbconnector.manager import EntityManager
 from backend.domain.services.account import AccountService
+from backend.domain.services.notification import NotificationService
+from backend.modules.depynject import Depynject
 from backend.modules.di_providers import SimplePrototypeDiProvider
 
+######################
+# Configuring Logging
+######################
+logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
+
+###################################
+# Configuring Dependency Injection
+###################################
 spdi_provider = SimplePrototypeDiProvider()
-index.d_injector.providers = {
+d_injector = Depynject(providers={
     'request': spdi_provider.provide
-}
-notification_service = index.d_injector.provide(NotificationService)
-account_service = index.d_injector.provide(AccountService)
+})
 
-accounts_list = account_service.get_all_accounts()
+# Configuring Entity Manager
+em = EntityManager(os.environ['DATABASE_URL'])
+d_injector.register_singleton(em)
 
-info_limit = datetime.date(datetime.today() - timedelta(days=30))
-warn_limit = datetime.date(datetime.today() - timedelta(days=60))
-error_limit = datetime.date(datetime.today() - timedelta(days=80))
 
-max_level = 0
-notification_level = None
-notifications = []
+##########################
+# Executing the Scheduler
+##########################
+notification_service = d_injector.provide(NotificationService)
+account_service = d_injector.provide(AccountService)
 
-for acc in accounts_list:
-    if not acc.notify:
-        continue
-    logging.info('Account %s last updated on %s', acc.name, acc.last_update)
-    if acc.last_update < error_limit:
-        max_level = max(max_level, 3)
-        notif = Notification(acc.name, 'ERROR', str(acc.last_update))
-        notifications.append(notif)
-        if max_level == 3:
-            notification_level = 'ERROR'
-    elif acc.last_update < warn_limit:
-        max_level = max(max_level, 2)
-        notif = Notification(acc.name, 'WARNING', str(acc.last_update))
-        notifications.append(notif)
-        if max_level == 2:
-            notification_level = 'WARNING'
-    elif acc.last_update < info_limit:
-        max_level = max(max_level, 1)
-        notif = Notification(acc.name, 'INFO', str(acc.last_update))
-        notifications.append(notif)
-        if max_level == 1:
-            notification_level = 'INFO'
+notification_level, notifications = account_service.get_notification_levels()
 
 logging.info('Notification max level: %s', notification_level)
 

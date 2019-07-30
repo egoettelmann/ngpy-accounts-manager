@@ -3,7 +3,7 @@ import datetime
 from .status import StatusService
 from .transaction import TransactionService
 from ..importers.resolve import Resolver
-from ..models import Account, KeyValue
+from ..models import Account, Notification
 from ...dbconnector.repositories.account import AccountRepository
 from ...mapping import Mapper
 
@@ -38,3 +38,5 @@ class AccountService():
     def get_account_total(self, account_id : int, date : datetime.date) -> float : ...
 
     def import_file(self, filename : str) -> bool : ...
+
+    def get_notification_levels(self) -> (str, list(Notification)) : ...

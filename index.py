@@ -16,19 +16,32 @@ from backend.modules.depynject import Depynject
 from backend.modules.di_providers import RequestDiProvider
 from backend.modules.restipy import Api
 
+######################
 # Configuring Logging
+######################
 logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
 
+###################################
 # Configuring Dependency Injection
+###################################
 rdi_provider = RequestDiProvider()
 d_injector = Depynject(providers={
     'request': rdi_provider.provide
 })
 
-# Configuring Exception Handling
-e_handler = ApplicationExceptionHandler()
+# Configuring Entity Manager
+em = EntityManager(os.environ['DATABASE_URL'])
+d_injector.register_singleton(em)
 
-# Building the app
+# Registering the App Properties
+app_properties = {}
+with open('version.txt', 'r') as version_file:
+    app_properties['version'] = version_file.read()
+d_injector.register_singleton(app_properties, 'app_properties')
+
+###################
+# Building the App
+###################
 app = Flask(__name__,
             static_folder='frontend/dist',
             static_url_path=''
@@ -42,26 +55,30 @@ CORS(app, origins='http://localhost:4210', supports_credentials=True)
 api = Api(app,
           prefix='/rest',
           di_provider=d_injector.provide,
-          exception_handler=e_handler
+          exception_handler=ApplicationExceptionHandler()
           )
 
-# Configuring Entity Manager
-em = EntityManager(os.environ['DATABASE_URL'])
-d_injector.register_singleton(em)
-
-# Registering the App Properties
-app_properties = {}
-with open('version.txt', 'r') as version_file:
-    app_properties['version'] = version_file.read()
-d_injector.register_singleton(app_properties, 'app_properties')
+# Registering the controllers
+api.register(AccountController)
+api.register(LabelController)
+api.register(CategoryController)
+api.register(TransactionController)
+api.register(StatisticsController)
+api.register(SessionController)
 
 
+##############################
+# Index Page for starting app
+##############################
 @app.route('/')
 def serve_app():
     logging.info('Loading index page')
     return app.send_static_file('index.html')
 
 
+########################
+# Authentication filter
+########################
 @app.before_request
 def before_request():
     logging.info('REQUESTING %s %s', request.path, request.endpoint)
@@ -75,6 +92,9 @@ def before_request():
             logging.debug('Request from user %s', session['logged_user_id'])
 
 
+######################
+# Post request filter
+######################
 @app.teardown_request
 def teardown_request(exception):
     rdi_provider.clear()
@@ -82,12 +102,8 @@ def teardown_request(exception):
         logging.critical('App teardown due to exception %s', exception)
 
 
-api.register(AccountController)
-api.register(LabelController)
-api.register(CategoryController)
-api.register(TransactionController)
-api.register(StatisticsController)
-api.register(SessionController)
-
+######################
+# Starting the WebApp
+######################
 if __name__ == '__main__':
     app.run(debug=True, port=5050, threaded=True)
