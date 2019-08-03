@@ -2,9 +2,9 @@
            [hidden]="!showNotification"
            [clrAlertType]="cssClasses.alert[errorNotification.type]"
            [clrAlertClosable]="false">
-  <div class="alert-item">
+  <clr-alert-item>
     <span class="alert-text">
       {{ translationPrefix + errorNotification.code | translate }}
     </span>
-  </div>
+  </clr-alert-item>
 </clr-alert>

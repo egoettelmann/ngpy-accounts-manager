@@ -10,10 +10,10 @@ export class NotificationMessageComponent extends AbstractNotificationComponent 
 
   public cssClasses = {
     alert: {
-      ERROR: 'alert-danger',
-      WARNING: 'alert-warning',
-      INFO: 'alert-primary',
-      SUCCESS: 'alert-success'
+      ERROR: 'danger',
+      WARNING: 'warning',
+      INFO: 'primary',
+      SUCCESS: 'success'
     }
   };
 

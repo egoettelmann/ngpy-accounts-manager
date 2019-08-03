@@ -1,5 +1,5 @@
 <div class="login-wrapper">
-  <form class="login" (ngSubmit)="tryLogin()">
+  <form class="login" autocomplete="off" (ngSubmit)="tryLogin()">
     <div class="title">
       <h3 class="welcome">{{ 'i18n.views.login.welcome.text' | translate }}</h3>
       {{ 'i18n.app.title' | translate }}
@@ -8,6 +8,7 @@
     <div class="login-group">
       <div [hidden]="formIsLoading">
         <input [(ngModel)]="loginForm.username"
+               autocomplete="off"
                clrInput
                name="username"
                class="username"
@@ -15,6 +16,7 @@
                id="login_username"
                [placeholder]="'i18n.views.login.form.placeholder.username' | translate">
         <input [(ngModel)]="loginForm.password"
+               autocomplete="off"
                clrInput
                name="password"
                class="password"
