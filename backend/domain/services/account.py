@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import hashlib
 import logging
 
@@ -53,15 +53,15 @@ class AccountService():
         transaction = self.transaction_service.get_last_transaction([account_id])
         return transaction.date_value
 
-    def get_account_total(self, account_id, date=None):
-        last_status = self.status_service.get_last_account_status(account_id, date)
+    def get_account_total(self, account_id, start_date=None):
+        last_status = self.status_service.get_last_account_status(account_id, start_date)
         if last_status is not None:
             total = last_status.value
             date_from = last_status.date
         else:
             total = 0
-            date_from = datetime.date(1900, 1, 1)
-        result = self.repository.get_total(account_id, date_from, date)
+            date_from = date(1900, 1, 1)
+        result = self.repository.get_total(account_id, date_from, start_date)
         if result is None:
             result = 0
         return total + result

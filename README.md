@@ -58,7 +58,7 @@ python index.py
 
 - Unit tests
 - Review the lifecycle of the db's session
-- Create a native app with Angular ?
+- Create a PWA with Angular ?
 
 ### Features
 
