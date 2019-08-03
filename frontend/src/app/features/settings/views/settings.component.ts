@@ -1,19 +1,11 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, HostBinding } from '@angular/core';
 
 @Component({
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
 
   @HostBinding('class') hostClass = 'content-container';
-
-  constructor(private route: ActivatedRoute,
-              private router: Router) {
-  }
-
-  ngOnInit(): void {
-  }
 
 }

@@ -69,21 +69,21 @@
     </app-field-wrapper>
   </section>
 
-  <div>
-    <button [disabled]="!form.valid"
-            class="btn btn-primary"
-            type="submit">
-      {{ 'i18n.components.transactions.form.button.save' | translate }}
+  <div class="text-right">
+    <button class="btn btn-secondary"
+            type="button"
+            (click)="cancel()">
+      {{ 'i18n.components.transactions.form.button.cancel' | translate }}
     </button>
     <button class="btn btn-danger"
             type="button"
             (click)="deleteTransaction()">
       {{ 'i18n.components.transactions.form.button.delete' | translate }}
     </button>
-    <button class="btn btn-secondary"
-            type="button"
-            (click)="cancel()">
-      {{ 'i18n.components.transactions.form.button.cancel' | translate }}
+    <button [disabled]="!form.valid"
+            class="btn btn-primary"
+            type="submit">
+      {{ 'i18n.components.transactions.form.button.save' | translate }}
     </button>
   </div>
 

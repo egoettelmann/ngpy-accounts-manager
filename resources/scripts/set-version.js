@@ -7,16 +7,17 @@ const execSync = require('child_process').execSync;
  * @returns {string} the current version number
  */
 function getVersionNumber() {
-    var sourceVersion = process.env.SOURCE_VERSION;
+    let sourceVersion = process.env.SOURCE_VERSION;
     if (!sourceVersion) {
         try {
             sourceVersion = execSync('git rev-parse HEAD', { encoding: 'utf8' });
         } catch (err) {
-            return console.error(err);
+            console.error(err);
+            return '0.0.1';
         }
     }
-    var shortHash = sourceVersion.substr(0, 7);
-    var todayDate = getCurrentDate();
+    const shortHash = sourceVersion.substr(0, 7);
+    const todayDate = getCurrentDate();
     return todayDate + '.' + shortHash;
 }
 
@@ -39,7 +40,7 @@ function writeToFile(filePath, content) {
     try {
         writeFileSync(filePath, content, 'utf8');
     } catch (err) {
-        return console.error(err);
+        console.error(err);
     }
 }
 

@@ -81,7 +81,7 @@ export class SettingsLabelsComponent implements OnInit {
     formGroup.valueChanges.pipe(
       debounceTime(500),
       lock(saveLock)
-    ).subscribe((v) => {
+    ).subscribe(() => {
       this.onFormChange(formGroup, saveLock);
     });
 
