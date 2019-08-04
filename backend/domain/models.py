@@ -1,10 +1,10 @@
-from enum import Enum
+from datetime import date
 
 from ..modules import restipy
 from ..modules.restipy import types
 
 
-class PeriodType():
+class PeriodType:
     DAY = 'DAY'
     MONTH = 'MONTH'
     YEAR = 'YEAR'
@@ -16,7 +16,7 @@ class PeriodType():
 })
 class User:
 
-    def __init__(self, id=None, login=None, password=None):
+    def __init__(self, id: int = None, login: str = None, password: str = None):
         self.id = id
         self.login = login
         self.password = password
@@ -33,7 +33,8 @@ class User:
 })
 class Account:
 
-    def __init__(self, id=None, name=None, description=None, total=None, color=None, notify=None):
+    def __init__(self, id: int = None, name: str = None, description: str = None,
+                 total: float = None, color: str = None, notify: bool = None):
         self.id = id
         self.name = name
         self.description = description
@@ -48,7 +49,7 @@ class Account:
 })
 class KeyValue:
 
-    def __init__(self, key=None, value=None) -> None:
+    def __init__(self, key: str = None, value: float = None) -> None:
         self.key = key
         self.value = value
 
@@ -60,7 +61,7 @@ class KeyValue:
 })
 class CompositeKeyValue:
 
-    def __init__(self, key_one=None, key_two=None, value=None) -> None:
+    def __init__(self, key_one: str = None, key_two: str = None, value: float = None) -> None:
         self.key_one = key_one
         self.key_two = key_two
         self.value = value
@@ -74,7 +75,7 @@ class CompositeKeyValue:
 })
 class Category:
 
-    def __init__(self, id=None, name=None, type=None, num_labels=None) -> None:
+    def __init__(self, id: int = None, name: str = None, type: str = None, num_labels: int = None) -> None:
         self.id = id
         self.name = name
         self.type = type
@@ -92,8 +93,8 @@ class Category:
 })
 class Label:
 
-    def __init__(self, id=None, name=None, color=None, icon=None, category_id=None, category=None,
-                 num_transactions=None) -> None:
+    def __init__(self, id: int = None, name: str = None, color: str = None, icon: str = None,
+                 category_id: int = None, category: Category = None, num_transactions: int = None) -> None:
         self.id = id
         self.name = name
         self.color = color
@@ -115,8 +116,9 @@ class Label:
 })
 class Summary:
 
-    def __init__(self, amount_start=None, amount_end=None, total_credit=None, total_debit=None,
-                 period_type=None) -> None:
+    def __init__(self, amount_start: float = None, amount_end: float = None,
+                 total_credit: float = None, total_debit: float = None,
+                 period_type: str = None) -> None:
         self.amount_start = amount_start
         self.amount_end = amount_end
         self.total_credit = total_credit
@@ -131,9 +133,9 @@ class Summary:
 })
 class Status:
 
-    def __init__(self, account_id=None, date=None, value=0):
+    def __init__(self, account_id: int = None, value_date: date = None, value: float = 0):
         self.account_id = account_id
-        self.date = date
+        self.date = value_date
         self.value = value
 
 
@@ -150,9 +152,11 @@ class Status:
 })
 class Transaction:
 
-    def __init__(self, id=None, account_id=None, date_compta=None, date_operation=None, description=None,
-                 reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None, label=None,
-                 account=None):
+    def __init__(self, id: int = None, account_id: int = None,
+                 date_compta: date = None, date_operation: date = None, description: str = None,
+                 reference: str = None, date_value: date = None, amount: float = None,
+                 note: str = None, label_id: int = None, hash: str = None,
+                 label: Label = None, account: Account = None):
         self.id = id
         self.account_id = account_id
         self.date_compta = date_compta
@@ -178,7 +182,7 @@ class Transaction:
 })
 class Notification:
 
-    def __init__(self, label=None, level=None, value=None) -> None:
+    def __init__(self, label: str = None, level: str = None, value: str = None) -> None:
         self.label = label
         self.level = level
         self.value = value

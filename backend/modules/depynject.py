@@ -1,4 +1,5 @@
-import logging, inspect
+import inspect
+import logging
 
 __INJECTABLE_LIST__ = {}
 __INJECTING_LIST__ = {}
@@ -14,7 +15,7 @@ def injectable(name=None, scope='singleton', **options):
     :return: the decorated class
     """
     def decorator(c):
-        args = inspect.getargspec(c.__init__).args[1:]
+        args = inspect.getfullargspec(c.__init__).args[1:]
         injecting_methods = []
         r_name = c.__qualname__
         if name is not None:
@@ -80,7 +81,7 @@ def inject(silent=False, **hints):
         return wrapper
 
     def decorator(m):
-        argspec = inspect.getargspec(m)
+        argspec = inspect.getfullargspec(m)
         __INJECTING_LIST__[m.__qualname__] = {
             'reference': m,
             'arguments': argspec.args[1:],

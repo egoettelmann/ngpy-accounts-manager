@@ -5,14 +5,40 @@ from sqlalchemy.sql.sqltypes import Date, Numeric, Integer, String, Boolean
 from .manager import EntityManager
 
 
+class QKeyValue:
+    """
+    The result of a (key, value) query.
+    """
+    key: str
+    value: float
+
+
+class QCompositeKeyValue:
+    """
+    The result of a (key_one, key_two, value) query.
+    """
+    key_one: str
+    key_two: str
+    value: float
+
+
 class UserDbo(EntityManager.get_base()):
+    """
+    The User Database Object
+    """
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     login = Column(String(50), unique=True)
     password = Column(String(250))
 
+    def __repr__(self):
+        return '<UserDbo %r, %r>' % (self.id, self.login)
+
 
 class AccountDbo(EntityManager.get_base()):
+    """
+    The Account Database Object
+    """
     __tablename__ = 'accounts'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
@@ -30,10 +56,13 @@ class AccountDbo(EntityManager.get_base()):
         self.notify = notify
 
     def __repr__(self):
-        return '<Account %r>' % self.name
+        return '<AccountDbo %r, %r>' % (self.id, self.name)
 
 
 class LabelDbo(EntityManager.get_base()):
+    """
+    The Label Database Object
+    """
     __tablename__ = 'labels'
     id = Column(Integer, primary_key=True)
     name = Column(String(250), unique=True)
@@ -54,6 +83,9 @@ class LabelDbo(EntityManager.get_base()):
 
 
 class CategoryDbo(EntityManager.get_base()):
+    """
+    The Category Database Object
+    """
     __tablename__ = 'categories'
     id = Column(Integer, primary_key=True)
     name = Column(String(250), unique=True)
@@ -70,6 +102,9 @@ class CategoryDbo(EntityManager.get_base()):
 
 
 class StatusDbo(EntityManager.get_base()):
+    """
+    The Status Database Object
+    """
     __tablename__ = 'status'
     id = Column(Integer, primary_key=True)
     account_id = Column(Integer, ForeignKey('accounts.id'))
@@ -82,10 +117,13 @@ class StatusDbo(EntityManager.get_base()):
         self.value = value
 
     def __repr__(self):
-        return '<Status %r>' % self.date
+        return '<StatusDbo %r, %r>' % (self.id, self.date)
 
 
 class TransactionDbo(EntityManager.get_base()):
+    """
+    The Transaction Database Object
+    """
     __tablename__ = 'transactions'
     id = Column(Integer, primary_key=True)
     account_id = Column(Integer, ForeignKey('accounts.id'))
@@ -114,4 +152,4 @@ class TransactionDbo(EntityManager.get_base()):
         self.hash = hash
 
     def __repr__(self):
-        return '<TransactionDbo %r>' % (self.reference)
+        return '<TransactionDbo %r, %r>' % (self.id, self.reference)

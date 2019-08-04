@@ -4,12 +4,12 @@ import os
 from flask import Flask, request, session
 from flask_cors import CORS
 
-from backend.controllers.account import AccountController
-from backend.controllers.category import CategoryController
-from backend.controllers.label import LabelController
-from backend.controllers.session import SessionController
-from backend.controllers.statistics import StatisticsController
-from backend.controllers.transaction import TransactionController
+from backend.controllers.account_controller import AccountController
+from backend.controllers.category_controller import CategoryController
+from backend.controllers.label_controller import LabelController
+from backend.controllers.session_controller import SessionController
+from backend.controllers.statistics_controller import StatisticsController
+from backend.controllers.transaction_controller import TransactionController
 from backend.dbconnector.manager import EntityManager
 from backend.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
 from backend.modules.depynject import Depynject
