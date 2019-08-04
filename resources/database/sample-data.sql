@@ -4,11 +4,11 @@ VALUES (1, 'user', '$2y$10$pG.BKaPOQ7ACUQoqh3FA9OChMDinS6PrJW/PqE/uRdV3ESxvcLNKC
 
 
 -- Accounts
-INSERT INTO "accounts" (id, name, description, color)
-VALUES (1, 'account_1', 'Demo Account 1', '#4444FF');
+INSERT INTO "accounts" (id, name, description, color, notify)
+VALUES (1, 'account_1', 'Demo Account 1', '#4444FF', false);
 
-INSERT INTO "accounts" (id, name, description, color)
-VALUES (2, 'account_2', 'Demo Account 2', '#FF4444');
+INSERT INTO "accounts" (id, name, description, color, notify)
+VALUES (2, 'account_2', 'Demo Account 2', '#FF4444', false);
 
 
 -- Categories

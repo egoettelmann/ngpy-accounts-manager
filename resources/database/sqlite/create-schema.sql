@@ -1,32 +1,33 @@
 -- Since Sqlite does not support schema, remove the 'public' schema
 
-DROP TABLE IF EXISTS public."user";
-DROP TABLE IF EXISTS public."categories";
-DROP TABLE IF EXISTS public."status";
-DROP TABLE IF EXISTS public."transactions";
-DROP TABLE IF EXISTS public."accounts";
-DROP TABLE IF EXISTS public."labels";
+DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS "categories";
+DROP TABLE IF EXISTS "status";
+DROP TABLE IF EXISTS "transactions";
+DROP TABLE IF EXISTS "accounts";
+DROP TABLE IF EXISTS "labels";
 
-CREATE TABLE public."accounts"
+CREATE TABLE "accounts"
 (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   name VARCHAR(50) UNIQUE,
   description VARCHAR(250),
-  color VARCHAR(50)
+  color VARCHAR(50),
+  notify INTEGER DEFAULT 0
 )
 ;
 
-CREATE TABLE public."categories"
+CREATE TABLE "categories"
 (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   name VARCHAR(250) UNIQUE,
   type VARCHAR(10)
 )
 ;
 
-CREATE TABLE public."labels"
+CREATE TABLE "labels"
 (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   name VARCHAR(250) UNIQUE,
   color VARCHAR(50),
   icon VARCHAR(250),
@@ -34,18 +35,18 @@ CREATE TABLE public."labels"
 )
 ;
 
-CREATE TABLE public."status"
+CREATE TABLE "status"
 (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   account_id INTEGER REFERENCES accounts,
   date DATE,
   value NUMERIC(25, 2)
 )
 ;
 
-CREATE TABLE public."transactions"
+CREATE TABLE "transactions"
 (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   account_id INTEGER REFERENCES accounts,
   date_compta DATE,
   date_operation DATE,
@@ -59,9 +60,9 @@ CREATE TABLE public."transactions"
 )
 ;
 
-CREATE TABLE public."user"
+CREATE TABLE "user"
 (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   login VARCHAR(50),
   password VARCHAR(250)
 )
