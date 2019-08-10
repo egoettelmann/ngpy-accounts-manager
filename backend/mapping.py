@@ -30,14 +30,24 @@ class Mapper(ObjectMapper):
         self.create_map(Category, CategoryDbo)
         self.create_map(UserDbo, User)
 
-    def map_all(self, object_list: List[Any], target_type: Type[T]) -> List[T]:
+    def map(self, source: Any, target_type: Type[T]) -> T:
+        """Helper function to map an object.
+        This method adds some type-hinting in comparison to the object mapper
+
+        :param source: the source object
+        :param target_type: the target type
+        :return: the mapped object
+        """
+        return super().map(source, target_type)
+
+    def map_all(self, source_list: List[Any], target_type: Type[T]) -> List[T]:
         """Helper function to map a list of objects
 
-        :param object_list: the source list
+        :param source_list: the source list
         :param target_type: the target type
         :return: the list of mapped objects
         """
         target_list = []
-        for obj in object_list:
+        for obj in source_list:
             target_list.append(self.map(obj, target_type))
         return target_list
