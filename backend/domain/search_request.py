@@ -176,8 +176,8 @@ class FilterRequest:
         else:
             result += self.__operator.value + '('
             result += self.__field
-            result += ', '
-            result += self.__value
+            result += ','
+            result += str(self.__value)
         result += ')'
         return result
 
@@ -186,7 +186,7 @@ class FilterRequest:
 
         :return: the string representation
         """
-        return '<RQL ' + self.__as_string() + '>'
+        return '<FilterRequest ' + self.__as_string() + '>'
 
 
 class SearchRequest:
@@ -206,3 +206,10 @@ class SearchRequest:
         self.filter_request = filter_request
         self.sort_request = sort_request
         self.page_request = page_request
+
+    def __repr__(self):
+        """Formats the search request for display
+
+        :return: the string representation
+        """
+        return repr(self.filter_request) + ' ' + repr(self.sort_request) + ' ' + repr(self.page_request)

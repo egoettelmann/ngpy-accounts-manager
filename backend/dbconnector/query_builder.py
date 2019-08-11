@@ -63,6 +63,11 @@ class QueryBuilder:
         return query
 
     def __build_clause(self, filter_request: FilterRequest):
+        """Builds a filter clause from a provided filter request.
+
+        :param filter_request: the filter request
+        :return: the filter clause
+        """
         # Checking for collection
         if filter_request.is_collection():
             parsed_parts = list(map(lambda x: self.__build_clause(x), filter_request.get_collection()))
@@ -73,39 +78,40 @@ class QueryBuilder:
 
         # Extracting the field
         field = getattr(self.__type, filter_request.get_field())
+        operator = filter_request.get_operator()
 
         # EQUALS
-        if filter_request.get_operator() == FilterOperator.EQ:
+        if operator == FilterOperator.EQ:
             return field == filter_request.get_value()
 
         # NOT EQUALS
-        if filter_request.get_operator() == FilterOperator.NE:
+        if operator == FilterOperator.NE:
             return field != filter_request.get_value()
 
         # IN
-        if filter_request.get_operator() == FilterOperator.IN:
+        if operator == FilterOperator.IN:
             return field.in_(filter_request.get_value())
 
         # NOT IN
-        if filter_request.get_operator() == FilterOperator.NI:
+        if operator == FilterOperator.NI:
             return field.notin_(filter_request.get_value())
 
         # GREATER THAN
-        if filter_request.get_operator() == FilterOperator.GT:
+        if operator == FilterOperator.GT:
             return field > filter_request.get_value()
 
         # LOWER THAN
-        if filter_request.get_operator() == FilterOperator.LT:
+        if operator == FilterOperator.LT:
             return field < filter_request.get_value()
 
         # GREATER THAN OR EQUALS
-        if filter_request.get_operator() == FilterOperator.GE:
+        if operator == FilterOperator.GE:
             return field >= filter_request.get_value()
 
         # LOWER THAN OR EQUALS
-        if filter_request.get_operator() == FilterOperator.LE:
+        if operator == FilterOperator.LE:
             return field <= filter_request.get_value()
 
         # CONTAINS
-        if filter_request.get_operator() == FilterOperator.CT:
+        if operator == FilterOperator.CT:
             return field.ilike('%' + filter_request.get_value() + '%')

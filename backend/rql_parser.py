@@ -58,19 +58,13 @@ class RqlRequestParser:
         :param request: the request to extract all parameters from
         :return: the RQL request object
         """
-        rql_request = SearchRequest()
+        rql_request = SearchRequest(
+            self.__parse_filters(request),
+            self.__parse_sort(request),
+            self.__parse_pagination(request)
+        )
 
-        # Parsing the sort request
-        rql_request.sort_request = self.__parse_sort(request)
-        logging.debug('RqlParser: parsed sort %s', rql_request.sort_request)
-
-        # Parsing the pagination request
-        rql_request.page_request = self.__parse_pagination(request)
-        logging.debug('RqlParser: parsed pagination %s', rql_request.page_request)
-
-        # Parsing the filter request
-        rql_request.filter_param = self.__parse_filters(request)
-        logging.debug('RqlParser: parsed filters %s', rql_request.filter_param)
+        logging.debug('RqlParser: parsed %s', rql_request)
         return rql_request
 
     def __parse_sort(self, request: Request) -> SortRequest:
@@ -180,6 +174,22 @@ class RqlRequestParser:
         # Building the filter param
         return FilterRequest.of(
             self.__allowed_params[field],
-            urllib.parse.unquote(value),
+            self.__parse_value(value, operator),
             operator
         )
+
+    def __parse_value(self, value: str, operator: FilterOperator) -> any:
+        """Parses the value based on the operator
+        Decodes from URI components and transforms values for IN and NOT IN to lists.
+
+        :param value: the value to parse
+        :param operator: the operator
+        :return: the parsed value
+        """
+        decoded_value = urllib.parse.unquote(value)
+
+        # IN or NOT INT
+        if operator == FilterOperator.IN or operator == FilterOperator.NI:
+            return decoded_value[1:-1].split(',')
+
+        return decoded_value
