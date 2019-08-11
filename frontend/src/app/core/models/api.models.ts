@@ -1,58 +1,77 @@
 export class Account {
-  public id: number;
-  public name: string;
-  public description: string;
-  public total: number;
-  public color: string;
-  public notify: boolean;
-  public lastUpdate: Date;
+  id: number;
+  name: string;
+  description: string;
+  total: number;
+  color: string;
+  notify: boolean;
+  lastUpdate: Date;
 }
 
 export class Category {
-  public id: number;
-  public name: string;
-  public type: string;
-  public numLabels: number;
+  id: number;
+  name: string;
+  type: string;
+  numLabels: number;
 }
 
 export class KeyValue {
-  public key: string;
-  public value: number;
+  key: string;
+  value: number;
 }
 
 export class CompositeKeyValue {
-  public keyOne: string;
-  public keyTwo: string;
-  public value: number;
+  keyOne: string;
+  keyTwo: string;
+  value: number;
 }
 
 export class AppProperties {
-  public version: string;
+  version: string;
 }
 
 export class Label {
-  public id: number;
-  public name: string;
-  public color: string;
-  public icon: string;
-  public category: Category;
-  public numTransactions: number;
+  id: number;
+  name: string;
+  color: string;
+  icon: string;
+  category: Category;
+  numTransactions: number;
 }
 
 export class Summary {
-  public amountStart: number;
-  public amountEnd: number;
-  public totalCredit: number;
-  public totalDebit: number;
-  public periodType: 'DAY'|'MONTH'|'YEAR';
+  amountStart: number;
+  amountEnd: number;
+  totalCredit: number;
+  totalDebit: number;
+  periodType: 'DAY'|'MONTH'|'YEAR';
 }
 
 export class Transaction {
-  public id: number;
-  public reference: string;
-  public description: string;
-  public dateValue: Date;
-  public amount: number;
-  public label: Label;
-  public account: Account;
+  id: number;
+  reference: string;
+  description: string;
+  dateValue: Date;
+  amount: number;
+  label: Label;
+  account: Account;
+}
+
+export class FilterCriteria {
+  accountIds?: number[];
+  dateFrom?: Date;
+  dateTo?: Date;
+  labelIds?: number[];
+  categoryType?: string;
+  reference?: string;
+  description?: string;
+  min?: number;
+  max?: number;
+}
+
+export class PageRequest {
+  page?: number;
+  pageSize?: number;
+  sort?: string;
+  sortDirection?: 'ASC' | 'DESC';
 }

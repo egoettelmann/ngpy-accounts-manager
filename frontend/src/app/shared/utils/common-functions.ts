@@ -1,4 +1,81 @@
+import { FilterCriteria, PageRequest } from '../../core/models/api.models';
+import { HttpParams } from '@angular/common/http';
+
 export class CommonFunctions {
+
+  /**
+   * Builds HttpParams from a provided filter criteria and page request.
+   *
+   * @param filterCriteria the filter criteria
+   * @param pageRequest the page request
+   */
+  public static buildHttpParams(filterCriteria?: FilterCriteria, pageRequest?: PageRequest): HttpParams {
+    let params = new HttpParams();
+
+    // Adding the filter criteria
+    if (filterCriteria != null) {
+      if (filterCriteria.accountIds !== undefined) {
+        params.append('account_ids', filterCriteria.accountIds.join(','));
+      }
+      if (filterCriteria.dateFrom !== undefined) {
+        params = params.append('from', CommonFunctions.formatDate(filterCriteria.dateFrom));
+      }
+      if (filterCriteria.dateTo !== undefined) {
+        params = params.append('to', CommonFunctions.formatDate(filterCriteria.dateTo));
+      }
+      if (filterCriteria.labelIds !== undefined) {
+        params = params.append('label_ids', filterCriteria.labelIds.join(','));
+      }
+      if (filterCriteria.categoryType != null) {
+        params = params.append('category_type', filterCriteria.categoryType);
+      }
+      if (filterCriteria.reference != null) {
+        params = params.append('reference', filterCriteria.reference);
+      }
+      if (filterCriteria.description != null) {
+        params = params.append('description', filterCriteria.description);
+      }
+      if (filterCriteria.min != null) {
+        params = params.append('min', filterCriteria.min.toString());
+      }
+      if (filterCriteria.max != null) {
+        params = params.append('max', filterCriteria.max.toString());
+      }
+    }
+
+    // Adding the page request
+    if (pageRequest != null) {
+      if (pageRequest.page != null) {
+        params = params.append('page', pageRequest.page.toString());
+        if (pageRequest.pageSize != null) {
+          params = params.append('page_size', pageRequest.pageSize.toString());
+        }
+      }
+      if (pageRequest.sort != null) {
+        params = params.append('sort', pageRequest.sort);
+        if (pageRequest.sortDirection != null) {
+          params = params.append('sort_direction', pageRequest.sortDirection);
+        }
+      }
+    }
+
+    return params;
+  }
+
+  /**
+   * Formats a date as string.
+   *
+   * @param date the date to format
+   */
+  public static formatDate(date: Date): string {
+    return ''
+      + date.getFullYear()
+      + '-'
+      + ('0' + (date.getMonth() + 1)).slice(-2)
+      + '-'
+      + ('0' + date.getDate()).slice(-2)
+      + '';
+  }
 
   /**
    * Get the list of months.

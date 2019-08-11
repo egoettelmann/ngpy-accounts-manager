@@ -1,9 +1,9 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
-import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
 import { zip } from 'rxjs';
 import { Router } from '@angular/router';
 import { Account } from '../../../core/models/api.models';
+import { TransactionsService } from '../../../core/services/domain/transactions.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -19,16 +19,16 @@ export class DashboardComponent implements OnInit {
 
   constructor(private router: Router,
               private accountsService: AccountsRestService,
-              private transactionsService: TransactionsRestService
+              private transactionsService: TransactionsService
   ) {
   }
 
   ngOnInit(): void {
     zip(
-      this.transactionsService.getAll(undefined, undefined, undefined, [null]),
+      this.transactionsService.countUnlabeled(),
       this.accountsService.getAccounts()
-    ).subscribe(([transactions, accounts]) => {
-      this.unlabeledTransactions = transactions.length;
+    ).subscribe(([numUnlabeled, accounts]) => {
+      this.unlabeledTransactions = numUnlabeled;
       this.accounts = accounts;
       this.total = 0;
       for (const a of this.accounts) {

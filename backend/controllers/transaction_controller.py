@@ -4,6 +4,7 @@ from typing import List
 from flask import request
 from werkzeug.utils import secure_filename
 
+from .controller_utils import ControllerUtils
 from ..domain.exceptions import FileImportException
 from ..domain.models import Transaction
 from ..domain.services import TransactionService, AccountService
@@ -37,20 +38,9 @@ class TransactionController:
 
         :return: the list of transactions
         """
-        year = request.args.get('year')
-        if year is not None:
-            year = int(year)
-        month = request.args.get('month')
-        if month is not None:
-            month = int(month)
-        account_ids = request.args.get('account_ids')
-        if account_ids is not None:
-            account_ids = list(map(lambda a: int(a), account_ids.split(',')))
-        label_ids = request.args.get('label_ids')
-        if label_ids is not None:
-            label_ids = list(map(lambda a: None if a == '' else int(a), label_ids.split(',')))
-        description = request.args.get('description')
-        return self.__transaction_service.get_all_transactions(account_ids, year, month, label_ids, description)
+        filter_criteria = ControllerUtils.extract_filter_criteria(request)
+        page_request = ControllerUtils.extract_page_request(request)
+        return self.__transaction_service.get_all_transactions(filter_criteria, page_request)
 
     @restipy.route('/top/<int:num_transactions>/<asc>')
     @restipy.format_as(Transaction)

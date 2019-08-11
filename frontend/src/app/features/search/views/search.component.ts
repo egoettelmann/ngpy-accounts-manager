@@ -2,10 +2,10 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
-import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { Account, Label, Transaction } from '../../../core/models/api.models';
 import { zip } from 'rxjs';
+import { TransactionsService } from '../../../core/services/domain/transactions.service';
 
 @Component({
   templateUrl: './search.component.html',
@@ -30,7 +30,7 @@ export class SearchComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private labelsService: LabelsRestService,
-              private transactionsService: TransactionsRestService,
+              private transactionsService: TransactionsService,
               private accountsService: AccountsRestService
   ) {
   }
@@ -140,13 +140,24 @@ export class SearchComponent implements OnInit {
    * Loads the data based on the selected filters
    */
   private loadData() {
-    this.transactionsService.getAll(
-      this.currentYear,
-      this.currentMonth,
-      this.accountsFilter,
-      this.labelsFilter,
-      this.descFilter
-    ).subscribe(data => {
+    let dateFrom: Date;
+    let dateTo: Date;
+    if (this.currentYear != null) {
+      dateFrom = new Date(this.currentYear, 0, 1);
+      dateTo = new Date(this.currentYear + 1, 0, 1);
+      if (this.currentMonth != null) {
+        dateFrom.setMonth(this.currentMonth);
+        dateTo.setFullYear(this.currentYear);
+        dateTo.setMonth(this.currentMonth === 11 ? 0 : this.currentMonth + 1);
+      }
+    }
+    this.transactionsService.search({
+      accountIds: this.accountsFilter,
+      dateFrom: dateFrom,
+      dateTo: dateTo,
+      labelIds: this.labelsFilter,
+      description: this.descFilter
+    }).subscribe(data => {
       this.transactions = data.slice(0);
     });
   }

@@ -2,7 +2,7 @@ import datetime
 from datetime import date
 from typing import List, Optional
 
-from ..models import Transaction, KeyValue, CompositeKeyValue, PeriodType
+from ..models import Transaction, KeyValue, CompositeKeyValue, PeriodType, FilterCriteria, PageRequest
 from ...dbconnector.entities import QKeyValue, QCompositeKeyValue
 from ...dbconnector.entities import TransactionDbo
 from ...dbconnector.repositories import TransactionRepository
@@ -28,27 +28,15 @@ class TransactionService:
         self.__repository = transaction_repository
         self.__mapper = object_mapper
 
-    def get_all_transactions(self,
-                             account_ids: List[int] = None,
-                             year: int = None,
-                             month: int = None,
-                             label_ids: List[int] = None,
-                             description: str = None
-                             ) -> List[Transaction]:
+    def get_all_transactions(self, filter_criteria: FilterCriteria, page: PageRequest) -> List[Transaction]:
         """Gets a list of transactions matching the provided filters.
 
-        :param account_ids: the accounts ids
-        :param year: the year
-        :param month: the month
-        :param label_ids: the label ids
-        :param description: the description
+        :param filter_criteria: the filter criteria
+        :param page: the page request
         :return: the list of transactions
         """
-        date_from = self.get_date_from(year, month)
-        date_to = self.get_date_to(year, month)
-        labels = self.sanitize_label_ids(label_ids)
         return self.__mapper.map_all(
-            self.__repository.get_all(account_ids, date_from, date_to, labels, description),
+            self.__repository.find_all(filter_criteria, page),
             Transaction
         )
 
@@ -295,16 +283,16 @@ class TransactionService:
         """
         date_to = datetime.date(datetime.date.today().year + 1, 1, 1)
         if year is not None:
-            date_to = date_to.replace(year=year+1)
+            date_to = date_to.replace(year=year + 1)
         else:
             year = datetime.date.today().year
         if month is not None:
             if month > 11:
-                date_to = date_to.replace(year=year+1)
+                date_to = date_to.replace(year=year + 1)
                 date_to = date_to.replace(month=1)
             else:
                 date_to = date_to.replace(year=year)
-                date_to = date_to.replace(month=month+1)
+                date_to = date_to.replace(month=month + 1)
         return date_to
 
     @staticmethod

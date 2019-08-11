@@ -2,13 +2,13 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
-import { TransactionsRestService } from '../../../core/services/rest/transactions-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
 import { zip } from 'rxjs';
 import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
+import { TransactionsService } from '../../../core/services/domain/transactions.service';
 
 @Component({
   templateUrl: './treasury.component.html',
@@ -37,7 +37,7 @@ export class TreasuryComponent implements OnInit {
               private accountsService: AccountsRestService,
               private labelsService: LabelsRestService,
               private statisticsService: StatisticsRestService,
-              private transactionsService: TransactionsRestService
+              private transactionsService: TransactionsService
   ) {
   }
 
@@ -182,11 +182,11 @@ export class TreasuryComponent implements OnInit {
    * @param {number[]} labels the labels to filter on
    */
   private loadTops(year: number, accounts: number[], labels: number[]) {
-    this.transactionsService.getTop(10, true, year, undefined, accounts, labels).subscribe(data => {
-      this.topTransactionsAsc = data;
-    });
-    this.transactionsService.getTop(10, false, year, undefined, accounts, labels).subscribe(data => {
+    this.transactionsService.getTopCredits(year, accounts, labels).subscribe(data => {
       this.topTransactionsDesc = data;
+    });
+    this.transactionsService.getTopDebits(year, accounts, labels).subscribe(data => {
+      this.topTransactionsAsc = data;
     });
   }
 

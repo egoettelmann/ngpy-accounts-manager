@@ -22,6 +22,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AuthenticatedGuard } from './guards/authenticated.guard';
 import { AuthenticationService } from './services/authentication.service';
 import { ResponsiveService } from './services/responsive.service';
+import { TransactionsService } from './services/domain/transactions.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -81,6 +82,9 @@ export class CoreModule {
     TransactionsRestService,
     LabelsRestService,
     CategoriesRestService,
+
+    /** Domain services **/
+    TransactionsService,
 
     /** App services */
     AuthenticationService,

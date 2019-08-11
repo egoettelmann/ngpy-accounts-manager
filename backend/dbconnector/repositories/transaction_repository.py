@@ -7,7 +7,7 @@ from sqlalchemy.sql.expression import extract, func, desc, label, or_
 
 from ..entities import LabelDbo, TransactionDbo, CategoryDbo, QKeyValue, QCompositeKeyValue
 from ..manager import EntityManager
-from ...domain.models import PeriodType
+from ...domain.models import PeriodType, FilterCriteria, PageRequest
 from ...modules.depynject import injectable
 
 
@@ -55,6 +55,20 @@ class TransactionRepository:
         :return: the transaction
         """
         return self.__entity_manager.query(TransactionDbo).get(transaction_id)
+
+    def find_all(self, filters: FilterCriteria = None, page: PageRequest = None) -> List[TransactionDbo]:
+        """Gets all transactions matching the provided filters.
+
+        :param filters: the the filter criteria
+        :param page: the page request
+        :return: the list of transactions
+        """
+        query = self.__entity_manager.query(TransactionDbo)
+        if filters is not None:
+            query = self.filter_query(query, filters)
+        if page is not None:
+            query = self.paginate_query(query, page)
+        return query
 
     def count(self, label_id: int = None) -> TransactionDbo:
         """Counts the number transactions for a given label id.
@@ -313,6 +327,25 @@ class TransactionRepository:
         return saved_transaction
 
     @staticmethod
+    def filter_query(query: Query, filter_criteria: FilterCriteria):
+        """Filters a query by the provided filter criteria.
+
+        :param query: the query to filter
+        :param filter_criteria: the filters to apply
+        :return: the filtered query
+        """
+        query = TransactionRepository.filter_by_accounts(query, filter_criteria.account_ids)
+        query = TransactionRepository.filter_by_date_from(query, filter_criteria.date_from)
+        query = TransactionRepository.filter_by_date_to(query, filter_criteria.date_to)
+        query = TransactionRepository.filter_by_labels(query, filter_criteria.label_ids)
+        query = TransactionRepository.filter_by_reference(query, filter_criteria.reference)
+        query = TransactionRepository.filter_by_description(query, filter_criteria.description)
+        query = TransactionRepository.filter_by_category_type(query, filter_criteria.category_type)
+        query = TransactionRepository.filter_by_amount_min(query, filter_criteria.amount_min)
+        query = TransactionRepository.filter_by_amount_max(query, filter_criteria.amount_max)
+        return query
+
+    @staticmethod
     def filter_by_accounts(query: Query, account_ids: List[int] = None) -> Query:
         """Filters a query by account ids
 
@@ -371,6 +404,18 @@ class TransactionRepository:
         return query
 
     @staticmethod
+    def filter_by_reference(query: Query, reference: str = None) -> Query:
+        """Filters a query by reference
+
+        :param query: the query
+        :param reference: the reference
+        :return: the filtered query
+        """
+        if reference is not None:
+            query = query.filter(TransactionDbo.reference == reference)
+        return query
+
+    @staticmethod
     def filter_by_description(query: Query, description: str = None) -> Query:
         """Filters a query by description
 
@@ -410,4 +455,54 @@ class TransactionRepository:
             query = query.filter(
                 TransactionDbo.amount >= 0
             )
+        return query
+
+    @staticmethod
+    def filter_by_amount_min(query: Query, amount_min: int = None) -> Query:
+        """Filters a query by a minimum amount
+
+        :param query: the query
+        :param amount_min: the minimum allowed amount
+        :return: the filtered query
+        """
+        if amount_min is not None:
+            query = query.filter(
+                TransactionDbo.amount >= amount_min
+            )
+        return query
+
+    @staticmethod
+    def filter_by_amount_max(query: Query, amount_max: int = None) -> Query:
+        """Filters a query by a maximum amount
+
+        :param query: the query
+        :param amount_max: the maximum allowed amount
+        :return: the filtered query
+        """
+        if amount_max is not None:
+            query = query.filter(
+                TransactionDbo.amount < amount_max
+            )
+        return query
+
+    @staticmethod
+    def paginate_query(query: Query, page_request: PageRequest) -> Query:
+        """Paginates a query
+
+        :param query: the query
+        :param page_request: the page request
+        :return: the paginated query
+        """
+        # Applying the order
+        if page_request.order is None:
+            return query
+        if page_request.desc is None or True:
+            query = query.order_by(getattr(TransactionDbo, page_request.order))
+        else:
+            query = query.order_by(desc(getattr(TransactionDbo, page_request.order)))
+
+        # Applying the offset/limit
+        if page_request is None:
+            return query
+        query = query.slice(page_request.offset, page_request.limit)
         return query
