@@ -7,7 +7,9 @@ from sqlalchemy.sql.expression import extract, func, desc, label, or_
 
 from ..entities import LabelDbo, TransactionDbo, CategoryDbo, QKeyValue, QCompositeKeyValue
 from ..manager import EntityManager
-from ...domain.models import PeriodType, FilterCriteria, PageRequest
+from ..query_builder import QueryBuilder
+from ...domain.filter_param import FilterParam, PageRequest
+from ...domain.models import PeriodType
 from ...modules.depynject import injectable
 
 
@@ -23,6 +25,7 @@ class TransactionRepository:
         :param entity_manager: the entity manager
         """
         self.__entity_manager = entity_manager
+        self.__query_builder = QueryBuilder(TransactionDbo)
 
     def get_all(self,
                 account_ids: int = None,
@@ -56,19 +59,17 @@ class TransactionRepository:
         """
         return self.__entity_manager.query(TransactionDbo).get(transaction_id)
 
-    def find_all(self, filters: FilterCriteria = None, page: PageRequest = None) -> List[TransactionDbo]:
+    def find_all(self, filter_param: FilterParam, page_request: PageRequest) -> List[TransactionDbo]:
         """Gets all transactions matching the provided filters.
 
-        :param filters: the the filter criteria
-        :param page: the page request
+        :param filter_param: the the filter criteria
+        :param page_request: the page request
         :return: the list of transactions
         """
         query = self.__entity_manager.query(TransactionDbo)
-        if filters is not None:
-            query = self.filter_query(query, filters)
-        if page is not None:
-            query = self.paginate_query(query, page)
-        return query
+        query = self.__query_builder.filter(query, filter_param)
+        query = self.__query_builder.paginate(query, page_request)
+        return query.all()
 
     def count(self, label_id: int = None) -> TransactionDbo:
         """Counts the number transactions for a given label id.
@@ -325,25 +326,6 @@ class TransactionRepository:
             raise
         self.__entity_manager.get_session().refresh(saved_transaction)
         return saved_transaction
-
-    @staticmethod
-    def filter_query(query: Query, filter_criteria: FilterCriteria):
-        """Filters a query by the provided filter criteria.
-
-        :param query: the query to filter
-        :param filter_criteria: the filters to apply
-        :return: the filtered query
-        """
-        query = TransactionRepository.filter_by_accounts(query, filter_criteria.account_ids)
-        query = TransactionRepository.filter_by_date_from(query, filter_criteria.date_from)
-        query = TransactionRepository.filter_by_date_to(query, filter_criteria.date_to)
-        query = TransactionRepository.filter_by_labels(query, filter_criteria.label_ids)
-        query = TransactionRepository.filter_by_reference(query, filter_criteria.reference)
-        query = TransactionRepository.filter_by_description(query, filter_criteria.description)
-        query = TransactionRepository.filter_by_category_type(query, filter_criteria.category_type)
-        query = TransactionRepository.filter_by_amount_min(query, filter_criteria.amount_min)
-        query = TransactionRepository.filter_by_amount_max(query, filter_criteria.amount_max)
-        return query
 
     @staticmethod
     def filter_by_accounts(query: Query, account_ids: List[int] = None) -> Query:

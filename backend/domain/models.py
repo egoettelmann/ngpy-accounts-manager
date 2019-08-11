@@ -1,5 +1,4 @@
-from datetime import date, datetime
-from typing import List
+from datetime import date
 
 from ..modules import restipy
 from ..modules.restipy import types
@@ -10,44 +9,6 @@ class PeriodType:
     MONTH = 'MONTH'
     QUARTER = 'QUARTER'
     YEAR = 'YEAR'
-
-
-class FilterCriteria:
-    account_ids: List[int]
-    date_from: datetime.date
-    date_to: datetime.date
-    label_ids: List[int]
-    category_type: str
-    reference: str
-    description: str
-    amount_min: int
-    amount_max: int
-
-    def __init__(self, account_ids: List[int] = None, date_from: date = None, date_to: date = None,
-                 label_ids: List[int] = None, category_type: str = None, reference: str = None,
-                 description: str = None, amount_min: float = None, amount_max: float = None):
-        self.account_ids = account_ids
-        self.date_from = date_from
-        self.date_to = date_to
-        self.label_ids = label_ids
-        self.category_type = category_type
-        self.reference = reference
-        self.description = description
-        self.amount_min = amount_min
-        self.amount_max = amount_max
-
-
-class PageRequest:
-    offset: int
-    limit: int
-    order: str
-    desc: bool
-
-    def __init__(self, offset: int = None, limit: int = None, order: str = None, desc: bool = None):
-        self.offset = offset
-        self.limit = limit
-        self.order = order
-        self.desc = desc
 
 
 @restipy.convertible({

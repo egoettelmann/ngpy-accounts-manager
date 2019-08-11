@@ -4,12 +4,12 @@ from typing import List
 from flask import request
 from werkzeug.utils import secure_filename
 
-from .controller_utils import ControllerUtils
 from ..domain.exceptions import FileImportException
 from ..domain.models import Transaction
 from ..domain.services import TransactionService, AccountService
 from ..modules import restipy
 from ..modules.depynject import injectable
+from ..rql_parser import RqlRequestParser
 
 
 @injectable()
@@ -30,6 +30,14 @@ class TransactionController:
         """
         self.__transaction_service = transaction_service
         self.__account_service = account_service
+        self.__rql_parser = RqlRequestParser({
+            'accountId': 'account_id',
+            'labelId': 'label_id',
+            'reference': 'reference',
+            'description': 'description',
+            'amount': 'amount',
+            'dateValue': 'date_value'
+        })
 
     @restipy.route('')
     @restipy.format_as(Transaction)
@@ -38,9 +46,8 @@ class TransactionController:
 
         :return: the list of transactions
         """
-        filter_criteria = ControllerUtils.extract_filter_criteria(request)
-        page_request = ControllerUtils.extract_page_request(request)
-        return self.__transaction_service.get_all_transactions(filter_criteria, page_request)
+        rql_request = self.__rql_parser.parse(request)
+        return self.__transaction_service.get_all_transactions(rql_request.filter_param, rql_request.page_request)
 
     @restipy.route('/top/<int:num_transactions>/<asc>')
     @restipy.format_as(Transaction)
