@@ -8,8 +8,8 @@ from sqlalchemy.sql.expression import extract, func, desc, label, or_
 from ..entities import LabelDbo, TransactionDbo, CategoryDbo, QKeyValue, QCompositeKeyValue
 from ..manager import EntityManager
 from ..query_builder import QueryBuilder
-from ...domain.filter_param import FilterParam, PageRequest
 from ...domain.models import PeriodType
+from ...domain.search_request import SearchRequest
 from ...modules.depynject import injectable
 
 
@@ -59,16 +59,16 @@ class TransactionRepository:
         """
         return self.__entity_manager.query(TransactionDbo).get(transaction_id)
 
-    def find_all(self, filter_param: FilterParam, page_request: PageRequest) -> List[TransactionDbo]:
+    def find_all(self, search_request: SearchRequest) -> List[TransactionDbo]:
         """Gets all transactions matching the provided filters.
 
-        :param filter_param: the the filter criteria
-        :param page_request: the page request
+        :param search_request: the search request
         :return: the list of transactions
         """
         query = self.__entity_manager.query(TransactionDbo)
-        query = self.__query_builder.filter(query, filter_param)
-        query = self.__query_builder.paginate(query, page_request)
+        query = self.__query_builder.filter(query, search_request.filter_request)
+        query = self.__query_builder.sort(query, search_request.sort_request)
+        query = self.__query_builder.paginate(query, search_request.page_request)
         return query.all()
 
     def count(self, label_id: int = None) -> TransactionDbo:
@@ -465,26 +465,4 @@ class TransactionRepository:
             query = query.filter(
                 TransactionDbo.amount < amount_max
             )
-        return query
-
-    @staticmethod
-    def paginate_query(query: Query, page_request: PageRequest) -> Query:
-        """Paginates a query
-
-        :param query: the query
-        :param page_request: the page request
-        :return: the paginated query
-        """
-        # Applying the order
-        if page_request.order is None:
-            return query
-        if page_request.desc is None or True:
-            query = query.order_by(getattr(TransactionDbo, page_request.order))
-        else:
-            query = query.order_by(desc(getattr(TransactionDbo, page_request.order)))
-
-        # Applying the offset/limit
-        if page_request is None:
-            return query
-        query = query.slice(page_request.offset, page_request.limit)
         return query

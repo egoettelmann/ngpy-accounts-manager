@@ -4,20 +4,7 @@ from typing import Mapping, Optional
 
 from flask import Request
 
-from .domain.filter_param import FilterParam, FilterOperator, PageRequest
-
-
-class RqlRequest:
-    """
-    The RQL request class to wrap the pagination request and the filter param
-    """
-    page_request: PageRequest
-    filter_param: FilterParam
-
-    def __init__(self, filter_param: FilterParam = None, page_request: PageRequest = None):
-        """Constructor"""
-        self.filter_param = filter_param
-        self.page_request = page_request
+from .domain.search_request import SearchRequest, FilterOperator, PageRequest, SortRequest, FilterRequest
 
 
 class RqlParserOptions:
@@ -65,13 +52,17 @@ class RqlRequestParser:
         if self.__parser_options is None:
             self.__parser_options = RqlParserOptions()
 
-    def parse(self, request: Request) -> RqlRequest:
+    def parse(self, request: Request) -> SearchRequest:
         """Parses the request into a RQL request object
 
         :param request: the request to extract all parameters from
         :return: the RQL request object
         """
-        rql_request = RqlRequest()
+        rql_request = SearchRequest()
+
+        # Parsing the sort request
+        rql_request.sort_request = self.__parse_sort(request)
+        logging.debug('RqlParser: parsed sort %s', rql_request.sort_request)
 
         # Parsing the pagination request
         rql_request.page_request = self.__parse_pagination(request)
@@ -81,6 +72,23 @@ class RqlRequestParser:
         rql_request.filter_param = self.__parse_filters(request)
         logging.debug('RqlParser: parsed filters %s', rql_request.filter_param)
         return rql_request
+
+    def __parse_sort(self, request: Request) -> SortRequest:
+        """Parses the request to build the sort request object
+
+        :param request: the request to extract all parameters from
+        :return: the sort request object
+        """
+        sort_request = SortRequest()
+
+        # Defining the order
+        sort = request.args.get(self.__parser_options.sort_attribute)
+        sort_direction = request.args.get(self.__parser_options.sort_direction_attribute)
+        if sort is not None and sort in self.__allowed_params:
+            sort_request.order = self.__allowed_params[sort]
+            sort_request.desc = sort_direction is not None and sort_direction == 'DESC'
+
+        return sort_request
 
     def __parse_pagination(self, request: Request) -> PageRequest:
         """Parses the request to build the pagination request object
@@ -107,16 +115,9 @@ class RqlRequestParser:
         else:
             page_request.offset = (int(page) - 1) * page_request.limit
 
-        # Defining the order
-        sort = request.args.get(self.__parser_options.sort_attribute)
-        sort_direction = request.args.get(self.__parser_options.sort_direction_attribute)
-        if sort is not None and sort in self.__allowed_params:
-            page_request.order = self.__allowed_params[sort]
-            page_request.desc = sort_direction is not None and sort_direction == 'DESC'
-
         return page_request
 
-    def __parse_filters(self, request: Request) -> Optional[FilterParam]:
+    def __parse_filters(self, request: Request) -> Optional[FilterRequest]:
         """Parses the request to build the filter param object
 
         :param request: the request to extract all parameters from
@@ -125,7 +126,7 @@ class RqlRequestParser:
         rql_expression = request.args.get(self.__parser_options.rql_attribute)
         return self.__parse_rql_expression(rql_expression)
 
-    def __parse_rql_expression(self, rql_expression: str) -> Optional[FilterParam]:
+    def __parse_rql_expression(self, rql_expression: str) -> Optional[FilterRequest]:
         """Parses an RQL expression into an optional filter param
 
         :param rql_expression: the expression to parse
@@ -155,9 +156,9 @@ class RqlRequestParser:
                 logging.warning('RqlParser: empty list of aggregation for {%s}', outer)
                 return None
             if outer == 'or':
-                return FilterParam.either(*parsed_parts)
+                return FilterRequest.either(*parsed_parts)
             else:
-                return FilterParam.all(*parsed_parts)
+                return FilterRequest.all(*parsed_parts)
 
         # Looking up the operator
         operator: FilterOperator = None
@@ -177,7 +178,7 @@ class RqlRequestParser:
             return None
 
         # Building the filter param
-        return FilterParam.of(
+        return FilterRequest.of(
             self.__allowed_params[field],
             urllib.parse.unquote(value),
             operator

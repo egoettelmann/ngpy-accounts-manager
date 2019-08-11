@@ -2,29 +2,45 @@ from enum import Enum
 from typing import List
 
 
+class SortRequest:
+    """
+    The sorted request class
+    """
+    order: str
+    desc: bool
+
+    def __init__(self, order: str = None, desc: bool = None):
+        """Constructor"""
+        self.order = order
+        self.desc = desc
+
+    def __repr__(self):
+        """Formats the sort request for display
+
+        :return: the string representation
+        """
+        direction = 'desc' if self.desc is True else 'asc'
+        return '<SortRequest %s(%s)>' % (direction, self.order)
+
+
 class PageRequest:
     """
     The paginated request class
     """
     offset: int
     limit: int
-    order: str
-    desc: bool
 
-    def __init__(self, offset: int = None, limit: int = None, order: str = None, desc: bool = None):
+    def __init__(self, offset: int = None, limit: int = None):
         """Constructor"""
         self.offset = offset
         self.limit = limit
-        self.order = order
-        self.desc = desc
 
     def __repr__(self):
         """Formats the page request for display
 
         :return: the string representation
         """
-        direction = 'desc' if self.desc is True else 'asc'
-        return '<Page [%s-%s] %s(%s)>' % (self.offset, self.offset + self.limit, direction, self.order)
+        return '<PageRequest [%s-%s]>' % (self.offset, self.offset + self.limit)
 
 
 class FilterOperator(Enum):
@@ -42,9 +58,9 @@ class FilterOperator(Enum):
     CT = 'ct'  # CONTAINS the textual value
 
 
-class FilterParam:
+class FilterRequest:
     """
-    The filter param class.
+    The filter request class.
     Each instance can be either:
       - a tuple of (field, value, operator)
       - a collection of filter params aggregated by 'and' or 'or' (defined by the 'is_and' field)
@@ -52,7 +68,7 @@ class FilterParam:
     __operator: FilterOperator
     __field: str
     __value: any
-    __collection: List['FilterParam']
+    __collection: List['FilterRequest']
     __is_and: bool
 
     def __init__(self):
@@ -64,40 +80,40 @@ class FilterParam:
         self.__is_and = None
 
     @staticmethod
-    def of(field: str, value: any, operator: FilterOperator) -> 'FilterParam':
-        """Builds a filter param
+    def of(field: str, value: any, operator: FilterOperator) -> 'FilterRequest':
+        """Builds a filter request
 
         :param field: the field to filter on
         :param value: the value to filter
         :param operator: the operator to use
         :return: the built filter param
         """
-        fp = FilterParam()
+        fp = FilterRequest()
         fp.__field = field
         fp.__value = value
         fp.__operator = operator
         return fp
 
     @staticmethod
-    def all(*args: List['FilterParam']) -> 'FilterParam':
+    def all(*args: List['FilterRequest']) -> 'FilterRequest':
         """Builds a list of filter params aggregated by 'and'
 
         :param args: the list of filter params to aggregate
         :return: the filter param
         """
-        fp = FilterParam()
+        fp = FilterRequest()
         fp.__is_and = True
         fp.__collection = args
         return fp
 
     @staticmethod
-    def either(*args: List['FilterParam']) -> 'FilterParam':
+    def either(*args: List['FilterRequest']) -> 'FilterRequest':
         """Builds a list of filter params aggregated by 'or'
 
         :param args: the list of filter params to aggregate
         :return: the filter param
         """
-        fp = FilterParam()
+        fp = FilterRequest()
         fp.__is_and = False
         fp.__collection = args
         return fp
@@ -116,7 +132,7 @@ class FilterParam:
         """
         return self.__is_and is True
 
-    def get_collection(self) -> List['FilterParam']:
+    def get_collection(self) -> List['FilterRequest']:
         """Gets the collection of filter params
 
         :return: the collection of filter params
@@ -171,3 +187,22 @@ class FilterParam:
         :return: the string representation
         """
         return '<RQL ' + self.__as_string() + '>'
+
+
+class SearchRequest:
+    """
+    The search request class to wrap the filter request, the sort request and the page request
+    """
+    filter_request: FilterRequest
+    sort_request: SortRequest
+    page_request: PageRequest
+
+    def __init__(self,
+                 filter_request: FilterRequest = None,
+                 sort_request: SortRequest = None,
+                 page_request: PageRequest = None
+                 ) -> None:
+        """Constructor"""
+        self.filter_request = filter_request
+        self.sort_request = sort_request
+        self.page_request = page_request

@@ -46,8 +46,8 @@ class TransactionController:
 
         :return: the list of transactions
         """
-        rql_request = self.__rql_parser.parse(request)
-        return self.__transaction_service.get_all_transactions(rql_request.filter_param, rql_request.page_request)
+        search_request = self.__rql_parser.parse(request)
+        return self.__transaction_service.search_all(search_request)
 
     @restipy.route('/top/<int:num_transactions>/<asc>')
     @restipy.format_as(Transaction)

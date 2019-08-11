@@ -2,7 +2,7 @@ import datetime
 from datetime import date
 from typing import List, Optional
 
-from ..filter_param import FilterParam, PageRequest
+from ..search_request import SearchRequest
 from ..models import Transaction, KeyValue, CompositeKeyValue, PeriodType
 from ...dbconnector.entities import QKeyValue, QCompositeKeyValue
 from ...dbconnector.entities import TransactionDbo
@@ -29,15 +29,14 @@ class TransactionService:
         self.__repository = transaction_repository
         self.__mapper = object_mapper
 
-    def get_all_transactions(self, filter_param: FilterParam, page_request: PageRequest) -> List[Transaction]:
+    def search_all(self, search_request: SearchRequest) -> List[Transaction]:
         """Gets a list of transactions matching the provided filters.
 
-        :param filter_param: the filter criteria
-        :param page_request: the page request
+        :param search_request: the search request
         :return: the list of transactions
         """
         return self.__mapper.map_all(
-            self.__repository.find_all(filter_param, page_request),
+            self.__repository.find_all(search_request),
             Transaction
         )
 
