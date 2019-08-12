@@ -59,15 +59,15 @@ class RqlRequestParser:
         :return: the RQL request object
         """
         rql_request = SearchRequest(
-            self.__parse_filters(request),
-            self.__parse_sort(request),
-            self.__parse_pagination(request)
+            self.parse_filters(request),
+            self.parse_sort(request),
+            self.parse_pagination(request)
         )
 
         logging.debug('RqlParser: parsed %s', rql_request)
         return rql_request
 
-    def __parse_sort(self, request: Request) -> SortRequest:
+    def parse_sort(self, request: Request) -> SortRequest:
         """Parses the request to build the sort request object
 
         :param request: the request to extract all parameters from
@@ -84,7 +84,7 @@ class RqlRequestParser:
 
         return sort_request
 
-    def __parse_pagination(self, request: Request) -> PageRequest:
+    def parse_pagination(self, request: Request) -> PageRequest:
         """Parses the request to build the pagination request object
 
         :param request: the request to extract all parameters from
@@ -111,7 +111,7 @@ class RqlRequestParser:
 
         return page_request
 
-    def __parse_filters(self, request: Request) -> Optional[FilterRequest]:
+    def parse_filters(self, request: Request) -> Optional[FilterRequest]:
         """Parses the request to build the filter param object
 
         :param request: the request to extract all parameters from

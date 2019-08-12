@@ -49,33 +49,6 @@ class TransactionController:
         search_request = self.__rql_parser.parse(request)
         return self.__transaction_service.search_all(search_request)
 
-    @restipy.route('/top/<int:num_transactions>/<asc>')
-    @restipy.format_as(Transaction)
-    def get_top_transactions(self, num_transactions: int, asc: bool) -> List[Transaction]:
-        """Gets the top transactions matching the provided filters.
-
-        :param num_transactions: the number of transactions to get
-        :param asc: the order
-        :return: the list of transactions
-        """
-        year = request.args.get('year')
-        if year is not None:
-            year = int(year)
-        month = request.args.get('month')
-        if month is not None:
-            month = int(month)
-        account_ids = request.args.get('account_ids')
-        if account_ids is not None:
-            account_ids = account_ids.split(',')
-        num_transactions = min(num_transactions, 10)
-        ascending = False
-        if asc == 'true':
-            ascending = True
-        label_ids = request.args.get('label_ids')
-        if label_ids is not None:
-            label_ids = list(map(lambda a: None if a == '' else int(a), label_ids.split(',')))
-        return self.__transaction_service.get_top_transactions(num_transactions, ascending, account_ids, year, month, label_ids)
-
     @restipy.route('/<int:transaction_id>')
     @restipy.format_as(Transaction)
     def get_one(self, transaction_id: int) -> Transaction:

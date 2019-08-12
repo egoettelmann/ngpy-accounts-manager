@@ -95,7 +95,7 @@ class FilterRequest:
         return fp
 
     @staticmethod
-    def all(*args: List['FilterRequest']) -> 'FilterRequest':
+    def all(*args: 'FilterRequest') -> 'FilterRequest':
         """Builds a list of filter params aggregated by 'and'
 
         :param args: the list of filter params to aggregate
@@ -107,7 +107,7 @@ class FilterRequest:
         return fp
 
     @staticmethod
-    def either(*args: List['FilterRequest']) -> 'FilterRequest':
+    def either(*args: 'FilterRequest') -> 'FilterRequest':
         """Builds a list of filter params aggregated by 'or'
 
         :param args: the list of filter params to aggregate

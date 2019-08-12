@@ -1,14 +1,23 @@
 from datetime import date
+from enum import Enum
+from typing import Optional
 
 from ..modules import restipy
 from ..modules.restipy import types
 
 
-class PeriodType:
+class PeriodType(Enum):
     DAY = 'DAY'
     MONTH = 'MONTH'
     QUARTER = 'QUARTER'
     YEAR = 'YEAR'
+
+    @staticmethod
+    def resolve(value: str) -> Optional['PeriodType']:
+        for name, member in PeriodType.__members__.items():
+            if member.value == value:
+                return member
+        return None
 
 
 @restipy.convertible({
@@ -112,19 +121,17 @@ class Label:
     'amountStart': types.Float(attribute='amount_start', ignore_on_parse=True),
     'amountEnd': types.Float(attribute='amount_end', ignore_on_parse=True),
     'totalCredit': types.Float(attribute='total_credit', ignore_on_parse=True),
-    'totalDebit': types.Float(attribute='total_debit', ignore_on_parse=True),
-    'periodType': types.String(attribute='period_type', ignore_on_parse=True)
+    'totalDebit': types.Float(attribute='total_debit', ignore_on_parse=True)
 })
 class Summary:
 
     def __init__(self, amount_start: float = None, amount_end: float = None,
-                 total_credit: float = None, total_debit: float = None,
-                 period_type: str = None) -> None:
+                 total_credit: float = None, total_debit: float = None
+                 ) -> None:
         self.amount_start = amount_start
         self.amount_end = amount_end
         self.total_credit = total_credit
         self.total_debit = total_debit
-        self.period_type = period_type
 
 
 @restipy.convertible({

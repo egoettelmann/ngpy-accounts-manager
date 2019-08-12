@@ -1,11 +1,12 @@
-import datetime
-from typing import List, Optional
+from datetime import date, timedelta
+from typing import List
 
 from .account_service import AccountService
 from .transaction_service import TransactionService
 from ..models import KeyValue
 from ..models import PeriodType
 from ..models import Summary
+from ..search_request import FilterRequest, FilterOperator
 from ...mapping import Mapper
 from ...modules.depynject import injectable
 
@@ -31,58 +32,68 @@ class StatisticsService:
         self.__transaction_service = transaction_service
         self.__account_service = account_service
 
-    def get_aggregation_by_period(self,
-                                  account_ids: List[int] = None,
-                                  year: int = None,
-                                  month: int = None,
-                                  label_ids: List[int] = None,
-                                  sign: bool = None
-                                  ) -> List[KeyValue]:
-        """Gets the aggregation of all transaction for a given period.
+    def get_total_over_period(self,
+                              period: PeriodType,
+                              filter_request: FilterRequest
+                              ) -> List[KeyValue]:
+        """Gets the total of all transaction for a given period.
 
-        :param account_ids: the account ids
-        :param year: the year
-        :param month: the month
-        :param label_ids: the label ids
-        :param sign: the sign of all transaction
+        :param period: the period
+        :param filter_request: the filter request
         :return: the list of (key, value) results
         """
-        if year is None:
-            year = int(datetime.datetime.now().strftime("%Y"))
-        return self.__transaction_service.get_total_by_period(
-            account_ids,
-            year,
-            month,
-            PeriodType.MONTH,
-            label_ids,
-            sign
-        )
+        return self.__transaction_service.get_total_over_period(period, filter_request)
 
-    def get_evolution_for_year(self, account_ids: List[int] = None, year: int = None) -> List[KeyValue]:
+    def get_evolution_over_period(self,
+                                  period: PeriodType,
+                                  account_ids: List[int],
+                                  date_from: date,
+                                  date_to: date,
+                                  filter_request: FilterRequest
+                                  ) -> List[KeyValue]:
         """Gets the evolution over a given year.
 
+        :param period: the period
         :param account_ids: the account ids
-        :param year: the year
+        :param date_from: the from date
+        :param date_to: the to date
+        :param filter_request: the filter request
         :return: the list of (key, value) results
         """
-        if year is None:
-            year = int(datetime.datetime.now().strftime("%Y"))
-        date_from = datetime.date(year, 1, 1)
+        filters = FilterRequest.all(
+            FilterRequest.of('date_value', date_from, FilterOperator.GE),
+            FilterRequest.of('date_value', date_to, FilterOperator.LT),
+            FilterRequest.of('account_id', account_ids, FilterOperator.IN),
+            filter_request
+        )
+
+        # Retrieving all entries
+        entries = self.__transaction_service.get_total_over_period(period, filters)
+
+        # Calculating the start amount
         start_amount = 0
-
-        entries = self.__transaction_service.get_total_by_period(account_ids, year, None, PeriodType.MONTH)
-
-        if account_ids is None:
-            account_ids = []
-            for acc in self.__account_service.get_all_accounts():
-                account_ids.append(acc.id)
-        acc_id: Optional[int]
         for acc_id in account_ids:
             account_total = self.__account_service.get_account_total(acc_id, date_from)
             if account_total is not None:
                 start_amount = start_amount + account_total
 
-        values = [KeyValue(str(year - 1) + '-12', start_amount)]
+        # Calculating the start date
+        key: str = ''
+        if period == PeriodType.DAY:
+            first_date = date_from - timedelta(days=1)
+            key = first_date.strftime("%Y-%m-%d")
+        if period == PeriodType.MONTH:
+            first_date = date_from - timedelta(days=30)
+            key = first_date.strftime("%Y-%m")
+        if period == PeriodType.QUARTER:
+            first_date = date_from - timedelta(days=90)
+            key = first_date.strftime("%Y") + '-' + str((first_date.month + 2) / 3)
+        if period == PeriodType.YEAR:
+            first_date = date_from - timedelta(days=365)
+            key = first_date.strftime("%Y")
+        values = [KeyValue(key, start_amount)]
+
+        # Re-calculating the evolution with the start amount
         for e in entries:
             if e.value is not None:
                 start_amount = start_amount + e.value
@@ -90,42 +101,48 @@ class StatisticsService:
         return values
 
     def get_summary(self,
-                    account_ids: List[int] = None,
-                    year: int = None,
-                    month: int = None,
-                    label_ids: List[int] = None
+                    account_ids: List[int],
+                    date_from: date,
+                    date_to: date,
+                    filter_request: FilterRequest
                     ) -> Summary:
         """Gets the summary for the provided filters.
 
-        :param account_ids: the accounts ids
-        :param year: the year
-        :param month: the month
-        :param label_ids: the label ids
+        :param account_ids: the account ids
+        :param date_from: the from date
+        :param date_to: the to date
+        :param filter_request: the filter request
         :return: the summary
         """
-        date_from = self.__transaction_service.get_date_from(year, month)
-        date_to = self.__transaction_service.get_date_to(year, month)
+        filters = FilterRequest.all(
+            FilterRequest.of('date_value', date_from, FilterOperator.GE),
+            FilterRequest.of('date_value', date_to, FilterOperator.LT),
+            FilterRequest.of('account_id', account_ids, FilterOperator.IN),
+            filter_request
+        )
+        credit_filters = FilterRequest.all(
+            FilterRequest.of('amount', 0, FilterOperator.GE),
+            filters
+        )
+        debit_filters = FilterRequest.all(
+            FilterRequest.of('amount', 0, FilterOperator.LT),
+            filters
+        )
 
-        total_debit = self.__transaction_service.get_total(account_ids, year, month, False, label_ids)
-        total_credit = self.__transaction_service.get_total(account_ids, year, month, True, label_ids)
-        if account_ids is None:
-            account_ids = []
-            accounts = self.__account_service.get_all_accounts()
-            for a in accounts:
-                account_ids.append(a.id)
+        # Retrieving all entries
+        total_debit = self.__transaction_service.get_total(debit_filters)
+        total_credit = self.__transaction_service.get_total(credit_filters)
+
+        # Calculating the start amounts
         amount_start = 0
         amount_end = 0
-        acc_id: Optional[int]
         for acc_id in account_ids:
             amount_start = amount_start + self.__account_service.get_account_total(acc_id, date_from)
             amount_end = amount_end + self.__account_service.get_account_total(acc_id, date_to)
-
-        period_type = PeriodType.YEAR if month is None else PeriodType.MONTH
 
         return Summary(
             amount_start,
             amount_end,
             total_credit,
-            total_debit,
-            period_type
+            total_debit
         )

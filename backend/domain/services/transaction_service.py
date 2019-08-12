@@ -1,9 +1,7 @@
-import datetime
-from datetime import date
 from typing import List, Optional
 
-from ..search_request import SearchRequest
 from ..models import Transaction, KeyValue, CompositeKeyValue, PeriodType
+from ..search_request import SearchRequest, FilterRequest, FilterOperator
 from ...dbconnector.entities import QKeyValue, QCompositeKeyValue
 from ...dbconnector.entities import TransactionDbo
 from ...dbconnector.repositories import TransactionRepository
@@ -57,7 +55,8 @@ class TransactionService:
         :param label_id: the label id
         :return: the number of transactions
         """
-        return self.__repository.count(label_id)
+        filter_request = FilterRequest.of('label_id', label_id, FilterOperator.EQ)
+        return self.__repository.count(filter_request)
 
     def delete_transaction(self, transaction_id: int) -> None:
         """Deletes a transaction by its id.
@@ -77,149 +76,65 @@ class TransactionService:
             Transaction
         )
 
-    def get_top_transactions(self,
-                             num_transactions: int,
-                             ascending: bool,
-                             account_ids: List[int],
-                             year: int,
-                             month: int,
-                             label_ids: List[int]
-                             ) -> List[Transaction]:
-        """Gets the list of top transactions by their amount.
-        If 'ascending' is true, gets the transactions with the biggest amounts.
-        If 'ascending' is false, gets the transactions with the lowest amounts.
-
-        :param num_transactions: the number of transactions to get
-        :param ascending: the order
-        :param account_ids: the account ids
-        :param year: the year
-        :param month: the month
-        :param label_ids: the label ids
-        :return: the list of transactions
-        """
-        date_from = self.get_date_from(year, month)
-        date_to = self.get_date_to(year, month)
-        return self.__mapper.map_all(
-            self.__repository.get_top_transactions(
-                num_transactions,
-                ascending,
-                account_ids,
-                date_from,
-                date_to,
-                label_ids
-            ),
-            Transaction
-        )
-
-    def get_total_by_labels(self,
-                            account_ids: List[int] = None,
-                            year: int = None,
-                            month: int = None,
-                            sign: bool = None
-                            ) -> List[KeyValue]:
+    def get_total_by_labels(self, filter_request: FilterRequest) -> List[KeyValue]:
         """Gets the total by labels matching the provided filters.
 
-        :param account_ids: the account ids
-        :param year: the year
-        :param month: the month
-        :param sign: the sign
+        :param filter_request: the filter request
         :return: the list of (key, value) results
         """
-        date_from = self.get_date_from(year, month)
-        date_to = self.get_date_to(year, month)
         return self.map_to_key_value_list(
-            self.__repository.get_grouped_by_labels(account_ids, date_from, date_to, sign)
+            self.__repository.get_grouped_by_labels(filter_request)
         )
 
-    def get_total_by_period(self,
-                            account_ids: List[int] = None,
-                            year: int = None,
-                            month: int = None,
-                            period: str = None,
-                            label_ids: List[int] = None,
-                            sign: bool = None
-                            ) -> List[KeyValue]:
+    def get_total_over_period(self,
+                              period: PeriodType,
+                              filter_request: FilterRequest
+                              ) -> List[KeyValue]:
         """Gets the total by period matching the provided filters.
 
-        :param account_ids: the account ids
-        :param year: the year
-        :param month: the month
         :param period: the period
-        :param label_ids: the label ids
-        :param sign: the sign
+        :param filter_request: the filter request
         :return: the list of (key, value) results
         """
-        date_from = self.get_date_from(year, month)
-        date_to = self.get_date_to(year, month)
-        entries = self.__repository.get_grouped_by_period(account_ids, date_from, date_to, period, label_ids, sign)
+        entries = self.__repository.get_grouped_over_period(period, filter_request)
         values = []
         for kv in entries:
-            keys = str(kv.key).split('-')
-            key = keys[0]
-            if period in [PeriodType.MONTH, PeriodType.DAY]:
-                key = key + '-' + keys[1]
-            if period in [PeriodType.DAY]:
-                key = key + '-' + keys[2]
-            values.append(KeyValue(key, kv.value))
+            values.append(KeyValue(kv.key, kv.value))
         return values
 
-    def get_total_by_category_type(self,
-                                   account_ids: List[int] = None,
-                                   year: int = None,
-                                   category_type: str = None,
-                                   quarterly: bool = True
-                                   ) -> List[CompositeKeyValue]:
+    def get_total_by_category_type_over_period(self,
+                                               period: PeriodType,
+                                               filter_request: FilterRequest
+                                               ) -> List[CompositeKeyValue]:
         """Gets the total by category type matching the provided filters.
 
-        :param account_ids: the account ids
-        :param year: the year
-        :param category_type: the category type
-        :param quarterly: the quarterly filter flag
+        :param period: the period
+        :param filter_request: the filter request
         :return: the list of (key_one, key_two, value) results
         """
-        date_from = self.get_date_from(year)
-        date_to = self.get_date_to(year)
         return self.map_to_grouped_value_list(
-            self.__repository.get_grouped_by_category_type(account_ids, date_from, date_to, category_type, quarterly)
+            self.__repository.get_grouped_by_type_over_period(period, filter_request)
         )
 
-    def get_total_by_labels_and_category_type(self,
-                                              account_ids: List[int] = None,
-                                              year: int = None,
-                                              category_type: str = None
-                                              ) -> List[CompositeKeyValue]:
+    def get_total_by_labels_and_type(self,
+                                     filter_request: FilterRequest
+                                     ) -> List[CompositeKeyValue]:
         """Gets the total by labels and category type matching the provided filters.
 
-        :param account_ids: the account ids
-        :param year: the year
-        :param category_type: the category type
+        :param filter_request: the filter request
         :return: the list of (key_one, key_two, value) results
         """
-        date_from = self.get_date_from(year)
-        date_to = self.get_date_to(year)
         return self.map_to_grouped_value_list(
-            self.__repository.get_grouped_by_labels_and_category_type(account_ids, date_from, date_to, category_type)
+            self.__repository.get_grouped_by_labels_and_type(filter_request)
         )
 
-    def get_total(self,
-                  account_ids: List[int] = None,
-                  year: int = None,
-                  month: int = None,
-                  sign: bool = None,
-                  label_ids: List[int] = None
-                  ) -> float:
+    def get_total(self, filter_request: FilterRequest) -> float:
         """Gets the total transactions matching the provided filters.
 
-        :param account_ids: the account ids
-        :param year: the year
-        :param month: the month
-        :param sign: the sign
-        :param label_ids: the label ids
+        :param filter_request: the filter request
         :return: the total
         """
-        date_from = self.get_date_from(year, month)
-        date_to = self.get_date_to(year, month)
-        return self.__repository.get_total(account_ids, date_from, date_to, sign, label_ids)
+        return self.__repository.get_total(filter_request)
 
     def create_one(self, transaction: Transaction) -> Transaction:
         """Creates a transaction.
@@ -257,45 +172,6 @@ class TransactionService:
         )
 
     @staticmethod
-    def get_date_from(year: int = None, month: int = None) -> date:
-        """Gets a start date from a given year and month.
-        Will be the first day of the provided month.
-
-        :param year: the year
-        :param month: the month
-        :return: the start date
-        """
-        date_from = datetime.date(1900, 1, 1)
-        if year is not None:
-            date_from = date_from.replace(year=year)
-        if month is not None:
-            date_from = date_from.replace(month=month)
-        return date_from
-
-    @staticmethod
-    def get_date_to(year: int = None, month: int = None) -> date:
-        """Gets an end date from a given year and month.
-        Will be the first day after the provided month.
-
-        :param year: the year
-        :param month: the month
-        :return: the end date
-        """
-        date_to = datetime.date(datetime.date.today().year + 1, 1, 1)
-        if year is not None:
-            date_to = date_to.replace(year=year + 1)
-        else:
-            year = datetime.date.today().year
-        if month is not None:
-            if month > 11:
-                date_to = date_to.replace(year=year + 1)
-                date_to = date_to.replace(month=1)
-            else:
-                date_to = date_to.replace(year=year)
-                date_to = date_to.replace(month=month + 1)
-        return date_to
-
-    @staticmethod
     def sanitize_label_ids(label_ids: List[int] = None) -> Optional[List[int]]:
         """Sanitizes a list of label ids.
         Transforms 'null' to None.
@@ -312,27 +188,3 @@ class TransactionService:
                     labels.append(label_id)
             return labels
         return None
-
-    @staticmethod
-    def map_to_key_value_list(entries: List[QKeyValue]) -> List[KeyValue]:
-        """Maps a list of (key, value) results.
-
-        :param entries: the list of results to map
-        :return: the mapped list
-        """
-        values = []
-        for kv in entries:
-            values.append(KeyValue(kv.key, kv.value))
-        return values
-
-    @staticmethod
-    def map_to_grouped_value_list(entries: List[QCompositeKeyValue]) -> List[CompositeKeyValue]:
-        """Maps a list of (key_one, key_two, value) results.
-
-        :param entries: the list of results to map
-        :return: the mapped list
-        """
-        values = []
-        for kv in entries:
-            values.append(CompositeKeyValue(kv.key_one, kv.key_two, kv.value))
-        return values

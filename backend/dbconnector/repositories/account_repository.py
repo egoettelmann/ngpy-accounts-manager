@@ -4,6 +4,7 @@ from typing import List
 from .transaction_repository import TransactionRepository
 from ..entities import AccountDbo
 from ..manager import EntityManager
+from ...domain.search_request import FilterRequest, FilterOperator
 from ...modules.depynject import injectable
 
 
@@ -48,7 +49,12 @@ class AccountRepository:
         :param date_to: the end date
         :return: the total of the account
         """
-        return self.__transaction_repository.get_total([account_id], date_from, date_to)
+        filter_request = FilterRequest.all(
+            FilterRequest.of('account_id', account_id, FilterOperator.EQ),
+            FilterRequest.of('date_value', date_from, FilterOperator.GE),
+            FilterRequest.of('date_value', date_to, FilterOperator.LT)
+        )
+        return self.__transaction_repository.get_total(filter_request)
 
     def find_by_name(self, name: str) -> AccountDbo:
         """Finds an account by its name.
