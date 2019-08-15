@@ -6,6 +6,8 @@ import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { Account, Label, Transaction } from '../../../core/models/api.models';
 import { zip } from 'rxjs';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
+import { RqlService } from '../../../core/services/rql.service';
+import { FilterOperator, FilterRequest } from '../../../core/models/rql.models';
 
 @Component({
   templateUrl: './search.component.html',
@@ -31,7 +33,8 @@ export class SearchComponent implements OnInit {
               private router: Router,
               private labelsService: LabelsRestService,
               private transactionsService: TransactionsService,
-              private accountsService: AccountsRestService
+              private accountsService: AccountsRestService,
+              private rqlService: RqlService
   ) {
   }
 
@@ -151,12 +154,22 @@ export class SearchComponent implements OnInit {
         dateTo.setMonth(this.currentMonth === 11 ? 0 : this.currentMonth + 1);
       }
     }
+
+    // Building the filters
+    const minDate = this.rqlService.formatDate(dateFrom);
+    const maxDate = this.rqlService.formatDate(dateTo);
+    const labels = this.rqlService.formatList(this.labelsFilter);
+    const accounts = this.rqlService.formatList(this.accountsFilter);
+    const filter = FilterRequest.all(
+      FilterRequest.of('dateValue', minDate, FilterOperator.GE),
+      FilterRequest.of('dateValue', maxDate, FilterOperator.LT),
+      FilterRequest.of('description', this.descFilter, FilterOperator.CT),
+      FilterRequest.of('labelId', labels, FilterOperator.IN),
+      FilterRequest.of('accountId', accounts, FilterOperator.IN)
+    );
+
     this.transactionsService.search({
-      accountIds: this.accountsFilter,
-      dateFrom: dateFrom,
-      dateTo: dateTo,
-      labelIds: this.labelsFilter,
-      description: this.descFilter
+      filter: filter
     }).subscribe(data => {
       this.transactions = data.slice(0);
     });

@@ -56,22 +56,3 @@ export class Transaction {
   label: Label;
   account: Account;
 }
-
-export class FilterCriteria {
-  accountIds?: number[];
-  dateFrom?: Date;
-  dateTo?: Date;
-  labelIds?: number[];
-  categoryType?: string;
-  reference?: string;
-  description?: string;
-  min?: number;
-  max?: number;
-}
-
-export class PageRequest {
-  page?: number;
-  pageSize?: number;
-  sort?: string;
-  sortDirection?: 'ASC' | 'DESC';
-}

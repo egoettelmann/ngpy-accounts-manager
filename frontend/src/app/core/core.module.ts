@@ -23,6 +23,7 @@ import { AuthenticatedGuard } from './guards/authenticated.guard';
 import { AuthenticationService } from './services/authentication.service';
 import { ResponsiveService } from './services/responsive.service';
 import { TransactionsService } from './services/domain/transactions.service';
+import { RqlService } from './services/rql.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -91,6 +92,7 @@ export class CoreModule {
     NotificationService,
     KeepFocusService,
     ResponsiveService,
+    RqlService,
 
     /** Pipes */
     DecimalPipe,

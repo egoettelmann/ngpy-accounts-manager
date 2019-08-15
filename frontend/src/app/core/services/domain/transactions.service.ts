@@ -1,22 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FilterCriteria, Transaction } from '../../models/api.models';
+import { Transaction } from '../../models/api.models';
 import { TransactionsRestService } from '../rest/transactions-rest.service';
 import { map } from 'rxjs/operators';
+import { RqlService } from '../rql.service';
+import { FilterOperator, FilterRequest, SearchRequest } from '../../models/rql.models';
 
 @Injectable()
 export class TransactionsService {
 
-  constructor(private transactionRestService: TransactionsRestService) {
-  }
+  constructor(private transactionRestService: TransactionsRestService,
+              private rqlService: RqlService
+  ) {}
 
   /**
    * Searches transactions with a provided list of criteria.
    *
-   * @param filterCriteria the filter criteria
+   * @param searchRequest the filter criteria
    */
-  search(filterCriteria: FilterCriteria): Observable<Transaction[]> {
-    return this.transactionRestService.getAll(filterCriteria);
+  search(searchRequest: SearchRequest): Observable<Transaction[]> {
+    return this.transactionRestService.getAll(searchRequest);
   }
 
   /**
@@ -34,22 +37,36 @@ export class TransactionsService {
     accounts: number[]
   ): Observable<Transaction[]> {
     // Building the date from
-    const dateFrom = new Date(year, month - 1, 1);
+    const dateFrom = this.rqlService.formatDate(new Date(year, month - 1, 1));
 
     // Building the date to
-    let dateTo: Date;
+    let dateTo: string;
     if (month === 12) {
-      dateTo = new Date(year + 1, 0, 1);
+      dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
     } else {
-      dateTo = new Date(year, month, 1);
+      dateTo = this.rqlService.formatDate(new Date(year, month, 1));
+    }
+
+    // Adding date and amount filters
+    let filter = FilterRequest.all(
+      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
+      FilterRequest.of('dateValue', dateTo, FilterOperator.LT)
+    );
+
+    // Adding the account filters
+    if (accounts && accounts.length > 0) {
+      const accountList = this.rqlService.formatList(accounts);
+      filter = FilterRequest.all(
+        FilterRequest.of('accountId', accountList, FilterOperator.IN),
+        filter
+      );
     }
 
     return this.transactionRestService.getAll({
-      accountIds: accounts,
-      dateFrom: dateFrom,
-      dateTo: dateTo
-    }, {
-      sort: 'date_value'
+      filter: filter,
+      sort: {
+        sort: 'dateValue'
+      }
     });
   }
 
@@ -58,7 +75,7 @@ export class TransactionsService {
    */
   countUnlabeled(): Observable<number> {
     return this.transactionRestService.getAll({
-      labelIds: [null]
+      filter: FilterRequest.of('labelId', null, FilterOperator.EQ),
     }).pipe(
       map(data => data.length)
     );
@@ -72,17 +89,44 @@ export class TransactionsService {
    * @param labels the labels
    */
   getTopCredits(year: number, accounts: number[], labels: number[]): Observable<Transaction[]> {
+    const dateFrom = this.rqlService.formatDate(new Date(year, 0, 1));
+    const dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
+
+    // Adding date and amount filters
+    let filter = FilterRequest.all(
+      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
+      FilterRequest.of('dateValue', dateTo, FilterOperator.LT),
+      FilterRequest.of('amount', 0, FilterOperator.GE)
+    );
+
+    // Adding the account filters
+    if (accounts && accounts.length > 0) {
+      const accountList = this.rqlService.formatList(accounts);
+      filter = FilterRequest.all(
+        FilterRequest.of('accountId', accountList, FilterOperator.IN),
+        filter
+      );
+    }
+
+    // Adding the label filters
+    if (labels && labels.length > 0) {
+      const labelList = this.rqlService.formatList(labels);
+      filter = FilterRequest.all(
+        FilterRequest.of('labelId', labelList, FilterOperator.IN),
+        filter
+      );
+    }
+
     return this.transactionRestService.getAll({
-      accountIds: accounts,
-      labelIds: labels,
-      dateFrom: new Date(year, 0, 1),
-      dateTo: new Date(year + 1, 0, 1),
-      min: 0
-    }, {
-      page: 1,
-      pageSize: 10,
-      sort: 'amount',
-      sortDirection: 'DESC'
+      filter: filter,
+      page: {
+        page: 1,
+        pageSize: 10
+      },
+      sort: {
+        sort: 'amount',
+        sortDirection: 'DESC'
+      }
     });
   }
 
@@ -94,17 +138,44 @@ export class TransactionsService {
    * @param labels the labels
    */
   getTopDebits(year: number, accounts: number[], labels: number[]): Observable<Transaction[]> {
+    const dateFrom = this.rqlService.formatDate(new Date(year, 0, 1));
+    const dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
+
+    // Adding date and amount filters
+    let filter = FilterRequest.all(
+      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
+      FilterRequest.of('dateValue', dateTo, FilterOperator.LT),
+      FilterRequest.of('amount', 0, FilterOperator.LT)
+    );
+
+    // Adding the account filters
+    if (accounts && accounts.length > 0) {
+      const accountList = this.rqlService.formatList(accounts);
+      filter = FilterRequest.all(
+        FilterRequest.of('accountId', accountList, FilterOperator.IN),
+        filter
+      );
+    }
+
+    // Adding the label filters
+    if (labels && labels.length > 0) {
+      const labelList = this.rqlService.formatList(labels);
+      filter = FilterRequest.all(
+        FilterRequest.of('labelId', labelList, FilterOperator.IN),
+        filter
+      );
+    }
+
     return this.transactionRestService.getAll({
-      accountIds: accounts,
-      labelIds: labels,
-      dateFrom: new Date(year, 0, 1),
-      dateTo: new Date(year + 1, 0, 1),
-      max: 0
-    }, {
-      page: 1,
-      pageSize: 10,
-      sort: 'amount',
-      sortDirection: 'ASC'
+      filter: filter,
+      page: {
+        page: 1,
+        pageSize: 10
+      },
+      sort: {
+        sort: 'amount',
+        sortDirection: 'ASC'
+      }
     });
   }
 
