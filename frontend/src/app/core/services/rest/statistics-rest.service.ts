@@ -12,18 +12,8 @@ export class StatisticsRestService {
               private rqlService: RqlService
   ) {}
 
-  getRepartition(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {
-    let params = new HttpParams();
-
-    if (year !== undefined) {
-      params = params.append('year', year.toString());
-    }
-    if (month !== undefined) {
-      params = params.append('month', month.toString());
-    }
-    if (accounts !== undefined) {
-      params = params.append('account_ids', accounts.join(','));
-    }
+  getRepartition(filterRequest: FilterRequest): Observable<KeyValue[]> {
+    const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
     return this.http.get<KeyValue[]>('/rest/stats/repartition', {params: params});
   }
 
