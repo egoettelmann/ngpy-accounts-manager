@@ -2,13 +2,13 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { CategoriesRestService } from '../../../core/services/rest/categories-rest.service';
-import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { zip } from 'rxjs';
 import * as _ from 'lodash';
 import { Account, Category, CompositeKeyValue } from '../../../core/models/api.models';
 import { ChartSerie, GroupedValue } from '../../../core/models/domain.models';
+import { StatisticsService } from '../../../core/services/domain/statistics.service';
 
 @Component({
   templateUrl: './analytics.component.html',
@@ -35,7 +35,7 @@ export class AnalyticsComponent implements OnInit {
               private location: Location,
               private accountsService: AccountsRestService,
               private categoriesService: CategoriesRestService,
-              private statisticsService: StatisticsRestService
+              private statisticsService: StatisticsService
   ) {
   }
 
@@ -126,14 +126,15 @@ export class AnalyticsComponent implements OnInit {
    * Reload the data
    */
   private reloadData() {
+    const period = this.quarterly ? 'QUARTER' : 'MONTH';
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
-    this.statisticsService.getAnalytics(this.currentYear, 'C', accounts, this.quarterly).subscribe(data => {
+    this.statisticsService.getAnalytics(this.currentYear, period, 'C', accounts).subscribe(data => {
       this.analyticsCredit = data;
     });
-    this.statisticsService.getAnalytics(this.currentYear, 'D', accounts, this.quarterly).subscribe(data => {
+    this.statisticsService.getAnalytics(this.currentYear, period, 'D', accounts).subscribe(data => {
       this.analyticsDebit = data;
     });
-    this.statisticsService.getAnalytics(this.currentYear, 'M', accounts, this.quarterly).subscribe(data => {
+    this.statisticsService.getAnalytics(this.currentYear, period, 'M', accounts).subscribe(data => {
       this.tableMovements = this.buildTable(data);
     });
     this.statisticsService.getAnalyticsDetails(this.currentYear, 'C', accounts).subscribe(data => {

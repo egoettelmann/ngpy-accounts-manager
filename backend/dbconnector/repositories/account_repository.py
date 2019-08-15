@@ -41,7 +41,7 @@ class AccountRepository:
         """
         return self.__entity_manager.query(AccountDbo).get(account_id)
 
-    def get_total(self, account_id: int, date_from: date = None, date_to: date = None) -> float:
+    def get_total(self, account_id: int, date_from: date, date_to: date) -> float:
         """Gets the total transactions of an account by its id between two given dates.
 
         :param account_id: the account id

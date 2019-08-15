@@ -1,6 +1,7 @@
-from typing import ClassVar
+import logging
+from typing import ClassVar, Optional
 
-from sqlalchemy import desc, and_, or_
+from sqlalchemy import desc, and_, or_, inspect
 from sqlalchemy.orm import Query
 
 from ..domain.search_request import FilterRequest, PageRequest, FilterOperator, SortRequest
@@ -23,9 +24,10 @@ class QueryBuilder:
         :param filter_request: the filters to apply
         :return: the filtered query
         """
-        if filter_request is None:
+        clause = self.__build_clause(filter_request)
+        if clause is None:
             return query
-        return query.filter(self.__build_clause(filter_request))
+        return query.filter(clause)
 
     def sort(self, query: Query, sort_request: SortRequest) -> Query:
         """Sorts a query
@@ -62,22 +64,37 @@ class QueryBuilder:
         query = query.slice(page_request.offset, page_request.limit)
         return query
 
-    def __build_clause(self, filter_request: FilterRequest):
+    def __build_clause(self, filter_request: FilterRequest) -> Optional[any]:
         """Builds a filter clause from a provided filter request.
 
         :param filter_request: the filter request
         :return: the filter clause
         """
+        # Checking for none
+        if filter_request is None:
+            return None
+
         # Checking for collection
         if filter_request.is_collection():
-            parsed_parts = list(map(lambda x: self.__build_clause(x), filter_request.get_collection()))
+            # Building the collection clause
+            parsed_parts = list(
+                filter(
+                    lambda x: x is not None,
+                    map(
+                        lambda x: self.__build_clause(x),
+                        filter_request.get_collection()
+                    )
+                )
+            )
+            if len(parsed_parts) == 0:
+                return None
             if filter_request.is_and():
                 return and_(*parsed_parts)
             else:
                 return or_(*parsed_parts)
 
         # Extracting the field
-        field = getattr(self.__type, filter_request.get_field())
+        field = self.deepgetattr(self.__type, filter_request.get_field())
         operator = filter_request.get_operator()
 
         # EQUALS
@@ -115,3 +132,16 @@ class QueryBuilder:
         # CONTAINS
         if operator == FilterOperator.CT:
             return field.ilike('%' + filter_request.get_value() + '%')
+
+    @staticmethod
+    def deepgetattr(o, attr):
+        logging.debug('Retrieving [%s] from %s', attr, o)
+        attrs = attr.split('.', 1)
+        item = getattr(o, attrs[0])
+        if len(attrs) == 1:
+            return item
+        else:
+            return QueryBuilder.deepgetattr(
+                item.property.mapper.class_,
+                attrs[1]
+            )

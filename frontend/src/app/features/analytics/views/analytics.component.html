@@ -76,14 +76,12 @@
 <div class="clr-row">
   <div class="clr-col-12 clr-col-md-6">
     <app-analytics-quarterly-chart [chartTitle]="creditChartTitle | translate"
-                                   [prefix]="quarterly ? 'Q' : ''"
                                    [data]="analyticsCredit">
     </app-analytics-quarterly-chart>
   </div>
 
   <div class="clr-col-12 clr-col-md-6">
     <app-analytics-quarterly-chart [chartTitle]="debitChartTitle | translate"
-                                   [prefix]="quarterly ? 'Q' : ''"
                                    [data]="analyticsDebit">
     </app-analytics-quarterly-chart>
   </div>

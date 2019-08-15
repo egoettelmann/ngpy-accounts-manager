@@ -38,7 +38,8 @@ class StatisticsController:
             'reference': 'reference',
             'description': 'description',
             'amount': 'amount',
-            'dateValue': 'date_value'
+            'dateValue': 'date_value',
+            'categoryType': 'label.category.type'
         })
 
     @restipy.route('/repartition')

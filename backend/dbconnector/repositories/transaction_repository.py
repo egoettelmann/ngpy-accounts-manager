@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import cast, Integer
+from sqlalchemy import cast, Integer, String
 from sqlalchemy.sql.expression import extract, func, desc, label
 
 from ..entities import LabelDbo, TransactionDbo, CategoryDbo, QKeyValue, QCompositeKeyValue
@@ -208,10 +208,18 @@ class TransactionRepository:
     @staticmethod
     def period_expression(period: PeriodType, column: any) -> any:
         if period == PeriodType.DAY:
-            return extract('year', column) + '-' + extract('month', column) + '-' + extract('day', column)
+            return cast(extract('year', column), String)\
+                   + '-'\
+                   + cast(extract('month', column), String)\
+                   + '-'\
+                   + cast(extract('day', column), String)
         if period == PeriodType.MONTH:
-            return extract('year', column) + '-' + extract('month', column)
+            return cast(extract('year', column), String)\
+                   + '-'\
+                   + cast(extract('month', column), String)
         if period == PeriodType.QUARTER:
-            return extract('year', column) + '-' + cast((extract('month', TransactionDbo.date_value) + 2) / 3, Integer)
+            return  cast(extract('year', column), String)\
+                   + '-'\
+                   + cast(cast((extract('month', TransactionDbo.date_value) + 2) / 3, Integer), String)
         if period == PeriodType.YEAR:
-            return extract('year', column)
+            return cast(extract('year', column), String)

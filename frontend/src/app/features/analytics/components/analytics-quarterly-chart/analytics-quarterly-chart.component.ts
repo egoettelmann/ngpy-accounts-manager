@@ -12,7 +12,6 @@ export class AnalyticsQuarterlyChartComponent implements OnChanges {
 
   @Input() chartTitle: string;
   @Input() data: CompositeKeyValue[];
-  @Input() prefix: string = '';
 
   public chartOptions: any;
 
@@ -73,19 +72,21 @@ export class AnalyticsQuarterlyChartComponent implements OnChanges {
     };
     let categories = [];
     const series = {};
+
+    // Generating list of categories
     for (const d of data) {
-      const categoryIdx = parseInt(d.keyOne, 10) - 1;
-      CommonFunctions.resizeArray(categories, 0, categoryIdx);
-      categories[categoryIdx] = this.prefix + d.keyOne;
+      if (!categories.includes(d.keyOne)) {
+        categories.push(d.keyOne);
+      }
+    }
+    categories = categories.sort((a: string, b: string) => {
+      return a.localeCompare(b);
+    });
+    for (const d of data) {
+      const categoryIdx = categories.indexOf(d.keyOne);
       if (!series.hasOwnProperty(d.keyTwo)) {
         series[d.keyTwo] = [];
       }
-      categories = categories.map((value, idx) => {
-        if (value === 0) {
-          return this.prefix + (idx + 1);
-        }
-        return value;
-      });
       CommonFunctions.resizeArray(series[d.keyTwo], 0, categoryIdx);
       series[d.keyTwo][categoryIdx] = d.value;
     }

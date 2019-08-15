@@ -46,7 +46,7 @@ class StatusService:
             Status
         )
 
-    def get_last_account_status(self, account_id: int, value_date: date = None) -> Optional[Status]:
+    def get_last_account_status(self, account_id: int, value_date: date) -> Optional[Status]:
         """Gets the last status of an account before a given date.
 
         :param account_id: the account id

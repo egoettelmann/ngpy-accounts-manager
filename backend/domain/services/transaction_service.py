@@ -2,7 +2,6 @@ from typing import List, Optional
 
 from ..models import Transaction, KeyValue, CompositeKeyValue, PeriodType
 from ..search_request import SearchRequest, FilterRequest, FilterOperator
-from ...dbconnector.entities import QKeyValue, QCompositeKeyValue
 from ...dbconnector.entities import TransactionDbo
 from ...dbconnector.repositories import TransactionRepository
 from ...mapping import Mapper
@@ -82,9 +81,11 @@ class TransactionService:
         :param filter_request: the filter request
         :return: the list of (key, value) results
         """
-        return self.map_to_key_value_list(
-            self.__repository.get_grouped_by_labels(filter_request)
-        )
+        entries = self.__repository.get_grouped_by_labels(filter_request)
+        values = []
+        for kv in entries:
+            values.append(KeyValue(kv.key, kv.value))
+        return values
 
     def get_total_over_period(self,
                               period: PeriodType,
@@ -112,9 +113,11 @@ class TransactionService:
         :param filter_request: the filter request
         :return: the list of (key_one, key_two, value) results
         """
-        return self.map_to_grouped_value_list(
-            self.__repository.get_grouped_by_type_over_period(period, filter_request)
-        )
+        entries = self.__repository.get_grouped_by_type_over_period(period, filter_request)
+        values = []
+        for kv in entries:
+            values.append(CompositeKeyValue(kv.key_one, kv.key_two, kv.value))
+        return values
 
     def get_total_by_labels_and_type(self,
                                      filter_request: FilterRequest
@@ -124,9 +127,11 @@ class TransactionService:
         :param filter_request: the filter request
         :return: the list of (key_one, key_two, value) results
         """
-        return self.map_to_grouped_value_list(
-            self.__repository.get_grouped_by_labels_and_type(filter_request)
-        )
+        entries = self.__repository.get_grouped_by_labels_and_type(filter_request)
+        values = []
+        for kv in entries:
+            values.append(CompositeKeyValue(kv.key_one, kv.key_two, kv.value))
+        return values
 
     def get_total(self, filter_request: FilterRequest) -> float:
         """Gets the total transactions matching the provided filters.

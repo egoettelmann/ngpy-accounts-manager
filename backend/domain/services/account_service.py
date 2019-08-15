@@ -53,7 +53,7 @@ class AccountService:
         )
         for acc in accounts:
             acc_id: int = acc.id
-            acc.total = self.get_account_total(acc_id)
+            acc.total = self.get_account_total(acc_id, date.today() + timedelta(days=1))
             acc.last_update = self.get_last_update(acc_id)
         return accounts
 
@@ -106,7 +106,7 @@ class AccountService:
         transaction = self.__transaction_service.get_last_transaction([account_id])
         return transaction.date_value
 
-    def get_account_total(self, account_id: int, start_date: date = None) -> float:
+    def get_account_total(self, account_id: int, start_date: date) -> float:
         """Gets the total of an account at a given date.
 
         :param account_id: the account id

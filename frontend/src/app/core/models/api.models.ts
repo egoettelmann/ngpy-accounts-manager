@@ -44,7 +44,6 @@ export class Summary {
   amountEnd: number;
   totalCredit: number;
   totalDebit: number;
-  periodType: 'DAY'|'MONTH'|'YEAR';
 }
 
 export class Transaction {

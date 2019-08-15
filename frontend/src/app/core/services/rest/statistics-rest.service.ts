@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CompositeKeyValue, KeyValue, Summary } from '../../models/api.models';
 import { Observable } from 'rxjs';
+import { RqlService } from '../rql.service';
+import { FilterRequest } from '../../models/rql.models';
 
 @Injectable()
 export class StatisticsRestService {
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient,
+              private rqlService: RqlService
+  ) {}
 
   getRepartition(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {
     let params = new HttpParams();
@@ -75,34 +78,14 @@ export class StatisticsRestService {
     return this.http.get<KeyValue[]>('/rest/stats/evolution', {params: params});
   }
 
-  getAnalytics(year?: number, categoryType?: string, accounts?: number[], quarterly = true): Observable<CompositeKeyValue[]> {
-    let params = new HttpParams();
-
-    if (year !== undefined) {
-      params = params.append('year', year.toString());
-    }
-    if (categoryType !== undefined) {
-      params = params.append('category_type', categoryType);
-    }
-    if (accounts !== undefined) {
-      params = params.append('account_ids', accounts.join(','));
-    }
-    params = params.append('quarterly', ''+quarterly);
+  getAnalytics(period: string, filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {
+    let params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
+    params = params.set('period', period);
     return this.http.get<CompositeKeyValue[]>('/rest/stats/analytics', {params: params});
   }
 
-  getAnalyticsDetails(year?: number, categoryType?: string, accounts?: number[]): Observable<CompositeKeyValue[]> {
-    let params = new HttpParams();
-
-    if (year !== undefined) {
-      params = params.append('year', year.toString());
-    }
-    if (categoryType !== undefined) {
-      params = params.append('category_type', categoryType);
-    }
-    if (accounts !== undefined) {
-      params = params.append('account_ids', accounts.join(','));
-    }
+  getAnalyticsDetails(filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {
+    const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
     return this.http.get<CompositeKeyValue[]>('/rest/stats/analytics/details', {params: params});
   }
 
