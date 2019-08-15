@@ -154,25 +154,37 @@ export class SearchComponent implements OnInit {
         dateTo.setMonth(this.currentMonth === 11 ? 0 : this.currentMonth + 1);
       }
     }
+    const filters: FilterRequest[] = [];
 
     // Building the filters
-    const minDate = this.rqlService.formatDate(dateFrom);
-    const maxDate = this.rqlService.formatDate(dateTo);
-    const labels = this.rqlService.formatList(this.labelsFilter);
-    const accounts = this.rqlService.formatList(this.accountsFilter);
-    const filter = FilterRequest.all(
-      FilterRequest.of('dateValue', minDate, FilterOperator.GE),
-      FilterRequest.of('dateValue', maxDate, FilterOperator.LT),
-      FilterRequest.of('description', this.descFilter, FilterOperator.CT),
-      FilterRequest.of('labelId', labels, FilterOperator.IN),
-      FilterRequest.of('accountId', accounts, FilterOperator.IN)
-    );
+    if (this.labelsFilter && this.labelsFilter.length > 0) {
+      const labels = this.rqlService.formatList(this.labelsFilter);
+      filters.push(FilterRequest.of('labelId', labels, FilterOperator.IN));
+    }
+    if (this.accountsFilter && this.accountsFilter.length > 0) {
+      const accounts = this.rqlService.formatList(this.accountsFilter);
+      filters.push(FilterRequest.of('accountId', accounts, FilterOperator.IN));
+    }
+    if (this.descFilter) {
+      filters.push(FilterRequest.of('description', this.descFilter, FilterOperator.CT));
+    }
+    if (dateFrom && dateTo) {
+      const minDate = this.rqlService.formatDate(dateFrom);
+      filters.push(FilterRequest.of('dateValue', minDate, FilterOperator.GE));
+    }
+    if (dateTo) {
+      const maxDate = this.rqlService.formatDate(dateTo);
+      filters.push(FilterRequest.of('dateValue', maxDate, FilterOperator.LT));
+    }
 
-    this.transactionsService.search({
-      filter: filter
-    }).subscribe(data => {
-      this.transactions = data.slice(0);
-    });
+    if (filters.length > 0) {
+      this.transactionsService.search({
+        filter: FilterRequest.all(...filters)
+      }).subscribe(data => {
+        this.transactions = data.slice(0);
+      });
+    }
+
   }
 
 }
