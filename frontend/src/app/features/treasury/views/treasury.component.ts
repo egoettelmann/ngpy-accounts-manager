@@ -9,6 +9,7 @@ import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/mo
 import { zip } from 'rxjs';
 import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
+import { StatisticsService } from '../../../core/services/domain/statistics.service';
 
 @Component({
   templateUrl: './treasury.component.html',
@@ -36,7 +37,7 @@ export class TreasuryComponent implements OnInit {
               private location: Location,
               private accountsService: AccountsRestService,
               private labelsService: LabelsRestService,
-              private statisticsService: StatisticsRestService,
+              private statisticsService: StatisticsService,
               private transactionsService: TransactionsService
   ) {
   }
@@ -154,10 +155,10 @@ export class TreasuryComponent implements OnInit {
    * @param {number[]} labels the labels to filter on
    */
   private loadAggregation(year: number, accounts: number[], labels: number[]) {
-    this.statisticsService.getAggregation(year, undefined, accounts, labels, true).subscribe(data => {
+    this.statisticsService.getAggregation(year, accounts, labels, true).subscribe(data => {
       this.aggregationCredit = data;
     });
-    this.statisticsService.getAggregation(year, undefined, accounts, labels, false).subscribe(data => {
+    this.statisticsService.getAggregation(year, accounts, labels, false).subscribe(data => {
       this.aggregationDebit = data;
     });
   }
@@ -169,7 +170,7 @@ export class TreasuryComponent implements OnInit {
    * @param {number[]} accounts the accounts to filter on
    */
   private loadSummary(year: number, accounts: number[]) {
-    this.statisticsService.getSummary(year, undefined, accounts).subscribe(data => {
+    this.statisticsService.getSummary(accounts, year).subscribe(data => {
       this.summary = data;
     });
   }

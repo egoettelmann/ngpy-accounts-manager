@@ -17,55 +17,53 @@ export class StatisticsRestService {
     return this.http.get<KeyValue[]>('/rest/stats/repartition', {params: params});
   }
 
-  getAggregation(year?: number, month?: number, accounts?: number[], labelIds?: number[], credit?: boolean): Observable<KeyValue[]> {
+  getEvolution(period: string, dateFrom: Date, dateTo: Date, accounts: number[], filterRequest: FilterRequest): Observable<KeyValue[]> {
     let params = new HttpParams();
 
-    if (year !== undefined) {
-      params = params.append('year', year.toString());
-    }
-    if (month !== undefined) {
-      params = params.append('month', month.toString());
-    }
-    if (accounts !== undefined) {
+    // Adding from date
+    const startDate = this.rqlService.formatDate(dateFrom);
+    const endDate = this.rqlService.formatDate(dateTo);
+    params = params.set('date_from', startDate);
+    params = params.set('date_to', endDate);
+
+    // Adding period
+    params = params.set('period', period);
+
+    // Adding accounts
+    if (accounts != null) {
       params = params.append('account_ids', accounts.join(','));
     }
-    if (labelIds !== undefined) {
-      params = params.append('label_ids', labelIds.join(','));
-    }
-    if (credit !== undefined) {
-      params = params.append('credit', ''+credit);
-    }
+
+    // Adding additional filters
+    params = this.rqlService.buildHttpParamsFromFilter(filterRequest, params);
+
+    return this.http.get<KeyValue[]>('/rest/stats/evolution', {params: params});
+  }
+
+  getAggregation(period: string, filterRequest: FilterRequest): Observable<KeyValue[]> {
+    let params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
+    params = params.set('period', period);
     return this.http.get<any>('/rest/stats/aggregation', {params: params});
   }
 
-  getSummary(year?: number, month?: number, accounts?: number[], labelIds?: number[]): Observable<Summary> {
+  getSummary(dateFrom: Date, dateTo: Date, accounts: number[], filterRequest: FilterRequest): Observable<Summary> {
     let params = new HttpParams();
 
-    if (year !== undefined) {
-      params = params.append('year', year.toString());
-    }
-    if (month !== undefined) {
-      params = params.append('month', month.toString());
-    }
-    if (accounts !== undefined) {
+    // Adding from date
+    const startDate = this.rqlService.formatDate(dateFrom);
+    const endDate = this.rqlService.formatDate(dateTo);
+    params = params.set('date_from', startDate);
+    params = params.set('date_to', endDate);
+
+    // Adding accounts
+    if (accounts != null) {
       params = params.append('account_ids', accounts.join(','));
     }
-    if (labelIds !== undefined) {
-      params = params.append('label_ids', labelIds.join(','));
-    }
+
+    // Adding additional filters
+    params = this.rqlService.buildHttpParamsFromFilter(filterRequest, params);
+
     return this.http.get<any>('/rest/stats/summary', {params: params});
-  }
-
-  getEvolution(year: number, accounts?: number[]): Observable<KeyValue[]> {
-    let params = new HttpParams();
-
-    if (year !== undefined) {
-      params = params.append('year', year.toString());
-    }
-    if (accounts !== undefined) {
-      params = params.append('account_ids', accounts.join(','));
-    }
-    return this.http.get<KeyValue[]>('/rest/stats/evolution', {params: params});
   }
 
   getAnalytics(period: string, filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {

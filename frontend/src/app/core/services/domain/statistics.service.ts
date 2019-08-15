@@ -12,8 +12,60 @@ export class StatisticsService {
               private rqlService: RqlService
   ) {}
 
-  getSummary(year?: number, month?: number, accounts?: number[], labelIds?: number[]): Observable<Summary> {
-    return this.statisticsRestService.getSummary(year, month, accounts, labelIds);
+  getSummary(accounts: number[], year: number, month?: number): Observable<Summary> {
+    // Building start and end date
+    if (month == null) {
+      month = 0;
+    }
+    const dateFrom = new Date(year, month, 1);
+    let dateTo: Date;
+    if (month == 11) {
+      dateTo = new Date(year + 1, 0, 1);
+    } else {
+      dateTo = new Date(year, month + 1, 1);
+    }
+
+    return this.statisticsRestService.getSummary(dateFrom, dateTo, accounts, undefined);
+  }
+
+  getAggregation(year: number, accounts: number[], labels: number[], credit: boolean): Observable<KeyValue[]> {
+    // Building start and end date
+    const dateFrom = this.rqlService.formatDate(new Date(year, 0, 1));
+    const dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
+
+    // Adding date and amount filters
+    let filter = FilterRequest.all(
+      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
+      FilterRequest.of('dateValue', dateTo, FilterOperator.LT),
+      FilterRequest.of('amount', 0, credit ? FilterOperator.GE : FilterOperator.LT)
+    );
+
+    // Adding the account filters
+    if (accounts && accounts.length > 0) {
+      const accountList = this.rqlService.formatList(accounts);
+      filter = FilterRequest.all(
+        FilterRequest.of('accountId', accountList, FilterOperator.IN),
+        filter
+      );
+    }
+
+    // Adding the label filters
+    if (labels && labels.length > 0) {
+      const accountList = this.rqlService.formatList(labels);
+      filter = FilterRequest.all(
+        FilterRequest.of('labelId', accountList, FilterOperator.IN),
+        filter
+      );
+    }
+
+    return this.statisticsRestService.getAggregation('MONTH', filter)
+  }
+
+  getEvolution(year: number, accounts: number[],): Observable<KeyValue[]> {
+    const dateFrom = new Date(year, 0, 1);
+    const dateTo = new Date(year + 1, 0, 1);
+
+    return this.statisticsRestService.getEvolution('MONTH', dateFrom, dateTo, accounts, undefined);
   }
 
   getRepartition(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {

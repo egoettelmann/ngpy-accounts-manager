@@ -205,7 +205,7 @@ export class TransactionsComponent implements OnInit {
    * @param {number[]} accounts the accounts to filter on
    */
   private loadSummary(year: number, month: number, accounts: number[]) {
-    this.statisticsService.getSummary(year, month, accounts).subscribe(data => {
+    this.statisticsService.getSummary(accounts, year, month).subscribe(data => {
       this.summary = data;
     });
   }
