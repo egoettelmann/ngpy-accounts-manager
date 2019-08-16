@@ -14,8 +14,19 @@ export class LabelToggleComponent implements OnChanges {
   selectedLabels: number[];
 
   ngOnChanges(changes) {
-    if (this.value && changes.value) {
-      this.selectedLabels = this.value.slice(0);
+    if (this.value && changes.value !== undefined) {
+      if (this.value.length === 0) {
+        this.toggleAllLabels();
+      } else {
+        this.toggleLabels(this.value);
+      }
+    }
+    if (changes.labels && this.labels) {
+      if (this.selectedLabels === undefined || this.selectedLabels.length === 0) {
+        this.toggleAllLabels();
+      } else {
+        this.toggleLabels(this.selectedLabels);
+      }
     }
   }
 
@@ -43,6 +54,11 @@ export class LabelToggleComponent implements OnChanges {
 
   toggleAllLabels() {
     this.selectedLabels = undefined;
+    this.onChange.emit(this.selectedLabels);
+  }
+
+  toggleLabels(labels: number[]) {
+    this.selectedLabels = labels.slice(0);
     this.onChange.emit(this.selectedLabels);
   }
 

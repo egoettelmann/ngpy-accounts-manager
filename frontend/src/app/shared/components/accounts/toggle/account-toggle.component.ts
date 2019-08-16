@@ -14,11 +14,15 @@ export class AccountToggleComponent implements OnChanges {
   selectedAccounts: number[] = [];
 
   ngOnChanges(changes) {
-    if (changes.preSelected && this.preSelected) {
-      this.selectedAccounts = this.preSelected.slice(0);
+    if (changes.preSelected && this.preSelected !== undefined) {
+      if (this.preSelected.length === 0) {
+        this.toggleAllAccounts();
+      } else {
+        this.toggleAccounts(this.preSelected);
+      }
     }
     if (changes.accounts && this.accounts) {
-      if (this.selectedAccounts.length === 0) {
+      if (this.selectedAccounts === undefined || this.selectedAccounts.length === 0) {
         this.toggleAllAccounts();
       } else {
         this.toggleAccounts(this.selectedAccounts);
