@@ -53,9 +53,7 @@ class AccountService:
             Account
         )
         for acc in accounts:
-            acc_id: int = acc.id
-            acc.total = self.get_account_total(acc_id, date.today() + timedelta(days=1))
-            acc.last_update = self.get_last_update(acc_id)
+            self.__add_metadata(acc)
         return accounts
 
     def get_account(self, account_id: int) -> Account:
@@ -64,10 +62,12 @@ class AccountService:
         :param account_id: the account id
         :return: the account
         """
-        return self.__mapper.map(
+        account = self.__mapper.map(
             self.__repository.get_by_id(account_id),
             Account
         )
+        self.__add_metadata(account)
+        return account
 
     def find_by_name(self, name: str) -> Account:
         """Finds an account by its name
@@ -160,10 +160,6 @@ class AccountService:
         """
         accounts_list = self.get_all_accounts()
 
-        info_limit = datetime.date(datetime.today() - timedelta(days=30))
-        warn_limit = datetime.date(datetime.today() - timedelta(days=60))
-        error_limit = datetime.date(datetime.today() - timedelta(days=80))
-
         max_level = 0
         notification_level = None
         notifications = []
@@ -172,22 +168,62 @@ class AccountService:
             if not acc.notify:
                 continue
             logging.info('Account %s last updated on %s', acc.name, acc.last_update)
-            if acc.last_update < error_limit:
+            if acc.status is 'ERROR':
                 max_level = max(max_level, 3)
-                notif = Notification(acc.name, 'ERROR', str(acc.last_update))
+                notif = Notification(acc.name, acc.status, str(acc.last_update))
                 notifications.append(notif)
                 if max_level == 3:
-                    notification_level = 'ERROR'
-            elif acc.last_update < warn_limit:
+                    notification_level = acc.status
+            elif acc.status is 'WARNING':
                 max_level = max(max_level, 2)
-                notif = Notification(acc.name, 'WARNING', str(acc.last_update))
+                notif = Notification(acc.name, acc.status, str(acc.last_update))
                 notifications.append(notif)
                 if max_level == 2:
-                    notification_level = 'WARNING'
-            elif acc.last_update < info_limit:
+                    notification_level = acc.status
+            elif acc.last_update is 'INFO':
                 max_level = max(max_level, 1)
-                notif = Notification(acc.name, 'INFO', str(acc.last_update))
+                notif = Notification(acc.name, acc.status, str(acc.last_update))
                 notifications.append(notif)
                 if max_level == 1:
-                    notification_level = 'INFO'
+                    notification_level = acc.status
         return notification_level, notifications
+
+    def __add_metadata(self, account: Account):
+        """Adds the additional metadata to an account:
+         - the total
+         - the last update
+
+        :param account:
+        :return:
+        """
+        account_id: int = account.id
+
+        # Adding the total
+        account.total = self.get_account_total(account_id, date.today() + timedelta(days=1))
+
+        # Adding the last update
+        account.last_update = self.get_last_update(account_id)
+
+        # Adding the status
+        account.status = self.__calculate_account_status(account)
+
+        return account
+
+    @staticmethod
+    def __calculate_account_status(account: Account) -> str:
+        """Calculates the account status based on the last update date.
+
+        :param account: the account
+        :return: the status
+        """
+        info_limit = datetime.date(datetime.today() - timedelta(days=30))
+        warn_limit = datetime.date(datetime.today() - timedelta(days=60))
+        error_limit = datetime.date(datetime.today() - timedelta(days=80))
+
+        if account.last_update < error_limit:
+            return 'ERROR'
+        elif account.last_update < warn_limit:
+            return 'WARNING'
+        elif account.last_update < info_limit:
+            return 'INFO'
+        return 'OK'

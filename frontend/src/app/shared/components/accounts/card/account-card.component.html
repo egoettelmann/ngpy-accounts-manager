@@ -7,6 +7,48 @@
     <p class="card-text">
       <span class="mr-1">{{ 'i18n.components.accounts.account-card.latest-transaction' | translate }}</span>
       <span>{{ account.lastUpdate | date:'dd/MM/yyyy' }}</span>
+
+      <!-- ERROR status -->
+      <span *ngIf="account.status === 'ERROR'"
+            class="tooltip tooltip-sm tooltip-top-right"
+            role="tooltip"
+            aria-haspopup="true">
+        <span class="text-danger">
+          <span>&nbsp;</span>
+          <clr-icon shape="error-standard" class="is-solid"></clr-icon>
+        </span>
+        <span class="tooltip-content">
+          <span>{{ 'i18n.components.accounts.account-card.status.error' | translate }}</span><br/>
+        </span>
+      </span>
+
+      <!-- WARNING status -->
+      <span *ngIf="account.status === 'WARNING'"
+            class="tooltip tooltip-sm tooltip-top-right"
+            role="tooltip"
+            aria-haspopup="true">
+        <span class="text-warning">
+          <span>&nbsp;</span>
+          <clr-icon shape="warning-standard" class="is-solid"></clr-icon>
+        </span>
+        <span class="tooltip-content">
+          <span>{{ 'i18n.components.accounts.account-card.status.warning' | translate }}</span><br/>
+        </span>
+      </span>
+
+      <!-- INFO status -->
+      <span *ngIf="account.status === 'INFO'"
+            class="tooltip tooltip-sm tooltip-top-right"
+            role="tooltip"
+            aria-haspopup="true">
+        <span class="text-info">
+          <span>&nbsp;</span>
+          <clr-icon shape="info-standard" class="is-solid"></clr-icon>
+        </span>
+        <span class="tooltip-content">
+          <span>{{ 'i18n.components.accounts.account-card.status.info' | translate }}</span><br/>
+        </span>
+      </span>
     </p>
   </div>
   <ul class="list-group list-group-flush">

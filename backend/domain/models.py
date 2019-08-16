@@ -37,6 +37,7 @@ class User:
     'name': types.String(),
     'description': types.String(),
     'total': types.Float(ignore_on_parse=True),
+    'status': types.String(),
     'color': types.String(),
     'notify': types.Boolean(),
     'lastUpdate': types.DateTime(attribute='last_update', dt_format='iso8601', ignore_on_parse=True)
@@ -44,11 +45,12 @@ class User:
 class Account:
 
     def __init__(self, id: int = None, name: str = None, description: str = None,
-                 total: float = None, color: str = None, notify: bool = None):
+                 total: float = None, status: str = None, color: str = None, notify: bool = None):
         self.id = id
         self.name = name
         self.description = description
         self.total = total
+        self.status = status
         self.color = color
         self.notify = notify
 

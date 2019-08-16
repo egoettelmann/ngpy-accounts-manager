@@ -3,6 +3,7 @@ export class Account {
   name: string;
   description: string;
   total: number;
+  status: string;
   color: string;
   notify: boolean;
   lastUpdate: Date;

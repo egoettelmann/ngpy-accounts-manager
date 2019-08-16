@@ -109,6 +109,9 @@
 
   "i18n.components.accounts.account-card.latest-transaction": "Latest transaction:",
   "i18n.components.accounts.account-card.total": "Total:",
+  "i18n.components.accounts.account-card.status.error": "Gap of 3 months",
+  "i18n.components.accounts.account-card.status.warning": "Gap of 2 months",
+  "i18n.components.accounts.account-card.status.info": "Gap of 1 month",
   "i18n.components.accounts.account-toggle.label": "Account(s):",
   "i18n.components.accounts.account-toggle.all-accounts": "All accounts",
   "i18n.components.accounts.account-toggle.accounts": " account(s)",
