@@ -3,6 +3,7 @@ import logging
 from datetime import date, datetime, timedelta
 from typing import List
 
+from ..search_request import FilterRequest, FilterOperator
 from .status_service import StatusService
 from .transaction_service import TransactionService
 from ..exceptions import FileImportException
@@ -120,7 +121,12 @@ class AccountService:
         else:
             total = 0
             date_from = date(1900, 1, 1)
-        result = self.__repository.get_total(account_id, date_from, start_date)
+        filter_request = FilterRequest.all(
+            FilterRequest.of('account_id', account_id, FilterOperator.EQ),
+            FilterRequest.of('date_value', date_from, FilterOperator.GE),
+            FilterRequest.of('date_value', start_date, FilterOperator.LT)
+        )
+        result = self.__transaction_service.get_total(filter_request)
         if result is None:
             result = 0
         return total + result

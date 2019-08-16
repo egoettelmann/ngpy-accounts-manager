@@ -1,10 +1,7 @@
-from datetime import date
 from typing import List
 
-from .transaction_repository import TransactionRepository
 from ..entities import AccountDbo
 from ..manager import EntityManager
-from ...domain.search_request import FilterRequest, FilterOperator
 from ...modules.depynject import injectable
 
 
@@ -15,16 +12,13 @@ class AccountRepository:
     """
 
     def __init__(self,
-                 entity_manager: EntityManager,
-                 transaction_repository: TransactionRepository
+                 entity_manager: EntityManager
                  ) -> None:
         """Constructor
 
         :param entity_manager: the entity manager
-        :param transaction_repository: the transaction repository
         """
         self.__entity_manager = entity_manager
-        self.__transaction_repository = transaction_repository
 
     def get_all(self) -> List[AccountDbo]:
         """Gets the list of all accounts.
@@ -40,21 +34,6 @@ class AccountRepository:
         :return: the account
         """
         return self.__entity_manager.query(AccountDbo).get(account_id)
-
-    def get_total(self, account_id: int, date_from: date, date_to: date) -> float:
-        """Gets the total transactions of an account by its id between two given dates.
-
-        :param account_id: the account id
-        :param date_from: the start date
-        :param date_to: the end date
-        :return: the total of the account
-        """
-        filter_request = FilterRequest.all(
-            FilterRequest.of('account_id', account_id, FilterOperator.EQ),
-            FilterRequest.of('date_value', date_from, FilterOperator.GE),
-            FilterRequest.of('date_value', date_to, FilterOperator.LT)
-        )
-        return self.__transaction_repository.get_total(filter_request)
 
     def find_by_name(self, name: str) -> AccountDbo:
         """Finds an account by its name.
