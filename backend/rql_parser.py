@@ -1,6 +1,6 @@
 import logging
 import urllib.parse
-from typing import Mapping, Optional
+from typing import Mapping, Optional, List
 
 from flask import Request
 
@@ -143,7 +143,7 @@ class RqlRequestParser:
 
         # Checking for aggregations
         if outer == 'or' or outer == 'and':
-            parts = inner.split(';')
+            parts = self.__split_expression(';', inner)
             parsed_parts = list(map(lambda x: self.__parse_rql_expression(x), parts))
             parsed_parts = [x for x in parsed_parts if x is not None]
             if len(parsed_parts) == 0:
@@ -193,3 +193,27 @@ class RqlRequestParser:
             return decoded_value[1:-1].split(',')
 
         return decoded_value
+
+    @staticmethod
+    def __split_expression(separator: str, expression: str) -> List[str]:
+        """Splits an expression by a given separator so that each substring forms a coherent expression.
+
+        :param separator: the separator to split on
+        :param expression: the expression
+        :return: the list of expressions
+        """
+        result = []
+        start_idx = 0
+        count = 0
+        stop_idx = len(expression) - 1
+        for idx, char in enumerate(expression):
+            if char is '(':
+                count = count + 1
+            if char is ')':
+                count = count - 1
+            if char == separator and count == 0:
+                result.append(expression[start_idx:idx])
+                start_idx = idx
+            if idx == stop_idx:
+                result.append(expression[start_idx + 1:idx + 1])
+        return result
