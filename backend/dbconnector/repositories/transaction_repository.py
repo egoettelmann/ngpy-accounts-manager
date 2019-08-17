@@ -205,21 +205,20 @@ class TransactionRepository:
         self.__entity_manager.get_session().refresh(saved_transaction)
         return saved_transaction
 
-    @staticmethod
-    def period_expression(period: PeriodType, column: any) -> any:
+    def period_expression(self, period: PeriodType, column: any) -> any:
         if period == PeriodType.DAY:
             return cast(extract('year', column), String)\
                    + '-'\
-                   + func.substr('00' + cast(extract('month', column), String), -2, 2)\
+                   + self.__entity_manager.query_adapter.pad(extract('month', column), '00')\
                    + '-'\
-                   + func.substr('00' + cast(extract('day', column), String), -2, 2)
+                   + self.__entity_manager.query_adapter.pad(extract('day', column), '00')
         if period == PeriodType.MONTH:
             return cast(extract('year', column), String)\
                    + '-'\
-                   + func.substr('00' + cast(extract('month', column), String), -2, 2)
+                   + self.__entity_manager.query_adapter.pad(extract('month', column), '00')
         if period == PeriodType.QUARTER:
-            return  cast(extract('year', column), String)\
-                   + '-'\
+            return cast(extract('year', column), String)\
+                   + '-Q'\
                    + cast(cast((extract('month', TransactionDbo.date_value) + 2) / 3, Integer), String)
         if period == PeriodType.YEAR:
             return cast(extract('year', column), String)

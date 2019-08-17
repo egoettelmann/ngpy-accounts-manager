@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, Query, Session
 from sqlalchemy.pool import QueuePool
 
+from .query_adapter import QueryAdapter
 from ..modules.depynject import inject, injectable
 
 __AVAILABLE_MANAGERS__ = {}
@@ -25,6 +26,9 @@ class EntityManager:
         if self.__db_file_path.startswith('sqlite'):
             # This option is specific to sqlite
             connect_args['check_same_thread'] = False
+            self.query_adapter = QueryAdapter('sqlite')
+        else:
+            self.query_adapter = QueryAdapter('postgresql')
         self.__engine = create_engine(
             self.__db_file_path,
             connect_args=connect_args,

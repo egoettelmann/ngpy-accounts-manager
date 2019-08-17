@@ -43,9 +43,9 @@ class QueryBuilder:
         # Applying the order
         if sort_request.order is not None:
             if sort_request.desc is None or sort_request.desc is False:
-                query = query.order_by(getattr(self.__type, sort_request.order))
+                query = query.order_by(self.__get_nested_attr(self.__type, sort_request.order))
             else:
-                query = query.order_by(desc(getattr(self.__type, sort_request.order)))
+                query = query.order_by(desc(self.__get_nested_attr(self.__type, sort_request.order)))
 
         return query
 
