@@ -160,12 +160,25 @@ export class AnalyticsComponent implements OnInit {
    */
   private buildTable(data: CompositeKeyValue[]): ChartSerie[] {
     const movements: ChartSerie[] = [];
+    let categories = [];
     const series = {};
+
+    // Generating list of categories
     for (const d of data) {
-      const categoryIdx = parseInt(d.keyOne, 10) - 1;
-      if (!series.hasOwnProperty(d.keyTwo)) {
-        series[d.keyTwo] = [0, 0, 0, 0];
+      if (!categories.includes(d.keyOne)) {
+        categories.push(d.keyOne);
       }
+    }
+    categories = categories.sort((a: string, b: string) => {
+      return a.localeCompare(b);
+    });
+
+    for (const d of data) {
+      const categoryIdx = categories.indexOf(d.keyOne);
+      if (!series.hasOwnProperty(d.keyTwo)) {
+        series[d.keyTwo] = [];
+      }
+      CommonFunctions.resizeArray(series[d.keyTwo], 0, this.quarterly ? 3 : 11);
       series[d.keyTwo][categoryIdx] = d.value;
     }
     for (const key in series) {
