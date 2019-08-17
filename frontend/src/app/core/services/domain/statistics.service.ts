@@ -14,15 +14,18 @@ export class StatisticsService {
 
   getSummary(accounts: number[], year: number, month?: number): Observable<Summary> {
     // Building start and end date
-    if (month == null) {
-      month = 0;
-    }
-    const dateFrom = new Date(year, month - 1, 1);
+    let dateFrom: Date;
     let dateTo: Date;
-    if (month == 12) {
+    if (month == null) {
+      dateFrom = new Date(year, 0, 1);
       dateTo = new Date(year + 1, 0, 1);
     } else {
-      dateTo = new Date(year, month, 1);
+      dateFrom = new Date(year, month - 1, 1);
+      if (month == 12) {
+        dateTo = new Date(year + 1, 0, 1);
+      } else {
+        dateTo = new Date(year, month, 1);
+      }
     }
 
     return this.statisticsRestService.getSummary(dateFrom, dateTo, accounts, undefined);

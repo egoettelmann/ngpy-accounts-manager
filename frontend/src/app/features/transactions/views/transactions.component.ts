@@ -62,7 +62,7 @@ export class TransactionsComponent implements OnInit {
   changeAccounts(accounts: Account[]) {
     const newFilter = accounts.length === this.accounts.length ? [] : accounts.map(a => a.id);
     if (!_.isEqual(this.accountsFilter, newFilter)) {
-      this.accountsFilter = newFilter;
+      this.accountsFilter = newFilter.slice(0);
       this.reloadData();
     }
   }

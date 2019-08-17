@@ -61,7 +61,7 @@ export class TreasuryComponent implements OnInit {
   changeAccounts(accounts: Account[]) {
     const newFilter = accounts.length === this.accounts.length ? [] : accounts.map(a => a.id);
     if (!_.isEqual(this.accountsFilter, newFilter)) {
-      this.accountsFilter = newFilter;
+      this.accountsFilter = newFilter.slice(0);
       this.reloadData();
     }
   }
@@ -74,7 +74,7 @@ export class TreasuryComponent implements OnInit {
   changeLabels(labels: number[]) {
     const newFilter = labels;
     if (!_.isEqual(this.labelsFilter, newFilter)) {
-      this.labelsFilter = newFilter;
+      this.labelsFilter = newFilter.slice(0);
       this.reloadData();
     }
   }
@@ -119,7 +119,7 @@ export class TreasuryComponent implements OnInit {
    */
   private reloadData() {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
-    const labels = this.labelsFilter;
+    const labels = this.labelsFilter.length > 0 ? this.labelsFilter : undefined;
     this.loadSummary(this.currentYear, accounts);
     this.loadEvolution(this.currentYear, accounts);
     this.loadAggregation(this.currentYear, accounts, labels);

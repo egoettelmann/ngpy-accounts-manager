@@ -39,15 +39,15 @@ export class LabelToggleComponent implements OnChanges {
   }
 
   toggleLabel(labelId: number) {
-    if (this.selectedLabels && this.isSelected(labelId)) {
+    if (this.selectedLabels === undefined) {
+      this.selectedLabels = [];
+    }
+    if (this.isSelected(labelId)) {
       const idx = this.selectedLabels.indexOf(labelId);
       if (this.selectedLabels.length > 1) {
         this.selectedLabels.splice(idx, 1);
       }
     } else {
-      if (this.selectedLabels === undefined) {
-        this.selectedLabels = [];
-      }
       this.selectedLabels.push(labelId);
     }
     this.onChange.emit(this.selectedLabels);
