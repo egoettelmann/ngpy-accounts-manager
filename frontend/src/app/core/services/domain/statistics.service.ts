@@ -17,12 +17,12 @@ export class StatisticsService {
     if (month == null) {
       month = 0;
     }
-    const dateFrom = new Date(year, month, 1);
+    const dateFrom = new Date(year, month - 1, 1);
     let dateTo: Date;
-    if (month == 11) {
+    if (month == 12) {
       dateTo = new Date(year + 1, 0, 1);
     } else {
-      dateTo = new Date(year, month + 1, 1);
+      dateTo = new Date(year, month, 1);
     }
 
     return this.statisticsRestService.getSummary(dateFrom, dateTo, accounts, undefined);
@@ -70,12 +70,12 @@ export class StatisticsService {
 
   getRepartition(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {
     // Building start and end date
-    const dateFrom = this.rqlService.formatDate(new Date(year, month, 1));
+    const dateFrom = this.rqlService.formatDate(new Date(year, month - 1, 1));
     let dateTo: string;
-    if (month == 11) {
+    if (month == 12) {
       dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
     } else {
-      dateTo = this.rqlService.formatDate(new Date(year, month + 1, 1));
+      dateTo = this.rqlService.formatDate(new Date(year, month, 1));
     }
 
     // Adding date and amount filters
