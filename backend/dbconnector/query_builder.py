@@ -1,7 +1,7 @@
 import logging
 from typing import ClassVar, Optional
 
-from sqlalchemy import desc, and_, or_, inspect
+from sqlalchemy import desc, and_, or_
 from sqlalchemy.orm import Query
 
 from ..domain.search_request import FilterRequest, PageRequest, FilterOperator, SortRequest
@@ -94,7 +94,7 @@ class QueryBuilder:
                 return or_(*parsed_parts)
 
         # Extracting the field
-        field = self.deepgetattr(self.__type, filter_request.get_field())
+        field = self.__get_nested_attr(self.__type, filter_request.get_field())
         operator = filter_request.get_operator()
 
         # EQUALS
@@ -107,11 +107,23 @@ class QueryBuilder:
 
         # IN
         if operator == FilterOperator.IN:
-            return field.in_(filter_request.get_value())
+            values = filter_request.get_value()
+            if None in values:
+                return or_(
+                    field.is_(None),
+                    field.in_(values)
+                )
+            return field.in_(values)
 
         # NOT IN
         if operator == FilterOperator.NI:
-            return field.notin_(filter_request.get_value())
+            values = filter_request.get_value()
+            if None in values:
+                return and_(
+                    field.isnot_(None),
+                    field.notin_(values)
+                )
+            return field.notin_(values)
 
         # GREATER THAN
         if operator == FilterOperator.GT:
@@ -134,14 +146,21 @@ class QueryBuilder:
             return field.ilike('%' + filter_request.get_value() + '%')
 
     @staticmethod
-    def deepgetattr(o, attr):
+    def __get_nested_attr(o, attr):
+        """Gets the attribute with support for 'dot' notation.
+        Will extract the nested attribute from the provided object.
+
+        :param o: the object
+        :param attr: the attribute to extract
+        :return: the extract attribute
+        """
         logging.debug('Retrieving [%s] from %s', attr, o)
         attrs = attr.split('.', 1)
         item = getattr(o, attrs[0])
         if len(attrs) == 1:
             return item
         else:
-            return QueryBuilder.deepgetattr(
+            return QueryBuilder.__get_nested_attr(
                 item.property.mapper.class_,
                 attrs[1]
             )
