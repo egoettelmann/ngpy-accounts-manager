@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { Account } from '../../../../core/models/api.models';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-account-toggle',
@@ -50,13 +51,19 @@ export class AccountToggleComponent implements OnChanges {
   }
 
   toggleAllAccounts() {
-    this.selectedAccounts = this.accounts.map(a => a.id);
-    this.onChange.emit(this.getSelectedAccounts());
+    const selectedAccounts = this.accounts.map(a => a.id);
+    if (!_.isEqual(selectedAccounts, this.selectedAccounts)) {
+      this.selectedAccounts = selectedAccounts;
+      this.onChange.emit(this.getSelectedAccounts());
+    }
   }
 
   toggleAccounts(accounts: number[]) {
-    this.selectedAccounts = accounts.slice(0);
-    this.onChange.emit(this.getSelectedAccounts());
+    const selectedAccounts = accounts.slice(0);
+    if (!_.isEqual(selectedAccounts, this.selectedAccounts)) {
+      this.selectedAccounts = selectedAccounts;
+      this.onChange.emit(this.getSelectedAccounts());
+    }
   }
 
   private getSelectedAccounts() {

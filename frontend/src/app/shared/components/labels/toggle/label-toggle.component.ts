@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { Label } from '../../../../core/models/api.models';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-label-toggle',
@@ -53,13 +54,18 @@ export class LabelToggleComponent implements OnChanges {
   }
 
   toggleAllLabels() {
-    this.selectedLabels = undefined;
-    this.onChange.emit(this.selectedLabels);
+    if (this.selectedLabels !== undefined) {
+      this.selectedLabels = undefined;
+      this.onChange.emit(this.selectedLabels);
+    }
   }
 
   toggleLabels(labels: number[]) {
-    this.selectedLabels = labels.slice(0);
-    this.onChange.emit(this.selectedLabels);
+    const selectedLabels = labels.slice(0);
+    if (!_.isEqual(selectedLabels, this.selectedLabels)) {
+      this.selectedLabels = selectedLabels;
+      this.onChange.emit(this.selectedLabels);
+    }
   }
 
 }
