@@ -187,14 +187,14 @@ class RqlRequestParser:
         :return: the parsed value
         """
         decoded_value = urllib.parse.unquote(value)
-        if decoded_value == 'null':
+        if decoded_value == 'null' or decoded_value == '':
             return None
 
         # IN or NOT INT
         if operator == FilterOperator.IN or operator == FilterOperator.NI:
             return list(
                 map(
-                    lambda x: None if x == 'null' else x,
+                    lambda x: None if (x == 'null' or x == '') else x,
                     decoded_value[1:-1].split(',')
                 )
             )
