@@ -2,6 +2,8 @@ from typing import List
 
 from ..entities import AccountDbo
 from ..manager import EntityManager
+from ..query_builder import QueryBuilder
+from ...domain.search_request import SearchRequest
 from ...modules.depynject import injectable
 
 
@@ -19,6 +21,7 @@ class AccountRepository:
         :param entity_manager: the entity manager
         """
         self.__entity_manager = entity_manager
+        self.__query_builder = QueryBuilder(AccountDbo)
 
     def get_all(self) -> List[AccountDbo]:
         """Gets the list of all accounts.
@@ -26,6 +29,18 @@ class AccountRepository:
         :return: the list of all accounts
         """
         return self.__entity_manager.query(AccountDbo).all()
+
+    def find_all(self, search_request: SearchRequest) -> List[AccountDbo]:
+        """Gets all accounts matching the provided filters.
+
+        :param search_request: the search request
+        :return: the list of accounts
+        """
+        query = self.__entity_manager.query(AccountDbo)
+        query = self.__query_builder.filter(query, search_request.filter_request)
+        query = self.__query_builder.sort(query, search_request.sort_request)
+        query = self.__query_builder.paginate(query, search_request.page_request)
+        return query.all()
 
     def get_by_id(self, account_id: int) -> AccountDbo:
         """Gets an account by its id.

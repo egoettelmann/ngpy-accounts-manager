@@ -1,6 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { CategoriesRestService } from '../../../core/services/rest/categories-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
@@ -9,6 +8,7 @@ import * as _ from 'lodash';
 import { Account, Category, CompositeKeyValue } from '../../../core/models/api.models';
 import { ChartSerie, GroupedValue } from '../../../core/models/domain.models';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
+import { AccountsService } from '../../../core/services/domain/accounts.service';
 
 @Component({
   templateUrl: './analytics.component.html',
@@ -33,7 +33,7 @@ export class AnalyticsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private location: Location,
-              private accountsService: AccountsRestService,
+              private accountsService: AccountsService,
               private categoriesService: CategoriesRestService,
               private statisticsService: StatisticsService
   ) {

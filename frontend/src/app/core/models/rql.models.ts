@@ -35,7 +35,7 @@ export enum FilterOperator {
 export class FilterRequest {
   operator: FilterOperator;
   field: string;
-  value: string | number;
+  value: string | number | boolean;
   collection: FilterRequest[];
   isAnd: boolean;
 
@@ -46,7 +46,7 @@ export class FilterRequest {
    * @param value the value to filter
    * @param operator the operator to apply as filter
    */
-  static of(field: string, value: string | number, operator: FilterOperator): FilterRequest {
+  static of(field: string, value: string | number | boolean, operator: FilterOperator): FilterRequest {
     const filterRequest = new FilterRequest();
     filterRequest.field = field;
     filterRequest.value = value;

@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import cast, Integer, String, func
+from sqlalchemy import cast, Integer, String
 from sqlalchemy.sql.expression import extract, func, desc, label
 
 from ..entities import LabelDbo, TransactionDbo, CategoryDbo, QKeyValue, QCompositeKeyValue

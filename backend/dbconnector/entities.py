@@ -46,14 +46,16 @@ class AccountDbo(EntityManager.get_base()):
     transactions = relationship("TransactionDbo", backref="account")
     color = Column(String(50))
     notify = Column(Boolean())
+    active = Column(Boolean())
     status = relationship("StatusDbo", backref="account")
 
-    def __init__(self, id=None,  name=None, description=None, color=None, notify=None):
+    def __init__(self, id=None,  name=None, description=None, color=None, notify=None, active=None):
         self.id = id
         self.name = name
         self.description = description
         self.color = color
         self.notify = notify
+        self.active = active
 
     def __repr__(self):
         return '<AccountDbo %r, %r>' % (self.id, self.name)

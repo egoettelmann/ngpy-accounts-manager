@@ -3,12 +3,12 @@ import logging
 from datetime import date, datetime, timedelta
 from typing import List
 
-from ..search_request import FilterRequest, FilterOperator
 from .status_service import StatusService
 from .transaction_service import TransactionService
 from ..exceptions import FileImportException
 from ..importers.resolve import Resolver
 from ..models import Account, Notification
+from ..search_request import FilterRequest, FilterOperator, SearchRequest
 from ...dbconnector.entities import AccountDbo
 from ...dbconnector.entities import TransactionDbo
 from ...dbconnector.repositories import AccountRepository
@@ -43,13 +43,16 @@ class AccountService:
         self.__status_service = status_service
         self.__resolver = resolver
 
-    def get_all_accounts(self) -> List[Account]:
-        """Gets the list of all accounts
+    def get_all_accounts(self, search_request: SearchRequest = None) -> List[Account]:
+        """Gets the list of all accounts matching the provided filters.
 
+        :param search_request: the search request
         :return: the list of all accounts
         """
+        if search_request is None:
+            search_request = SearchRequest()
         accounts = self.__mapper.map_all(
-            self.__repository.get_all(),
+            self.__repository.find_all(search_request),
             Account
         )
         for acc in accounts:

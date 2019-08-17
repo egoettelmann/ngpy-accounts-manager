@@ -1,7 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
-import { StatisticsRestService } from '../../../core/services/rest/statistics-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import * as _ from 'lodash';
@@ -10,6 +8,7 @@ import { zip } from 'rxjs';
 import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
+import { AccountsService } from '../../../core/services/domain/accounts.service';
 
 @Component({
   templateUrl: './treasury.component.html',
@@ -35,7 +34,7 @@ export class TreasuryComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private location: Location,
-              private accountsService: AccountsRestService,
+              private accountsService: AccountsService,
               private labelsService: LabelsRestService,
               private statisticsService: StatisticsService,
               private transactionsService: TransactionsService

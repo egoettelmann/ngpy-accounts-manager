@@ -13,7 +13,8 @@ CREATE TABLE public."accounts"
   name VARCHAR(50) UNIQUE,
   description VARCHAR(250),
   color VARCHAR(50),
-  notify BOOLEAN
+  notify BOOLEAN,
+  active BOOLEAN
 )
 ;
 

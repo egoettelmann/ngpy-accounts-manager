@@ -6,6 +6,7 @@ export class Account {
   status: string;
   color: string;
   notify: boolean;
+  active: boolean;
   lastUpdate: Date;
 }
 

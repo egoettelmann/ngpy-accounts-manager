@@ -8,6 +8,7 @@
       <th class="text-left">{{ 'i18n.views.settings.accounts.table.header.description' | translate }}</th>
       <th class="text-left">{{ 'i18n.views.settings.accounts.table.header.color' | translate }}</th>
       <th class="text-left">{{ 'i18n.views.settings.accounts.table.header.notify' | translate }}</th>
+      <th class="text-left">{{ 'i18n.views.settings.accounts.table.header.active' | translate }}</th>
       <th class="text-right">{{ 'i18n.views.settings.accounts.table.header.last-update' | translate }}</th>
       <th class="text-right">{{ 'i18n.views.settings.accounts.table.header.total' | translate }}</th>
       <th>&nbsp;</th>
@@ -30,6 +31,9 @@
       </td>
       <td class="text-left">
         <input type="checkbox" [formControlName]="'notify'" clrToggle />
+      </td>
+      <td class="text-left">
+        <input type="checkbox" [formControlName]="'active'" clrToggle />
       </td>
       <td class="text-right">{{ accountForm.get('lastUpdate').value }}</td>
       <td class="text-right">{{ accountForm.get('total').value | number:'1.2-2' }}&nbsp;€</td>

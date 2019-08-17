@@ -1,7 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { DecimalPipe, Location } from '@angular/common';
 import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
-import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { zip } from 'rxjs';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
@@ -9,6 +8,7 @@ import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
+import { AccountsService } from '../../../core/services/domain/accounts.service';
 
 @Component({
   templateUrl: './transactions.component.html',
@@ -37,7 +37,7 @@ export class TransactionsComponent implements OnInit {
               private labelsService: LabelsRestService,
               private transactionsService: TransactionsService,
               private statisticsService: StatisticsService,
-              private accountsService: AccountsRestService,
+              private accountsService: AccountsService,
               private decimalPipe: DecimalPipe
   ) {
   }

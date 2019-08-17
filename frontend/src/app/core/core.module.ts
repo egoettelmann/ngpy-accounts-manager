@@ -25,6 +25,7 @@ import { ResponsiveService } from './services/responsive.service';
 import { TransactionsService } from './services/domain/transactions.service';
 import { RqlService } from './services/rql.service';
 import { StatisticsService } from './services/domain/statistics.service';
+import { AccountsService } from './services/domain/accounts.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -86,6 +87,7 @@ export class CoreModule {
     CategoriesRestService,
 
     /** Domain services **/
+    AccountsService,
     TransactionsService,
     StatisticsService,
 

@@ -1,9 +1,9 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { AccountsRestService } from '../../../core/services/rest/accounts-rest.service';
 import { zip } from 'rxjs';
 import { Router } from '@angular/router';
 import { Account } from '../../../core/models/api.models';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
+import { AccountsService } from '../../../core/services/domain/accounts.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   public total: number;
 
   constructor(private router: Router,
-              private accountsService: AccountsRestService,
+              private accountsService: AccountsService,
               private transactionsService: TransactionsService
   ) {
   }
@@ -26,10 +26,10 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     zip(
       this.transactionsService.countUnlabeled(),
-      this.accountsService.getAccounts()
+      this.accountsService.getActiveAccounts()
     ).subscribe(([numUnlabeled, accounts]) => {
       this.unlabeledTransactions = numUnlabeled;
-      this.accounts = accounts;
+      this.accounts = this.sortAccounts(accounts);
       this.total = 0;
       for (const a of this.accounts) {
         this.total += a.total;
@@ -42,6 +42,15 @@ export class DashboardComponent implements OnInit {
       queryParams: {
         label: ''
       }
+    });
+  }
+
+  private sortAccounts(accounts: Account[]): Account[] {
+    if (accounts == null) {
+      return [];
+    }
+    return accounts.sort((a1, a2) => {
+      return a2.total - a1.total;
     });
   }
 

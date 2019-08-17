@@ -13,7 +13,8 @@ CREATE TABLE "accounts"
   name VARCHAR(50) UNIQUE,
   description VARCHAR(250),
   color VARCHAR(50),
-  notify INTEGER DEFAULT 0
+  notify INTEGER DEFAULT 0,
+  active INTEGER DEFAULT 1
 )
 ;
 

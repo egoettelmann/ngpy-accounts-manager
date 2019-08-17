@@ -1,9 +1,12 @@
 from typing import List
 
+from flask import request
+
 from ..domain.models import Account
 from ..domain.services import AccountService, NotificationService
 from ..modules import restipy
 from ..modules.depynject import injectable
+from ..rql_parser import RqlRequestParser
 
 
 @injectable()
@@ -24,6 +27,12 @@ class AccountController:
         """
         self.__account_service = account_service
         self.__notification_service = notification_service
+        self.__rql_parser = RqlRequestParser({
+            'name': 'name',
+            'description': 'description',
+            'notify': 'notify',
+            'active': 'active'
+        })
 
     @restipy.route('')
     @restipy.format_as(Account)
@@ -32,7 +41,8 @@ class AccountController:
 
         :return: the list of all accounts
         """
-        return self.__account_service.get_all_accounts()
+        search_request = self.__rql_parser.parse(request)
+        return self.__account_service.get_all_accounts(search_request)
 
     @restipy.route('/<int:account_id>')
     @restipy.format_as(Account)

@@ -1,9 +1,9 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AccountsRestService } from '../../../../core/services/rest/accounts-rest.service';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Account } from '../../../../core/models/api.models';
+import { AccountsService } from '../../../../core/services/domain/accounts.service';
 
 @Component({
   templateUrl: './settings-accounts.component.html',
@@ -19,8 +19,8 @@ export class SettingsAccountsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder,
-              private accountsService: AccountsRestService) {
-  }
+              private accountsService: AccountsService
+  ) {}
 
   ngOnInit(): void {
     this.accountsService.getAccounts().subscribe(accounts => {
@@ -52,6 +52,7 @@ export class SettingsAccountsComponent implements OnInit {
       'description': [account.description],
       'color': [account.color],
       'notify': [account.notify],
+      'active': [account.active],
       'lastUpdate': [{value: account.lastUpdate, disabled: true}],
       'total': [{value: account.total, disabled: true}]
     });

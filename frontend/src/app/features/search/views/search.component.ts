@@ -8,6 +8,7 @@ import { zip } from 'rxjs';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { RqlService } from '../../../core/services/rql.service';
 import { FilterOperator, FilterRequest } from '../../../core/models/rql.models';
+import { AccountsService } from '../../../core/services/domain/accounts.service';
 
 @Component({
   templateUrl: './search.component.html',
@@ -33,7 +34,7 @@ export class SearchComponent implements OnInit {
               private router: Router,
               private labelsService: LabelsRestService,
               private transactionsService: TransactionsService,
-              private accountsService: AccountsRestService,
+              private accountsService: AccountsService,
               private rqlService: RqlService
   ) {
   }
