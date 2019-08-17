@@ -220,7 +220,7 @@ class RqlRequestParser:
                 count = count - 1
             if char == separator and count == 0:
                 result.append(expression[start_idx:idx])
-                start_idx = idx
+                start_idx = idx + 1
             if idx == stop_idx:
-                result.append(expression[start_idx + 1:idx + 1])
+                result.append(expression[start_idx:idx + 1])
         return result
