@@ -33,6 +33,7 @@ class TransactionController:
         self.__rql_parser = RqlRequestParser({
             'accountId': 'account_id',
             'labelId': 'label_id',
+            'categoryId': 'label.category_id',
             'reference': 'reference',
             'description': 'description',
             'amount': 'amount',

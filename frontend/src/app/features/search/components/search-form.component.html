@@ -15,12 +15,12 @@
                       (onChange)="changeLabels($event)">
     </app-label-toggle>
 
-  <!-- Categories -->
-<!--    <app-categories-toggle *ngIf="categories"
-                           [labels]="categories"
-                           [value]="searchForm.get('categories').value"
-                           (onChange)="searchForm.get('categories').setValue($event)">
-    </app-categories-toggle>-->
+    <!-- Categories -->
+    <app-category-toggle *ngIf="categories"
+                         [categories]="categories"
+                         [value]="searchForm.get('categories').value"
+                         (onChange)="changeCategories($event)">
+    </app-category-toggle>
   </div>
 
   <div class="clr-col-12 clr-col-md-8">

@@ -47,6 +47,10 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.searchForm.get('labels').setValue(labelIds);
   }
 
+  changeCategories(categoryIds: number[]) {
+    this.searchForm.get('categories').setValue(categoryIds);
+  }
+
   changeDate(field: string, value: Date) {
     this.searchForm.get(field).setValue(value);
   }
@@ -80,17 +84,20 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
     // Adding the accounts
     if (formData.accounts && formData.accounts.length > 0) {
-      filters.push(FilterRequest.of('accountId', formData.accounts, FilterOperator.IN));
+      const accounts = this.rqlService.formatList(formData.accounts);
+      filters.push(FilterRequest.of('accountId', accounts, FilterOperator.IN));
     }
 
     // Adding the labels
     if (formData.labels && formData.labels.length > 0) {
-      filters.push(FilterRequest.of('labelId', formData.labels, FilterOperator.IN));
+      const labels = this.rqlService.formatList(formData.labels);
+      filters.push(FilterRequest.of('labelId', labels, FilterOperator.IN));
     }
 
     // Adding the categories
     if (formData.categories && formData.categories.length > 0) {
-      filters.push(FilterRequest.of('categoryId', formData.categories, FilterOperator.IN));
+      const categories = this.rqlService.formatList(formData.categories);
+      filters.push(FilterRequest.of('categoryId', categories, FilterOperator.IN));
     }
 
     // Adding the min date

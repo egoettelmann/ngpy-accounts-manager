@@ -22,6 +22,7 @@ import { LabelToggleComponent } from './components/labels/toggle/label-toggle.co
 import { TransactionsTableComponent } from './components/transactions/table/transactions-table.component';
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from '@angular/cdk/layout';
+import { CategoryToggleComponent } from './components/categories/toggle/category-toggle.component';
 
 @NgModule({
   declarations: SharedModule.COMPONENTS_LIST,
@@ -50,6 +51,7 @@ export class SharedModule {
     SummaryComponent,
     TransactionsFormComponent,
     LabelToggleComponent,
+    CategoryToggleComponent,
     TransactionsTableComponent
   ];
 
