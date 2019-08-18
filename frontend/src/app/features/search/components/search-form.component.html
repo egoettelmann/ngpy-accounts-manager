@@ -1,0 +1,129 @@
+<div class="clr-row">
+
+  <div class="clr-col-12 clr-col-md-4">
+    <!-- Accounts -->
+    <app-account-toggle *ngIf="accounts"
+                        [accounts]="accounts"
+                        [preSelected]="searchForm.get('accounts').value"
+                        (onChange)="changeAccounts($event)">
+    </app-account-toggle>
+
+    <!-- Labels -->
+    <app-label-toggle *ngIf="labels"
+                      [labels]="labels"
+                      [value]="searchForm.get('labels').value"
+                      (onChange)="changeLabels($event)">
+    </app-label-toggle>
+
+  <!-- Categories -->
+<!--    <app-categories-toggle *ngIf="categories"
+                           [labels]="categories"
+                           [value]="searchForm.get('categories').value"
+                           (onChange)="searchForm.get('categories').setValue($event)">
+    </app-categories-toggle>-->
+  </div>
+
+  <div class="clr-col-12 clr-col-md-8">
+    <div class="clr-row">
+
+      <!-- Minimum date -->
+      <div class="clr-col-12 clr-col-md-6">
+        <table class="table table-compact table-vertical card-shadow">
+          <tbody>
+          <tr>
+            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.min-date-input' | translate }}</th>
+            <td class="text-right">
+              <div class="clr-form">
+                <input class="clr-input w-100"
+                       [clrDate]="searchForm.get('minDate').value"
+                       (clrDateChange)="changeDate('minDate', $event)"
+                       type="date"
+                       autocomplete="off" />
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Maximum date -->
+      <div class="clr-col-12 clr-col-md-6">
+        <table class="table table-compact table-vertical card-shadow">
+          <tbody>
+          <tr>
+            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.max-date-input' | translate }}</th>
+            <td class="text-right">
+              <div class="clr-form">
+                <input class="clr-input w-100"
+                       [clrDate]="searchForm.get('maxDate').value"
+                       (clrDateChange)="changeDate('maxDate', $event)"
+                       type="date"
+                       autocomplete="off" />
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Minimum amount -->
+      <div class="clr-col-12 clr-col-md-6">
+        <table class="table table-compact table-vertical card-shadow">
+          <tbody>
+          <tr>
+            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.min-amount-input' | translate }}</th>
+            <td class="text-right">
+              <div class="clr-form">
+                <input class="clr-input w-100"
+                       [formControl]="searchForm.get('minAmount')"
+                       type="text"
+                       autocomplete="off" />
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Maximum amount -->
+      <div class="clr-col-12 clr-col-md-6">
+        <table class="table table-compact table-vertical card-shadow">
+          <tbody>
+          <tr>
+            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.max-amount-input' | translate }}</th>
+            <td class="text-right">
+              <div class="clr-form">
+                <input class="clr-input w-100"
+                       [formControl]="searchForm.get('maxAmount')"
+                       type="text"
+                       autocomplete="off" />
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Text search -->
+      <div class="clr-col-12 clr-col-md-12">
+        <table class="table table-compact table-vertical card-shadow">
+          <tbody>
+          <tr>
+            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.desc-input' | translate }}</th>
+            <td class="text-right">
+              <div class="clr-form">
+                <input class="clr-input w-100"
+                       [formControl]="searchForm.get('description')"
+                       type="text"
+                       autocomplete="off" />
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+</div>

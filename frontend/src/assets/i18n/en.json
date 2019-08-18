@@ -146,5 +146,11 @@
   "i18n.components.statistics.summary.end": "End of period",
   "i18n.components.statistics.summary.debit": "Debit",
   "i18n.components.statistics.summary.credit": "Credit",
-  "i18n.components.statistics.summary.result": "Period result"
+  "i18n.components.statistics.summary.result": "Period result",
+
+  "i18n.components.search-form.label.min-date-input": "Minimum date",
+  "i18n.components.search-form.label.max-date-input": "Maximum date",
+  "i18n.components.search-form.label.min-amount-input": "Minimum amount",
+  "i18n.components.search-form.label.max-amount-input": "Maximum amount",
+  "i18n.components.search-form.label.desc-input": "Description"
 }
