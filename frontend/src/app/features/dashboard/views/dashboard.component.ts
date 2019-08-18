@@ -14,7 +14,10 @@ export class DashboardComponent implements OnInit {
   @HostBinding('class') hostClass = 'content-area';
 
   public accounts: Account[];
-  public unlabeledTransactions: number;
+  public alerts: {
+    labels: number,
+    categories: number
+  };
   public total: number;
 
   constructor(private router: Router,
@@ -26,9 +29,13 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     zip(
       this.transactionsService.countUnlabeled(),
+      this.transactionsService.countWronglyCategorized(),
       this.accountsService.getActiveAccounts()
-    ).subscribe(([numUnlabeled, accounts]) => {
-      this.unlabeledTransactions = numUnlabeled;
+    ).subscribe(([labelErrors, categoryErrors, accounts]) => {
+      this.alerts = {
+        labels: labelErrors,
+        categories : categoryErrors
+      };
       this.accounts = this.sortAccounts(accounts);
       this.total = 0;
       for (const a of this.accounts) {
@@ -37,7 +44,15 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  goToUnlabeledTransactions() {
+  goToLabelAlerts() {
+    this.router.navigate(['search'], {
+      queryParams: {
+        label: ''
+      }
+    });
+  }
+
+  goToCategoryAlerts() {
     this.router.navigate(['search'], {
       queryParams: {
         label: ''

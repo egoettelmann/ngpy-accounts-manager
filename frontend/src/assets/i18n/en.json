@@ -35,8 +35,11 @@
 
   "i18n.views.dashboard.accounts.total": "Total of all accounts:",
   "i18n.views.dashboard.chart.title": "Distribution by account",
-  "i18n.views.dashboard.error.unlabeled-transactions": "There are {{ num }} transactions that are attached to no label.",
-  "i18n.views.dashboard.error.unlabeled-transactions-fix": "Fix that",
+  "i18n.views.dashboard.alerts.labels": "There are {{ num }} transactions that are attached to no label.",
+  "i18n.views.dashboard.alerts.labels-link": "Fix that",
+  "i18n.views.dashboard.alerts.categories": "There are {{ num }} transactions that are wrongly categorized.",
+  "i18n.views.dashboard.alerts.categories-max": "There are more than 500 transactions that are wrongly categorized.",
+  "i18n.views.dashboard.alerts.categories-link": "Fix that",
 
   "i18n.views.transactions.list.title": "List of transactions",
   "i18n.views.transactions.chart.title": "Distribution by category",
