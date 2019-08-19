@@ -59,10 +59,9 @@ export class AnalyticsComponent implements OnInit {
    *
    * @param {Account[]} accounts the new list of accounts
    */
-  changeAccounts(accounts: Account[]) {
-    const newFilter = accounts.length === this.accounts.length ? [] : accounts.map(a => a.id);
-    if (!_.isEqual(this.accountsFilter, newFilter)) {
-      this.accountsFilter = newFilter.slice(0);
+  changeAccounts(accounts: number[]) {
+    if (!_.isEqual(this.accountsFilter, accounts)) {
+      this.accountsFilter = accounts.slice(0);
       this.reloadData();
     }
   }

@@ -10,10 +10,15 @@ export class AccountToggleComponent implements OnChanges {
 
   @Input() accounts: Account[];
   @Input() preSelected: number[] = [];
-  @Output() onChange = new EventEmitter<Account[]>();
+  @Output() onChange = new EventEmitter<number[]>();
 
   selectedAccounts: number[] = [];
 
+  /**
+   * Triggered on any input changes.
+   *
+   * @param changes
+   */
   ngOnChanges(changes) {
     if (changes.preSelected && this.preSelected != null) {
       if (this.preSelected.length === 0) {
@@ -31,6 +36,11 @@ export class AccountToggleComponent implements OnChanges {
     }
   }
 
+  /**
+   * Checks if the provided account is selected.
+   *
+   * @param account the account to check
+   */
   isSelected(account: Account): boolean {
     if (this.selectedAccounts) {
       return this.selectedAccounts.indexOf(account.id) > -1;
@@ -38,6 +48,11 @@ export class AccountToggleComponent implements OnChanges {
     return false;
   }
 
+  /**
+   * Toggles a given account.
+   *
+   * @param account the account to toggle
+   */
   toggleAccount(account: Account) {
     if (this.isSelected(account)) {
       const idx = this.selectedAccounts.indexOf(account.id);
@@ -50,6 +65,9 @@ export class AccountToggleComponent implements OnChanges {
     this.onChange.emit(this.getSelectedAccounts());
   }
 
+  /**
+   * Toggles all accounts.
+   */
   toggleAllAccounts() {
     const selectedAccounts = this.accounts.map(a => a.id);
     if (!_.isEqual(selectedAccounts, this.selectedAccounts)) {
@@ -58,7 +76,12 @@ export class AccountToggleComponent implements OnChanges {
     }
   }
 
-  toggleAccounts(accounts: number[]) {
+  /**
+   * Toggles a given list of account ids.
+   *
+   * @param accounts the account ids to toggle
+   */
+  private toggleAccounts(accounts: number[]) {
     const selectedAccounts = accounts.slice(0);
     if (!_.isEqual(selectedAccounts, this.selectedAccounts)) {
       this.selectedAccounts = selectedAccounts;
@@ -66,10 +89,17 @@ export class AccountToggleComponent implements OnChanges {
     }
   }
 
-  private getSelectedAccounts() {
-    return this.accounts.filter((a) => {
+  /**
+   * Get the list of selected account ids.
+   */
+  private getSelectedAccounts(): number[] {
+    const accountIds = this.accounts.filter((a) => {
       return this.selectedAccounts.indexOf(a.id) > -1;
-    });
+    }).map(a => a.id);
+    if (accountIds.length === this.accounts.length) {
+      return [];
+    }
+    return accountIds;
   }
 
 }

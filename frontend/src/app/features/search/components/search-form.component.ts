@@ -53,8 +53,8 @@ export class SearchFormComponent implements OnInit, OnDestroy {
    *
    * @param accounts the selected accounts
    */
-  changeAccounts(accounts: Account[]) {
-    const accountIds = accounts.length === this.accounts.length ? null : accounts.map(a => a.id);
+  changeAccounts(accounts: number[]) {
+    const accountIds = accounts.length === 0 ? null : accounts;
     this.searchForm.get('accounts').setValue(accountIds);
   }
 
