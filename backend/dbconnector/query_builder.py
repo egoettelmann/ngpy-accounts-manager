@@ -1,5 +1,5 @@
 import logging
-from typing import ClassVar, Optional
+from typing import ClassVar, Optional, List
 
 from sqlalchemy import desc, and_, or_
 from sqlalchemy.orm import Query
@@ -7,62 +7,81 @@ from sqlalchemy.orm import Query
 from ..domain.search_request import FilterRequest, PageRequest, FilterOperator, SortRequest
 
 
-class QueryBuilder:
+class QueryTemplate:
     """
-    The query builder class to add dynamic filters and pagination
+    The query template class to build the final query
     """
+    query: Query
     __type: ClassVar
+    __joins: List[any]
 
-    def __init__(self, entity_type: ClassVar):
+    def __init__(self, query: Query, entity_type: ClassVar):
         """Constructor"""
+        self.query = query
         self.__type = entity_type
+        self.__joins = []
 
-    def filter(self, query: Query, filter_request: FilterRequest) -> Query:
+    def filter(self, filter_request: FilterRequest):
         """Filters a query by the provided filter param.
 
-        :param query: the query to filter
         :param filter_request: the filters to apply
         :return: the filtered query
         """
         clause = self.__build_clause(filter_request)
         if clause is None:
-            return query
-        return query.filter(clause)
+            return
+        self.query = self.query.filter(clause)
 
-    def sort(self, query: Query, sort_request: SortRequest) -> Query:
+    def sort(self, sort_request: SortRequest):
         """Sorts a query
 
-        :param query: the query
         :param sort_request: the sort request
         :return: the sorted query
         """
         # Checking for None
         if sort_request is None:
-            return query
+            return
 
         # Applying the order
         if sort_request.order is not None:
+            attr = self.get_nested_attribute(self.__type, sort_request.order)
             if sort_request.desc is None or sort_request.desc is False:
-                query = query.order_by(self.__get_nested_attr(self.__type, sort_request.order))
+                self.query = self.query.order_by(attr)
             else:
-                query = query.order_by(desc(self.__get_nested_attr(self.__type, sort_request.order)))
+                self.query = self.query.order_by(desc(attr))
 
-        return query
-
-    def paginate(self, query: Query, page_request: PageRequest) -> Query:
+    def paginate(self, page_request: PageRequest):
         """Paginates a query
 
-        :param query: the query
         :param page_request: the page request
         :return: the paginated query
         """
         # Checking for None
         if page_request is None:
-            return query
+            return
 
         # Applying the offset/limit
-        query = query.slice(page_request.offset, page_request.limit)
-        return query
+        self.query = self.query.slice(page_request.offset, page_request.limit)
+
+    def get_nested_attribute(self, o: any, attr: str):
+        """Gets the attribute with support for 'dot' notation.
+        Will extract the nested attribute from the provided object.
+
+        :param o: the object
+        :param attr: the attribute to extract
+        :return: the extract attribute
+        """
+        logging.debug('Retrieving [%s] from %s', attr, o)
+        attrs = attr.split('.', 1)
+        item = getattr(o, attrs[0])
+        if len(attrs) == 1:
+            return item
+        else:
+            target = item.property.mapper.class_
+            if target not in self.__joins:
+                self.query = self.query.join(target)
+                self.__joins.append(target)
+            return self.get_nested_attribute(target, attrs[1])
 
     def __build_clause(self, filter_request: FilterRequest) -> Optional[any]:
         """Builds a filter clause from a provided filter request.
@@ -94,73 +113,86 @@ class QueryBuilder:
                 return or_(*parsed_parts)
 
         # Extracting the field
-        field = self.__get_nested_attr(self.__type, filter_request.get_field())
+        field = self.get_nested_attribute(self.__type, filter_request.get_field())
         operator = filter_request.get_operator()
+        value = filter_request.get_value()
 
         # EQUALS
         if operator == FilterOperator.EQ:
-            return field == filter_request.get_value()
+            return field == value
 
         # NOT EQUALS
         if operator == FilterOperator.NE:
-            return field != filter_request.get_value()
+            return field != value
 
         # IN
         if operator == FilterOperator.IN:
-            values = filter_request.get_value()
-            if None in values:
+            if None in value:
                 return or_(
                     field.is_(None),
-                    field.in_(values)
+                    field.in_(value)
                 )
-            return field.in_(values)
+            return field.in_(value)
 
         # NOT IN
         if operator == FilterOperator.NI:
-            values = filter_request.get_value()
-            if None in values:
+            if None in value:
                 return and_(
                     field.isnot_(None),
-                    field.notin_(values)
+                    field.notin_(value)
                 )
-            return field.notin_(values)
+            return field.notin_(value)
 
         # GREATER THAN
         if operator == FilterOperator.GT:
-            return field > filter_request.get_value()
+            return field > value
 
         # LOWER THAN
         if operator == FilterOperator.LT:
-            return field < filter_request.get_value()
+            return field < value
 
         # GREATER THAN OR EQUALS
         if operator == FilterOperator.GE:
-            return field >= filter_request.get_value()
+            return field >= value
 
         # LOWER THAN OR EQUALS
         if operator == FilterOperator.LE:
-            return field <= filter_request.get_value()
+            return field <= value
 
         # CONTAINS
         if operator == FilterOperator.CT:
-            return field.ilike('%' + filter_request.get_value() + '%')
+            return field.ilike('%' + value + '%')
 
-    @staticmethod
-    def __get_nested_attr(o, attr):
-        """Gets the attribute with support for 'dot' notation.
-        Will extract the nested attribute from the provided object.
 
-        :param o: the object
-        :param attr: the attribute to extract
-        :return: the extract attribute
+class QueryBuilder:
+    """
+    The query builder class to add dynamic filters and pagination
+    """
+    __type: ClassVar
+
+    def __init__(self, entity_type: ClassVar):
+        """Constructor"""
+        self.__type = entity_type
+
+    def build(self,
+              query: Query,
+              filters: FilterRequest = None,
+              sort: SortRequest = None,
+              paginate: PageRequest = None,
+              ) -> Query:
+        """Filters a query by the provided filter param.
+
+        :param query: the query to filter
+        :param filters: the filters to apply
+        :param sort: the sort request
+        :param paginate: the page request
+        :return: the filtered query
         """
-        logging.debug('Retrieving [%s] from %s', attr, o)
-        attrs = attr.split('.', 1)
-        item = getattr(o, attrs[0])
-        if len(attrs) == 1:
-            return item
-        else:
-            return QueryBuilder.__get_nested_attr(
-                item.property.mapper.class_,
-                attrs[1]
-            )
+        query_template = QueryTemplate(query, self.__type)
+        if filters is not None:
+            query_template.filter(filters)
+        if sort is not None:
+            query_template.sort(sort)
+        if paginate is not None:
+            query_template.paginate(paginate)
+        return query_template.query

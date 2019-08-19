@@ -37,9 +37,12 @@ class AccountRepository:
         :return: the list of accounts
         """
         query = self.__entity_manager.query(AccountDbo)
-        query = self.__query_builder.filter(query, search_request.filter_request)
-        query = self.__query_builder.sort(query, search_request.sort_request)
-        query = self.__query_builder.paginate(query, search_request.page_request)
+        query = self.__query_builder.build(
+            query,
+            filters=search_request.filter_request,
+            sort=search_request.sort_request,
+            paginate=search_request.page_request
+        )
         return query.all()
 
     def get_by_id(self, account_id: int) -> AccountDbo:

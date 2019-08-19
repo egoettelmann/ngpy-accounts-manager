@@ -40,9 +40,12 @@ class TransactionRepository:
         :return: the list of transactions
         """
         query = self.__entity_manager.query(TransactionDbo)
-        query = self.__query_builder.filter(query, search_request.filter_request)
-        query = self.__query_builder.sort(query, search_request.sort_request)
-        query = self.__query_builder.paginate(query, search_request.page_request)
+        query = self.__query_builder.build(
+            query,
+            filters=search_request.filter_request,
+            sort=search_request.sort_request,
+            paginate=search_request.page_request
+        )
         return query.all()
 
     def count(self, filter_request: FilterRequest) -> TransactionDbo:
@@ -52,7 +55,7 @@ class TransactionRepository:
         :return: the number of transactions
         """
         query = self.__entity_manager.query(TransactionDbo)
-        query = self.__query_builder.filter(query, filter_request)
+        query = self.__query_builder.build(query, filters=filter_request)
         return query.count()
 
     def delete_by_id(self, transaction_id: int) -> None:
@@ -91,7 +94,7 @@ class TransactionRepository:
         ).join(
             LabelDbo.transactions
         )
-        query = self.__query_builder.filter(query, filter_request)
+        query = self.__query_builder.build(query, filters=filter_request)
         query = query.group_by(LabelDbo.id)
         query = query.group_by(LabelDbo.name)
         query = query.order_by(desc(value_expr))
@@ -112,7 +115,7 @@ class TransactionRepository:
             label('key', period_expr),
             label('value', func.sum(TransactionDbo.amount))
         )
-        query = self.__query_builder.filter(query, filter_request)
+        query = self.__query_builder.build(query, filters=filter_request)
         query = query.group_by(period_expr)
         query = query.order_by(period_expr)
         return query.all()
@@ -137,7 +140,7 @@ class TransactionRepository:
         ).join(
             LabelDbo.transactions
         )
-        query = self.__query_builder.filter(query, filter_request)
+        query = self.__query_builder.build(query, filters=filter_request)
         query = query.group_by(CategoryDbo.name)
         query = query.group_by(period_expr)
         return query.all()
@@ -157,7 +160,7 @@ class TransactionRepository:
         ).join(
             LabelDbo.transactions
         )
-        query = self.__query_builder.filter(query, filter_request)
+        query = self.__query_builder.build(query, filters=filter_request)
         query = query.group_by(LabelDbo.id)
         query = query.group_by(CategoryDbo.name)
         return query.all()
@@ -171,7 +174,7 @@ class TransactionRepository:
         query = self.__entity_manager.query(
             label('total', func.sum(TransactionDbo.amount))
         )
-        query = self.__query_builder.filter(query, filter_request)
+        query = self.__query_builder.build(query, filters=filter_request)
         total = query.scalar()
         return 0 if total is None else total
 
@@ -206,6 +209,12 @@ class TransactionRepository:
         return saved_transaction
 
     def period_expression(self, period: PeriodType, column: any) -> any:
+        """Builds a period expression from a provided period type and for a given column.
+
+        :param period: the period type
+        :param column: the column
+        :return: the period expression
+        """
         if period == PeriodType.DAY:
             return cast(extract('year', column), String)\
                    + '-'\
