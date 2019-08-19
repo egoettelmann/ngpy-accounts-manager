@@ -5,6 +5,7 @@ import { FilterOperator, FilterRequest } from '../../../core/models/rql.models';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { RqlService } from '../../../core/services/rql.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-form',
@@ -23,19 +24,53 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   private changeSubscription: Subscription;
 
-  constructor(private fb: FormBuilder,
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private fb: FormBuilder,
               private rqlService: RqlService
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.registerFormChanges();
+    this.initOnChanges();
   }
 
   ngOnDestroy(): void {
     if (this.changeSubscription) {
       this.changeSubscription.unsubscribe();
     }
+  }
+
+
+  /**
+   * Init query param change listeners
+   */
+  initOnChanges() {
+    this.route.queryParamMap.subscribe(value => {
+      const formData = {} as any;
+      formData.minDate = value.get('minDate');
+      formData.maxDate = value.get('maxDate');
+      formData.minAmount = value.get('minAmount');
+      formData.maxAmount = value.get('maxAmount');
+      if (value.has('accounts')) {
+        formData.accounts = value.get('accounts')
+          .split(',')
+          .map(a => +a);
+      }
+      if (value.has('labels')) {
+        formData.labels = value.get('labels')
+          .split(',')
+          .map(a => a === '' ? null : +a);
+      }
+      if (value.has('categories')) {
+        formData.categories = value.get('categories')
+          .split(',')
+          .map(a => a === '' ? null : +a);
+      }
+      formData.description = value.get('desc');
+      this.searchForm.patchValue(formData);
+    });
   }
 
   changeAccounts(accounts: Account[]) {
@@ -113,17 +148,17 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     }
 
     // Adding the min amount
-    if (formData.minAmount != null) {
+    if (formData.minAmount != null && formData.minAmount != '') {
       filters.push(FilterRequest.of('amount', formData.minAmount, FilterOperator.GE));
     }
 
     // Adding the min amount
-    if (formData.maxAmount != null) {
+    if (formData.maxAmount != null && formData.maxAmount != '') {
       filters.push(FilterRequest.of('amount', formData.maxAmount, FilterOperator.LT));
     }
 
     // Adding the description
-    if (formData.description && formData.description.trim() !== '') {
+    if (formData.description && formData.description.trim() != '') {
       filters.push(FilterRequest.of('description', formData.description, FilterOperator.CT));
     }
 

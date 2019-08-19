@@ -47,15 +47,25 @@ export class DashboardComponent implements OnInit {
   goToLabelAlerts() {
     this.router.navigate(['search'], {
       queryParams: {
-        label: ''
+        labels: ''
       }
     });
   }
 
-  goToCategoryAlerts() {
+  goToCategoryCreditAlerts() {
     this.router.navigate(['search'], {
       queryParams: {
-        label: ''
+        categories: '2,3,5',
+        minAmount: 0
+      }
+    });
+  }
+
+  goToCategoryDebitAlerts() {
+    this.router.navigate(['search'], {
+      queryParams: {
+        categories: '1,4',
+        maxAmount: 0
       }
     });
   }

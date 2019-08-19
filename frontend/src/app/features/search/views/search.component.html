@@ -1,7 +1,7 @@
 <h3>
   <span>{{ 'i18n.views.transactions.list.title' | translate }}</span>
   <span>&nbsp;</span>
-  <span class="badge badge-info">{{ transactions?.length }}</span>
+  <span *ngIf="transactions" class="badge badge-info">{{ transactions?.length }}</span>
 </h3>
 
 <app-search-form [accounts]="accounts"

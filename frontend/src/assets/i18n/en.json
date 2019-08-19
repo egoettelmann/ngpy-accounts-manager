@@ -40,6 +40,8 @@
   "i18n.views.dashboard.alerts.categories": "There are {{ num }} transactions that are wrongly categorized.",
   "i18n.views.dashboard.alerts.categories-max": "There are more than 500 transactions that are wrongly categorized.",
   "i18n.views.dashboard.alerts.categories-link": "Fix that",
+  "i18n.views.dashboard.alerts.categories-link-credits": "Fix credits",
+  "i18n.views.dashboard.alerts.categories-link-debits": "Fix debits",
 
   "i18n.views.transactions.list.title": "List of transactions",
   "i18n.views.transactions.chart.title": "Distribution by category",
