@@ -15,3 +15,9 @@ export class Notification {
   public code: string;
   public content: string;
 }
+
+export class Alerts {
+  public labels: number;
+  public credits: number;
+  public debits: number;
+}

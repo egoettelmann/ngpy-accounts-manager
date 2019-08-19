@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, zip } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Transaction } from '../../models/api.models';
 import { TransactionsRestService } from '../rest/transactions-rest.service';
-import { map } from 'rxjs/operators';
 import { RqlService } from '../rql.service';
-import { FilterOperator, FilterRequest, PageRequest, SearchRequest } from '../../models/rql.models';
+import { FilterOperator, FilterRequest, SearchRequest } from '../../models/rql.models';
 
 @Injectable()
 export class TransactionsService {
@@ -68,48 +67,6 @@ export class TransactionsService {
         sort: 'dateValue'
       }
     });
-  }
-
-  /**
-   * Counts the number of unlabeled transactions.
-   */
-  countUnlabeled(): Observable<number> {
-    return this.transactionRestService.getAll({
-      filter: FilterRequest.of('labelId', null, FilterOperator.EQ),
-    }).pipe(
-      map(data => data.length)
-    );
-  }
-
-  /**
-   * Counts the number of wrongly categorized labels.
-   * Returns -1 if there are more than the maximum retrievable entries.
-   */
-  countWronglyCategorized(): Observable<number> {
-    const pageRequest: PageRequest = {
-      page: 1,
-      pageSize: 500
-    };
-    const wrongCredits = FilterRequest.all(
-      FilterRequest.of('categoryType', 'C', FilterOperator.EQ),
-      FilterRequest.of('amount', 0, FilterOperator.LT)
-    );
-    const wrongDebits = FilterRequest.all(
-      FilterRequest.of('categoryType', 'D', FilterOperator.EQ),
-      FilterRequest.of('amount', 0, FilterOperator.GT)
-    );
-    return zip(
-      this.transactionRestService.getAll({ filter: wrongCredits, page: pageRequest }),
-      this.transactionRestService.getAll({ filter: wrongDebits, page: pageRequest })
-    ).pipe(
-      map(([credits, debits]) => {
-        const num = credits.length + debits.length;
-        if (num === pageRequest.pageSize * 2) {
-          return -1;
-        }
-        return num;
-      })
-    )
   }
 
   /**

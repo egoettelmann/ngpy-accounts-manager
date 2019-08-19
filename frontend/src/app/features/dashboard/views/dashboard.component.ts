@@ -1,9 +1,9 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { zip } from 'rxjs';
 import { Router } from '@angular/router';
 import { Account } from '../../../core/models/api.models';
-import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
+import { AlertsService } from '../../../core/services/domain/alerts.service';
+import { Alerts } from '../../../core/models/domain.models';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -14,28 +14,20 @@ export class DashboardComponent implements OnInit {
   @HostBinding('class') hostClass = 'content-area';
 
   public accounts: Account[];
-  public alerts: {
-    labels: number,
-    categories: number
-  };
+  public alerts: Alerts;
   public total: number;
 
   constructor(private router: Router,
-              private accountsService: AccountsService,
-              private transactionsService: TransactionsService
+              private alertsService: AlertsService,
+              private accountsService: AccountsService
   ) {
   }
 
   ngOnInit(): void {
-    zip(
-      this.transactionsService.countUnlabeled(),
-      this.transactionsService.countWronglyCategorized(),
-      this.accountsService.getActiveAccounts()
-    ).subscribe(([labelErrors, categoryErrors, accounts]) => {
-      this.alerts = {
-        labels: labelErrors,
-        categories : categoryErrors
-      };
+    this.alertsService.getAlerts().subscribe(alerts => {
+      this.alerts = alerts;
+    });
+    this.accountsService.getActiveAccounts().subscribe(accounts => {
       this.accounts = this.sortAccounts(accounts);
       this.total = 0;
       for (const a of this.accounts) {

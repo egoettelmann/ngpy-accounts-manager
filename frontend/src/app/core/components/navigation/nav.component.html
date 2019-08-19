@@ -2,6 +2,10 @@
   <div class="header-nav" [clr-nav-level]="1">
     <a [routerLink]="['/dashboard']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.dashboard' | translate }}</span>
+      <span *ngIf="numAlerts">
+        <span>&nbsp;</span>
+        <span class="badge badge-danger">{{ numAlerts }}</span>
+      </span>
     </a>
     <a [routerLink]="['/transactions']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.transactions' | translate }}</span>
