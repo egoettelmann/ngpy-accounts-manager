@@ -29,7 +29,7 @@ export class NavComponent implements OnInit {
   search(value: string) {
     this.router.navigate(['search'], {
       queryParams: {
-        desc: value
+        description: value
       }
     });
     this.searchInput.nativeElement.value = '';
