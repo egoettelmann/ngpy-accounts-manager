@@ -5,11 +5,22 @@ import { map, skip } from 'rxjs/operators';
 import { FilterOperator, FilterRequest } from '../../models/rql.models';
 import { Alerts } from '../../models/domain.models';
 
+/**
+ * The alerts service
+ */
 @Injectable()
 export class AlertsService {
 
+  /**
+   * The behavior subject
+   */
   private subject = new BehaviorSubject<Alerts>(undefined);
 
+  /**
+   * Instantiates the service.
+   *
+   * @param transactionsRestService the transactions rest service
+   */
   constructor(private transactionsRestService: TransactionsRestService) {}
 
   /**

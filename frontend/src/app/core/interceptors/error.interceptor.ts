@@ -5,15 +5,32 @@ import { NotificationService } from '../services/notification.service';
 import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 
+/**
+ * The error interceptor
+ */
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
+  /**
+   * The notification service.
+   */
   private notificationService: NotificationService;
 
+  /**
+   * Instantiates the interceptor.
+   *
+   * @param notificationService the notification service
+   */
   constructor(notificationService: NotificationService) {
     this.notificationService = notificationService;
   }
 
+  /**
+   * Intercepts the request to notify for any error happening on an HTTP call.
+   *
+   * @param req the request
+   * @param next the handler
+   */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // const apiReq = req.clone();
     const baseUrl = environment.baseUrl;

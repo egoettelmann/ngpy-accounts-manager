@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
+/**
+ * The autocomplete component
+ */
 @Component({
   selector: 'app-autocomplete',
   templateUrl: './autocomplete.component.html',
@@ -7,20 +10,61 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 })
 export class AutocompleteComponent implements OnChanges {
 
+  /**
+   * The unique id
+   */
   @Input() uuid: string;
+
+  /**
+   * The current value
+   */
   @Input() value: any;
+
+  /**
+   * The available options
+   */
   @Input() options: any[];
+
+  /**
+   * The value attribute
+   */
   @Input() valueAttribute = 'id';
+
+  /**
+   * The label attribute
+   */
   @Input() labelAttribute = 'name';
 
+  /**
+   * Triggered when an item gets selected
+   */
   @Output() onSelect = new EventEmitter<any>();
+
+  /**
+   * Triggered when a new element is created
+   */
   @Output() onCreate = new EventEmitter<string>();
 
+  /**
+   * The model bound to the control
+   */
   public ngModel: any;
+
+  /**
+   * The available options
+   */
   public ngOptions: any[];
 
+  /**
+   * The currently selected model
+   */
   private selectedModel: any;
 
+  /**
+   * Triggered for any input changes.
+   *
+   * @param changes the input changes
+   */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.value
       && this.value
@@ -36,6 +80,11 @@ export class AutocompleteComponent implements OnChanges {
     }
   }
 
+  /**
+   * Triggered on each control change.
+   *
+   * @param inputText the input
+   */
   onChange(inputText) {
     if (inputText) {
       this.ngOptions = this.options.filter(o => {
@@ -47,6 +96,11 @@ export class AutocompleteComponent implements OnChanges {
     }
   }
 
+  /**
+   * Checks if an option is selected.
+   *
+   * @param opt the option to check
+   */
   isSelected(opt: any) {
     return (
       this.selectedModel
@@ -55,6 +109,11 @@ export class AutocompleteComponent implements OnChanges {
     );
   }
 
+  /**
+   * Handles all keyboard events on the control.
+   *
+   * @param event the keyboard event
+   */
   select(event: KeyboardEvent) {
     switch (event.code) {
       case 'Enter':
@@ -72,6 +131,9 @@ export class AutocompleteComponent implements OnChanges {
     }
   }
 
+  /**
+   * Validates the selection
+   */
   validate() {
     if (this.selectedModel) {
       this.onSelect.emit(this.selectedModel);
@@ -81,12 +143,20 @@ export class AutocompleteComponent implements OnChanges {
     this.ngOptions = undefined;
   }
 
+  /**
+   * Selects through click.
+   *
+   * @param model the model to select
+   */
   selectClick(model: any) {
     this.selectedModel = model;
     this.ngModel = this.selectedModel[this.labelAttribute];
     this.validate();
   }
 
+  /**
+   * Selects the next element
+   */
   selectNext() {
     const currentIndex = this.findCurrentIndex();
     if (this.ngOptions.length > currentIndex + 1) {
@@ -95,6 +165,9 @@ export class AutocompleteComponent implements OnChanges {
     }
   }
 
+  /**
+   * Selects the previous element
+   */
   selectPrevious() {
     const currentIndex = this.findCurrentIndex();
     if (currentIndex > 0
@@ -105,12 +178,18 @@ export class AutocompleteComponent implements OnChanges {
     }
   }
 
+  /**
+   * Handles the focus out event on the input
+   */
   onFocusOut() {
     setTimeout(() => {
       this.ngOptions = undefined;
     });
   }
 
+  /**
+   * Finds the index of the currently selected item
+   */
   private findCurrentIndex(): number {
     if (this.selectedModel
       && this.ngOptions

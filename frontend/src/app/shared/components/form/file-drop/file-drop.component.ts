@@ -3,6 +3,9 @@ import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { UploadRestService } from '../../../../core/services/rest/upload-rest.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 
+/**
+ * The file drop component
+ */
 @Component({
   selector: 'app-file-drop',
   templateUrl: './file-drop.component.html',
@@ -11,6 +14,13 @@ import { NotificationService } from '../../../../core/services/notification.serv
 })
 export class FileDropComponent {
 
+  /**
+   * Instantiates the component.
+   *
+   * @param uploadService the upload service
+   * @param notificationService the notification service
+   * @param ngZone the angular zone to manage the drop callback
+   */
   constructor(
     private uploadService: UploadRestService,
     private notificationService: NotificationService,

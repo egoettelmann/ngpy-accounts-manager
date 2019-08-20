@@ -4,21 +4,32 @@ import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SessionRestService } from './rest/session-rest.service';
 
+/**
+ * The authentication service
+ */
 @Injectable()
 export class AuthenticationService {
 
+  /**
+   * The current user
+   */
   private currentUser: any;
 
+  /**
+   * Instantiates the service.
+   *
+   * @param http the HTTP client
+   * @param sessionRestService the session rest service
+   */
   constructor(
     private http: HttpClient,
     private sessionRestService: SessionRestService
   ) {
   }
 
-  getCurrentUser(): any {
-    return this.currentUser;
-  }
-
+  /**
+   * Get the currently connected user.
+   */
   getConnectedUser(): Observable<any> {
     if (this.currentUser !== undefined) {
       return of(this.currentUser);

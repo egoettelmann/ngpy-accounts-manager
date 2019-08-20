@@ -1,6 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+/**
+ * The app component
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,11 +11,14 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent {
 
-  @Input() connectedUser;
-
-  constructor(private translate: TranslateService) {
-    translate.setDefaultLang('en');
-    translate.use('en');
+  /**
+   * Instantiates the component.
+   *
+   * @param translateService the translate service
+   */
+  constructor(private translateService: TranslateService) {
+    translateService.setDefaultLang('en');
+    translateService.use('en');
   }
 
 }

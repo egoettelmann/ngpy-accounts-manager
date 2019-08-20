@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Account } from '../../../../core/models/api.models';
 
+/**
+ * The account card component
+ */
 @Component({
   selector: 'app-account-card',
   templateUrl: './account-card.component.html',
@@ -8,6 +11,9 @@ import { Account } from '../../../../core/models/api.models';
 })
 export class AccountCardComponent {
 
+  /**
+   * The account
+   */
   @Input() account: Account;
 
 }

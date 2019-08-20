@@ -5,9 +5,18 @@ import { TransactionsRestService } from '../rest/transactions-rest.service';
 import { RqlService } from '../rql.service';
 import { FilterOperator, FilterRequest, SearchRequest } from '../../models/rql.models';
 
+/**
+ * The transactions service
+ */
 @Injectable()
 export class TransactionsService {
 
+  /**
+   * Instantiates the service.
+   *
+   * @param transactionRestService the transactions rest service
+   * @param rqlService the RQL service
+   */
   constructor(private transactionRestService: TransactionsRestService,
               private rqlService: RqlService
   ) {}

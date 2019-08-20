@@ -1,3 +1,6 @@
+/**
+ * The account DTO
+ */
 export class Account {
   id: number;
   name: string;
@@ -10,6 +13,9 @@ export class Account {
   lastUpdate: Date;
 }
 
+/**
+ * The category DTO
+ */
 export class Category {
   id: number;
   name: string;
@@ -17,21 +23,33 @@ export class Category {
   numLabels: number;
 }
 
+/**
+ * The key/value DTO
+ */
 export class KeyValue {
   key: string;
   value: number;
 }
 
+/**
+ * The composite key/value DTO
+ */
 export class CompositeKeyValue {
   keyOne: string;
   keyTwo: string;
   value: number;
 }
 
+/**
+ * The application properties DTO
+ */
 export class AppProperties {
   version: string;
 }
 
+/**
+ * The label DTO
+ */
 export class Label {
   id: number;
   name: string;
@@ -41,6 +59,9 @@ export class Label {
   numTransactions: number;
 }
 
+/**
+ * The summary DTO
+ */
 export class Summary {
   amountStart: number;
   amountEnd: number;
@@ -48,6 +69,9 @@ export class Summary {
   totalDebit: number;
 }
 
+/**
+ * The transaction DTO
+ */
 export class Transaction {
   id: number;
   reference: string;

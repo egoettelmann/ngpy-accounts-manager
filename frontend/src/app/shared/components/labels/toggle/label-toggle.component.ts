@@ -2,18 +2,40 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { Label } from '../../../../core/models/api.models';
 import * as _ from 'lodash';
 
+/**
+ * The label toggle component
+ */
 @Component({
   selector: 'app-label-toggle',
   templateUrl: './label-toggle.component.html'
 })
 export class LabelToggleComponent implements OnChanges {
 
+  /**
+   * The available labels
+   */
   @Input() labels: Label[];
+
+  /**
+   * The currently selected values
+   */
   @Input() value: number[] = [];
+
+  /**
+   * Triggered on selection change
+   */
   @Output() onChange = new EventEmitter<number[]>();
 
+  /**
+   * The currently selected labels
+   */
   selectedLabels: number[];
 
+  /**
+   * Handles all input changes.
+   *
+   * @param changes the input changes
+   */
   ngOnChanges(changes) {
     if (this.value && changes.value !== undefined) {
       if (this.value.length === 0) {
@@ -31,6 +53,11 @@ export class LabelToggleComponent implements OnChanges {
     }
   }
 
+  /**
+   * Checks if a label id is selected.
+   *
+   * @param labelId the label id
+   */
   isSelected(labelId: number): boolean {
     if (this.selectedLabels) {
       return this.selectedLabels.indexOf(labelId) > -1;
@@ -38,6 +65,11 @@ export class LabelToggleComponent implements OnChanges {
     return false;
   }
 
+  /**
+   * Toggles a label by its id.
+   *
+   * @param labelId the label id
+   */
   toggleLabel(labelId: number) {
     if (this.selectedLabels === undefined) {
       this.selectedLabels = [];
@@ -53,6 +85,9 @@ export class LabelToggleComponent implements OnChanges {
     this.onChange.emit(this.selectedLabels);
   }
 
+  /**
+   * Toggles all labels
+   */
   toggleAllLabels() {
     if (this.selectedLabels !== undefined) {
       this.selectedLabels = undefined;
@@ -60,6 +95,11 @@ export class LabelToggleComponent implements OnChanges {
     }
   }
 
+  /**
+   * Toggles the provided labels.
+   *
+   * @param labels the labels to toggle
+   */
   toggleLabels(labels: number[]) {
     const selectedLabels = labels.slice(0);
     if (!_.isEqual(selectedLabels, this.selectedLabels)) {

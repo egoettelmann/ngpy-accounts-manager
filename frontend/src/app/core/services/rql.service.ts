@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { FilterRequest, PageRequest, SearchRequest, SortRequest } from '../models/rql.models';
 import { HttpParams } from '@angular/common/http';
 
+/**
+ * The RQL service
+ */
 @Injectable()
 export class RqlService {
 

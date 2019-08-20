@@ -2,12 +2,18 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import {AbstractNotificationComponent} from '../abstract-notification.component';
 import {NotificationService} from '../../../../core/services/notification.service';
 
+/**
+ * The notification modal component
+ */
 @Component({
   selector: 'app-notification-modal',
   templateUrl: './notification-modal.component.html'
 })
 export class NotificationModalComponent extends AbstractNotificationComponent {
 
+  /**
+   * The CSS classes
+   */
   public cssClasses = {
     textColor: {
       ERROR: 'text-danger',
@@ -29,6 +35,12 @@ export class NotificationModalComponent extends AbstractNotificationComponent {
     },
   };
 
+  /**
+   * Instantiates the component.
+   *
+   * @param notificationService the notification service
+   * @param changeDetectorRef the change detector ref
+   */
   constructor(
     protected notificationService: NotificationService,
     protected changeDetectorRef: ChangeDetectorRef

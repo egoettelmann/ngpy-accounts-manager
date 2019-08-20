@@ -2,16 +2,33 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { Account } from '../../../../core/models/api.models';
 import * as _ from 'lodash';
 
+/**
+ * The account toggle component
+ */
 @Component({
   selector: 'app-account-toggle',
   templateUrl: './account-toggle.component.html'
 })
 export class AccountToggleComponent implements OnChanges {
 
+  /**
+   * The available accounts
+   */
   @Input() accounts: Account[];
+
+  /**
+   * The pre-selected accounts
+   */
   @Input() preSelected: number[] = [];
+
+  /**
+   * Triggered on each selection change
+   */
   @Output() onChange = new EventEmitter<number[]>();
 
+  /**
+   * The currently selected accounts
+   */
   selectedAccounts: number[] = [];
 
   /**

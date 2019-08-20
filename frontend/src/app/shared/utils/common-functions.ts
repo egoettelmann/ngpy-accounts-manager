@@ -1,3 +1,6 @@
+/**
+ * Common util functions.
+ */
 export class CommonFunctions {
 
   /**
@@ -52,11 +55,16 @@ export class CommonFunctions {
     }
   }
 
+  /**
+   * Cleans all 'null' and 'undefined' fields of the provided object.
+   *
+   * @param obj the object to clean
+   */
   public static removeEmpty(obj: any): any {
     if (Array.isArray(obj)) {
       return obj
         .filter(f => f != null)
-        .map((r, i) =>
+        .map(r =>
           CommonFunctions.removeEmpty(r)
         );
     } else if (typeof obj !== 'object') {
