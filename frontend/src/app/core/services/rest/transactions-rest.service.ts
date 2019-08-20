@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Transaction } from '../../models/api.models';
 import { RqlService } from '../rql.service';
-import { SearchRequest } from '../../models/rql.models';
+import { FilterRequest, SearchRequest } from '../../models/rql.models';
 
 @Injectable()
 export class TransactionsRestService {
@@ -15,6 +15,11 @@ export class TransactionsRestService {
   getAll(searchRequest: SearchRequest): Observable<Transaction[]> {
     const params = this.rqlService.buildHttpParams(searchRequest);
     return this.http.get<Transaction[]>('/rest/transactions', { params: params });
+  }
+
+  countAll(filterRequest: FilterRequest): Observable<number> {
+    const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
+    return this.http.get<number>('/rest/transactions/count', { params: params });
   }
 
   deleteOne(transactionId: number): Observable<any> {

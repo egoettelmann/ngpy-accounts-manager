@@ -51,6 +51,15 @@ class TransactionController:
         search_request = self.__rql_parser.parse(request)
         return self.__transaction_service.search_all(search_request)
 
+    @restipy.route('/count')
+    def count_all(self) -> int:
+        """Counts all transactions matching the provided filters.
+
+        :return: the number of transactions
+        """
+        filter_request = self.__rql_parser.parse_filters(request)
+        return self.__transaction_service.count(filter_request)
+
     @restipy.route('/<int:transaction_id>')
     @restipy.format_as(Transaction)
     def get_one(self, transaction_id: int) -> Transaction:

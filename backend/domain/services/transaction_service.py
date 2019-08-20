@@ -48,13 +48,12 @@ class TransactionService:
             Transaction
         )
 
-    def count(self, label_id: int = None) -> int:
+    def count(self, filter_request: FilterRequest) -> int:
         """Counts the number of transaction for a given label.
 
-        :param label_id: the label id
+        :param filter_request: the filter request
         :return: the number of transactions
         """
-        filter_request = FilterRequest.of('label_id', label_id, FilterOperator.EQ)
         return self.__repository.count(filter_request)
 
     def delete_transaction(self, transaction_id: int) -> None:

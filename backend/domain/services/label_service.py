@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from ..search_request import FilterRequest, FilterOperator
 from ...dbconnector.repositories import LabelRepository
 from ...mapping import Mapper
 from .transaction_service import TransactionService
@@ -40,7 +41,8 @@ class LabelService:
         )
         for label in labels:
             label_id: int = label.id
-            label.num_transactions = self.__transaction_service.count(label_id)
+            filter_request = FilterRequest.of('label_id', label_id, FilterOperator.EQ)
+            label.num_transactions = self.__transaction_service.count(filter_request)
         return labels
 
     def get_by_id(self, label_id: int) -> Label:

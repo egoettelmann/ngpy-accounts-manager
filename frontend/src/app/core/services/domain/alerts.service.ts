@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, zip } from 'rxjs';
 import { TransactionsRestService } from '../rest/transactions-rest.service';
 import { map, skip } from 'rxjs/operators';
-import { FilterOperator, FilterRequest, PageRequest } from '../../models/rql.models';
+import { FilterOperator, FilterRequest } from '../../models/rql.models';
 import { Alerts } from '../../models/domain.models';
 
 @Injectable()
@@ -49,10 +49,8 @@ export class AlertsService {
    * Counts the number of unlabeled transactions.
    */
   private countUnlabeled(): Observable<number> {
-    return this.transactionsRestService.getAll({
-      filter: FilterRequest.of('labelId', null, FilterOperator.EQ),
-    }).pipe(
-      map(data => data.length)
+    return this.transactionsRestService.countAll(
+      FilterRequest.of('labelId', null, FilterOperator.EQ),
     );
   }
 
@@ -61,26 +59,11 @@ export class AlertsService {
    * Returns -1 if there are more than the maximum retrievable entries.
    */
   private countWronglyCategorizedCredits(): Observable<number> {
-    const pageRequest: PageRequest = {
-      page: 1,
-      pageSize: 500
-    };
     const wrongCredits = FilterRequest.all(
       FilterRequest.of('categoryType', 'D', FilterOperator.EQ),
       FilterRequest.of('amount', 0, FilterOperator.GT)
     );
-    return this.transactionsRestService.getAll({
-      filter: wrongCredits,
-      page: pageRequest
-    }).pipe(
-      map(credits => {
-        const num = credits.length;
-        if (num === pageRequest.pageSize * 2) {
-          return -1;
-        }
-        return num;
-      })
-    );
+    return this.transactionsRestService.countAll(wrongCredits);
   }
 
   /**
@@ -88,26 +71,11 @@ export class AlertsService {
    * Returns -1 if there are more than the maximum retrievable entries.
    */
   private countWronglyCategorizedDebits(): Observable<number> {
-    const pageRequest: PageRequest = {
-      page: 1,
-      pageSize: 500
-    };
     const wrongDebits = FilterRequest.all(
       FilterRequest.of('categoryType', 'C', FilterOperator.EQ),
       FilterRequest.of('amount', 0, FilterOperator.LT)
     );
-    return this.transactionsRestService.getAll({
-      filter: wrongDebits,
-      page: pageRequest
-    }).pipe(
-      map(debits => {
-        const num = debits.length;
-        if (num === pageRequest.pageSize * 2) {
-          return -1;
-        }
-        return num;
-      })
-    );
+    return this.transactionsRestService.countAll(wrongDebits);
   }
 
 }
