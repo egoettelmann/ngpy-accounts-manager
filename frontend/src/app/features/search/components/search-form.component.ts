@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { RqlService } from '../../../core/services/rql.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DateService } from '../../../core/services/date.service';
 
 @Component({
   selector: 'app-search-form',
@@ -27,6 +28,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder,
+              private dateService: DateService,
               private rqlService: RqlService
   ) {}
 
@@ -124,12 +126,10 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     const queryParams = this.route.snapshot.queryParamMap;
     const formData = {} as any;
     if (queryParams.has('minDate')) {
-      const dateArr = queryParams.get('minDate').split('-');
-      formData.minDate = new Date(+dateArr[0], +dateArr[1], +dateArr[2]);
+      formData.minDate = this.dateService.parse(queryParams.get('minDate'));
     }
     if (queryParams.has('maxDate')) {
-      const dateArr = queryParams.get('maxDate').split('-');
-      formData.maxDate = new Date(+dateArr[0], +dateArr[1], +dateArr[2]);
+      formData.maxDate = this.dateService.parse(queryParams.get('maxDate'));
     }
     formData.minAmount = queryParams.get('minAmount');
     formData.maxAmount = queryParams.get('maxAmount');
@@ -159,8 +159,8 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     const accounts = this.searchForm.get('accounts').value ? this.searchForm.get('accounts').value.join(',') : undefined;
     const labels = this.searchForm.get('labels').value ? this.searchForm.get('labels').value.join(',') : undefined;
     const categories = this.searchForm.get('categories').value ? this.searchForm.get('categories').value.join(',') : undefined;
-    const minDate = this.searchForm.get('minDate').value ? this.rqlService.formatDate(this.searchForm.get('minDate').value) : undefined;
-    const maxDate = this.searchForm.get('maxDate').value ? this.rqlService.formatDate(this.searchForm.get('maxDate').value) : undefined;
+    const minDate = this.searchForm.get('minDate').value ? this.dateService.format(this.searchForm.get('minDate').value) : undefined;
+    const maxDate = this.searchForm.get('maxDate').value ? this.dateService.format(this.searchForm.get('maxDate').value) : undefined;
     const queryParams = {
       'accounts': accounts,
       'labels': labels,
@@ -204,13 +204,13 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
     // Adding the min date
     if (formData.minDate != null) {
-      const minDate = this.rqlService.formatDate(formData.minDate);
+      const minDate = this.dateService.format(formData.minDate);
       filters.push(FilterRequest.of('dateValue', minDate, FilterOperator.GE));
     }
 
     // Adding the max date
     if (formData.maxDate != null) {
-      const maxDate = this.rqlService.formatDate(formData.maxDate);
+      const maxDate = this.dateService.format(formData.maxDate);
       filters.push(FilterRequest.of('dateValue', maxDate, FilterOperator.LT));
     }
 

@@ -1,7 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonFunctions } from '../../../shared/utils/common-functions';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
 import { zip } from 'rxjs';
@@ -9,6 +8,7 @@ import { LabelsRestService } from '../../../core/services/rest/labels-rest.servi
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
+import { DateService } from '../../../core/services/date.service';
 
 @Component({
   templateUrl: './treasury.component.html',
@@ -37,7 +37,8 @@ export class TreasuryComponent implements OnInit {
               private accountsService: AccountsService,
               private labelsService: LabelsRestService,
               private statisticsService: StatisticsService,
-              private transactionsService: TransactionsService
+              private transactionsService: TransactionsService,
+              private dateService: DateService
   ) {
   }
 
@@ -93,7 +94,7 @@ export class TreasuryComponent implements OnInit {
    */
   private initData() {
     if (!this.route.snapshot.paramMap.has('year')) {
-      this.currentYear = CommonFunctions.getCurrentYear();
+      this.currentYear = this.dateService.getCurrentYear();
     } else {
       this.currentYear = +this.route.snapshot.paramMap.get('year');
     }

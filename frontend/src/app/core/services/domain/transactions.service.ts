@@ -4,6 +4,7 @@ import { Transaction } from '../../models/api.models';
 import { TransactionsRestService } from '../rest/transactions-rest.service';
 import { RqlService } from '../rql.service';
 import { FilterOperator, FilterRequest, SearchRequest } from '../../models/rql.models';
+import { DateService } from '../date.service';
 
 /**
  * The transactions service
@@ -15,9 +16,11 @@ export class TransactionsService {
    * Instantiates the service.
    *
    * @param transactionRestService the transactions rest service
+   * @param dateService the date service
    * @param rqlService the RQL service
    */
   constructor(private transactionRestService: TransactionsRestService,
+              private dateService: DateService,
               private rqlService: RqlService
   ) {}
 
@@ -45,20 +48,13 @@ export class TransactionsService {
     accounts: number[]
   ): Observable<Transaction[]> {
     // Building the date from
-    const dateFrom = this.rqlService.formatDate(new Date(year, month - 1, 1));
-
-    // Building the date to
-    let dateTo: string;
-    if (month === 12) {
-      dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
-    } else {
-      dateTo = this.rqlService.formatDate(new Date(year, month, 1));
-    }
+    const dateFrom = this.dateService.getPeriodStart(year, month);
+    const dateTo = this.dateService.getPeriodEnd(year, month);
 
     // Adding date and amount filters
     let filter = FilterRequest.all(
-      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
-      FilterRequest.of('dateValue', dateTo, FilterOperator.LT)
+      FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT)
     );
 
     // Adding the account filters
@@ -86,13 +82,13 @@ export class TransactionsService {
    * @param labels the labels
    */
   getTopCredits(year: number, accounts: number[], labels: number[]): Observable<Transaction[]> {
-    const dateFrom = this.rqlService.formatDate(new Date(year, 0, 1));
-    const dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
+    const dateFrom = this.dateService.getPeriodStart(year);
+    const dateTo = this.dateService.getPeriodEnd(year);
 
     // Adding date and amount filters
     let filter = FilterRequest.all(
-      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
-      FilterRequest.of('dateValue', dateTo, FilterOperator.LT),
+      FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT),
       FilterRequest.of('amount', 0, FilterOperator.GE)
     );
 
@@ -135,13 +131,13 @@ export class TransactionsService {
    * @param labels the labels
    */
   getTopDebits(year: number, accounts: number[], labels: number[]): Observable<Transaction[]> {
-    const dateFrom = this.rqlService.formatDate(new Date(year, 0, 1));
-    const dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
+    const dateFrom = this.dateService.getPeriodStart(year);
+    const dateTo = this.dateService.getPeriodEnd(year);
 
     // Adding date and amount filters
     let filter = FilterRequest.all(
-      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
-      FilterRequest.of('dateValue', dateTo, FilterOperator.LT),
+      FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT),
       FilterRequest.of('amount', 0, FilterOperator.LT)
     );
 

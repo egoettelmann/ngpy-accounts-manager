@@ -3,12 +3,12 @@ import { DecimalPipe, Location } from '@angular/common';
 import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { zip } from 'rxjs';
-import { CommonFunctions } from '../../../shared/utils/common-functions';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
+import { DateService } from '../../../core/services/date.service';
 
 @Component({
   templateUrl: './transactions.component.html',
@@ -38,6 +38,7 @@ export class TransactionsComponent implements OnInit {
               private transactionsService: TransactionsService,
               private statisticsService: StatisticsService,
               private accountsService: AccountsService,
+              private dateService: DateService,
               private decimalPipe: DecimalPipe
   ) {
   }
@@ -148,12 +149,12 @@ export class TransactionsComponent implements OnInit {
    */
   private initData() {
     if (!this.route.snapshot.paramMap.has('year')) {
-      this.currentYear = CommonFunctions.getCurrentYear();
+      this.currentYear = this.dateService.getCurrentYear();
     } else {
       this.currentYear = +this.route.snapshot.paramMap.get('year');
     }
     if (!this.route.snapshot.paramMap.has('month')) {
-      this.currentMonth = CommonFunctions.getCurrentMonth();
+      this.currentMonth = this.dateService.getCurrentMonth();
     } else {
       this.currentMonth = +this.route.snapshot.paramMap.get('month');
     }

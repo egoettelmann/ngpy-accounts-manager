@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonFunctions } from '../../../utils/common-functions';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DateService } from '../../../../core/services/date.service';
 
 /**
  * The month toggle component
@@ -8,7 +8,7 @@ import { CommonFunctions } from '../../../utils/common-functions';
   selector: 'app-month-toggle',
   templateUrl: './month-toggle.component.html'
 })
-export class MonthToggleComponent {
+export class MonthToggleComponent implements OnInit{
 
   /**
    * The current month
@@ -21,9 +21,23 @@ export class MonthToggleComponent {
   @Output() onChange = new EventEmitter<number>();
 
   /**
+   * Instantiates the component.
+   *
+   * @param dateService the date service
+   */
+  constructor(private dateService: DateService) {}
+
+  /**
    * The available list of months
    */
-  public monthList = CommonFunctions.getMonthsList();
+  public monthList: number[];
+
+  /**
+   * Initializes the component
+   */
+  ngOnInit(): void {
+    this.monthList = this.dateService.getMonthsList();
+  }
 
   /**
    * Triggered on month change.

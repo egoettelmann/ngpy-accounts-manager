@@ -116,21 +116,6 @@ export class RqlService {
   }
 
   /**
-   * Formats a date to a string.
-   *
-   * @param date the date to format
-   */
-  public formatDate(date: Date): string {
-    return ''
-      + date.getFullYear()
-      + '-'
-      + ('0' + (date.getMonth() + 1)).slice(-2)
-      + '-'
-      + ('0' + date.getDate()).slice(-2)
-      + '';
-  }
-
-  /**
    * Formats a list to a string.
    *
    * @param list the list to format

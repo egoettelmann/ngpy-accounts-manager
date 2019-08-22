@@ -4,6 +4,7 @@ import { CompositeKeyValue, KeyValue, Summary } from '../../models/api.models';
 import { Observable } from 'rxjs';
 import { RqlService } from '../rql.service';
 import { FilterRequest } from '../../models/rql.models';
+import { DateService } from '../date.service';
 
 /**
  * The statistics rest service
@@ -15,9 +16,11 @@ export class StatisticsRestService {
    * Instantiates the service.
    *
    * @param http the HTTP client
+   * @param dateService the date service
    * @param rqlService the RQL service
    */
   constructor(private http: HttpClient,
+              private dateService: DateService,
               private rqlService: RqlService
   ) {}
 
@@ -44,8 +47,8 @@ export class StatisticsRestService {
     let params = new HttpParams();
 
     // Adding from date
-    const startDate = this.rqlService.formatDate(dateFrom);
-    const endDate = this.rqlService.formatDate(dateTo);
+    const startDate = this.dateService.format(dateFrom);
+    const endDate = this.dateService.format(dateTo);
     params = params.set('date_from', startDate);
     params = params.set('date_to', endDate);
 
@@ -87,8 +90,8 @@ export class StatisticsRestService {
     let params = new HttpParams();
 
     // Adding from date
-    const startDate = this.rqlService.formatDate(dateFrom);
-    const endDate = this.rqlService.formatDate(dateTo);
+    const startDate = this.dateService.format(dateFrom);
+    const endDate = this.dateService.format(dateTo);
     params = params.set('date_from', startDate);
     params = params.set('date_to', endDate);
 

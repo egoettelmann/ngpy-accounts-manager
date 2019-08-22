@@ -27,6 +27,7 @@ import { RqlService } from './services/rql.service';
 import { StatisticsService } from './services/domain/statistics.service';
 import { AccountsService } from './services/domain/accounts.service';
 import { AlertsService } from './services/domain/alerts.service';
+import { DateService } from './services/date.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -99,6 +100,7 @@ export class CoreModule {
     KeepFocusService,
     ResponsiveService,
     RqlService,
+    DateService,
 
     /** Pipes */
     DecimalPipe,

@@ -1,7 +1,7 @@
 import { fakeAsync, tick } from '@angular/core/testing';
-import { interval } from 'rxjs/observable/interval';
 import { map, take } from 'rxjs/operators';
 import { lock, SubscriptionLock } from './lock-subscriber';
+import { interval } from 'rxjs';
 
 describe('LockSubscriber', () => {
 
@@ -204,6 +204,8 @@ describe('LockSubscriber', () => {
         currentValue = v;
         tickLock.release();
       }, 500);
+    }, (e) => {
+      expect(e).toBe('Timeout');
     });
     expect(currentValue).toEqual(undefined);
     try {

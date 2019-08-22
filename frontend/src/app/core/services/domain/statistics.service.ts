@@ -4,6 +4,7 @@ import { StatisticsRestService } from '../rest/statistics-rest.service';
 import { FilterOperator, FilterRequest } from '../../models/rql.models';
 import { Observable } from 'rxjs';
 import { CompositeKeyValue, KeyValue, Summary } from '../../models/api.models';
+import { DateService } from '../date.service';
 
 /**
  * The statistics service
@@ -15,9 +16,11 @@ export class StatisticsService {
    * Instantiates the service.
    *
    * @param statisticsRestService the statistics rest service
+   * @param dateService the date service
    * @param rqlService the RQL service
    */
   constructor(private statisticsRestService: StatisticsRestService,
+              private dateService: DateService,
               private rqlService: RqlService
   ) {}
 
@@ -30,19 +33,8 @@ export class StatisticsService {
    */
   getSummary(accounts: number[], year: number, month?: number): Observable<Summary> {
     // Building start and end date
-    let dateFrom: Date;
-    let dateTo: Date;
-    if (month == null) {
-      dateFrom = new Date(year, 0, 1);
-      dateTo = new Date(year + 1, 0, 1);
-    } else {
-      dateFrom = new Date(year, month - 1, 1);
-      if (month == 12) {
-        dateTo = new Date(year + 1, 0, 1);
-      } else {
-        dateTo = new Date(year, month, 1);
-      }
-    }
+    const dateFrom = this.dateService.getPeriodStart(year, month);
+    const dateTo = this.dateService.getPeriodEnd(year, month);
 
     return this.statisticsRestService.getSummary(dateFrom, dateTo, accounts, undefined);
   }
@@ -57,13 +49,13 @@ export class StatisticsService {
    */
   getAggregation(year: number, accounts: number[], labels: number[], credit: boolean): Observable<KeyValue[]> {
     // Building start and end date
-    const dateFrom = this.rqlService.formatDate(new Date(year, 0, 1));
-    const dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
+    const dateFrom = this.dateService.getPeriodStart(year);
+    const dateTo = this.dateService.getPeriodEnd(year);
 
     // Adding date and amount filters
     let filter = FilterRequest.all(
-      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
-      FilterRequest.of('dateValue', dateTo, FilterOperator.LT),
+      FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT),
       FilterRequest.of('amount', 0, credit ? FilterOperator.GE : FilterOperator.LT)
     );
 
@@ -95,8 +87,8 @@ export class StatisticsService {
    * @param accounts the list of accounts
    */
   getEvolution(year: number, accounts: number[],): Observable<KeyValue[]> {
-    const dateFrom = new Date(year, 0, 1);
-    const dateTo = new Date(year + 1, 0, 1);
+    const dateFrom = this.dateService.getPeriodStart(year);
+    const dateTo = this.dateService.getPeriodEnd(year);
 
     return this.statisticsRestService.getEvolution('MONTH', dateFrom, dateTo, accounts, undefined);
   }
@@ -110,18 +102,13 @@ export class StatisticsService {
    */
   getRepartition(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {
     // Building start and end date
-    const dateFrom = this.rqlService.formatDate(new Date(year, month - 1, 1));
-    let dateTo: string;
-    if (month == 12) {
-      dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
-    } else {
-      dateTo = this.rqlService.formatDate(new Date(year, month, 1));
-    }
+    const dateFrom = this.dateService.getPeriodStart(year, month);
+    const dateTo = this.dateService.getPeriodEnd(year, month);
 
     // Adding date and amount filters
     let filter = FilterRequest.all(
-      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
-      FilterRequest.of('dateValue', dateTo, FilterOperator.LT)
+      FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT)
     );
 
     // Adding the account filters
@@ -146,13 +133,13 @@ export class StatisticsService {
    */
   getAnalytics(year: number, period: string, categoryType: string, accounts: number[]): Observable<CompositeKeyValue[]> {
     // Building start and end date
-    const dateFrom = this.rqlService.formatDate(new Date(year, 0, 1));
-    const dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
+    const dateFrom = this.dateService.getPeriodStart(year);
+    const dateTo = this.dateService.getPeriodEnd(year);
 
     // Adding date and amount filters
     let filter = FilterRequest.all(
-      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
-      FilterRequest.of('dateValue', dateTo, FilterOperator.LT),
+      FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT),
       FilterRequest.of('categoryType', categoryType, FilterOperator.EQ)
     );
 
@@ -177,13 +164,13 @@ export class StatisticsService {
    */
   getAnalyticsDetails(year: number, categoryType: string, accounts: number[]): Observable<CompositeKeyValue[]> {
     // Building start and end date
-    const dateFrom = this.rqlService.formatDate(new Date(year, 0, 1));
-    const dateTo = this.rqlService.formatDate(new Date(year + 1, 0, 1));
+    const dateFrom = this.dateService.getPeriodStart(year);
+    const dateTo = this.dateService.getPeriodEnd(year);
 
     // Adding date and amount filters
     let filter = FilterRequest.all(
-      FilterRequest.of('dateValue', dateFrom, FilterOperator.GE),
-      FilterRequest.of('dateValue', dateTo, FilterOperator.LT),
+      FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT),
       FilterRequest.of('categoryType', categoryType, FilterOperator.EQ)
     );
 

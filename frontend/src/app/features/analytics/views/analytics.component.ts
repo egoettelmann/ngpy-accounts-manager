@@ -9,6 +9,7 @@ import { Account, Category, CompositeKeyValue } from '../../../core/models/api.m
 import { ChartSerie, GroupedValue } from '../../../core/models/domain.models';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
+import { DateService } from '../../../core/services/date.service';
 
 @Component({
   templateUrl: './analytics.component.html',
@@ -35,7 +36,8 @@ export class AnalyticsComponent implements OnInit {
               private location: Location,
               private accountsService: AccountsService,
               private categoriesService: CategoriesRestService,
-              private statisticsService: StatisticsService
+              private statisticsService: StatisticsService,
+              private dateService: DateService
   ) {
   }
 
@@ -108,7 +110,7 @@ export class AnalyticsComponent implements OnInit {
    */
   private initData() {
     if (!this.route.snapshot.paramMap.has('year')) {
-      this.currentYear = CommonFunctions.getCurrentYear();
+      this.currentYear = this.dateService.getCurrentYear();
     } else {
       this.currentYear = +this.route.snapshot.paramMap.get('year');
     }
@@ -154,8 +156,8 @@ export class AnalyticsComponent implements OnInit {
   /**
    * Builds the aggregation table.
    *
-   * @param {any[]} data the data to aggregate
-   * @returns {any[]} the aggregated data for the table
+   * @param data the data to aggregate
+   * @returns the aggregated data for the table
    */
   private buildTable(data: CompositeKeyValue[]): ChartSerie[] {
     const movements: ChartSerie[] = [];
