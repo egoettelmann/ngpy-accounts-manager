@@ -132,16 +132,11 @@ class TransactionRepository:
         """
         period_expr = self.period_expression(period, TransactionDbo.date_value)
         query = self.__entity_manager.query(
+            label('value', func.sum(TransactionDbo.amount)),
             label('key_one', period_expr),
-            label('key_two', CategoryDbo.name),
-            label('value', func.sum(TransactionDbo.amount))
-        ).join(
-            CategoryDbo.labels
-        ).join(
-            LabelDbo.transactions
+            label('key_two', CategoryDbo.name)
         )
-        query = self.__query_builder.build(query, filters=filter_request)
-        query = query.group_by(CategoryDbo.name)
+        query = self.__query_builder.build(query, filters=filter_request, groups=['label.category.name'])
         query = query.group_by(period_expr)
         return query.all()
 
@@ -152,17 +147,11 @@ class TransactionRepository:
         :return: the list of (key_one, key_two, value) results
         """
         query = self.__entity_manager.query(
+            label('value', func.sum(TransactionDbo.amount)),
             label('key_one', CategoryDbo.name),
             label('key_two', LabelDbo.name),
-            label('value', func.sum(TransactionDbo.amount))
-        ).join(
-            CategoryDbo.labels
-        ).join(
-            LabelDbo.transactions
         )
-        query = self.__query_builder.build(query, filters=filter_request)
-        query = query.group_by(LabelDbo.id)
-        query = query.group_by(CategoryDbo.name)
+        query = self.__query_builder.build(query, filters=filter_request, groups=['label.name', 'label.category.name'])
         return query.all()
 
     def get_total(self, filter_request: FilterRequest) -> float:

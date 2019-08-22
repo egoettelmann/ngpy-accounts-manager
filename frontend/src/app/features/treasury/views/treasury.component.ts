@@ -106,7 +106,7 @@ export class TreasuryComponent implements OnInit {
         .map(a => +a);
     }
     if (!this.route.snapshot.queryParamMap.has('labels')) {
-      this.labelsFilter = undefined;
+      this.labelsFilter = [];
     } else {
       this.labelsFilter = this.route.snapshot.queryParamMap.get('labels')
         .split(',')

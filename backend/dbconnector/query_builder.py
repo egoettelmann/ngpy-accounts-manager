@@ -63,6 +63,20 @@ class QueryTemplate:
         # Applying the offset/limit
         self.query = self.query.slice(page_request.offset, page_request.limit)
 
+    def group(self, groups: List[str]):
+        """Groups a query on multiple clauses
+
+        :param groups: the group list
+        :return: the paginated query
+        """
+        # Checking for None
+        if groups is None or len(groups) == 0:
+            return
+
+        # Applying the groups
+        for group in groups:
+            self.query = self.query.group_by(self.get_nested_attribute(self.__type, group))
+
     def get_nested_attribute(self, o: any, attr: str):
         """Gets the attribute with support for 'dot' notation.
         Will extract the nested attribute from the provided object.
@@ -179,6 +193,7 @@ class QueryBuilder:
               filters: FilterRequest = None,
               sort: SortRequest = None,
               paginate: PageRequest = None,
+              groups: List[str] = []
               ) -> Query:
         """Filters a query by the provided filter param.
 
@@ -186,6 +201,7 @@ class QueryBuilder:
         :param filters: the filters to apply
         :param sort: the sort request
         :param paginate: the page request
+        :param groups: the group by clauses
         :return: the filtered query
         """
         query_template = QueryTemplate(query, self.__type)
@@ -195,4 +211,6 @@ class QueryBuilder:
             query_template.sort(sort)
         if paginate is not None:
             query_template.paginate(paginate)
+        if groups is not None:
+            query_template.group(groups)
         return query_template.query
