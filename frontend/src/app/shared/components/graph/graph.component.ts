@@ -30,7 +30,7 @@ export class GraphComponent implements OnChanges, AfterViewInit {
   /**
    * The graph default options
    */
-  private defaultOptions = {
+  private defaultOptions: Highcharts.Options = {
     chart: {
       backgroundColor: 'none',
       width: null
