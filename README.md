@@ -28,6 +28,17 @@ python index.py
 
 ## Release Notes
 
+### `0.5.0`
+
+- Added native Python logging
+- Switched to Python type-hinting
+- Worked on CI: added frontend tests and set-version
+- Added RQL support for better requests flexibility
+- Improved PWA compliance and responsiveness
+- Added alerts on dashboard
+- Charts display more data
+- Improved search form
+
 ### `0.4.1`
 
 - Added scheduler for sending notifications
@@ -64,11 +75,6 @@ python index.py
 
 ### Features
 
-- Automatically create label if it does not exist on transaction table
-- Improve alerts on dashboard:
-  - labels without category
-  - labels without transactions
-  - last account update that is too old
 - Add possibility to close a period at a given date
   - Impossible to change amount or account of a transaction before this date
   - Period can only be closed at a date of 30 days before the current day
