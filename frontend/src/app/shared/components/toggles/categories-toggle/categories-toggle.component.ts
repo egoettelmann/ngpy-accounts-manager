@@ -6,10 +6,10 @@ import * as _ from 'lodash';
  * The category toggle component
  */
 @Component({
-  selector: 'app-category-toggle',
-  templateUrl: './category-toggle.component.html'
+  selector: 'app-categories-toggle',
+  templateUrl: './categories-toggle.component.html'
 })
-export class CategoryToggleComponent implements OnChanges {
+export class CategoriesToggleComponent implements OnChanges {
 
   /**
    * The available categories

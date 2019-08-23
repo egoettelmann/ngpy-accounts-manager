@@ -6,10 +6,10 @@ import * as _ from 'lodash';
  * The account toggle component
  */
 @Component({
-  selector: 'app-account-toggle',
-  templateUrl: './account-toggle.component.html'
+  selector: 'app-accounts-toggle',
+  templateUrl: './accounts-toggle.component.html'
 })
-export class AccountToggleComponent implements OnChanges {
+export class AccountsToggleComponent implements OnChanges {
 
   /**
    * The available accounts

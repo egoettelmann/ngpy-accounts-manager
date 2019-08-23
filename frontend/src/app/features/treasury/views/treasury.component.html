@@ -1,23 +1,23 @@
 <div class="clr-row">
   <div class="clr-col-12 clr-col-md-4">
     <!-- Account select-->
-    <app-account-toggle *ngIf="accounts"
-                        [accounts]="accounts"
-                        [preSelected]="accountsFilter"
-                        (onChange)="changeAccounts($event)">
-    </app-account-toggle>
+    <app-accounts-toggle *ngIf="accounts"
+                         [accounts]="accounts"
+                         [preSelected]="accountsFilter"
+                         (onChange)="changeAccounts($event)">
+    </app-accounts-toggle>
 
     <!-- Year select -->
-    <app-year-toggle [currentYear]="currentYear"
-                     (onChange)="changeYear($event)">
-    </app-year-toggle>
+    <app-years-toggle [currentYear]="currentYear"
+                      (onChange)="changeYear($event)">
+    </app-years-toggle>
 
     <!-- Label select -->
-    <app-label-toggle *ngIf="labels"
-                      [labels]="labels"
-                      [value]="labelsFilter"
-                      (onChange)="changeLabels($event)">
-    </app-label-toggle>
+    <app-labels-toggle *ngIf="labels"
+                       [labels]="labels"
+                       [value]="labelsFilter"
+                       (onChange)="changeLabels($event)">
+    </app-labels-toggle>
 
     <!-- Summary -->
     <app-summary [summary]="summary"></app-summary>

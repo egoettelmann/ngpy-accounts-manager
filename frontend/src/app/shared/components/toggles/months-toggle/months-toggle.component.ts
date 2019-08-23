@@ -5,10 +5,10 @@ import { DateService } from '../../../../core/services/date.service';
  * The month toggle component
  */
 @Component({
-  selector: 'app-month-toggle',
-  templateUrl: './month-toggle.component.html'
+  selector: 'app-months-toggle',
+  templateUrl: './months-toggle.component.html'
 })
-export class MonthToggleComponent implements OnInit{
+export class MonthsToggleComponent implements OnInit{
 
   /**
    * The current month

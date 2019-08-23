@@ -6,10 +6,10 @@ import * as _ from 'lodash';
  * The label toggle component
  */
 @Component({
-  selector: 'app-label-toggle',
-  templateUrl: './label-toggle.component.html'
+  selector: 'app-labels-toggle',
+  templateUrl: './labels-toggle.component.html'
 })
-export class LabelToggleComponent implements OnChanges {
+export class LabelsToggleComponent implements OnChanges {
 
   /**
    * The available labels

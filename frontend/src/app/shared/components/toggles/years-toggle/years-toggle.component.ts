@@ -5,10 +5,10 @@ import { DateService } from '../../../../core/services/date.service';
  * The year toggle component
  */
 @Component({
-  selector: 'app-year-toggle',
-  templateUrl: './year-toggle.component.html'
+  selector: 'app-years-toggle',
+  templateUrl: './years-toggle.component.html'
 })
-export class YearToggleComponent implements OnInit {
+export class YearsToggleComponent implements OnInit {
 
   /**
    * The current year

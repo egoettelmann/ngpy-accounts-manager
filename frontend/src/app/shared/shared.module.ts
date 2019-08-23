@@ -12,16 +12,16 @@ import { NotificationMessageComponent } from './components/notification/message/
 import { NotificationModalComponent } from './components/notification/modal/notification-modal.component';
 import { FieldWrapperComponent } from './components/form/field-wrapper/field-wrapper.component';
 import { KeepFocusDirective } from './directives/keep-focus.directive';
-import { AccountToggleComponent } from './components/accounts/toggle/account-toggle.component';
-import { MonthToggleComponent } from './components/dates/month-toggle/month-toggle.component';
-import { YearToggleComponent } from './components/dates/year-toggle/year-toggle.component';
+import { AccountsToggleComponent } from './components/toggles/accounts-toggle/accounts-toggle.component';
+import { MonthsToggleComponent } from './components/toggles/months-toggle/months-toggle.component';
+import { YearsToggleComponent } from './components/toggles/years-toggle/years-toggle.component';
 import { SummaryComponent } from './components/statistics/summary/summary.component';
 import { TransactionsFormComponent } from './components/transactions/form/transactions-form.component';
-import { LabelToggleComponent } from './components/labels/toggle/label-toggle.component';
+import { LabelsToggleComponent } from './components/toggles/labels-toggle/labels-toggle.component';
 import { TransactionsTableComponent } from './components/transactions/table/transactions-table.component';
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from '@angular/cdk/layout';
-import { CategoryToggleComponent } from './components/categories/toggle/category-toggle.component';
+import { CategoriesToggleComponent } from './components/toggles/categories-toggle/categories-toggle.component';
 
 @NgModule({
   declarations: SharedModule.COMPONENTS_LIST,
@@ -43,13 +43,13 @@ export class SharedModule {
     NotificationMessageComponent,
     NotificationModalComponent,
     KeepFocusDirective,
-    AccountToggleComponent,
-    MonthToggleComponent,
-    YearToggleComponent,
+    AccountsToggleComponent,
+    MonthsToggleComponent,
+    YearsToggleComponent,
     SummaryComponent,
     TransactionsFormComponent,
-    LabelToggleComponent,
-    CategoryToggleComponent,
+    LabelsToggleComponent,
+    CategoriesToggleComponent,
     TransactionsTableComponent
   ];
 
