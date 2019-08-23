@@ -10,7 +10,7 @@ export class Account {
   color: string;
   notify: boolean;
   active: boolean;
-  lastUpdate: Date;
+  lastUpdate: string;
 }
 
 /**
@@ -76,7 +76,7 @@ export class Transaction {
   id: number;
   reference: string;
   description: string;
-  dateValue: Date;
+  dateValue: string;
   amount: number;
   label: Label;
   account: Account;

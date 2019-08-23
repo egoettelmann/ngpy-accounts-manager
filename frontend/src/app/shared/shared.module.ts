@@ -15,7 +15,7 @@ import { KeepFocusDirective } from './directives/keep-focus.directive';
 import { AccountsToggleComponent } from './components/toggles/accounts-toggle/accounts-toggle.component';
 import { MonthsToggleComponent } from './components/toggles/months-toggle/months-toggle.component';
 import { YearsToggleComponent } from './components/toggles/years-toggle/years-toggle.component';
-import { SummaryComponent } from './components/statistics/summary/summary.component';
+import { SummaryComponent } from './components/summary/summary.component';
 import { TransactionsFormComponent } from './components/transactions/form/transactions-form.component';
 import { LabelsToggleComponent } from './components/toggles/labels-toggle/labels-toggle.component';
 import { TransactionsTableComponent } from './components/transactions/table/transactions-table.component';

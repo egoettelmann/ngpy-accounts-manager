@@ -42,10 +42,10 @@
                        [ctrl]="form.get('dateValue')"
                        class="form-group clr-row mb-1">
       <input id="dateValue"
-             clrInput
-             [formControlName]="'dateValue'"
-             class="w-100"
-             type="text"/>
+             [clrDate]="form.get('dateValue').value"
+             (clrDateChange)="changeDate($event)"
+             type="date"
+             class="w-100"/>
     </app-field-wrapper>
     <app-field-wrapper for="amount"
                        [i18nLabel]="'i18n.components.transactions.form.amount'"

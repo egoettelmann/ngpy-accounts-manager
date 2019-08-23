@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Account, Label, Transaction } from '../../../../core/models/api.models';
+import { DateService } from '../../../../core/services/date.service';
 
 /**
  * The transactions form component
@@ -50,9 +51,12 @@ export class TransactionsFormComponent implements OnChanges {
    * Instantiates the component.
    *
    * @param fb the form builder
+   * @param dateService the date service
    */
-  constructor(private fb: FormBuilder) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private dateService: DateService
+  ) {}
 
   /**
    * Handles all input changes.
@@ -88,7 +92,9 @@ export class TransactionsFormComponent implements OnChanges {
    * @param data the form data
    */
   initFormData(data: Transaction) {
-    this.form.patchValue(data);
+    const t = Object.assign({}, data) as Transaction;
+    t.dateValue = this.dateService.parse(t.dateValue) as any;
+    this.form.patchValue(t);
   }
 
   /**
@@ -101,10 +107,20 @@ export class TransactionsFormComponent implements OnChanges {
   }
 
   /**
+   * Changes the date.
+   *
+   * @param value the new date
+   */
+  changeDate(value: Date) {
+    this.form.get('dateValue').setValue(value);
+  }
+
+  /**
    * Submits the form
    */
   submitForm() {
-    const t = Object.assign({}, this.model, this.form.value);
+    const t = Object.assign({}, this.model, this.form.value) as Transaction;
+    t.dateValue = this.dateService.format(t.dateValue as any);
     this.onFormSubmit.emit(t);
   }
 
