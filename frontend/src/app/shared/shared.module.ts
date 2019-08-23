@@ -12,7 +12,6 @@ import { NotificationMessageComponent } from './components/notification/message/
 import { NotificationModalComponent } from './components/notification/modal/notification-modal.component';
 import { FieldWrapperComponent } from './components/form/field-wrapper/field-wrapper.component';
 import { KeepFocusDirective } from './directives/keep-focus.directive';
-import { AccountCardComponent } from './components/accounts/card/account-card.component';
 import { AccountToggleComponent } from './components/accounts/toggle/account-toggle.component';
 import { MonthToggleComponent } from './components/dates/month-toggle/month-toggle.component';
 import { YearToggleComponent } from './components/dates/year-toggle/year-toggle.component';
@@ -44,7 +43,6 @@ export class SharedModule {
     NotificationMessageComponent,
     NotificationModalComponent,
     KeepFocusDirective,
-    AccountCardComponent,
     AccountToggleComponent,
     MonthToggleComponent,
     YearToggleComponent,
