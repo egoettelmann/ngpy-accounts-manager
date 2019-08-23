@@ -2,14 +2,15 @@
   "name": "ngpy-accounts-manager",
   "version": "0.4.1",
   "scripts": {
-    "postinstall": "npm run set-version && npm run build-front",
-    "build-front": "npm install --prefix frontend && npm run build --prefix frontend",
-    "test-front": "npm run test --prefix frontend",
+    "postinstall": "npm install --prefix frontend",
+    "build": "npm run set-version && npm run build --prefix frontend",
+    "test": "npm run test --prefix frontend",
     "set-version": "node ./resources/scripts/set-version.js"
   },
   "engines": {
     "node": "10.13.0"
   },
+  "private": true,
   "dependencies": {
     "child_process": "^1.0.2",
     "fs": "0.0.1-security"
