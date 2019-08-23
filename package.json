@@ -4,6 +4,7 @@
   "scripts": {
     "postinstall": "npm run set-version && npm run build-front",
     "build-front": "npm install --prefix frontend && npm run build --prefix frontend",
+    "test-front": "npm run test --prefix frontend",
     "set-version": "node ./resources/scripts/set-version.js"
   },
   "engines": {

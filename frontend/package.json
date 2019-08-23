@@ -6,7 +6,8 @@
     "ng": "ng",
     "start": "ng serve --port=4210",
     "build": "ng build --aot --prod --build-optimizer",
-    "test": "ng test",
+    "test": "ng test -- --watch=false --no-progress --browsers=ChromeHeadlessCI",
+    "test:dev": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
