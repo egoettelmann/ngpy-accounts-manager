@@ -93,7 +93,7 @@ class QueryTemplate:
         else:
             target = item.property.mapper.class_
             if target not in self.__joins:
-                self.query = self.query.join(target)
+                self.query = self.query.join(item)
                 self.__joins.append(target)
             return self.get_nested_attribute(target, attrs[1])
 
