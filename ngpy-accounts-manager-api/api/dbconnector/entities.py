@@ -2,7 +2,7 @@
 from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy.sql.sqltypes import Date, Numeric, Integer, String, Boolean
 
-from .manager import EntityManager
+from . import EntityManager
 
 
 class QKeyValue:

@@ -4,17 +4,17 @@ import os
 from flask import Flask, request, session
 from flask_cors import CORS
 
-from backend.controllers.account_controller import AccountController
-from backend.controllers.category_controller import CategoryController
-from backend.controllers.label_controller import LabelController
-from backend.controllers.session_controller import SessionController
-from backend.controllers.statistics_controller import StatisticsController
-from backend.controllers.transaction_controller import TransactionController
-from backend.dbconnector.manager import EntityManager
-from backend.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
-from backend.modules.depynject import Depynject
-from backend.modules.di_providers import RequestDiProvider
-from backend.modules.restipy import Api
+from api.controllers.account_controller import AccountController
+from api.controllers.category_controller import CategoryController
+from api.controllers.label_controller import LabelController
+from api.controllers.session_controller import SessionController
+from api.controllers.statistics_controller import StatisticsController
+from api.controllers.transaction_controller import TransactionController
+from api.dbconnector.manager import EntityManager
+from api.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
+from api.modules.depynject import Depynject
+from api.modules.di_providers import RequestDiProvider
+from api.modules.restipy import Api
 
 ######################
 # Configuring Logging
@@ -35,7 +35,7 @@ d_injector.register_singleton(em)
 
 # Registering the App Properties
 app_properties = {}
-with open('version.txt', 'r') as version_file:
+with open('../version.txt', 'r') as version_file:
     app_properties['version'] = version_file.read()
 d_injector.register_singleton(app_properties, 'app_properties')
 

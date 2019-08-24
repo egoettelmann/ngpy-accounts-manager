@@ -20,10 +20,11 @@ npm install --prefix frontend
 npm run build --prefix frontend
 ```
 
-Then, simply run the backend with python:
+Then, install and run the backend with python:
 
 ```
-python index.py
+pip install -r requirements.txt
+python ngpy-accounts-manager-api/main.py
 ```
 
 ## Release Notes

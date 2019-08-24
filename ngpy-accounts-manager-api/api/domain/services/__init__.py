@@ -1,6 +1,4 @@
-﻿#!/usr/bin/env python
-
-from .account_service import AccountService
+﻿from .account_service import AccountService
 from .category_service import CategoryService
 from .label_service import LabelService
 from .notification_service import NotificationService

@@ -2,8 +2,8 @@ import pytest
 import flask
 import urllib.parse
 
-from backend.domain.search_request import FilterOperator
-from backend.rql_parser import RqlRequestParser
+from api.domain.search_request import FilterOperator
+from api.rql_parser import RqlRequestParser
 
 
 @pytest.fixture()

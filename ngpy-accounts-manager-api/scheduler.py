@@ -1,11 +1,11 @@
 import logging
 import os
 
-from backend.dbconnector.manager import EntityManager
-from backend.domain.services.account_service import AccountService
-from backend.domain.services.notification_service import NotificationService
-from backend.modules.depynject import Depynject
-from backend.modules.di_providers import SimplePrototypeDiProvider
+from api.dbconnector.manager import EntityManager
+from api.domain.services.account_service import AccountService
+from api.domain.services.notification_service import NotificationService
+from api.modules.depynject import Depynject
+from api.modules.di_providers import SimplePrototypeDiProvider
 
 ######################
 # Configuring Logging

@@ -1,1 +1,1 @@
-web: gunicorn index:app
+web: gunicorn ngpy-accounts-manager-api:app

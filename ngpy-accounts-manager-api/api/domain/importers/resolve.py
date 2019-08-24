@@ -3,10 +3,8 @@ import logging
 from itertools import islice
 from typing import List, TypeVar
 
-from .bpalc_parser import BpalcParser
-from .ing_parser import IngParser
-from .inglux_parser import IngLuxParser
-from .parser import Parser
+from . import BpalcParser, IngParser, IngLuxParser
+from . import Parser
 from ...modules.depynject import injectable
 
 T = TypeVar('T')

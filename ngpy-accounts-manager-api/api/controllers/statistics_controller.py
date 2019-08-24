@@ -3,8 +3,7 @@ from typing import List
 
 from flask import request
 
-from backend.domain.models import PeriodType
-from ..domain.models import KeyValue, CompositeKeyValue, Summary
+from ..domain.models import KeyValue, CompositeKeyValue, Summary, PeriodType
 from ..domain.services import StatisticsService, AccountService, TransactionService
 from ..modules import restipy
 from ..modules.depynject import injectable

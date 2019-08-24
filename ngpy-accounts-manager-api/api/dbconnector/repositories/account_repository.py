@@ -1,8 +1,7 @@
 from typing import List
 
+from .. import EntityManager, QueryBuilder
 from ..entities import AccountDbo
-from ..manager import EntityManager
-from ..query_builder import QueryBuilder
 from ...domain.search_request import SearchRequest
 from ...modules.depynject import injectable
 

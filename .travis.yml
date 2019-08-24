@@ -12,7 +12,7 @@ addons:
 cache:
   directories:
     - ./node_modules
-    - ./frontend/node_modules
+    - ./ngpy-accounts-manager-frontend/node_modules
 
 install:
   - npm install

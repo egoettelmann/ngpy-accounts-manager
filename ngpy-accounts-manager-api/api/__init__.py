@@ -1,4 +1,4 @@
-﻿# Importing the ObjectMapper
+# Importing the ObjectMapper
 from .mapping import Mapper
 
 # Importing all controllers
