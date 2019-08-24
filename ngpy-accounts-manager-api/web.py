@@ -35,15 +35,17 @@ d_injector.register_singleton(em)
 
 # Registering the App Properties
 app_properties = {}
-with open('./version.txt', 'r') as version_file:
+version_file_path = os.path.join(os.path.dirname(__file__), 'version.txt')
+with open(version_file_path, 'r') as version_file:
     app_properties['version'] = version_file.read()
 d_injector.register_singleton(app_properties, 'app_properties')
 
 ###################
 # Building the App
 ###################
+static_folder_path = os.path.join(os.path.dirname(__file__), '../ngpy-accounts-manager-ui/dist')
 app = Flask(__name__,
-            static_folder='../ngpy-accounts-manager-ui/dist',
+            static_folder=static_folder_path,
             static_url_path=''
             )
 app.secret_key = os.environ['SESSION_SECRET_KEY']
