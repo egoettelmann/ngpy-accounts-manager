@@ -85,7 +85,6 @@ class QueryTemplate:
         :param attr: the attribute to extract
         :return: the extract attribute
         """
-        logging.debug('Retrieving [%s] from %s', attr, o)
         attrs = attr.split('.', 1)
         item = getattr(o, attrs[0])
         if len(attrs) == 1:

@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 from sqlalchemy import cast, Integer, String
@@ -46,6 +47,7 @@ class TransactionRepository:
             sort=search_request.sort_request,
             paginate=search_request.page_request
         )
+        logging.debug(query)
         return query.all()
 
     def count(self, filter_request: FilterRequest) -> TransactionDbo:
@@ -56,6 +58,7 @@ class TransactionRepository:
         """
         query = self.__entity_manager.query(TransactionDbo)
         query = self.__query_builder.build(query, filters=filter_request)
+        logging.debug(query)
         return query.count()
 
     def delete_by_id(self, transaction_id: int) -> None:
@@ -98,6 +101,7 @@ class TransactionRepository:
         query = query.group_by(LabelDbo.id)
         query = query.group_by(LabelDbo.name)
         query = query.order_by(desc(value_expr))
+        logging.debug(query)
         return query.all()
 
     def get_grouped_over_period(self,
@@ -118,6 +122,7 @@ class TransactionRepository:
         query = self.__query_builder.build(query, filters=filter_request)
         query = query.group_by(period_expr)
         query = query.order_by(period_expr)
+        logging.debug(query)
         return query.all()
 
     def get_grouped_by_type_over_period(self,
@@ -138,6 +143,7 @@ class TransactionRepository:
         )
         query = self.__query_builder.build(query, filters=filter_request, groups=['label.category.name'])
         query = query.group_by(period_expr)
+        logging.debug(query)
         return query.all()
 
     def get_grouped_by_labels_and_type(self, filter_request: FilterRequest) -> List[QCompositeKeyValue]:
@@ -152,6 +158,7 @@ class TransactionRepository:
             label('key_two', LabelDbo.name),
         )
         query = self.__query_builder.build(query, filters=filter_request, groups=['label.name', 'label.category.name'])
+        logging.debug(query)
         return query.all()
 
     def get_total(self, filter_request: FilterRequest) -> float:
@@ -164,6 +171,7 @@ class TransactionRepository:
             label('total', func.sum(TransactionDbo.amount))
         )
         query = self.__query_builder.build(query, filters=filter_request)
+        logging.debug(query)
         total = query.scalar()
         return 0 if total is None else total
 
@@ -217,6 +225,6 @@ class TransactionRepository:
         if period == PeriodType.QUARTER:
             return cast(extract('year', column), String)\
                    + '-Q'\
-                   + cast(cast((extract('month', TransactionDbo.date_value) + 2) / 3, Integer), String)
+                   + cast(cast(cast(extract('month', TransactionDbo.date_value) - 1, Integer) / 3 + 1, Integer), String)
         if period == PeriodType.YEAR:
             return cast(extract('year', column), String)
