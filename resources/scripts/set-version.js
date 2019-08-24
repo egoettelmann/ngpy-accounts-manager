@@ -48,4 +48,4 @@ function writeToFile(filePath, content) {
 /**
  * Writes the version number to a dedicated file
  */
-writeToFile('./version.txt', getVersionNumber());
+writeToFile('./ngpy-accounts-manager-api/version.txt', getVersionNumber());

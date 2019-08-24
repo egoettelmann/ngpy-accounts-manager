@@ -1,1 +1,1 @@
-web: gunicorn ngpy-accounts-manager-api:app
+web: gunicorn --pythonpath ngpy-accounts-manager-api main:app

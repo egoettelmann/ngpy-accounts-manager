@@ -35,7 +35,7 @@ d_injector.register_singleton(em)
 
 # Registering the App Properties
 app_properties = {}
-with open('../version.txt', 'r') as version_file:
+with open('./version.txt', 'r') as version_file:
     app_properties['version'] = version_file.read()
 d_injector.register_singleton(app_properties, 'app_properties')
 
