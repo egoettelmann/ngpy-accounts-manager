@@ -43,7 +43,7 @@ d_injector.register_singleton(app_properties, 'app_properties')
 # Building the App
 ###################
 app = Flask(__name__,
-            static_folder='frontend/dist',
+            static_folder='../ngpy-accounts-manager-ui/dist',
             static_url_path=''
             )
 app.secret_key = os.environ['SESSION_SECRET_KEY']
