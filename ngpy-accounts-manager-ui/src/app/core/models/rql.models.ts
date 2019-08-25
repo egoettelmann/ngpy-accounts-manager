@@ -40,6 +40,11 @@ export class FilterRequest {
   isAnd: boolean;
 
   /**
+   * The constructor is private to prevent instantiating it directly.
+   */
+  private constructor() {}
+
+  /**
    * Builds a simple filter request element with a field, value and an operator.
    *
    * @param field the field to filter on
@@ -60,9 +65,21 @@ export class FilterRequest {
    * @param filters the list of filters to aggregate
    */
   static all(...filters: FilterRequest[]): FilterRequest {
+    if (filters.length === 1) {
+      const item = filters[0];
+      return FilterRequest.of(item.field, item.value, item.operator);
+    }
     const filterRequest = new FilterRequest();
     filterRequest.isAnd = true;
-    filterRequest.collection = filters;
+    filterRequest.collection = [];
+    filters.forEach(f => {
+      // Same type collections are flattened
+      if (f.isCollection() && f.isAnd) {
+        filterRequest.collection.push(...f.collection);
+      } else {
+        filterRequest.collection.push(f);
+      }
+    });
     return filterRequest;
   }
 
@@ -72,9 +89,21 @@ export class FilterRequest {
    * @param filters the list of filters to aggregate
    */
   static either(...filters: FilterRequest[]): FilterRequest {
+    if (filters.length === 1) {
+      const item = filters[0];
+      return FilterRequest.of(item.field, item.value, item.operator);
+    }
     const filterRequest = new FilterRequest();
     filterRequest.isAnd = false;
-    filterRequest.collection = filters;
+    filterRequest.collection = [];
+    filters.forEach(f => {
+      // Same type collections are flattened
+      if (f.isCollection() && !f.isAnd) {
+        filterRequest.collection.push(...f.collection);
+      } else {
+        filterRequest.collection.push(f);
+      }
+    });
     return filterRequest;
   }
 
