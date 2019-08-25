@@ -28,8 +28,8 @@ class Mapper(ObjectMapper):
         self.create_map(StatusDbo, Status)
         self.create_map(CategoryDbo, Category)
         self.create_map(Category, CategoryDbo)
-        self.create_map(BudgetDbo, Budget)
-        self.create_map(Budget, Budget)
+        self.create_map(BudgetDbo, Budget, {'label': lambda x: x.label, 'account': lambda x: x.account, 'category': lambda x: x.category})
+        self.create_map(Budget, BudgetDbo)
         self.create_map(UserDbo, User)
 
     def map(self, source: Any, target_type: Type[T]) -> T:

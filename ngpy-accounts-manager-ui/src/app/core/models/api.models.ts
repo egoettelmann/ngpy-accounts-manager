@@ -81,3 +81,15 @@ export class Transaction {
   label: Label;
   account: Account;
 }
+
+/**
+ * The budget DTO
+ */
+export class Budget {
+  id: number;
+  amount: number;
+  period: string;
+  account: Account;
+  label: Label;
+  category: Category;
+}

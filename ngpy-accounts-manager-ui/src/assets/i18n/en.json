@@ -92,10 +92,16 @@
   "i18n.views.analytics.table.credit.title": "Crediting transactions by category",
   "i18n.views.analytics.table.debit.title": "Debiting transactions by category",
 
+  "i18n.views.budget.categories.chart.title": "Budget status",
+  "i18n.component.budget.series.expected": "Budget",
+  "i18n.component.budget.series.above": "Budget overrun",
+  "i18n.component.budget.series.below": "Budget surplus",
+
   "i18n.components.navigation.dashboard": "Dashboard",
   "i18n.components.navigation.transactions": "Transactions",
   "i18n.components.navigation.treasury": "Treasury",
   "i18n.components.navigation.analytics": "Analytics",
+  "i18n.components.navigation.budget": "Budget",
   "i18n.components.navigation.search": "Search ...",
   "i18n.components.navigation.settings": "Settings",
   "i18n.components.navigation.settings.labels": "Labels",

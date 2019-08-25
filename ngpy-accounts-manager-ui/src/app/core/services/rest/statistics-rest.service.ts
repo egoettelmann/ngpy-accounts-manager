@@ -56,7 +56,7 @@ export class StatisticsRestService {
     params = params.set('period', period);
 
     // Adding accounts
-    if (accounts != null) {
+    if (accounts != null && accounts.length > 0) {
       params = params.append('account_ids', accounts.join(','));
     }
 
@@ -96,7 +96,7 @@ export class StatisticsRestService {
     params = params.set('date_to', endDate);
 
     // Adding accounts
-    if (accounts != null) {
+    if (accounts != null && accounts.length > 0) {
       params = params.append('account_ids', accounts.join(','));
     }
 

@@ -16,6 +16,9 @@
     <a [routerLink]="['/analytics']" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.analytics' | translate }}</span>
     </a>
+    <a [routerLink]="['/budget']" routerLinkActive="active" class="nav-link">
+      <span class="nav-text">{{ 'i18n.components.navigation.budget' | translate }}</span>
+    </a>
   </div>
   <form class="search clr-hidden-sm-down"
         (submit)="search(searchInput.value)"

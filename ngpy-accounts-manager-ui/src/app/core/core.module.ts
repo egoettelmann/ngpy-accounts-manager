@@ -28,6 +28,8 @@ import { StatisticsService } from './services/domain/statistics.service';
 import { AccountsService } from './services/domain/accounts.service';
 import { AlertsService } from './services/domain/alerts.service';
 import { DateService } from './services/date.service';
+import { BudgetRestService } from './services/rest/budget-rest.service';
+import { BudgetService } from './services/domain/budget.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -87,12 +89,14 @@ export class CoreModule {
     TransactionsRestService,
     LabelsRestService,
     CategoriesRestService,
+    BudgetRestService,
 
     /** Domain services **/
     AccountsService,
     TransactionsService,
     StatisticsService,
     AlertsService,
+    BudgetService,
 
     /** App services */
     AuthenticationService,

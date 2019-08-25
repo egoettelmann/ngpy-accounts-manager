@@ -34,6 +34,10 @@ const routes: Routes = [
             loadChildren: () => import('./features/analytics/analytics.module').then(m => m.AnalyticsModule)
           },
           {
+            path: 'budget',
+            loadChildren: () => import('./features/budget/budget.module').then(m => m.BudgetModule)
+          },
+          {
             path: 'search',
             loadChildren: () => import('./features/search/search.module').then(m => m.SearchModule)
           },

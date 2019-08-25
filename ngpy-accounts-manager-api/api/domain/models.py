@@ -210,15 +210,18 @@ class Notification:
     'label_id': types.Integer(),
     'category_id': types.Integer(),
     'period': types.String(),
-    'amount': types.Float()
+    'amount': types.Float(),
+    'account': types.Nested(Account, ignore_on_parse=True),
+    'label': types.Nested(Label, ignore_on_parse=True),
+    'category': types.Nested(Category, ignore_on_parse=True)
 })
 class Budget:
     """
     The Budget model
     """
 
-    def __init__(self, id=None, account_id=None, label_id=None,
-                 category_id=None, period=None, amount=None):
+    def __init__(self, id=None, account_id=None, label_id=None, category_id=None, period=None,
+                 amount=None, label: Label = None, account: Account = None, category: Category = None):
         """Constructor"""
         self.id = id
         self.account_id = account_id
@@ -226,6 +229,9 @@ class Budget:
         self.category_id = category_id
         self.period = period
         self.amount = amount
+        self.label = label
+        self.category = category
+        self.account = account
 
     def __repr__(self):
         """String representation"""
