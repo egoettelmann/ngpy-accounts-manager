@@ -201,8 +201,7 @@ export class AnalyticsComponent implements OnInit {
   private consolidateDetails(details: CompositeKeyValue[]): any[] {
     const groupsByCategory = {};
     let total = 0;
-    for (let i in details) {
-      let detail = details[i];
+    details.forEach((detail, key) => {
       if (!groupsByCategory.hasOwnProperty(detail.keyOne)) {
         groupsByCategory[detail.keyOne] = [];
       }
@@ -212,19 +211,19 @@ export class AnalyticsComponent implements OnInit {
         percentage: 0
       });
       total += detail.value;
-    }
+    });
     const groupsWithDetails = [];
-    for (let g in groupsByCategory) {
+    Object.keys(groupsByCategory).forEach((key) => {
       const gd = {
-        label: g,
-        amount: groupsByCategory[g].reduce((t, a) => t + a.amount, 0),
-        details: groupsByCategory[g].sort((g1, g2) => Math.abs(g2.amount) - Math.abs(g1.amount)),
+        label: key,
+        amount: groupsByCategory[key].reduce((t, a) => t + a.amount, 0),
+        details: groupsByCategory[key].sort((g1, g2) => Math.abs(g2.amount) - Math.abs(g1.amount)),
         percentage: 0
       };
-      groupsByCategory[g].map(g => g.percentage = g.amount / total * 100);
+      groupsByCategory[key].map(g => g.percentage = g.amount / total * 100);
       gd.percentage = gd.amount / total * 100;
       groupsWithDetails.push(gd);
-    }
+    });
     return groupsWithDetails.sort((g1, g2) => Math.abs(g2.amount) - Math.abs(g1.amount));
   }
 

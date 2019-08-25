@@ -4,14 +4,14 @@
   <table class="table card-shadow" [formArrayName]="'categories'">
     <thead>
     <tr>
-      <th class="left" width="40%">{{ 'i18n.views.settings.categories.table.header.name' | translate }}</th>
-      <th class="left" width="40%">{{ 'i18n.views.settings.categories.table.header.type' | translate }}</th>
-      <th class="right" width="15%">{{ 'i18n.views.settings.categories.table.header.labels' | translate }}</th>
-      <th width="10%">&nbsp;</th>
+      <th class="left w-40">{{ 'i18n.views.settings.categories.table.header.name' | translate }}</th>
+      <th class="left w-40">{{ 'i18n.views.settings.categories.table.header.type' | translate }}</th>
+      <th class="right w-15">{{ 'i18n.views.settings.categories.table.header.labels' | translate }}</th>
+      <th class="w-15">&nbsp;</th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let categoryForm of formArray.controls; let i = index;" [formGroupName]="i">
+    <tr *ngFor="let categoryForm of formArray.controls" [formGroup]="categoryForm">
       <td class="left">
         <input class="clr-input w-100" type="text" [formControlName]="'name'" size="45" />
       </td>

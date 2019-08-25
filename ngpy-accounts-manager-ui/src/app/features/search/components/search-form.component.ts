@@ -215,17 +215,17 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     }
 
     // Adding the min amount
-    if (formData.minAmount != null && formData.minAmount != '') {
+    if (formData.minAmount != null && formData.minAmount !== '') {
       filters.push(FilterRequest.of('amount', formData.minAmount, FilterOperator.GE));
     }
 
     // Adding the min amount
-    if (formData.maxAmount != null && formData.maxAmount != '') {
+    if (formData.maxAmount != null && formData.maxAmount !== '') {
       filters.push(FilterRequest.of('amount', formData.maxAmount, FilterOperator.LT));
     }
 
     // Adding the description
-    if (formData.description && formData.description.trim() != '') {
+    if (formData.description && formData.description.trim() !== '') {
       filters.push(FilterRequest.of('description', formData.description, FilterOperator.CT));
     }
 

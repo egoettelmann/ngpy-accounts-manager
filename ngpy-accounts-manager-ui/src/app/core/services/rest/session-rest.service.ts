@@ -44,7 +44,7 @@ export class SessionRestService {
    * Gets the application properties
    */
   getProperties(): Observable<AppProperties> {
-    return this.http.get<AppProperties>('/rest/session/properties')
+    return this.http.get<AppProperties>('/rest/session/properties');
   }
 
 }

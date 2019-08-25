@@ -1,4 +1,4 @@
-<div class="clr-row">
+<div [formGroup]="searchForm" class="clr-row">
 
   <div class="clr-col-12 clr-col-md-4">
     <!-- Accounts -->
@@ -31,10 +31,13 @@
         <table class="table table-compact table-vertical card-shadow">
           <tbody>
           <tr>
-            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.min-date-input' | translate }}</th>
+            <th class="text-left align-middle w-40">
+              <label for="minDate">{{ 'i18n.components.search-form.label.min-date-input' | translate }}</label>
+            </th>
             <td class="text-right">
               <div class="clr-form">
-                <input class="clr-input w-100"
+                <input id="minDate"
+                       class="clr-input w-100"
                        [clrDate]="searchForm.get('minDate').value"
                        (clrDateChange)="changeDate('minDate', $event)"
                        type="date"
@@ -51,10 +54,13 @@
         <table class="table table-compact table-vertical card-shadow">
           <tbody>
           <tr>
-            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.max-date-input' | translate }}</th>
+            <th class="text-left align-middle w-40">
+              <label for="maxDate">{{ 'i18n.components.search-form.label.max-date-input' | translate }}</label>
+            </th>
             <td class="text-right">
               <div class="clr-form">
-                <input class="clr-input w-100"
+                <input id="maxDate"
+                       class="clr-input w-100"
                        [clrDate]="searchForm.get('maxDate').value"
                        (clrDateChange)="changeDate('maxDate', $event)"
                        type="date"
@@ -71,11 +77,14 @@
         <table class="table table-compact table-vertical card-shadow">
           <tbody>
           <tr>
-            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.min-amount-input' | translate }}</th>
+            <th class="text-left align-middle w-40">
+              <label for="minAmount">{{ 'i18n.components.search-form.label.min-amount-input' | translate }}</label>
+            </th>
             <td class="text-right">
               <div class="clr-form">
-                <input class="clr-input w-100"
-                       [formControl]="searchForm.get('minAmount')"
+                <input id="minAmount"
+                       class="clr-input w-100"
+                       [formControlName]="'minAmount'"
                        type="text"
                        autocomplete="off" />
               </div>
@@ -90,11 +99,14 @@
         <table class="table table-compact table-vertical card-shadow">
           <tbody>
           <tr>
-            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.max-amount-input' | translate }}</th>
+            <th class="text-left align-middle w-40">
+              <label for="maxAmount">{{ 'i18n.components.search-form.label.max-amount-input' | translate }}</label>
+            </th>
             <td class="text-right">
               <div class="clr-form">
-                <input class="clr-input w-100"
-                       [formControl]="searchForm.get('maxAmount')"
+                <input id="maxAmount"
+                       class="clr-input w-100"
+                       [formControlName]="'maxAmount'"
                        type="text"
                        autocomplete="off" />
               </div>
@@ -109,11 +121,14 @@
         <table class="table table-compact table-vertical card-shadow">
           <tbody>
           <tr>
-            <th class="text-left align-middle" width="40%">{{ 'i18n.components.search-form.label.desc-input' | translate }}</th>
+            <th class="text-left align-middle w-40">
+              <label for="description">{{ 'i18n.components.search-form.label.desc-input' | translate }}</label>
+            </th>
             <td class="text-right">
               <div class="clr-form">
-                <input class="clr-input w-100"
-                       [formControl]="searchForm.get('description')"
+                <input id="description"
+                       class="clr-input w-100"
+                       [formControlName]="'description'"
                        type="text"
                        autocomplete="off" />
               </div>

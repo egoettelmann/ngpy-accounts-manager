@@ -154,6 +154,6 @@ describe('StatisticsService', () => {
     const expectedDateTo = format(new Date(2012, 0, 1), 'yyyy-MM-dd');
     expect(result[0].collection[0].value).toEqual(expectedDateFrom, 'dateFrom is wrong');
     expect(result[0].collection[1].value).toEqual(expectedDateTo, 'dateTo is wrong');
-  }))
+  }));
 
 });

@@ -77,7 +77,7 @@ export class StatisticsService {
       );
     }
 
-    return this.statisticsRestService.getAggregation('MONTH', filter)
+    return this.statisticsRestService.getAggregation('MONTH', filter);
   }
 
   /**
@@ -86,7 +86,7 @@ export class StatisticsService {
    * @param year the year of the evolution
    * @param accounts the list of accounts
    */
-  getEvolution(year: number, accounts: number[],): Observable<KeyValue[]> {
+  getEvolution(year: number, accounts: number[]): Observable<KeyValue[]> {
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
 

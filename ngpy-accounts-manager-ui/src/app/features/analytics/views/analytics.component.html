@@ -17,7 +17,7 @@
     <table class="table table-compact table-vertical card-shadow">
       <tbody>
       <tr>
-        <th class="text-left align-middle" width="40%">{{ 'i18n.views.analytics.period.select.title' | translate }}</th>
+        <th class="text-left align-middle w-40">{{ 'i18n.views.analytics.period.select.title' | translate }}</th>
         <td class="text-right">
           <clr-dropdown class="text-right">
             <button type="button" class="btn btn-link" clrDropdownTrigger>
@@ -46,7 +46,7 @@
     <table class="table table-vertical table-compact card-shadow">
       <tbody>
       <tr>
-        <th width="20%">
+        <th class="w-20">
           <span *ngIf="quarterly">{{ 'i18n.views.analytics.quarterly.table.title' | translate }}</span>
           <span *ngIf="!quarterly">{{ 'i18n.views.analytics.monthly.table.title' | translate }}</span>
         </th>

@@ -6,14 +6,14 @@ import { KeepFocusService } from '../../core/services/keep-focus.service';
  * Forces an element to keep the focus when the DOM is re-rendered.
  */
 @Directive({
-  selector: '[keepFocus]'
+  selector: '[appKeepFocus]'
 })
 export class KeepFocusDirective implements OnInit {
 
   /**
    * The unique id that identifies the DOM element
    */
-  @Input('keepFocus') id: string;
+  @Input('appKeepFocus') id: string;
 
   /**
    * Instantiates the directive.

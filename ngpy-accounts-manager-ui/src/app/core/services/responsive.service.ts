@@ -54,7 +54,7 @@ export class ResponsiveService {
    * @param size the size to check
    */
   private isEqualOrAbove(size: number): boolean {
-    return this.breakpointObserver.isMatched(`(min-width: ${size}px)`)
+    return this.breakpointObserver.isMatched(`(min-width: ${size}px)`);
   }
 
 }

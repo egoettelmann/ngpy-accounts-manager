@@ -86,7 +86,7 @@ export class AnalyticsDetailsChartComponent implements OnChanges {
       }]
     };
 
-    let categories = [];
+    const categories = [];
     const series = [];
     for (const group of data) {
       // Adding categories
@@ -103,7 +103,7 @@ export class AnalyticsDetailsChartComponent implements OnChanges {
           y: details.percentage,
           data: details.amount,
           parent: group.label
-        })
+        });
       }
     }
     options.series[0].data = categories;

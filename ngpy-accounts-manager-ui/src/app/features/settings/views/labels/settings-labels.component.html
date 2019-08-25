@@ -13,7 +13,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let labelForm of formArray.controls; let i = index;" [formGroupName]="i">
+    <tr *ngFor="let labelForm of formArray.controls" [formGroup]="labelForm">
       <td class="left">
         <input class="clr-input w-100" type="text" [formControlName]="'name'" />
       </td>

@@ -8,7 +8,7 @@ import { DateService } from '../../../../core/services/date.service';
   selector: 'app-months-toggle',
   templateUrl: './months-toggle.component.html'
 })
-export class MonthsToggleComponent implements OnInit{
+export class MonthsToggleComponent implements OnInit {
 
   /**
    * The current month

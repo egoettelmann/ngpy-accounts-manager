@@ -15,7 +15,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let accountForm of formArray.controls; let i = index;" [formGroupName]="i">
+    <tr *ngFor="let accountForm of formArray.controls" [formGroup]="accountForm">
       <td class="text-left">
         <input class="clr-input w-100" type="text" [formControlName]="'name'" />
       </td>

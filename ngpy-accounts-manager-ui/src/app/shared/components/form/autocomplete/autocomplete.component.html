@@ -4,7 +4,7 @@
          class="clr-input autocomplete-input"
          (ngModelChange)="onChange($event)"
          (keydown)="select($event)"
-         [keepFocus]="uuid"
+         [appKeepFocus]="uuid"
          (focusout)="onFocusOut()"/>
   <div class="autocomplete-options" *ngIf="ngOptions">
     <div *ngFor="let option of ngOptions"
