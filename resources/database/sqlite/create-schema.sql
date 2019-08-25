@@ -32,7 +32,7 @@ CREATE TABLE "labels"
   name VARCHAR(250) UNIQUE,
   color VARCHAR(50),
   icon VARCHAR(250),
-  category_id INTEGER
+  category_id INTEGER REFERENCES categories
 )
 ;
 
@@ -66,5 +66,16 @@ CREATE TABLE "user"
   id INTEGER PRIMARY KEY,
   login VARCHAR(50),
   password VARCHAR(250)
+)
+;
+
+CREATE TABLE "budget"
+(
+  id INTEGER PRIMARY KEY,
+  account_id INTEGER REFERENCES accounts NULL,
+  label_id INTEGER REFERENCES labels NULL,
+  category_id INTEGER REFERENCES categories NULL,
+  period VARCHAR(50),
+  amount NUMERIC(25, 2)
 )
 ;

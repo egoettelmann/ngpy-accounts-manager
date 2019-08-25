@@ -1,4 +1,5 @@
 ﻿from .account_service import AccountService
+from .budget_service import BudgetService
 from .category_service import CategoryService
 from .label_service import LabelService
 from .notification_service import NotificationService

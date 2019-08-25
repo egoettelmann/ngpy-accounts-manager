@@ -68,3 +68,14 @@ CREATE TABLE public."user"
   password VARCHAR(250)
 )
 ;
+
+CREATE TABLE "budget"
+(
+    id SERIAL PRIMARY KEY,
+    account_id INTEGER REFERENCES accounts NULL,
+    label_id INTEGER REFERENCES labels NULL,
+    category_id INTEGER REFERENCES categories NULL,
+    period VARCHAR(50),
+    amount NUMERIC(25, 2)
+)
+;

@@ -32,6 +32,7 @@ class UserDbo(EntityManager.get_base()):
     password = Column(String(250))
 
     def __repr__(self):
+        """String representation"""
         return '<UserDbo %r, %r>' % (self.id, self.login)
 
 
@@ -43,13 +44,14 @@ class AccountDbo(EntityManager.get_base()):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
     description = Column(String(250))
-    transactions = relationship("TransactionDbo", backref="account")
+    transactions = relationship('TransactionDbo', backref='account')
     color = Column(String(50))
     notify = Column(Boolean())
     active = Column(Boolean())
-    status = relationship("StatusDbo", backref="account")
+    status = relationship('StatusDbo', backref='account')
 
     def __init__(self, id=None,  name=None, description=None, color=None, notify=None, active=None):
+        """Constructor"""
         self.id = id
         self.name = name
         self.description = description
@@ -58,6 +60,7 @@ class AccountDbo(EntityManager.get_base()):
         self.active = active
 
     def __repr__(self):
+        """String representation"""
         return '<AccountDbo %r, %r>' % (self.id, self.name)
 
 
@@ -70,10 +73,11 @@ class LabelDbo(EntityManager.get_base()):
     name = Column(String(250), unique=True)
     color = Column(String(50))
     icon = Column(String(50))
-    transactions = relationship("TransactionDbo", backref="label")
+    transactions = relationship('TransactionDbo', backref='label')
     category_id = Column(Integer, ForeignKey('categories.id'))
 
     def __init__(self, id=None, name=None, color=None, icon=None, category_id=None):
+        """Constructor"""
         self.id = id
         self.name = name
         self.color = color
@@ -81,6 +85,7 @@ class LabelDbo(EntityManager.get_base()):
         self.category_id = category_id
 
     def __repr__(self):
+        """String representation"""
         return '<LabelDbo %r, %r>' % (self.id, self.name)
 
 
@@ -92,14 +97,16 @@ class CategoryDbo(EntityManager.get_base()):
     id = Column(Integer, primary_key=True)
     name = Column(String(250), unique=True)
     type = Column(String(10))
-    labels = relationship("LabelDbo", backref="category")
+    labels = relationship('LabelDbo', backref='category')
 
     def __init__(self, id=None, name=None, type=None):
+        """Construtor"""
         self.id = id
         self.name = name
         self.type = type
 
     def __repr__(self):
+        """String representation"""
         return '<CategoryDbo %r, %r>' % (self.id, self.name)
 
 
@@ -114,11 +121,13 @@ class StatusDbo(EntityManager.get_base()):
     value = Column(Numeric(precision=2))
 
     def __init__(self, account_id, date, value=0):
+        """Constructor"""
         self.account_id = account_id
         self.date = date
         self.value = value
 
     def __repr__(self):
+        """String representation"""
         return '<StatusDbo %r, %r>' % (self.id, self.date)
 
 
@@ -141,6 +150,7 @@ class TransactionDbo(EntityManager.get_base()):
 
     def __init__(self, id=None, account_id=None, date_compta=None, date_operation=None, description=None,
                  reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None):
+        """Constructor"""
         self.id = id
         self.account_id = account_id
         self.date_compta = date_compta
@@ -154,4 +164,35 @@ class TransactionDbo(EntityManager.get_base()):
         self.hash = hash
 
     def __repr__(self):
+        """String representation"""
         return '<TransactionDbo %r, %r>' % (self.id, self.reference)
+
+
+class BudgetDbo(EntityManager.get_base()):
+    """
+    The Budget Database Object
+    """
+    __tablename__ = 'budget'
+    id = Column(Integer, primary_key=True)
+    account_id = Column(Integer, ForeignKey('accounts.id'))
+    label_id = Column(Integer, ForeignKey('labels.id'))
+    category_id = Column(Integer, ForeignKey('categories.id'))
+    period = Column(String(50))
+    amount = Column(Numeric(precision=2))
+    account = relationship('AccountDbo')
+    label = relationship('LabelDbo')
+    category = relationship('CategoryDbo')
+
+    def __init__(self, id=None, account_id=None, label_id=None,
+                 category_id=None, period=None, amount=None):
+        """Constructor"""
+        self.id = id
+        self.account_id = account_id
+        self.label_id = label_id
+        self.category_id = category_id
+        self.period = period
+        self.amount = amount
+
+    def __repr__(self):
+        """String representation"""
+        return '<BudgetDbo %r, %r>' % (self.id, self.amount)

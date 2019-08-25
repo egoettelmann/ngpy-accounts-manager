@@ -7,6 +7,9 @@ from ..modules.restipy import types
 
 
 class PeriodType(Enum):
+    """
+    The period type class
+    """
     DAY = 'DAY'
     MONTH = 'MONTH'
     QUARTER = 'QUARTER'
@@ -199,3 +202,31 @@ class Notification:
         self.label = label
         self.level = level
         self.value = value
+
+
+@restipy.convertible({
+    'id': types.Integer(),
+    'account_id': types.Integer(),
+    'label_id': types.Integer(),
+    'category_id': types.Integer(),
+    'period': types.String(),
+    'amount': types.Float()
+})
+class Budget:
+    """
+    The Budget model
+    """
+
+    def __init__(self, id=None, account_id=None, label_id=None,
+                 category_id=None, period=None, amount=None):
+        """Constructor"""
+        self.id = id
+        self.account_id = account_id
+        self.label_id = label_id
+        self.category_id = category_id
+        self.period = period
+        self.amount = amount
+
+    def __repr__(self):
+        """String representation"""
+        return '<Budget %r, %r>' % (self.id, self.amount)

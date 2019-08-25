@@ -19,6 +19,10 @@ class LabelRepository:
         self.__entity_manager = entity_manager
 
     def get_all(self) -> List[LabelDbo]:
+        """Gets all labels
+
+        :return: the list of all labels
+        """
         return self.__entity_manager.query(LabelDbo).order_by(LabelDbo.name).all()
 
     def get_by_id(self, label_id: int) -> LabelDbo:

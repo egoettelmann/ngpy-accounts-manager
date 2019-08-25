@@ -2,9 +2,9 @@ from typing import List, Any, TypeVar, Type
 
 from mapper.object_mapper import ObjectMapper
 
+from .dbconnector.entities import LabelDbo, BudgetDbo, AccountDbo, StatusDbo, TransactionDbo, CategoryDbo, UserDbo
+from .domain.models import Account, Budget, Label, Status, Transaction, Category, User
 from .modules.depynject import injectable
-from .dbconnector.entities import LabelDbo, AccountDbo, StatusDbo, TransactionDbo, CategoryDbo, UserDbo
-from .domain.models import Account, Label, Status, Transaction, Category, User
 
 
 @injectable('object_mapper')
@@ -28,6 +28,8 @@ class Mapper(ObjectMapper):
         self.create_map(StatusDbo, Status)
         self.create_map(CategoryDbo, Category)
         self.create_map(Category, CategoryDbo)
+        self.create_map(BudgetDbo, Budget)
+        self.create_map(Budget, Budget)
         self.create_map(UserDbo, User)
 
     def map(self, source: Any, target_type: Type[T]) -> T:

@@ -4,12 +4,7 @@ import os
 from flask import Flask, request, session
 from flask_cors import CORS
 
-from api.controllers.account_controller import AccountController
-from api.controllers.category_controller import CategoryController
-from api.controllers.label_controller import LabelController
-from api.controllers.session_controller import SessionController
-from api.controllers.statistics_controller import StatisticsController
-from api.controllers.transaction_controller import TransactionController
+from api.controllers import *
 from api.dbconnector.manager import EntityManager
 from api.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
 from api.modules.depynject import Depynject
@@ -62,6 +57,7 @@ api = Api(app,
 
 # Registering the controllers
 api.register(AccountController)
+api.register(BudgetController)
 api.register(LabelController)
 api.register(CategoryController)
 api.register(TransactionController)
