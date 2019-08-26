@@ -42,32 +42,45 @@ export class BudgetChartComponent implements OnChanges {
     const that = this;
     const options = {
       chart: {
-        type: 'column'
+        type: 'bar'
       },
       tooltip: {
         formatter: function () {
           return '<b>' + this.series.name + '</b><br/>'
             + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
-            + ' (' + this.point.ratio + ')';
+            + ' (' + this.point.relativeRatio + ')';
         }
       },
       xAxis: {
-        categories: []
-      },
-      yAxis: {
-        stackLabels: {
-          enabled: true,
-          formatter: function () {
-            return that.decimalPipe.transform(this.total, '1.2-2') + ' €';
+        categories: [],
+        gridLineWidth: 1,
+        labels: {
+          formatter: function() {
+            const idx = this.axis.categories.indexOf(this.value);
+            let sum = 0;
+            this.axis.series.forEach(s => {
+              sum += s.options.data[idx].y;
+            });
+            return '<b>' + this.value + '</b><br/>'
+              + that.decimalPipe.transform(sum, '1.2-2') + ' €';
           }
         }
       },
+      yAxis: {
+        gridLineWidth: 0,
+        labels: {
+          enabled: false
+        }
+      },
       plotOptions: {
-        column: {
+        series: {
           stacking: 'percent',
           dataLabels: {
             enabled: true,
             formatter: function () {
+              if (this.y === 0) {
+                return;
+              }
               return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
             }
           }
@@ -93,27 +106,30 @@ export class BudgetChartComponent implements OnChanges {
     });
     for (const d of data) {
       const categoryIdx = categories.indexOf(d.label);
-      CommonFunctions.resizeArray(series.expected, 0, categoryIdx);
-      CommonFunctions.resizeArray(series.below, 0, categoryIdx);
-      CommonFunctions.resizeArray(series.above, 0, categoryIdx);
       const diff = Math.abs(d.expected) - Math.abs(d.actual);
       if (diff > 0) {
         series.expected[categoryIdx] = {
-          y: Math.abs(d.expected),
-          ratio: this.decimalPipe.transform(d.expectedPercentage * 100, '1.2-2') + '%'
+          y: Math.abs(d.expected) - diff,
+          relativeRatio: this.decimalPipe.transform(d.expectedPercentage * 100, '1.2-2') + '%'
         };
         series.below[categoryIdx] = {
           y: diff,
-          ratio: '-' + this.decimalPipe.transform((1 - d.actualPercentage) * 100, '1.2-2') + '%'
+          relativeRatio: '-' + this.decimalPipe.transform((1 - d.actualPercentage) * 100, '1.2-2') + '%'
+        };
+        series.above[categoryIdx] = {
+          y: 0
         };
       } else {
         series.expected[categoryIdx] = {
           y: Math.abs(d.expected),
-          ratio: this.decimalPipe.transform(d.expectedPercentage * 100, '1.2-2') + '%'
+          relativeRatio: this.decimalPipe.transform(d.expectedPercentage * 100, '1.2-2') + '%'
         };
         series.above[categoryIdx] = {
           y: -diff,
-          ratio: '+' + this.decimalPipe.transform((d.actualPercentage - 1) * 100, '1.2-2') + '%'
+          relativeRatio: '+' + this.decimalPipe.transform((d.actualPercentage - 1) * 100, '1.2-2') + '%'
+        };
+        series.below[categoryIdx] = {
+          y: 0
         };
       }
     }
