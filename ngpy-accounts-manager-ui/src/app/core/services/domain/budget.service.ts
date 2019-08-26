@@ -54,8 +54,8 @@ export class BudgetService {
         budgets.forEach(budget => {
           budgetsMap[budget.category.name] = {
             label: budget.category.name,
-            expected: -total * budget.amount,
-            expectedPercentage: budget.amount,
+            expected: budget.amount,
+            expectedPercentage: budget.amount / total,
             actual: 0,
             actualPercentage: 0
           };
