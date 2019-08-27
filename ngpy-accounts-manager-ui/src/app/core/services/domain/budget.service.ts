@@ -54,8 +54,8 @@ export class BudgetService {
         budgets.forEach(budget => {
           budgetsMap[budget.category.name] = {
             label: budget.category.name,
-            expected: budget.amount,
-            expectedPercentage: budget.amount / total,
+            expected: Math.abs(budget.amount),
+            expectedPercentage: 0,
             actual: 0,
             actualPercentage: 0
           };
@@ -63,17 +63,17 @@ export class BudgetService {
 
         // Looping on all analytics items
         analytics.forEach(item => {
-          if (!budgetsMap.hasOwnProperty(item.keyTwo)) {
-            budgetsMap[item.keyTwo] = {
-              label: item.keyTwo,
-              expected: undefined,
-              expectedPercentage: undefined,
-              actual: 0,
-              actualPercentage: 0
-            };
+          if (budgetsMap.hasOwnProperty(item.keyTwo)) {
+            const budgetAmount = budgetsMap[item.keyTwo].expected;
+            const spendingAmount = Math.abs(item.value);
+            budgetsMap[item.keyTwo].actual = spendingAmount;
+            budgetsMap[item.keyTwo].actualPercentage = spendingAmount / budgetAmount;
+            if (spendingAmount > budgetAmount) {
+              budgetsMap[item.keyTwo].expectedPercentage = 1;
+            } else {
+              budgetsMap[item.keyTwo].expectedPercentage = spendingAmount / budgetAmount;
+            }
           }
-          budgetsMap[item.keyTwo].actual = item.value;
-          budgetsMap[item.keyTwo].actualPercentage = item.value / budgetsMap[item.keyTwo].expected;
         });
 
         return Object.values(budgetsMap);

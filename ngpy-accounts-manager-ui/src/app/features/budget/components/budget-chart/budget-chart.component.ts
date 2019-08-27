@@ -42,7 +42,8 @@ export class BudgetChartComponent implements OnChanges {
     const that = this;
     const options = {
       chart: {
-        type: 'bar'
+        type: 'bar',
+        height: this.data.length * 50 + 62
       },
       tooltip: {
         formatter: function () {
@@ -51,20 +52,12 @@ export class BudgetChartComponent implements OnChanges {
             + ' (' + this.point.relativeRatio + ')';
         }
       },
+      legend: {
+        verticalAlign: 'top'
+      },
       xAxis: {
         categories: [],
-        gridLineWidth: 1,
-        labels: {
-          formatter: function() {
-            const idx = this.axis.categories.indexOf(this.value);
-            let sum = 0;
-            this.axis.series.forEach(s => {
-              sum += s.options.data[idx].y;
-            });
-            return '<b>' + this.value + '</b><br/>'
-              + that.decimalPipe.transform(sum, '1.2-2') + ' €';
-          }
-        }
+        gridLineWidth: 1
       },
       yAxis: {
         gridLineWidth: 0,
@@ -74,6 +67,7 @@ export class BudgetChartComponent implements OnChanges {
       },
       plotOptions: {
         series: {
+          pointWidth: '40',
           stacking: 'percent',
           dataLabels: {
             enabled: true,
@@ -106,26 +100,25 @@ export class BudgetChartComponent implements OnChanges {
     });
     for (const d of data) {
       const categoryIdx = categories.indexOf(d.label);
-      const diff = Math.abs(d.expected) - Math.abs(d.actual);
-      if (diff > 0) {
+      if (d.expected > d.actual) {
         series.expected[categoryIdx] = {
-          y: Math.abs(d.expected) - diff,
+          y: d.actual,
           relativeRatio: this.decimalPipe.transform(d.expectedPercentage * 100, '1.2-2') + '%'
         };
         series.below[categoryIdx] = {
-          y: diff,
-          relativeRatio: '-' + this.decimalPipe.transform((1 - d.actualPercentage) * 100, '1.2-2') + '%'
+          y: d.expected - d.actual,
+          relativeRatio: this.decimalPipe.transform((1 - d.actualPercentage) * 100, '1.2-2') + '%'
         };
         series.above[categoryIdx] = {
           y: 0
         };
       } else {
         series.expected[categoryIdx] = {
-          y: Math.abs(d.expected),
+          y: d.expected,
           relativeRatio: this.decimalPipe.transform(d.expectedPercentage * 100, '1.2-2') + '%'
         };
         series.above[categoryIdx] = {
-          y: -diff,
+          y: d.actual - d.expected,
           relativeRatio: '+' + this.decimalPipe.transform((d.actualPercentage - 1) * 100, '1.2-2') + '%'
         };
         series.below[categoryIdx] = {
