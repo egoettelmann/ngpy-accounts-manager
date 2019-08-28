@@ -93,3 +93,11 @@ export class Budget {
   label: Label;
   category: Category;
 }
+
+/**
+ * The budget status DTO
+ */
+export class BudgetStatus {
+  budget: Budget;
+  spending: number;
+}

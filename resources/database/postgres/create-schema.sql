@@ -69,13 +69,28 @@ CREATE TABLE public."user"
 )
 ;
 
-CREATE TABLE "budget"
+CREATE TABLE public."budgets"
 (
-    id SERIAL PRIMARY KEY,
-    account_id INTEGER REFERENCES accounts NULL,
-    label_id INTEGER REFERENCES labels NULL,
-    category_id INTEGER REFERENCES categories NULL,
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(50) UNIQUE,
+    description VARCHAR(250),
     period VARCHAR(50),
     amount NUMERIC(25, 2)
+)
+;
+
+CREATE TABLE public."budgets_accounts"
+(
+    budget_id INTEGER REFERENCES budgets NULL,
+    account_id INTEGER REFERENCES accounts NULL,
+    PRIMARY KEY (budget_id, account_id)
+)
+;
+
+CREATE TABLE public."budgets_labels"
+(
+    budget_id INTEGER REFERENCES budgets NULL,
+    label_id INTEGER REFERENCES labels NULL,
+    PRIMARY KEY (budget_id, label_id)
 )
 ;

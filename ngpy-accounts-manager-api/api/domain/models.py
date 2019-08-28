@@ -1,6 +1,6 @@
 from datetime import date
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 
 from ..modules import restipy
 from ..modules.restipy import types
@@ -206,33 +206,47 @@ class Notification:
 
 @restipy.convertible({
     'id': types.Integer(),
-    'account_id': types.Integer(),
-    'label_id': types.Integer(),
-    'category_id': types.Integer(),
     'period': types.String(),
+    'name': types.String(),
+    'description': types.String(),
     'amount': types.Float(),
-    'account': types.Nested(Account, ignore_on_parse=True),
-    'label': types.Nested(Label, ignore_on_parse=True),
-    'category': types.Nested(Category, ignore_on_parse=True)
+    'accounts': types.Nested(Account, ignore_on_parse=True),
+    'labels': types.Nested(Label, ignore_on_parse=True)
 })
 class Budget:
     """
     The Budget model
     """
 
-    def __init__(self, id=None, account_id=None, label_id=None, category_id=None, period=None,
-                 amount=None, label: Label = None, account: Account = None, category: Category = None):
+    def __init__(self, id=None, name=None, description=None, period=None, amount=None,
+                 labels: List[Label] = None, accounts: List[Account] = None):
         """Constructor"""
         self.id = id
-        self.account_id = account_id
-        self.label_id = label_id
-        self.category_id = category_id
+        self.name = name
+        self.description = description
         self.period = period
         self.amount = amount
-        self.label = label
-        self.category = category
-        self.account = account
+        self.labels = labels
+        self.accounts = accounts
 
     def __repr__(self):
         """String representation"""
-        return '<Budget %r, %r>' % (self.id, self.amount)
+        return '<Budget %r, %r>' % (self.id, self.name)
+
+
+@restipy.convertible({
+    'budget': types.Nested(Budget, ignore_on_parse=True),
+    'spending': types.Float()
+})
+class BudgetStatus:
+    """
+    The Budget status model
+    """
+    def __init__(self, budget: Budget = None, spending: float = None):
+        """Constructor"""
+        self.budget = budget
+        self.spending = spending
+
+    def __repr__(self):
+        """String representation"""
+        return '<BudgetStatus %r, %r>' % (self.budget.id, self.spending)

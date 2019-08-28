@@ -1,5 +1,5 @@
 ﻿from sqlalchemy.orm import relationship
-from sqlalchemy.sql.schema import Column, ForeignKey
+from sqlalchemy.sql.schema import Table, Column, ForeignKey
 from sqlalchemy.sql.sqltypes import Date, Numeric, Integer, String, Boolean
 
 from . import EntityManager
@@ -168,31 +168,51 @@ class TransactionDbo(EntityManager.get_base()):
         return '<TransactionDbo %r, %r>' % (self.id, self.reference)
 
 
+def budgets_accounts_table():
+    """
+    The association table for linking budgets to accounts
+    """
+    return Table(
+        'budgets_accounts',
+        EntityManager.get_base().metadata,
+        Column('budget_id', Integer, ForeignKey('budgets.id')),
+        Column('account_id', Integer, ForeignKey('accounts.id'))
+    )
+
+
+def budgets_labels_table():
+    """
+    The association table for linking budgets to labels
+    """
+    return Table(
+        'budgets_labels',
+        EntityManager.get_base().metadata,
+        Column('budget_id', Integer, ForeignKey('budgets.id')),
+        Column('label_id', Integer, ForeignKey('labels.id'))
+    )
+
+
 class BudgetDbo(EntityManager.get_base()):
     """
     The Budget Database Object
     """
-    __tablename__ = 'budget'
+    __tablename__ = 'budgets'
     id = Column(Integer, primary_key=True)
-    account_id = Column(Integer, ForeignKey('accounts.id'))
-    label_id = Column(Integer, ForeignKey('labels.id'))
-    category_id = Column(Integer, ForeignKey('categories.id'))
+    name = Column(String(50))
+    description = Column(String(250))
     period = Column(String(50))
     amount = Column(Numeric(precision=2))
-    account = relationship('AccountDbo')
-    label = relationship('LabelDbo')
-    category = relationship('CategoryDbo')
+    accounts = relationship('AccountDbo', secondary=budgets_accounts_table)
+    labels = relationship('LabelDbo', secondary=budgets_labels_table)
 
-    def __init__(self, id=None, account_id=None, label_id=None,
-                 category_id=None, period=None, amount=None):
+    def __init__(self, id=None, name=None, description=None, period=None, amount=None):
         """Constructor"""
         self.id = id
-        self.account_id = account_id
-        self.label_id = label_id
-        self.category_id = category_id
+        self.name = name
+        self.description = description
         self.period = period
         self.amount = amount
 
     def __repr__(self):
         """String representation"""
-        return '<BudgetDbo %r, %r>' % (self.id, self.amount)
+        return '<BudgetDbo %r, %r>' % (self.id, self.name)

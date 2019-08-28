@@ -1,8 +1,9 @@
 from typing import List
+from datetime import date, datetime
 
 from flask import request
 
-from ..domain.models import Budget
+from ..domain.models import Budget, BudgetStatus
 from ..domain.services import BudgetService, AccountService
 from ..modules import restipy
 from ..modules.depynject import injectable
@@ -28,12 +29,10 @@ class BudgetController:
         self.__budget_service = budget_service
         self.__account_service = account_service
         self.__rql_parser = RqlRequestParser({
-            'accountId': 'account_id',
-            'labelId': 'label_id',
-            'categoryId': 'category_id',
+            'accountId': 'accounts.id',
+            'labelId': 'labels.id',
             'period': 'period',
-            'labelType': 'label.category.type',
-            'categoryType': 'category.type'
+            'categoryType': 'labels.category.type'
         })
 
     @restipy.route('')
@@ -73,3 +72,21 @@ class BudgetController:
         :param budget: the budget to save
         :return: the saved budget
         """
+
+    @restipy.route('/status')
+    @restipy.format_as(BudgetStatus)
+    def get_status_list(self) -> List[BudgetStatus]:
+        """Gets the status list of all budgets.
+
+        :return: the list of budget status
+        """
+        # From date
+        status_date = request.args.get('date')
+        if status_date is not None:
+            status_date = datetime.strptime(status_date, '%Y-%m-%d').date()
+        else:
+            status_date = date.today()
+
+        # Filter request
+        filter_request = self.__rql_parser.parse_filters(request)
+        return self.__budget_service.get_status_list(status_date, filter_request)
