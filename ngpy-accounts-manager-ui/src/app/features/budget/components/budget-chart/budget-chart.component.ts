@@ -1,8 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { CommonFunctions } from '../../../../shared/utils/common-functions';
-import { CompositeKeyValue } from '../../../../core/models/api.models';
-import { BudgetStatus } from '../../../../core/models/domain.models';
+import { BudgetStatus } from '../../../../core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -17,6 +15,12 @@ export class BudgetChartComponent implements OnChanges {
 
   public chartOptions: any;
 
+  /**
+   * Instantiates the component.
+   *
+   * @param decimalPipe the decimal pipe
+   * @param translateService the translate service
+   */
   constructor(
     private decimalPipe: DecimalPipe,
     private translateService: TranslateService
@@ -82,62 +86,62 @@ export class BudgetChartComponent implements OnChanges {
       },
       series: []
     };
-    let categories = [];
+    const categories = [];
     const series = {
-      expected: [],
-      above: [],
-      below: []
+      consumption: [],
+      overrun: [],
+      available: []
     };
 
     // Generating list of categories
     for (const d of data) {
-      if (!categories.includes(d.label)) {
-        categories.push(d.label);
+      if (!categories.includes(d.budget.name)) {
+        categories.push(d.budget.name);
       }
-    }
-    categories = categories.sort((a: string, b: string) => {
-      return a.localeCompare(b);
-    });
-    for (const d of data) {
-      const categoryIdx = categories.indexOf(d.label);
-      if (d.expected > d.actual) {
-        series.expected[categoryIdx] = {
-          y: d.actual,
-          relativeRatio: this.decimalPipe.transform(d.expectedPercentage * 100, '1.2-2') + '%'
+      const categoryIdx = categories.length - 1;
+      const totalSpending = Math.abs(d.spending);
+      const totalBudget = d.budget.amount;
+      if (totalSpending > totalBudget) {
+        series.consumption[categoryIdx] = {
+          y: totalBudget,
+          relativeRatio: this.decimalPipe.transform(100, '1.2-2') + '%'
         };
-        series.below[categoryIdx] = {
-          y: d.expected - d.actual,
-          relativeRatio: this.decimalPipe.transform((1 - d.actualPercentage) * 100, '1.2-2') + '%'
+        const aboveRatio = (totalSpending / totalBudget) - 1;
+        series.overrun[categoryIdx] = {
+          y: totalSpending - totalBudget,
+          relativeRatio: '+' + this.decimalPipe.transform(aboveRatio * 100, '1.2-2') + '%'
         };
-        series.above[categoryIdx] = {
+        series.available[categoryIdx] = {
           y: 0
         };
       } else {
-        series.expected[categoryIdx] = {
-          y: d.expected,
-          relativeRatio: this.decimalPipe.transform(d.expectedPercentage * 100, '1.2-2') + '%'
+        const budgetRatio = totalSpending / totalBudget;
+        series.consumption[categoryIdx] = {
+          y: totalSpending,
+          relativeRatio: this.decimalPipe.transform(budgetRatio * 100, '1.2-2') + '%'
         };
-        series.above[categoryIdx] = {
-          y: d.actual - d.expected,
-          relativeRatio: '+' + this.decimalPipe.transform((d.actualPercentage - 1) * 100, '1.2-2') + '%'
+        const belowRatio = (totalBudget - totalSpending) / totalBudget;
+        series.available[categoryIdx] = {
+          y: totalBudget - totalSpending,
+          relativeRatio: this.decimalPipe.transform(belowRatio * 100, '1.2-2') + '%'
         };
-        series.below[categoryIdx] = {
+        series.overrun[categoryIdx] = {
           y: 0
         };
       }
     }
     options.xAxis.categories = categories;
     options.series = [{
-      name: this.translateService.instant('i18n.component.budget.series.above'),
-      data: series.above,
+      name: this.translateService.instant('i18n.component.budget.series.overrun'),
+      data: series.overrun,
       color: '#f45b5b'
     }, {
-      name: this.translateService.instant('i18n.component.budget.series.below'),
-      data: series.below,
+      name: this.translateService.instant('i18n.component.budget.series.available'),
+      data: series.available,
       color: '#90ed7d'
     }, {
-      name: this.translateService.instant('i18n.component.budget.series.expected'),
-      data: series.expected,
+      name: this.translateService.instant('i18n.component.budget.series.consumption'),
+      data: series.consumption,
       color: '#7cb5ec'
     }];
     return options;

@@ -3,8 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DateService } from '../../../core/services/date.service';
 import { BudgetService } from '../../../core/services/domain/budget.service';
-import { BudgetStatus } from '../../../core/models/domain.models';
-import { Account, Category } from '../../../core/models/api.models';
+import { Account, BudgetStatus, Category } from '../../../core/models/api.models';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
 import * as _ from 'lodash';
 
@@ -104,7 +103,7 @@ export class BudgetComponent implements OnInit {
    * Reload the data
    */
   private reloadData() {
-    this.budgetService.getMonthlyBudgetPerCategory(this.accountsFilter, this.currentYear, this.currentMonth).subscribe(data => {
+    this.budgetService.getStatusList(this.accountsFilter, this.currentYear, this.currentMonth).subscribe(data => {
       this.budgetStatusList = data;
     });
   }

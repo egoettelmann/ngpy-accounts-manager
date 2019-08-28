@@ -93,9 +93,9 @@
   "i18n.views.analytics.table.debit.title": "Debiting transactions by category",
 
   "i18n.views.budget.categories.chart.title": "Budget status",
-  "i18n.component.budget.series.expected": "Budget consumption",
-  "i18n.component.budget.series.above": "Budget overrun",
-  "i18n.component.budget.series.below": "Available budget",
+  "i18n.component.budget.series.consumption": "Budget consumption",
+  "i18n.component.budget.series.overrun": "Budget overrun",
+  "i18n.component.budget.series.available": "Available budget",
 
   "i18n.components.navigation.dashboard": "Dashboard",
   "i18n.components.navigation.transactions": "Transactions",

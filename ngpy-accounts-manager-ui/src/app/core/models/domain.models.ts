@@ -33,14 +33,3 @@ export class Alerts {
   public credits: number;
   public debits: number;
 }
-
-/**
- * The budget status model
- */
-export class BudgetStatus {
-  label: string;
-  expected: number;
-  expectedPercentage: number;
-  actual: number;
-  actualPercentage: number;
-}

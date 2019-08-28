@@ -87,11 +87,12 @@ export class Transaction {
  */
 export class Budget {
   id: number;
-  amount: number;
+  name: string;
+  description: string;
   period: string;
-  account: Account;
-  label: Label;
-  category: Category;
+  amount: number;
+  accounts: Account[];
+  labels: Label[];
 }
 
 /**
