@@ -36,6 +36,15 @@ export class BudgetRestService {
   }
 
   /**
+   * Gets a budgets by its id.
+   *
+   * @param budgetId the budget id
+   */
+  getOne(budgetId: number): Observable<Budget> {
+    return this.http.get<Budget>('/rest/budgets/' + budgetId);
+  }
+
+  /**
    * Deletes a budget by its id.
    *
    * @param budgetId the budget id

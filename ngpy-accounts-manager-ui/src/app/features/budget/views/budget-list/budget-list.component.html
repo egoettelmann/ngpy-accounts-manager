@@ -1,0 +1,27 @@
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-md-4">
+
+    <!-- Account select -->
+    <app-accounts-toggle *ngIf="accounts"
+                         [accounts]="accounts"
+                         [preSelected]="accountsFilter"
+                         (onChange)="changeAccounts($event)">
+    </app-accounts-toggle>
+
+    <!-- Year select -->
+    <app-years-toggle [currentYear]="currentYear"
+                      (onChange)="changeYear($event)">
+    </app-years-toggle>
+
+    <!-- Month select -->
+    <app-months-toggle [currentMonth]="currentMonth"
+                       (onChange)="changeMonth($event)">
+    </app-months-toggle>
+  </div>
+
+  <div class="clr-col-12 clr-col-md-8">
+    <app-budget-chart [chartTitle]="'i18n.views.budget.categories.chart.title' | translate"
+                      [data]="budgetStatusList">
+    </app-budget-chart>
+  </div>
+</div>

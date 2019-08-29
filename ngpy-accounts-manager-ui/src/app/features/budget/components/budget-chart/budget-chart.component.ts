@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { BudgetStatus } from '../../../../core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-budget-chart',
@@ -18,10 +19,12 @@ export class BudgetChartComponent implements OnChanges {
   /**
    * Instantiates the component.
    *
+   * @param router the router
    * @param decimalPipe the decimal pipe
    * @param translateService the translate service
    */
   constructor(
+    private router: Router,
     private decimalPipe: DecimalPipe,
     private translateService: TranslateService
   ) {
@@ -81,6 +84,14 @@ export class BudgetChartComponent implements OnChanges {
               }
               return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
             }
+          },
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function() {
+                that.router.navigate(['budget', 'details', this.options.budgetId]);
+              }
+            }
           }
         }
       },
@@ -104,12 +115,14 @@ export class BudgetChartComponent implements OnChanges {
       if (totalSpending > totalBudget) {
         series.consumption[categoryIdx] = {
           y: totalBudget,
-          relativeRatio: this.decimalPipe.transform(100, '1.2-2') + '%'
+          relativeRatio: this.decimalPipe.transform(100, '1.2-2') + '%',
+          budgetId: d.budget.id
         };
         const aboveRatio = (totalSpending / totalBudget) - 1;
         series.overrun[categoryIdx] = {
           y: totalSpending - totalBudget,
-          relativeRatio: '+' + this.decimalPipe.transform(aboveRatio * 100, '1.2-2') + '%'
+          relativeRatio: '+' + this.decimalPipe.transform(aboveRatio * 100, '1.2-2') + '%',
+          budgetId: d.budget.id
         };
         series.available[categoryIdx] = {
           y: 0
@@ -118,12 +131,14 @@ export class BudgetChartComponent implements OnChanges {
         const budgetRatio = totalSpending / totalBudget;
         series.consumption[categoryIdx] = {
           y: totalSpending,
-          relativeRatio: this.decimalPipe.transform(budgetRatio * 100, '1.2-2') + '%'
+          relativeRatio: this.decimalPipe.transform(budgetRatio * 100, '1.2-2') + '%',
+          budgetId: d.budget.id
         };
         const belowRatio = (totalBudget - totalSpending) / totalBudget;
         series.available[categoryIdx] = {
           y: totalBudget - totalSpending,
-          relativeRatio: this.decimalPipe.transform(belowRatio * 100, '1.2-2') + '%'
+          relativeRatio: this.decimalPipe.transform(belowRatio * 100, '1.2-2') + '%',
+          budgetId: d.budget.id
         };
         series.overrun[categoryIdx] = {
           y: 0
@@ -132,15 +147,15 @@ export class BudgetChartComponent implements OnChanges {
     }
     options.xAxis.categories = categories;
     options.series = [{
-      name: this.translateService.instant('i18n.component.budget.series.overrun'),
+      name: this.translateService.instant('i18n.components.budgets.series.overrun'),
       data: series.overrun,
       color: '#f45b5b'
     }, {
-      name: this.translateService.instant('i18n.component.budget.series.available'),
+      name: this.translateService.instant('i18n.components.budgets.series.available'),
       data: series.available,
       color: '#90ed7d'
     }, {
-      name: this.translateService.instant('i18n.component.budget.series.consumption'),
+      name: this.translateService.instant('i18n.components.budgets.series.consumption'),
       data: series.consumption,
       color: '#7cb5ec'
     }];
