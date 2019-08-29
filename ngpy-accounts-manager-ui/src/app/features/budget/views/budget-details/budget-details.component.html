@@ -1,18 +1,3 @@
-<div *ngIf="budget" class="card">
-  <div class="card-block">
-    <h4 class="card-title">
-      <strong>{{ budget.name }}</strong><br/>
-      <span class="budget-name">{{ budget.description }}</span>
-    </h4>
-    <p class="card-text">
-      <span class="mr-1">{{ 'i18n.components.budgets.budget-card.period' | translate }}</span>
-      <span>{{ budget.period }}</span>
-    </p>
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-      <strong class="mr-1">{{ 'i18n.components.budgets.budget-card.amount' | translate }}</strong>
-      <span>&nbsp;{{ budget.amount | number:'1.2-2' }} €</span>
-    </li>
-  </ul>
-</div>
+<app-budget-card *ngIf="budget"
+                 [budget]="budget">
+</app-budget-card>
