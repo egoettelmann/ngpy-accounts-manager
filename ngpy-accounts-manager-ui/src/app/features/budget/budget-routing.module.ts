@@ -14,11 +14,7 @@ export const routes: Routes = [
         component: BudgetListComponent
       },
       {
-        path: ':year',
-        component: BudgetListComponent
-      },
-      {
-        path: 'details/:budgetId',
+        path: ':budgetId',
         component: BudgetDetailsComponent
       }
     ]

@@ -30,6 +30,7 @@ import { AlertsService } from './services/domain/alerts.service';
 import { DateService } from './services/date.service';
 import { BudgetRestService } from './services/rest/budget-rest.service';
 import { BudgetService } from './services/domain/budget.service';
+import { RouterService } from './services/router.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -105,6 +106,7 @@ export class CoreModule {
     ResponsiveService,
     RqlService,
     DateService,
+    RouterService,
 
     /** Pipes */
     DecimalPipe,

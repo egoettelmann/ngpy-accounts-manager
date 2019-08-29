@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { DateService } from '../../../../core/services/date.service';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
 import { Account, BudgetStatus, Category } from '../../../../core/models/api.models';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
 import * as _ from 'lodash';
+import { RouterService } from '../../../../core/services/router.service';
 
 @Component({
   templateUrl: './budget-list.component.html',
@@ -23,8 +23,7 @@ export class BudgetListComponent implements OnInit {
   public budgetStatusList: BudgetStatus[];
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private location: Location,
+              private routerService: RouterService,
               private dateService: DateService,
               private budgetService: BudgetService,
               private accountsService: AccountsService
@@ -78,23 +77,9 @@ export class BudgetListComponent implements OnInit {
    * Initializes the component with the data from the route
    */
   private initData() {
-    if (!this.route.snapshot.paramMap.has('year')) {
-      this.currentYear = this.dateService.getCurrentYear();
-    } else {
-      this.currentYear = +this.route.snapshot.paramMap.get('year');
-    }
-    if (!this.route.snapshot.paramMap.has('month')) {
-      this.currentMonth = this.dateService.getCurrentMonth();
-    } else {
-      this.currentMonth = +this.route.snapshot.paramMap.get('month');
-    }
-    if (!this.route.snapshot.queryParamMap.has('account')) {
-      this.accountsFilter = [];
-    } else {
-      this.accountsFilter = this.route.snapshot.queryParamMap.get('account')
-        .split(',')
-        .map(a => +a);
-    }
+    this.currentYear = this.routerService.getYear(this.route);
+    this.currentMonth = this.routerService.getMonth(this.route);
+    this.accountsFilter = this.routerService.getAccounts(this.route);
   }
 
   /**
@@ -104,6 +89,12 @@ export class BudgetListComponent implements OnInit {
     this.budgetService.getStatusList(this.accountsFilter, this.currentYear, this.currentMonth).subscribe(data => {
       this.budgetStatusList = data;
     });
+
+    let params = {};
+    params = this.routerService.setYear(this.currentYear, params);
+    params = this.routerService.setMonth(this.currentMonth, params);
+    params = this.routerService.setAccounts(this.accountsFilter, params);
+    this.routerService.refresh(['budget'], params);
   }
 
 }
