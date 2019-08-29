@@ -1,6 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
 import { zip } from 'rxjs';
@@ -8,7 +7,7 @@ import { LabelsRestService } from '../../../core/services/rest/labels-rest.servi
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
-import { DateService } from '../../../core/services/date.service';
+import { RouterService } from '../../../core/services/router.service';
 
 @Component({
   templateUrl: './treasury.component.html',
@@ -32,13 +31,11 @@ export class TreasuryComponent implements OnInit {
   public aggregationDebit: KeyValue[];
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private location: Location,
+              private routerService: RouterService,
               private accountsService: AccountsService,
               private labelsService: LabelsRestService,
               private statisticsService: StatisticsService,
-              private transactionsService: TransactionsService,
-              private dateService: DateService
+              private transactionsService: TransactionsService
   ) {
   }
 
@@ -74,7 +71,7 @@ export class TreasuryComponent implements OnInit {
   changeLabels(labels: number[]) {
     const newFilter = labels;
     if (!_.isEqual(this.labelsFilter, newFilter)) {
-      this.labelsFilter = newFilter.slice(0);
+      this.labelsFilter = newFilter ? newFilter.slice(0) : [];
       this.reloadData();
     }
   }
@@ -93,25 +90,9 @@ export class TreasuryComponent implements OnInit {
    * Initializes the component with the data from the route
    */
   private initData() {
-    if (!this.route.snapshot.paramMap.has('year')) {
-      this.currentYear = this.dateService.getCurrentYear();
-    } else {
-      this.currentYear = +this.route.snapshot.paramMap.get('year');
-    }
-    if (!this.route.snapshot.queryParamMap.has('account')) {
-      this.accountsFilter = [];
-    } else {
-      this.accountsFilter = this.route.snapshot.queryParamMap.get('account')
-        .split(',')
-        .map(a => +a);
-    }
-    if (!this.route.snapshot.queryParamMap.has('labels')) {
-      this.labelsFilter = [];
-    } else {
-      this.labelsFilter = this.route.snapshot.queryParamMap.get('labels')
-        .split(',')
-        .map(a => +a);
-    }
+    this.currentYear = this.routerService.getYear(this.route);
+    this.accountsFilter = this.routerService.getAccounts(this.route);
+    this.labelsFilter = this.routerService.getLabels(this.route);
   }
 
   /**
@@ -125,13 +106,11 @@ export class TreasuryComponent implements OnInit {
     this.loadAggregation(this.currentYear, accounts, labels);
     this.loadTops(this.currentYear, accounts, labels);
 
-    const url = this.router.createUrlTree(['treasury', this.currentYear], {
-      queryParams: {
-        'account': accounts ? accounts.join(',') : undefined,
-        'labels': labels ? labels.join(',') : undefined
-      }
-    }).toString();
-    this.location.go(url);
+    let params = {};
+    params = this.routerService.setYear(this.currentYear, params);
+    params = this.routerService.setAccounts(accounts, params);
+    params = this.routerService.setLabels(labels, params);
+    this.routerService.refresh(['treasury'], params);
   }
 
   /**

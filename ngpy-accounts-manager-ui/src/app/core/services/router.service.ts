@@ -24,9 +24,8 @@ export class RouterService {
   getYear(route: ActivatedRoute): number {
     if (!route.snapshot.paramMap.has('year')) {
       return this.dateService.getCurrentYear();
-    } else {
-      return +route.snapshot.paramMap.get('year');
     }
+    return +route.snapshot.paramMap.get('year');
   }
 
   setYear(year: number, params: Params): Params {
@@ -39,9 +38,8 @@ export class RouterService {
   getMonth(route: ActivatedRoute): number {
     if (!route.snapshot.paramMap.has('month')) {
       return this.dateService.getCurrentMonth();
-    } else {
-      return +route.snapshot.paramMap.get('month');
     }
+    return +route.snapshot.paramMap.get('month');
   }
 
   setMonth(month: number, params: Params): Params {
@@ -54,11 +52,10 @@ export class RouterService {
   getAccounts(route: ActivatedRoute): number[] {
     if (!route.snapshot.queryParamMap.has('accounts')) {
       return [];
-    } else {
-      return route.snapshot.queryParamMap.get('accounts')
-        .split(',')
-        .map(a => +a);
     }
+    return route.snapshot.queryParamMap.get('accounts')
+      .split(',')
+      .map(a => +a);
   }
 
   setAccounts(accounts: number[], params: Params): Params {
@@ -72,11 +69,10 @@ export class RouterService {
   getLabels(route: ActivatedRoute): number[] {
     if (!route.snapshot.queryParamMap.has('labels')) {
       return [];
-    } else {
-      return route.snapshot.queryParamMap.get('labels')
-        .split(',')
-        .map(a => +a);
     }
+    return route.snapshot.queryParamMap.get('labels')
+      .split(',')
+      .map(a => +a);
   }
 
   setLabels(labels: number[], params: Params): Params {

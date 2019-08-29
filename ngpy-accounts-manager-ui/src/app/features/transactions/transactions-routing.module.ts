@@ -9,10 +9,6 @@ export const routes: Routes = [
       {
         path: '',
         component: TransactionsComponent
-      },
-      {
-        path: ':year/:month',
-        component: TransactionsComponent
       }
     ]
   }

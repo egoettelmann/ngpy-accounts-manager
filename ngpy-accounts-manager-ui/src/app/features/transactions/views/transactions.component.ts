@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { DecimalPipe, Location } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { zip } from 'rxjs';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
@@ -9,6 +9,7 @@ import { TransactionsService } from '../../../core/services/domain/transactions.
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
 import { DateService } from '../../../core/services/date.service';
+import { RouterService } from '../../../core/services/router.service';
 
 @Component({
   templateUrl: './transactions.component.html',
@@ -32,8 +33,7 @@ export class TransactionsComponent implements OnInit {
   showModal = false;
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private location: Location,
+              private routerService: RouterService,
               private labelsService: LabelsRestService,
               private transactionsService: TransactionsService,
               private statisticsService: StatisticsService,
@@ -148,23 +148,9 @@ export class TransactionsComponent implements OnInit {
    * Initializes the component with the data from the route
    */
   private initData() {
-    if (!this.route.snapshot.paramMap.has('year')) {
-      this.currentYear = this.dateService.getCurrentYear();
-    } else {
-      this.currentYear = +this.route.snapshot.paramMap.get('year');
-    }
-    if (!this.route.snapshot.paramMap.has('month')) {
-      this.currentMonth = this.dateService.getCurrentMonth();
-    } else {
-      this.currentMonth = +this.route.snapshot.paramMap.get('month');
-    }
-    if (!this.route.snapshot.queryParamMap.has('account')) {
-      this.accountsFilter = [];
-    } else {
-      this.accountsFilter = this.route.snapshot.queryParamMap.get('account')
-        .split(',')
-        .map(a => +a);
-    }
+    this.currentYear = this.routerService.getYear(this.route);
+    this.currentMonth = this.routerService.getMonth(this.route);
+    this.accountsFilter = this.routerService.getAccounts(this.route);
   }
 
   /**
@@ -176,12 +162,11 @@ export class TransactionsComponent implements OnInit {
     this.loadSummary(this.currentYear, this.currentMonth, accounts);
     this.loadRepartition(this.currentYear, this.currentMonth, accounts);
 
-    const url = this.router.createUrlTree(['transactions', this.currentYear, this.currentMonth], {
-      queryParams: {
-        'account': accounts ? accounts.join(',') : undefined
-      }
-    }).toString();
-    this.location.go(url);
+    let params = {};
+    params = this.routerService.setYear(this.currentYear, params);
+    params = this.routerService.setMonth(this.currentMonth, params);
+    params = this.routerService.setAccounts(accounts, params);
+    this.routerService.refresh(['transactions'], params);
   }
 
   /**

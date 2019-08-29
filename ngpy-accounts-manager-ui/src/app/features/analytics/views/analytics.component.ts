@@ -1,7 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { CategoriesRestService } from '../../../core/services/rest/categories-rest.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { zip } from 'rxjs';
 import * as _ from 'lodash';
@@ -9,7 +8,7 @@ import { Account, Category, CompositeKeyValue } from '../../../core/models/api.m
 import { ChartSerie, GroupedValue } from '../../../core/models/domain.models';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
-import { DateService } from '../../../core/services/date.service';
+import { RouterService } from '../../../core/services/router.service';
 
 @Component({
   templateUrl: './analytics.component.html',
@@ -32,12 +31,10 @@ export class AnalyticsComponent implements OnInit {
   public detailsDebit: GroupedValue[] = [];
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private location: Location,
+              private routerService: RouterService,
               private accountsService: AccountsService,
               private categoriesService: CategoriesRestService,
-              private statisticsService: StatisticsService,
-              private dateService: DateService
+              private statisticsService: StatisticsService
   ) {
   }
 
@@ -97,10 +94,16 @@ export class AnalyticsComponent implements OnInit {
     return quarterly ? 'i18n.views.analytics.period.select.quarterly' : 'i18n.views.analytics.period.select.monthly';
   }
 
+  /**
+   * Get the credit chart title
+   */
   get creditChartTitle() {
     return this.quarterly ? 'i18n.views.analytics.quarterly.chart.credit.title' : 'i18n.views.analytics.monthly.chart.credit.title';
   }
 
+  /**
+   * Get the debit chart title
+   */
   get debitChartTitle() {
     return this.quarterly ? 'i18n.views.analytics.quarterly.chart.debit.title' : 'i18n.views.analytics.monthly.chart.debit.title';
   }
@@ -109,18 +112,8 @@ export class AnalyticsComponent implements OnInit {
    * Initializes the component with the data from the route
    */
   private initData() {
-    if (!this.route.snapshot.paramMap.has('year')) {
-      this.currentYear = this.dateService.getCurrentYear();
-    } else {
-      this.currentYear = +this.route.snapshot.paramMap.get('year');
-    }
-    if (!this.route.snapshot.queryParamMap.has('account')) {
-      this.accountsFilter = [];
-    } else {
-      this.accountsFilter = this.route.snapshot.queryParamMap.get('account')
-        .split(',')
-        .map(a => +a);
-    }
+    this.currentYear = this.routerService.getYear(this.route);
+    this.accountsFilter = this.routerService.getAccounts(this.route);
   }
 
   /**
@@ -145,12 +138,10 @@ export class AnalyticsComponent implements OnInit {
       this.detailsDebit = this.consolidateDetails(data);
     });
 
-    const url = this.router.createUrlTree(['analytics', this.currentYear], {
-      queryParams: {
-        'account': accounts ? accounts.join(',') : undefined
-      }
-    }).toString();
-    this.location.go(url);
+    let params = {};
+    params = this.routerService.setAccounts(accounts, params);
+    params = this.routerService.setYear(this.currentYear, params);
+    this.routerService.refresh(['analytics'], params);
   }
 
   /**
@@ -201,7 +192,7 @@ export class AnalyticsComponent implements OnInit {
   private consolidateDetails(details: CompositeKeyValue[]): any[] {
     const groupsByCategory = {};
     let total = 0;
-    details.forEach((detail, key) => {
+    details.forEach(detail => {
       if (!groupsByCategory.hasOwnProperty(detail.keyOne)) {
         groupsByCategory[detail.keyOne] = [];
       }

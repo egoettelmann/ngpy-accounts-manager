@@ -9,10 +9,6 @@ export const routes: Routes = [
       {
         path: '',
         component: AnalyticsComponent
-      },
-      {
-        path: ':year',
-        component: AnalyticsComponent
       }
     ]
   }

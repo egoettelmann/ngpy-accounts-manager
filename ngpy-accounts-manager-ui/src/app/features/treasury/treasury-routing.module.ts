@@ -9,10 +9,6 @@ export const routes: Routes = [
       {
         path: '',
         component: TreasuryComponent
-      },
-      {
-        path: ':year',
-        component: TreasuryComponent
       }
     ]
   }

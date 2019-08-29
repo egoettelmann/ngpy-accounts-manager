@@ -89,7 +89,7 @@ export class BudgetChartComponent implements OnChanges {
           point: {
             events: {
               click: function() {
-                that.router.navigate(['budget', 'details', this.options.budgetId]);
+                that.router.navigate(['budget', this.options.budgetId]);
               }
             }
           }
