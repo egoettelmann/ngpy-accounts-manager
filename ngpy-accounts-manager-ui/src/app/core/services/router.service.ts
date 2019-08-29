@@ -22,10 +22,10 @@ export class RouterService {
   }
 
   getYear(route: ActivatedRoute): number {
-    if (!route.snapshot.paramMap.has('year')) {
+    if (!route.snapshot.queryParamMap.has('year')) {
       return this.dateService.getCurrentYear();
     }
-    return +route.snapshot.paramMap.get('year');
+    return +route.snapshot.queryParamMap.get('year');
   }
 
   setYear(year: number, params: Params): Params {
@@ -36,10 +36,10 @@ export class RouterService {
   }
 
   getMonth(route: ActivatedRoute): number {
-    if (!route.snapshot.paramMap.has('month')) {
+    if (!route.snapshot.queryParamMap.has('month')) {
       return this.dateService.getCurrentMonth();
     }
-    return +route.snapshot.paramMap.get('month');
+    return +route.snapshot.queryParamMap.get('month');
   }
 
   setMonth(month: number, params: Params): Params {

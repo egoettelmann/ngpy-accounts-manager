@@ -59,23 +59,19 @@ export class BudgetService {
   /**
    * Gets the status history.
    *
-   * @param year
-   * @param month
+   * @param dateFrom
+   * @param dateTo
    * @param period
    * @param accounts
    * @param labels
    */
   getStatusHistory(
-    year: number,
-    month: number,
+    dateFrom: Date,
+    dateTo: Date,
     period: string,
     accounts: number[],
     labels: number[]
   ): Observable<KeyValue[]> {
-    // Building start and end date
-    const dateFrom = this.dateService.getPeriodStart(year, month);
-    const dateTo = this.dateService.getPeriodEnd(year, month);
-
     // Adding date and amount filters
     let filter = FilterRequest.all(
       FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),

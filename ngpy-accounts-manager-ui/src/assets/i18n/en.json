@@ -98,6 +98,7 @@
   "i18n.components.budgets.series.available": "Available budget",
   "i18n.components.budgets.budget-card.period": "Period",
   "i18n.components.budgets.budget-card.amount": "Amount",
+  "i18n.components.budgets.budget-history-chart.title": "Budget status history",
 
   "i18n.components.navigation.dashboard": "Dashboard",
   "i18n.components.navigation.transactions": "Transactions",

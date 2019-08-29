@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Budget } from '../../../../core/models/api.models';
+import { Budget, BudgetStatus, KeyValue } from '../../../../core/models/api.models';
+import { RouterService } from '../../../../core/services/router.service';
+import { DateService } from '../../../../core/services/date.service';
 
 @Component({
   templateUrl: './budget-details.component.html',
@@ -9,19 +11,88 @@ import { Budget } from '../../../../core/models/api.models';
 })
 export class BudgetDetailsComponent implements OnInit {
 
+  public currentYear: number;
+  public currentMonth: number;
+
   private budgetId: number;
   private budget: Budget;
 
+  private statusList: BudgetStatus[];
+
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private budgetService: BudgetService
+              private routerService: RouterService,
+              private budgetService: BudgetService,
+              private dateService: DateService
   ) {}
 
   ngOnInit(): void {
     this.budgetId = +this.route.snapshot.paramMap.get('budgetId');
+    this.initData();
     this.budgetService.getDetails(this.budgetId).subscribe(details => {
       this.budget = details;
+      this.reloadData();
     });
+  }
+
+  /**
+   * Initializes the component with the data from the route
+   */
+  private initData() {
+    this.currentYear = this.routerService.getYear(this.route);
+    this.currentMonth = this.routerService.getMonth(this.route);
+  }
+
+  private reloadData() {
+    const accountIds = this.budget.accounts.map(a => a.id);
+    const labelIds = this.budget.labels.map(l => l.id);
+    this.budgetService.getStatusHistory(
+      this.buildStartDate(),
+      this.buildEndDate(),
+      this.budget.period,
+      accountIds,
+      labelIds
+    ).subscribe(data => {
+      this.buildBudgetStatusList(data);
+    });
+
+    let params = {};
+    params = this.routerService.setYear(this.currentYear, params);
+    params = this.routerService.setMonth(this.currentMonth, params);
+    this.routerService.refresh(['budget', this.budgetId], params);
+  }
+
+  private buildStartDate(): Date {
+    if (this.budget.period === 'DAY') {
+      return this.dateService.getPeriodStart(this.currentYear, this.currentMonth);
+    }
+    if (this.budget.period === 'MONTH' || this.budget.period === 'QUARTER') {
+      return this.dateService.getPeriodStart(this.currentYear);
+    }
+    return this.dateService.getPeriodStart(this.currentYear - 5);
+  }
+
+  private buildEndDate(): Date {
+    if (this.budget.period === 'DAY') {
+      return this.dateService.getPeriodEnd(this.currentYear, this.currentMonth);
+    }
+    if (this.budget.period === 'MONTH' || this.budget.period === 'QUARTER') {
+      return this.dateService.getPeriodEnd(this.currentYear);
+    }
+    return this.dateService.getPeriodEnd(this.currentYear);
+  }
+
+  private buildBudgetStatusList(data: KeyValue[]) {
+    const statusList: BudgetStatus[] = [];
+    data.forEach(item => {
+      const budget = JSON.parse(JSON.stringify(this.budget)) as Budget;
+      budget.name = item.key;
+      statusList.push({
+        budget: budget,
+        spending: item.value
+      });
+    });
+    this.statusList = statusList;
   }
 
 }

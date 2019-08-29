@@ -6,6 +6,7 @@ import { BudgetChartComponent } from './components/budget-chart/budget-chart.com
 import { BudgetListComponent } from './views/budget-list/budget-list.component';
 import { BudgetDetailsComponent } from './views/budget-details/budget-details.component';
 import { BudgetCardComponent } from './components/budget-card/budget-card.component';
+import { BudgetHistoryChartComponent } from './components/budget-history-chart/budget-history-chart.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { BudgetCardComponent } from './components/budget-card/budget-card.compon
     BudgetListComponent,
     BudgetDetailsComponent,
     BudgetChartComponent,
-    BudgetCardComponent
+    BudgetCardComponent,
+    BudgetHistoryChartComponent
   ],
   imports: [
     SharedModule,

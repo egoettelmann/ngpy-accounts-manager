@@ -1,3 +1,18 @@
-<app-budget-card *ngIf="budget"
-                 [budget]="budget">
-</app-budget-card>
+<div class="clr-row">
+  <div class="clr-col-12 clr-col-md-4">
+
+    <!-- Budget details -->
+    <app-budget-card *ngIf="budget"
+                     [budget]="budget">
+    </app-budget-card>
+
+  </div>
+  <div class="clr-col-12 clr-col-md-8">
+
+    <!-- The budget history chart -->
+    <app-budget-history-chart [chartTitle]="'i18n.components.budgets.budget-history-chart.title' | translate"
+                              [data]="statusList">
+    </app-budget-history-chart>
+
+  </div>
+</div>
