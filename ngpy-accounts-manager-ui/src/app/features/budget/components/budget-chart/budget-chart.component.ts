@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { BudgetStatus } from '../../../../core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,6 +13,8 @@ export class BudgetChartComponent implements OnChanges {
 
   @Input() chartTitle: string;
   @Input() data: BudgetStatus[];
+
+  @Output() handleClick = new EventEmitter<number>();
 
   public chartOptions: any;
 
@@ -89,7 +91,7 @@ export class BudgetChartComponent implements OnChanges {
           point: {
             events: {
               click: function() {
-                that.router.navigate(['budget', this.options.budgetId]);
+                that.handleClick.emit(this.options.budgetId);
               }
             }
           }

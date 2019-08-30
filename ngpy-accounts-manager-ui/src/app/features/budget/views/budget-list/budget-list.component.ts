@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DateService } from '../../../../core/services/date.service';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
 import { Account, BudgetStatus, Category } from '../../../../core/models/api.models';
@@ -23,6 +23,7 @@ export class BudgetListComponent implements OnInit {
   public budgetStatusList: BudgetStatus[];
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private routerService: RouterService,
               private dateService: DateService,
               private budgetService: BudgetService,
@@ -71,6 +72,20 @@ export class BudgetListComponent implements OnInit {
   changeMonth(month: number) {
     this.currentMonth = month;
     this.reloadData();
+  }
+
+  /**
+   * Redirects to the details page of a given budget id.
+   *
+   * @param budgetId the budget id
+   */
+  goToDetails(budgetId: number) {
+    let params = {};
+    params = this.routerService.setYear(this.currentYear, params);
+    params = this.routerService.setMonth(this.currentMonth, params);
+    this.router.navigate(['budget', budgetId], {
+      queryParams: params
+    });
   }
 
   /**

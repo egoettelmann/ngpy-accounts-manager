@@ -12,7 +12,7 @@
     </div>
 
     <!-- Year select -->
-    <app-card-wrapper [label]="'i18n.components.dates.label.month-dropdown' | translate">
+    <app-card-wrapper [label]="'i18n.components.dates.label.year-dropdown' | translate">
       <app-years-toggle [currentYear]="currentYear"
                         (onChange)="changeYear($event)">
       </app-years-toggle>
@@ -20,7 +20,7 @@
 
     <!-- Month select -->
     <app-card-wrapper *ngIf="isMonthSelectable()"
-                      [label]="'i18n.components.dates.label.year-dropdown' | translate">
+                      [label]="'i18n.components.dates.label.month-dropdown' | translate">
       <app-months-toggle [currentMonth]="currentMonth"
                          (onChange)="changeMonth($event)">
       </app-months-toggle>

@@ -27,7 +27,8 @@
 
   <div class="clr-col-12 clr-col-md-8">
     <app-budget-chart [chartTitle]="'i18n.views.budget.categories.chart.title' | translate"
-                      [data]="budgetStatusList">
+                      [data]="budgetStatusList"
+                      (handleClick)="goToDetails($event)">
     </app-budget-chart>
   </div>
 </div>
