@@ -4,6 +4,29 @@
       <strong>{{ budget.name }}</strong><br/>
       <span class="budget-name">{{ budget.description }}</span>
     </h4>
+    <div class="card-text">
+      <div class="clr-row">
+        <div class="clr-col clr-col-6">
+          <strong>{{ 'i18n.components.budgets.budget-card.accounts' | translate }}</strong><br/>
+          <span *ngFor="let account of budget.accounts"
+                class="label label-purple"
+                [ngStyle]="{ border: '1px solid ' + account.color }">
+            {{ account.name }}
+          </span>
+          <span *ngIf="budget.accounts.length === 0">
+            {{ 'i18n.components.budgets.budget-card.all-accounts' | translate }}
+          </span>
+        </div>
+        <div class="clr-col clr-col-6">
+          <strong>{{ 'i18n.components.budgets.budget-card.labels' | translate }}</strong><br/>
+          <span *ngFor="let label of budget.labels"
+                class="label label-purple"
+                [ngStyle]="{ border: '1px solid ' + label.color }">
+            {{ label.name }}
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
