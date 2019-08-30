@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Budget, BudgetStatus, KeyValue } from '../../../../core/models/api.models';
+import { Budget, BudgetStatus, KeyValue, Transaction } from '../../../../core/models/api.models';
 import { RouterService } from '../../../../core/services/router.service';
 import { DateService } from '../../../../core/services/date.service';
+import { zip } from 'rxjs';
 
 @Component({
   templateUrl: './budget-details.component.html',
@@ -18,6 +19,7 @@ export class BudgetDetailsComponent implements OnInit {
   private budget: Budget;
 
   statusList: BudgetStatus[];
+  transactions: Transaction[];
 
   /**
    * Instantiates the component.
@@ -88,13 +90,15 @@ export class BudgetDetailsComponent implements OnInit {
   private reloadData() {
     const accountIds = this.budget.accounts.map(a => a.id);
     const labelIds = this.budget.labels.map(l => l.id);
-    this.budgetService.getStatusHistory(
-      this.buildStartDate(),
-      this.buildEndDate(),
-      this.budget.period,
-      accountIds,
-      labelIds
-    ).subscribe(data => {
+
+    const dateFrom = this.buildStartDate();
+    const dateTo = this.buildEndDate();
+
+    zip(
+      this.budgetService.getTransactions(dateFrom, dateTo, accountIds, labelIds),
+      this.budgetService.getStatusHistory(dateFrom, dateTo, this.budget.period, accountIds, labelIds)
+    ).subscribe(([transactions, data]) => {
+      this.transactions = transactions;
       this.buildBudgetStatusList(data);
     });
 

@@ -1,9 +1,8 @@
 <div class="clr-row">
-  <div class="clr-col-12 clr-col-md-4">
+  <div *ngIf="budget" class="clr-col-12 clr-col-md-4">
 
     <!-- Budget details -->
-    <app-budget-card *ngIf="budget"
-                     [budget]="budget">
+    <app-budget-card [budget]="budget">
     </app-budget-card>
 
     <!-- Year select -->
@@ -29,5 +28,19 @@
                               [data]="statusList">
     </app-budget-history-chart>
 
+  </div>
+</div>
+
+<h3>
+  <span>{{ 'i18n.views.transactions.list.title' | translate }}</span>
+  <span>&nbsp;</span>
+  <span *ngIf="transactions" class="badge badge-info">{{ transactions?.length }}</span>
+</h3>
+
+<div class="clr-row">
+  <div class="clr-col-12">
+    <app-transactions-table [transactions]="transactions"
+                            [editable]="false">
+    </app-transactions-table>
   </div>
 </div>

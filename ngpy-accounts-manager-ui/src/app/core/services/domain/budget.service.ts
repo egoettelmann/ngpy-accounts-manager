@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { RqlService } from '../rql.service';
 import { Observable } from 'rxjs';
-import { Budget, BudgetStatus, KeyValue } from '../../models/api.models';
+import { Budget, BudgetStatus, KeyValue, Transaction } from '../../models/api.models';
 import { DateService } from '../date.service';
 import { BudgetRestService } from '../rest/budget-rest.service';
 import { FilterOperator, FilterRequest } from '../../models/rql.models';
 import { StatisticsRestService } from '../rest/statistics-rest.service';
+import { TransactionsRestService } from '../rest/transactions-rest.service';
 
 /**
  * The budget service
@@ -18,11 +19,13 @@ export class BudgetService {
    *
    * @param budgetRestService the budget rest service
    * @param statisticsRestService the statistics rest service
+   * @param transactionsRestService the transactions rest service
    * @param dateService the date service
    * @param rqlService the RQL service
    */
   constructor(private budgetRestService: BudgetRestService,
               private statisticsRestService: StatisticsRestService,
+              private transactionsRestService: TransactionsRestService,
               private dateService: DateService,
               private rqlService: RqlService
   ) {
@@ -97,6 +100,41 @@ export class BudgetService {
     }
 
     return this.statisticsRestService.getAggregation(period, filter);
+  }
+
+  /**
+   * Gets the list of transactions.
+   *
+   * @param dateFrom
+   * @param dateTo
+   * @param accounts
+   * @param labels
+   */
+  getTransactions(
+    dateFrom: Date,
+    dateTo: Date,
+    accounts: number[],
+    labels: number[]
+  ): Observable<Transaction[]> {
+
+    let filters = FilterRequest.all(
+      FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT)
+    );
+    if (accounts && accounts.length > 0) {
+      filters = FilterRequest.all(
+        FilterRequest.of('accountId', this.rqlService.formatList(accounts), FilterOperator.IN),
+        filters
+      );
+    }
+    if (labels && labels.length > 0) {
+      filters = FilterRequest.all(
+        FilterRequest.of('labelId', this.rqlService.formatList(labels), FilterOperator.IN),
+        filters
+      );
+    }
+
+    return this.transactionsRestService.getAll({ filter: filters });
   }
 
 }
