@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Budget, BudgetStatus, KeyValue, Transaction } from '../../../../core/models/api.models';
+import { Account, Budget, BudgetStatus, KeyValue, Label, Transaction } from '../../../../core/models/api.models';
 import { RouterService } from '../../../../core/services/router.service';
 import { DateService } from '../../../../core/services/date.service';
 import { zip } from 'rxjs';
+import { AccountsService } from '../../../../core/services/domain/accounts.service';
+import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 
 @Component({
   templateUrl: './budget-details.component.html',
@@ -21,6 +23,11 @@ export class BudgetDetailsComponent implements OnInit {
   statusList: BudgetStatus[];
   transactions: Transaction[];
 
+  public accounts: Account[];
+  public labels: Label[];
+
+  showModal = false;
+
   /**
    * Instantiates the component.
    *
@@ -28,12 +35,16 @@ export class BudgetDetailsComponent implements OnInit {
    * @param router the router
    * @param routerService the router service
    * @param budgetService the budget service
+   * @param accountsService the accounts service
+   * @param labelsService the labels service
    * @param dateService the date service
    */
   constructor(private route: ActivatedRoute,
               private router: Router,
               private routerService: RouterService,
               private budgetService: BudgetService,
+              private accountsService: AccountsService,
+              private labelsService: LabelsRestService,
               private dateService: DateService
   ) {}
 
@@ -43,7 +54,13 @@ export class BudgetDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.budgetId = +this.route.snapshot.paramMap.get('budgetId');
     this.initData();
-    this.budgetService.getDetails(this.budgetId).subscribe(details => {
+    zip(
+      this.accountsService.getAccounts(),
+      this.labelsService.getAll(),
+      this.budgetService.getDetails(this.budgetId)
+    ).subscribe(([accounts, labels, details]) => {
+      this.accounts = accounts;
+      this.labels = labels;
       this.budget = details;
       this.reloadData();
     });
@@ -74,6 +91,38 @@ export class BudgetDetailsComponent implements OnInit {
    */
   isMonthSelectable(): boolean {
     return this.budget.period === 'DAY';
+  }
+
+  /**
+   * Opens the modal with the budget form.
+   */
+  openModal() {
+    this.showModal = true;
+  }
+
+  /**
+   * Closes the modal with the budget form.
+   */
+  closeModal() {
+    this.showModal = false;
+  }
+
+  /**
+   * Saves the budget.
+   *
+   * @param budget the budget to save
+   */
+  saveBudget(budget: Budget) {
+    console.log('save', budget);
+  }
+
+  /**
+   * Deletes the budget.
+   *
+   * @param budget the budget to delete
+   */
+  deleteBudget(budget: Budget) {
+    console.log('delete', budget);
   }
 
   /**

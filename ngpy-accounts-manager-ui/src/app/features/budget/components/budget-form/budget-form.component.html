@@ -1,0 +1,100 @@
+<form [formGroup]="form"
+      (ngSubmit)="submitForm()"
+      class="clr-form">
+
+  <section class="form-block compact">
+
+    <!-- Name -->
+    <app-field-wrapper for="name"
+                       [i18nLabel]="'i18n.components.budgets.budget-form.name'"
+                       [ctrl]="form.get('name')"
+                       class="form-group clr-row mb-1">
+      <input id="name"
+             clrInput
+             [formControlName]="'name'"
+             class="w-100"
+             type="text"/>
+    </app-field-wrapper>
+
+    <!-- Description -->
+    <app-field-wrapper for="description"
+                       [i18nLabel]="'i18n.components.budgets.budget-form.description'"
+                       [ctrl]="form.get('description')"
+                       class="form-group clr-row mb-1">
+        <textarea id="description"
+                  clrTextarea
+                  [formControlName]="'description'"
+                  class="w-100"
+                  rows="3">
+        </textarea>
+    </app-field-wrapper>
+
+    <!-- Amount -->
+    <app-field-wrapper for="amount"
+                       [i18nLabel]="'i18n.components.budgets.budget-form.amount'"
+                       [ctrl]="form.get('amount')"
+                       class="form-group clr-row mb-1">
+      <input id="amount"
+             clrInput
+             [formControlName]="'amount'"
+             class="w-100"
+             type="text"/>
+    </app-field-wrapper>
+
+    <!-- Period -->
+    <app-field-wrapper for="period"
+                       [i18nLabel]="'i18n.components.budgets.budget-form.period'"
+                       [ctrl]="form.get('period')"
+                       class="form-group clr-row mb-1">
+      <select id="period"
+              clrSelect
+              [formControlName]="'period'">
+        <option *ngFor="let period of periods"
+                [value]="period">
+          {{ 'i18n.components.budgets.budget-card.period-type.' + period | translate }}
+        </option>
+      </select>
+    </app-field-wrapper>
+
+    <!-- Accounts -->
+    <app-field-wrapper for="accounts"
+                       [i18nLabel]="'i18n.components.budgets.budget-form.accounts'"
+                       [ctrl]="form.get('accounts')"
+                       class="form-group clr-row mb-1">
+      <app-accounts-toggle [accounts]="accounts"
+                           [preSelected]="form.get('accounts').value"
+                           (onChange)="selectAccounts($event)">
+      </app-accounts-toggle>
+    </app-field-wrapper>
+
+    <!-- Labels -->
+    <app-field-wrapper for="labels"
+                       [i18nLabel]="'i18n.components.budgets.budget-form.labels'"
+                       [ctrl]="form.get('labels')"
+                       class="form-group clr-row mb-1">
+      <app-labels-toggle [labels]="labels"
+                         [value]="form.get('labels').value"
+                         (onChange)="selectLabels($event)">
+      </app-labels-toggle>
+    </app-field-wrapper>
+  </section>
+
+  <div class="text-right">
+    <button class="btn btn-secondary"
+            type="button"
+            (click)="cancel()">
+      {{ 'i18n.components.budgets.budget-form.button.cancel' | translate }}
+    </button>
+    <button class="btn btn-danger"
+            type="button"
+            (click)="deleteBudget()">
+      {{ 'i18n.components.budgets.budget-form.button.delete' | translate }}
+    </button>
+    <button [disabled]="!form.valid"
+            class="btn btn-primary"
+            type="submit">
+      {{ 'i18n.components.budgets.budget-form.button.save' | translate }}
+    </button>
+  </div>
+
+</form>

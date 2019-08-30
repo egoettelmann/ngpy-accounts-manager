@@ -93,6 +93,7 @@
   "i18n.views.analytics.table.debit.title": "Debiting transactions by category",
 
   "i18n.views.budget.categories.chart.title": "Budget status",
+  "i18n.views.budgets.budget-details.button.edit": "Edit",
   "i18n.components.budgets.series.consumption": "Budget consumption",
   "i18n.components.budgets.series.overrun": "Budget overrun",
   "i18n.components.budgets.series.available": "Available budget",
@@ -109,6 +110,15 @@
   "i18n.components.budgets.budget-summary.overrun": "Overrun",
   "i18n.components.budgets.budget-summary.budget": "Budget",
   "i18n.components.budgets.budget-summary.total": "Result",
+  "i18n.components.budgets.budget-form.name": "Name",
+  "i18n.components.budgets.budget-form.description": "Description",
+  "i18n.components.budgets.budget-form.amount": "Amount",
+  "i18n.components.budgets.budget-form.period": "Period",
+  "i18n.components.budgets.budget-form.accounts": "Accounts",
+  "i18n.components.budgets.budget-form.labels": "Labels",
+  "i18n.components.budgets.budget-form.button.cancel": "Cancel",
+  "i18n.components.budgets.budget-form.button.delete": "Delete",
+  "i18n.components.budgets.budget-form.button.save": "Save",
 
   "i18n.components.navigation.dashboard": "Dashboard",
   "i18n.components.navigation.transactions": "Transactions",

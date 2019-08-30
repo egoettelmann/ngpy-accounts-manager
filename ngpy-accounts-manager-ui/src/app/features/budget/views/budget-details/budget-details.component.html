@@ -5,6 +5,12 @@
     <app-budget-card [budget]="budget">
     </app-budget-card>
 
+    <div class="text-right">
+      <button type="button" class="btn btn-sm btn-icon btn-info mr-0" (click)="openModal()">
+        <span>{{ 'i18n.views.budgets.budget-details.button.edit' | translate }}</span>
+      </button>
+    </div>
+
     <!-- Year select -->
     <app-years-toggle [currentYear]="currentYear"
                       (onChange)="changeYear($event)">
@@ -44,3 +50,20 @@
     </app-transactions-table>
   </div>
 </div>
+
+<clr-modal *ngIf="budget"
+           [(clrModalOpen)]="showModal"
+           [clrModalSize]="'lg'"
+           [clrModalClosable]="false"
+           [clrModalStaticBackdrop]="true">
+  <h3 class="modal-title">{{ budget.name }}</h3>
+  <div class="modal-body">
+    <app-budget-form [model]="budget"
+                     [labels]="labels"
+                     [accounts]="accounts"
+                     (onFormSubmit)="saveBudget($event)"
+                     (onFormCancel)="closeModal()"
+                     (onFormDelete)="deleteBudget($event)">
+    </app-budget-form>
+  </div>
+</clr-modal>
