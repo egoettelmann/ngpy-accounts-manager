@@ -6,6 +6,21 @@
                      [budget]="budget">
     </app-budget-card>
 
+    <!-- Year select -->
+    <app-years-toggle [currentYear]="currentYear"
+                      (onChange)="changeYear($event)">
+    </app-years-toggle>
+
+    <!-- Month select -->
+    <app-months-toggle *ngIf="isMonthSelectable()"
+                       [currentMonth]="currentMonth"
+                       (onChange)="changeMonth($event)">
+    </app-months-toggle>
+
+    <!-- The budget summary -->
+    <app-budget-summary [statusList]="statusList">
+    </app-budget-summary>
+
   </div>
   <div class="clr-col-12 clr-col-md-8">
 

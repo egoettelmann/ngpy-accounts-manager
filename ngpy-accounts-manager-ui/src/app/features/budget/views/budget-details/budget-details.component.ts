@@ -17,8 +17,17 @@ export class BudgetDetailsComponent implements OnInit {
   private budgetId: number;
   private budget: Budget;
 
-  private statusList: BudgetStatus[];
+  statusList: BudgetStatus[];
 
+  /**
+   * Instantiates the component.
+   *
+   * @param route the activated route
+   * @param router the router
+   * @param routerService the router service
+   * @param budgetService the budget service
+   * @param dateService the date service
+   */
   constructor(private route: ActivatedRoute,
               private router: Router,
               private routerService: RouterService,
@@ -26,6 +35,9 @@ export class BudgetDetailsComponent implements OnInit {
               private dateService: DateService
   ) {}
 
+  /**
+   * Initializes the component
+   */
   ngOnInit(): void {
     this.budgetId = +this.route.snapshot.paramMap.get('budgetId');
     this.initData();
@@ -36,6 +48,33 @@ export class BudgetDetailsComponent implements OnInit {
   }
 
   /**
+   * Triggered on year change.
+   *
+   * @param year
+   */
+  changeYear(year: number) {
+    this.currentYear = year;
+    this.reloadData();
+  }
+
+  /**
+   * Triggered on month change.
+   *
+   * @param month
+   */
+  changeMonth(month: number) {
+    this.currentMonth = month;
+    this.reloadData();
+  }
+
+  /**
+   * Checks if the month can be selected.
+   */
+  isMonthSelectable(): boolean {
+    return this.budget.period === 'DAY';
+  }
+
+  /**
    * Initializes the component with the data from the route
    */
   private initData() {
@@ -43,6 +82,9 @@ export class BudgetDetailsComponent implements OnInit {
     this.currentMonth = this.routerService.getMonth(this.route);
   }
 
+  /**
+   * Reload the data from the backend and updates the route params
+   */
   private reloadData() {
     const accountIds = this.budget.accounts.map(a => a.id);
     const labelIds = this.budget.labels.map(l => l.id);
@@ -58,10 +100,15 @@ export class BudgetDetailsComponent implements OnInit {
 
     let params = {};
     params = this.routerService.setYear(this.currentYear, params);
-    params = this.routerService.setMonth(this.currentMonth, params);
+    if (this.isMonthSelectable()) {
+      params = this.routerService.setMonth(this.currentMonth, params);
+    }
     this.routerService.refresh(['budget', this.budgetId], params);
   }
 
+  /**
+   * Builds the start date
+   */
   private buildStartDate(): Date {
     if (this.budget.period === 'DAY') {
       return this.dateService.getPeriodStart(this.currentYear, this.currentMonth);
@@ -72,6 +119,9 @@ export class BudgetDetailsComponent implements OnInit {
     return this.dateService.getPeriodStart(this.currentYear - 5);
   }
 
+  /**
+   * Builds the end date
+   */
   private buildEndDate(): Date {
     if (this.budget.period === 'DAY') {
       return this.dateService.getPeriodEnd(this.currentYear, this.currentMonth);
@@ -82,6 +132,11 @@ export class BudgetDetailsComponent implements OnInit {
     return this.dateService.getPeriodEnd(this.currentYear);
   }
 
+  /**
+   * Builds the budget status list.
+   *
+   * @param data the list of key/values
+   */
   private buildBudgetStatusList(data: KeyValue[]) {
     const statusList: BudgetStatus[] = [];
     data.forEach(item => {

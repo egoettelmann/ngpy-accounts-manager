@@ -1,0 +1,22 @@
+<table *ngIf="statusList" class="table card-shadow">
+  <thead>
+    <tr>
+      <th colspan="2">{{ 'i18n.components.budgets.budget-summary.balance' | translate }}</th>
+      <th colspan="2">{{ 'i18n.components.budgets.budget-summary.status' | translate }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="text-left">{{ 'i18n.components.budgets.budget-summary.available' | translate }}</td>
+      <td class="text-right text-success">{{ summary.available | number:'1.2-2' }}&nbsp;€</td>
+      <td class="text-left">{{ 'i18n.components.budgets.budget-summary.budget' | translate }}</td>
+      <td class="text-right">{{ summary.budget | number:'1.2-2' }}&nbsp;€</td>
+    </tr>
+    <tr>
+      <td class="text-left">{{ 'i18n.components.budgets.budget-summary.overrun' | translate }}</td>
+      <td class="text-right text-danger">{{ summary.overrun | number:'1.2-2' }}&nbsp;€</td>
+      <td class="text-left">{{ 'i18n.components.budgets.budget-summary.total' | translate }}</td>
+      <td class="text-right font-weight-bold" [ngClass]="getAmountColor(summary.total)">{{ summary.total | number:'1.2-2' }}&nbsp;€</td>
+    </tr>
+  </tbody>
+</table>
