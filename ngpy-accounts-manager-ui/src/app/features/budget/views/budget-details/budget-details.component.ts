@@ -18,13 +18,13 @@ export class BudgetDetailsComponent implements OnInit {
   public currentMonth: number;
 
   private budgetId: number;
-  private budget: Budget;
 
+  budget: Budget;
   statusList: BudgetStatus[];
   transactions: Transaction[];
 
-  public accounts: Account[];
-  public labels: Label[];
+  accounts: Account[];
+  labels: Label[];
 
   showModal = false;
 
