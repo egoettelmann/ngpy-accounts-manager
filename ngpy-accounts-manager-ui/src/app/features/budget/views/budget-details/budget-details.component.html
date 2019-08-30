@@ -12,15 +12,19 @@
     </div>
 
     <!-- Year select -->
-    <app-years-toggle [currentYear]="currentYear"
-                      (onChange)="changeYear($event)">
-    </app-years-toggle>
+    <app-card-wrapper [label]="'i18n.components.dates.label.month-dropdown' | translate">
+      <app-years-toggle [currentYear]="currentYear"
+                        (onChange)="changeYear($event)">
+      </app-years-toggle>
+    </app-card-wrapper>
 
     <!-- Month select -->
-    <app-months-toggle *ngIf="isMonthSelectable()"
-                       [currentMonth]="currentMonth"
-                       (onChange)="changeMonth($event)">
-    </app-months-toggle>
+    <app-card-wrapper *ngIf="isMonthSelectable()"
+                      [label]="'i18n.components.dates.label.year-dropdown' | translate">
+      <app-months-toggle [currentMonth]="currentMonth"
+                         (onChange)="changeMonth($event)">
+      </app-months-toggle>
+    </app-card-wrapper>
 
     <!-- The budget summary -->
     <app-budget-summary [statusList]="statusList">

@@ -1,32 +1,23 @@
-<table class="table table-compact table-vertical card-shadow">
-  <tbody>
-  <tr>
-    <th class="text-left align-middle w-40">{{ 'i18n.components.accounts.account-toggle.label' | translate }}</th>
-    <td class="text-right">
-      <clr-dropdown *ngIf="accounts">
-        <button type="button" class="btn btn-link" clrDropdownTrigger>
-          {{ selectedAccounts?.length === accounts?.length ? ('i18n.components.accounts.account-toggle.all-accounts' | translate) : selectedAccounts?.length + ('i18n.components.accounts.account-toggle.accounts' | translate) }}
-          <clr-icon shape="caret down"></clr-icon>
-        </button>
-        <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
-          <button type="button"
-                  clrDropdownItem
-                  (click)="toggleAllAccounts()">
-            <clr-icon *ngIf="selectedAccounts?.length === accounts?.length" shape="success-standard" class="is-success"></clr-icon>
-            <clr-icon *ngIf="selectedAccounts?.length !== accounts?.length" shape="circle"></clr-icon>
-            <span>&nbsp;{{ 'i18n.components.accounts.account-toggle.all-accounts' | translate }}</span>
-          </button>
-          <button *ngFor="let account of accounts"
-                  type="button"
-                  clrDropdownItem
-                  (click)="toggleAccount(account)">
-            <clr-icon *ngIf="isSelected(account)" shape="success-standard" class="is-success"></clr-icon>
-            <clr-icon *ngIf="!isSelected(account)" shape="circle"></clr-icon>
-            <span>&nbsp;{{ account.name }} - {{ account.description }}</span>
-          </button>
-        </clr-dropdown-menu>
-      </clr-dropdown>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<clr-dropdown *ngIf="accounts">
+  <button type="button" class="btn btn-link" clrDropdownTrigger>
+    {{ selectedAccounts?.length === accounts?.length ? ('i18n.components.accounts.account-toggle.all-accounts' | translate) : selectedAccounts?.length + ('i18n.components.accounts.account-toggle.accounts' | translate) }}
+    <clr-icon shape="caret down"></clr-icon>
+  </button>
+  <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
+    <button type="button"
+            clrDropdownItem
+            (click)="toggleAllAccounts()">
+      <clr-icon *ngIf="selectedAccounts?.length === accounts?.length" shape="success-standard" class="is-success"></clr-icon>
+      <clr-icon *ngIf="selectedAccounts?.length !== accounts?.length" shape="circle"></clr-icon>
+      <span>&nbsp;{{ 'i18n.components.accounts.account-toggle.all-accounts' | translate }}</span>
+    </button>
+    <button *ngFor="let account of accounts"
+            type="button"
+            clrDropdownItem
+            (click)="toggleAccount(account)">
+      <clr-icon *ngIf="isSelected(account)" shape="success-standard" class="is-success"></clr-icon>
+      <clr-icon *ngIf="!isSelected(account)" shape="circle"></clr-icon>
+      <span>&nbsp;{{ account.name }} - {{ account.description }}</span>
+    </button>
+  </clr-dropdown-menu>
+</clr-dropdown>

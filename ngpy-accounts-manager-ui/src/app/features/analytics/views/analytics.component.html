@@ -2,16 +2,20 @@
   <div class="clr-col-12 clr-col-md-4">
 
     <!-- Account select -->
-    <app-accounts-toggle *ngIf="accounts"
-                         [accounts]="accounts"
-                         [preSelected]="accountsFilter"
-                         (onChange)="changeAccounts($event)">
-    </app-accounts-toggle>
+    <app-card-wrapper *ngIf="accounts"
+                      [label]="'i18n.components.accounts.account-toggle.label' | translate">
+      <app-accounts-toggle [accounts]="accounts"
+                           [preSelected]="accountsFilter"
+                           (onChange)="changeAccounts($event)">
+      </app-accounts-toggle>
+    </app-card-wrapper>
 
     <!-- Year select -->
-    <app-years-toggle [currentYear]="currentYear"
-                      (onChange)="changeYear($event)">
-    </app-years-toggle>
+    <app-card-wrapper [label]="'i18n.components.dates.label.year-dropdown' | translate">
+      <app-years-toggle [currentYear]="currentYear"
+                        (onChange)="changeYear($event)">
+      </app-years-toggle>
+    </app-card-wrapper>
 
     <!-- Period select-->
     <table class="table table-compact table-vertical card-shadow">

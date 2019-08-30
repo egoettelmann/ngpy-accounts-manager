@@ -2,25 +2,32 @@
 
   <div class="clr-col-12 clr-col-md-4">
     <!-- Accounts -->
-    <app-accounts-toggle *ngIf="accounts"
-                         [accounts]="accounts"
-                         [preSelected]="searchForm.get('accounts').value"
-                         (onChange)="changeAccounts($event)">
-    </app-accounts-toggle>
+    <app-card-wrapper *ngIf="accounts"
+                      [label]="'i18n.components.accounts.account-toggle.label' | translate">
+      <app-accounts-toggle [accounts]="accounts"
+                           [preSelected]="searchForm.get('accounts').value"
+                           (onChange)="changeAccounts($event)">
+      </app-accounts-toggle>
+    </app-card-wrapper>
 
     <!-- Labels -->
-    <app-labels-toggle *ngIf="labels"
-                       [labels]="labels"
-                       [value]="searchForm.get('labels').value"
-                       (onChange)="changeLabels($event)">
-    </app-labels-toggle>
+    <app-card-wrapper *ngIf="labels"
+                      [label]="'i18n.components.transactions.label-toggle.label' | translate">
+      <app-labels-toggle [labels]="labels"
+                         [value]="searchForm.get('labels').value"
+                         (onChange)="changeLabels($event)">
+      </app-labels-toggle>
+    </app-card-wrapper>
 
     <!-- Categories -->
-    <app-categories-toggle *ngIf="categories"
-                           [categories]="categories"
-                           [value]="searchForm.get('categories').value"
-                           (onChange)="changeCategories($event)">
-    </app-categories-toggle>
+    <app-card-wrapper *ngIf="categories"
+                      [label]="'i18n.components.transactions.category-toggle.label' | translate">
+      <app-categories-toggle *ngIf="categories"
+                             [categories]="categories"
+                             [value]="searchForm.get('categories').value"
+                             (onChange)="changeCategories($event)">
+      </app-categories-toggle>
+    </app-card-wrapper>
   </div>
 
   <div class="clr-col-12 clr-col-md-8">
@@ -28,114 +35,69 @@
 
       <!-- Minimum date -->
       <div class="clr-col-12 clr-col-md-6">
-        <table class="table table-compact table-vertical card-shadow">
-          <tbody>
-          <tr>
-            <th class="text-left align-middle w-40">
-              <label for="minDate">{{ 'i18n.components.search-form.label.min-date-input' | translate }}</label>
-            </th>
-            <td class="text-right">
-              <div class="clr-form">
-                <input id="minDate"
-                       class="clr-input w-100"
-                       [clrDate]="searchForm.get('minDate').value"
-                       (clrDateChange)="changeDate('minDate', $event)"
-                       type="date"
-                       autocomplete="off" />
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <app-card-wrapper [label]="'i18n.components.search-form.label.min-date-input' | translate">
+          <div class="clr-form">
+            <input id="minDate"
+                   class="clr-input w-100"
+                   [clrDate]="searchForm.get('minDate').value"
+                   (clrDateChange)="changeDate('minDate', $event)"
+                   type="date"
+                   autocomplete="off" />
+          </div>
+        </app-card-wrapper>
       </div>
 
       <!-- Maximum date -->
       <div class="clr-col-12 clr-col-md-6">
-        <table class="table table-compact table-vertical card-shadow">
-          <tbody>
-          <tr>
-            <th class="text-left align-middle w-40">
-              <label for="maxDate">{{ 'i18n.components.search-form.label.max-date-input' | translate }}</label>
-            </th>
-            <td class="text-right">
-              <div class="clr-form">
-                <input id="maxDate"
-                       class="clr-input w-100"
-                       [clrDate]="searchForm.get('maxDate').value"
-                       (clrDateChange)="changeDate('maxDate', $event)"
-                       type="date"
-                       autocomplete="off" />
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <app-card-wrapper [label]="'i18n.components.search-form.label.max-date-input' | translate">
+          <div class="clr-form">
+            <input id="maxDate"
+                   class="clr-input w-100"
+                   [clrDate]="searchForm.get('maxDate').value"
+                   (clrDateChange)="changeDate('maxDate', $event)"
+                   type="date"
+                   autocomplete="off" />
+          </div>
+        </app-card-wrapper>
       </div>
 
       <!-- Minimum amount -->
       <div class="clr-col-12 clr-col-md-6">
-        <table class="table table-compact table-vertical card-shadow">
-          <tbody>
-          <tr>
-            <th class="text-left align-middle w-40">
-              <label for="minAmount">{{ 'i18n.components.search-form.label.min-amount-input' | translate }}</label>
-            </th>
-            <td class="text-right">
-              <div class="clr-form">
-                <input id="minAmount"
-                       class="clr-input w-100"
-                       [formControlName]="'minAmount'"
-                       type="text"
-                       autocomplete="off" />
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <app-card-wrapper [label]="'i18n.components.search-form.label.min-amount-input' | translate">
+          <div class="clr-form">
+            <input id="minAmount"
+                   class="clr-input w-100"
+                   [formControlName]="'minAmount'"
+                   type="text"
+                   autocomplete="off" />
+          </div>
+        </app-card-wrapper>
       </div>
 
       <!-- Maximum amount -->
       <div class="clr-col-12 clr-col-md-6">
-        <table class="table table-compact table-vertical card-shadow">
-          <tbody>
-          <tr>
-            <th class="text-left align-middle w-40">
-              <label for="maxAmount">{{ 'i18n.components.search-form.label.max-amount-input' | translate }}</label>
-            </th>
-            <td class="text-right">
-              <div class="clr-form">
-                <input id="maxAmount"
-                       class="clr-input w-100"
-                       [formControlName]="'maxAmount'"
-                       type="text"
-                       autocomplete="off" />
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <app-card-wrapper [label]="'i18n.components.search-form.label.max-amount-input' | translate">
+          <div class="clr-form">
+            <input id="maxAmount"
+                   class="clr-input w-100"
+                   [formControlName]="'maxAmount'"
+                   type="text"
+                   autocomplete="off" />
+          </div>
+        </app-card-wrapper>
       </div>
 
       <!-- Text search -->
       <div class="clr-col-12 clr-col-md-12">
-        <table class="table table-compact table-vertical card-shadow">
-          <tbody>
-          <tr>
-            <th class="text-left align-middle w-40">
-              <label for="description">{{ 'i18n.components.search-form.label.desc-input' | translate }}</label>
-            </th>
-            <td class="text-right">
-              <div class="clr-form">
-                <input id="description"
-                       class="clr-input w-100"
-                       [formControlName]="'description'"
-                       type="text"
-                       autocomplete="off" />
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <app-card-wrapper [label]="'i18n.components.search-form.label.desc-input' | translate">
+          <div class="clr-form">
+            <input id="description"
+                   class="clr-input w-100"
+                   [formControlName]="'description'"
+                   type="text"
+                   autocomplete="off" />
+          </div>
+        </app-card-wrapper>
       </div>
 
     </div>

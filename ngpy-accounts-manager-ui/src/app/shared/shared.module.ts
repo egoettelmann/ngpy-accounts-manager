@@ -22,6 +22,7 @@ import { TransactionsTableComponent } from './components/transactions/table/tran
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from '@angular/cdk/layout';
 import { CategoriesToggleComponent } from './components/toggles/categories-toggle/categories-toggle.component';
+import { CardWrapperComponent } from './components/cards/card-wrapper.component';
 
 @NgModule({
   declarations: SharedModule.COMPONENTS_LIST,
@@ -39,6 +40,7 @@ export class SharedModule {
     AutocompleteComponent,
     FileDropComponent,
     FieldWrapperComponent,
+    CardWrapperComponent,
     GraphComponent,
     NotificationMessageComponent,
     NotificationModalComponent,
