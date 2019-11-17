@@ -52,7 +52,7 @@ class NotificationService:
         :return: the build template
         """
         env = jinja2.Environment(
-            loader=jinja2.PackageLoader('backend', 'templates')
+            loader=jinja2.PackageLoader('api', 'templates')
         )
         tpl_engine = env.get_template(template)
         return tpl_engine.render(
