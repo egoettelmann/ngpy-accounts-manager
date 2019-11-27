@@ -137,4 +137,22 @@ export class BudgetService {
     return this.transactionsRestService.getAll({ filter: filters });
   }
 
+  /**
+   * Deletes a budget.
+   *
+   * @param budget the budget to delete
+   */
+  deleteOne(budget: Budget): Observable<any> {
+    return this.budgetRestService.deleteOne(budget.id);
+  }
+
+  /**
+   * Saves a budget.
+   *
+   * @param budget the budget to save
+   */
+  saveOne(budget: Budget): Observable<Budget> {
+    return  this.budgetRestService.saveOne(budget);
+  }
+
 }

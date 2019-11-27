@@ -79,6 +79,7 @@ export class BudgetFormComponent implements OnChanges {
   buildForm() {
     this.form = this.fb.group(
       {
+        'id': [null],
         'name': [null, [Validators.required]],
         'description': [null],
         'period': [null, [Validators.required]],
@@ -89,6 +90,11 @@ export class BudgetFormComponent implements OnChanges {
     );
   }
 
+  /**
+   * Select multiple accounts.
+   *
+   * @param accounts the account ids to select
+   */
   selectAccounts(accounts: number[]) {
     if (accounts && accounts.length > 0) {
       this.form.get('accounts').setValue(accounts);
@@ -97,6 +103,11 @@ export class BudgetFormComponent implements OnChanges {
     }
   }
 
+  /**
+   * Select multiple labels.
+   *
+   * @param labels the label ids to select
+   */
   selectLabels(labels: number[]) {
     if (labels && labels.length > 0) {
       this.form.get('labels').setValue(labels);
@@ -111,33 +122,27 @@ export class BudgetFormComponent implements OnChanges {
    * @param data the form data
    */
   initFormData(data: Budget) {
-    const t = Object.assign({}, data) as Budget;
+    const t = Object.assign({}, data) as any;
+    t.accounts = t.accounts.map(account => account.id);
+    t.labels = t.labels.map(label => label.id);
     this.form.patchValue(t);
-  }
-
-  /**
-   * Changes the label.
-   *
-   * @param label the new label
-   */
-  changeLabel(label: Label) {
-    this.form.patchValue({ 'label_id': label.id });
-  }
-
-  /**
-   * Changes the date.
-   *
-   * @param value the new date
-   */
-  changeDate(value: Date) {
-    this.form.get('dateValue').setValue(value);
   }
 
   /**
    * Submits the form
    */
   submitForm() {
-    const t = Object.assign({}, this.model, this.form.value) as Budget;
+    const t = Object.assign({}, this.form.value) as any;
+    if (t.accounts != null) {
+      t.accounts = t.accounts.map(id => this.findAccountFromId(id));
+    } else {
+      t.accounts = [];
+    }
+    if (t.labels != null) {
+      t.labels = t.labels.map(id => this.findLabelFromId(id));
+    } else {
+      t.labels = [];
+    }
     this.onFormSubmit.emit(t);
   }
 
@@ -155,6 +160,24 @@ export class BudgetFormComponent implements OnChanges {
   cancel() {
     const t = Object.assign({}, this.model);
     this.onFormCancel.emit(t);
+  }
+
+  /**
+   * Finds an account by its id.
+   *
+   * @param accountId the account id to find
+   */
+  private findAccountFromId(accountId: number): Account {
+    return this.accounts.find(account => account.id === accountId);
+  }
+
+  /**
+   * Finds a label by its id.
+   *
+   * @param labelId the label id to find
+   */
+  private findLabelFromId(labelId: number): Label {
+    return this.labels.find(label => label.id === labelId);
   }
 
 }

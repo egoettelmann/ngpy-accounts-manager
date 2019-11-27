@@ -9,8 +9,8 @@
         <div class="clr-col clr-col-6">
           <strong>{{ 'i18n.components.budgets.budget-card.accounts' | translate }}</strong><br/>
           <span *ngFor="let account of budget.accounts"
-                class="label label-purple"
-                [ngStyle]="{ border: '1px solid ' + account.color }">
+                class="label"
+                [ngStyle]="{ border: '1px solid ' + account.color, background: account.color + '30' }">
             {{ account.name }}
           </span>
           <span *ngIf="budget.accounts.length === 0">
@@ -20,8 +20,8 @@
         <div class="clr-col clr-col-6">
           <strong>{{ 'i18n.components.budgets.budget-card.labels' | translate }}</strong><br/>
           <span *ngFor="let label of budget.labels"
-                class="label label-purple"
-                [ngStyle]="{ border: '1px solid ' + label.color }">
+                class="label"
+                [ngStyle]="{ border: '1px solid ' + label.color, background: label.color + '30' }">
             {{ label.name }}
           </span>
         </div>

@@ -59,7 +59,7 @@ export class BudgetRestService {
    * @param budget the budget to save
    */
   saveOne(budget: Budget): Observable<Budget> {
-    return this.http.post<Budget>('/rest/budgets', CommonFunctions.removeEmpty(budget));
+    return this.http.put<Budget>('/rest/budgets', CommonFunctions.removeEmpty(budget));
   }
 
   /**

@@ -7,6 +7,7 @@ import { DateService } from '../../../../core/services/date.service';
 import { zip } from 'rxjs';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
+import { flatMap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './budget-details.component.html',
@@ -14,19 +15,18 @@ import { LabelsRestService } from '../../../../core/services/rest/labels-rest.se
 })
 export class BudgetDetailsComponent implements OnInit {
 
-  public currentYear: number;
-  public currentMonth: number;
-
-  private budgetId: number;
+  currentYear: number;
+  currentMonth: number;
 
   budget: Budget;
   statusList: BudgetStatus[];
   transactions: Transaction[];
-
   accounts: Account[];
   labels: Label[];
 
   showModal = false;
+
+  private budgetId: number;
 
   /**
    * Instantiates the component.
@@ -56,12 +56,10 @@ export class BudgetDetailsComponent implements OnInit {
     this.initData();
     zip(
       this.accountsService.getAccounts(),
-      this.labelsService.getAll(),
-      this.budgetService.getDetails(this.budgetId)
-    ).subscribe(([accounts, labels, details]) => {
+      this.labelsService.getAll()
+    ).subscribe(([accounts, labels]) => {
       this.accounts = accounts;
       this.labels = labels;
-      this.budget = details;
       this.reloadData();
     });
   }
@@ -113,7 +111,10 @@ export class BudgetDetailsComponent implements OnInit {
    * @param budget the budget to save
    */
   saveBudget(budget: Budget) {
-    console.log('save', budget);
+    this.budgetService.saveOne(budget).subscribe(() => {
+      this.closeModal();
+      this.reloadData();
+    });
   }
 
   /**
@@ -122,7 +123,10 @@ export class BudgetDetailsComponent implements OnInit {
    * @param budget the budget to delete
    */
   deleteBudget(budget: Budget) {
-    console.log('delete', budget);
+    this.budgetService.deleteOne(budget).subscribe(() => {
+      this.closeModal();
+      this.reloadData();
+    });
   }
 
   /**
@@ -137,26 +141,30 @@ export class BudgetDetailsComponent implements OnInit {
    * Reload the data from the backend and updates the route params
    */
   private reloadData() {
-    const accountIds = this.budget.accounts.map(a => a.id);
-    const labelIds = this.budget.labels.map(l => l.id);
+    this.budgetService.getDetails(this.budgetId).subscribe(budget => {
+      this.budget = budget;
 
-    const dateFrom = this.buildStartDate();
-    const dateTo = this.buildEndDate();
+      const accountIds = this.budget.accounts.map(a => a.id);
+      const labelIds = this.budget.labels.map(l => l.id);
 
-    zip(
-      this.budgetService.getTransactions(dateFrom, dateTo, accountIds, labelIds),
-      this.budgetService.getStatusHistory(dateFrom, dateTo, this.budget.period, accountIds, labelIds)
-    ).subscribe(([transactions, data]) => {
-      this.transactions = transactions;
-      this.buildBudgetStatusList(data);
+      const dateFrom = this.buildStartDate();
+      const dateTo = this.buildEndDate();
+
+      zip(
+        this.budgetService.getTransactions(dateFrom, dateTo, accountIds, labelIds),
+        this.budgetService.getStatusHistory(dateFrom, dateTo, this.budget.period, accountIds, labelIds)
+      ).subscribe(([transactions, data]) => {
+        this.transactions = transactions;
+        this.buildBudgetStatusList(data);
+      });
+
+      let params = {};
+      params = this.routerService.setYear(this.currentYear, params);
+      if (this.isMonthSelectable()) {
+        params = this.routerService.setMonth(this.currentMonth, params);
+      }
+      this.routerService.refresh(['budget', this.budgetId], params);
     });
-
-    let params = {};
-    params = this.routerService.setYear(this.currentYear, params);
-    if (this.isMonthSelectable()) {
-      params = this.routerService.setMonth(this.currentMonth, params);
-    }
-    this.routerService.refresh(['budget', this.budgetId], params);
   }
 
   /**

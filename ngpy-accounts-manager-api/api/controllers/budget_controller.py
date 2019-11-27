@@ -72,6 +72,7 @@ class BudgetController:
         :param budget: the budget to save
         :return: the saved budget
         """
+        return self.__budget_service.save_budget(budget)
 
     @restipy.route('/status')
     @restipy.format_as(BudgetStatus)

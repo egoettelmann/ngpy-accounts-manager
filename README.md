@@ -24,7 +24,7 @@ Then, install and run the backend with python:
 
 ```
 pip install -r requirements.txt
-python ngpy-accounts-manager-api/main.py
+python ngpy-accounts-manager-api/web.py
 ```
 
 ## Release Notes

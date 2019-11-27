@@ -210,8 +210,8 @@ class Notification:
     'name': types.String(),
     'description': types.String(),
     'amount': types.Float(),
-    'accounts': types.Nested(Account, ignore_on_parse=True),
-    'labels': types.Nested(Label, ignore_on_parse=True)
+    'accounts': types.Nested(Account, allow_null=True),
+    'labels': types.Nested(Label, allow_null=True)
 })
 class Budget:
     """
@@ -226,8 +226,8 @@ class Budget:
         self.description = description
         self.period = period
         self.amount = amount
-        self.labels = labels
-        self.accounts = accounts
+        self.labels = [] if labels is None else labels
+        self.accounts = [] if accounts is None else accounts
 
     def __repr__(self):
         """String representation"""

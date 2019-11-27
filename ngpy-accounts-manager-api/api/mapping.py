@@ -29,18 +29,23 @@ class Mapper(ObjectMapper):
         self.create_map(CategoryDbo, Category)
         self.create_map(Category, CategoryDbo)
         self.create_map(BudgetDbo, Budget, {'labels': lambda x: x.labels, 'accounts': lambda x: x.accounts})
-        self.create_map(Budget, BudgetDbo)
+        self.create_map(Budget, BudgetDbo, {
+            'labels': lambda x: self.map_all(x.labels, LabelDbo),
+            'accounts': lambda x: self.map_all(x.accounts, AccountDbo)
+        })
         self.create_map(UserDbo, User)
 
-    def map(self, source: Any, target_type: Type[T]) -> T:
+    def map(self, source: Any, target_type: Type[T], *args, **kwargs) -> T:
         """Helper function to map an object.
         This method adds some type-hinting in comparison to the object mapper
 
         :param source: the source object
         :param target_type: the target type
+        :param args: other positional params
+        :param kwargs: other named params
         :return: the mapped object
         """
-        return super().map(source, target_type)
+        return super().map(source, target_type, *args, **kwargs)
 
     def map_all(self, source_list: List[Any], target_type: Type[T]) -> List[T]:
         """Helper function to map a list of objects

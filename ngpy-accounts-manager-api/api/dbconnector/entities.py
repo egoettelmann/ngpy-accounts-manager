@@ -205,13 +205,15 @@ class BudgetDbo(EntityManager.get_base()):
     accounts = relationship('AccountDbo', secondary=budgets_accounts_table)
     labels = relationship('LabelDbo', secondary=budgets_labels_table)
 
-    def __init__(self, id=None, name=None, description=None, period=None, amount=None):
+    def __init__(self, id=None, name=None, description=None, period=None, amount=None, accounts=None, labels=None):
         """Constructor"""
         self.id = id
         self.name = name
         self.description = description
         self.period = period
         self.amount = amount
+        self.accounts = [] if accounts is None else accounts
+        self.labels = [] if labels is None else labels
 
     def __repr__(self):
         """String representation"""
