@@ -30,5 +30,28 @@
                       [data]="budgetStatusList"
                       (handleClick)="goToDetails($event)">
     </app-budget-chart>
+
+    <div class="text-right">
+      <button type="button" class="btn btn-sm btn-icon btn-info mr-0" (click)="openModal()">
+        <clr-icon shape="plus"></clr-icon>
+        <span>{{ 'i18n.views.budgets.button.create' | translate }}</span>
+      </button>
+    </div>
   </div>
 </div>
+
+<clr-modal *ngIf="newBudget"
+           [(clrModalOpen)]="showModal"
+           [clrModalSize]="'lg'"
+           [clrModalClosable]="false"
+           [clrModalStaticBackdrop]="true">
+  <h3 class="modal-title">{{ 'i18n.views.budgets.button.create' | translate }}</h3>
+  <div class="modal-body">
+    <app-budget-form [model]="newBudget"
+                     [labels]="labels"
+                     [accounts]="accounts"
+                     (onFormSubmit)="saveBudget($event)"
+                     (onFormCancel)="closeModal()">
+    </app-budget-form>
+  </div>
+</clr-modal>

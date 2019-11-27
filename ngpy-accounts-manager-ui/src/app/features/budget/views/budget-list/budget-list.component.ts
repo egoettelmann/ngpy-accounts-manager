@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DateService } from '../../../../core/services/date.service';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
-import { Account, BudgetStatus, Category } from '../../../../core/models/api.models';
+import { Account, Budget, BudgetStatus, Category, Label } from '../../../../core/models/api.models';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
 import * as _ from 'lodash';
 import { RouterService } from '../../../../core/services/router.service';
+import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
+import { zip } from 'rxjs';
 
 @Component({
   templateUrl: './budget-list.component.html',
@@ -13,20 +15,25 @@ import { RouterService } from '../../../../core/services/router.service';
 })
 export class BudgetListComponent implements OnInit {
 
-  public currentYear: number;
-  public currentMonth: number;
-  public accountsFilter: number[] = [];
+  currentYear: number;
+  currentMonth: number;
+  accountsFilter: number[] = [];
 
-  public accounts: Account[];
-  public categories: Category[];
+  accounts: Account[];
+  labels: Label[];
+  categories: Category[];
 
-  public budgetStatusList: BudgetStatus[];
+  budgetStatusList: BudgetStatus[];
+
+  newBudget: Budget;
+  showModal = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private routerService: RouterService,
               private dateService: DateService,
               private budgetService: BudgetService,
+              private labelsService: LabelsRestService,
               private accountsService: AccountsService
   ) {
   }
@@ -36,8 +43,12 @@ export class BudgetListComponent implements OnInit {
    */
   ngOnInit(): void {
     this.initData();
-    this.accountsService.getAccounts().subscribe(accounts => {
-      this.accounts = accounts.slice(0);
+    zip(
+      this.accountsService.getAccounts(),
+      this.labelsService.getAll()
+    ).subscribe(([accounts, labels]) => {
+      this.accounts = accounts;
+      this.labels = labels;
       this.reloadData();
     });
   }
@@ -85,6 +96,34 @@ export class BudgetListComponent implements OnInit {
     params = this.routerService.setMonth(this.currentMonth, params);
     this.router.navigate(['budget', budgetId], {
       queryParams: params
+    });
+  }
+
+  /**
+   * Opens the modal with the budget form.
+   */
+  openModal() {
+    this.newBudget = new Budget();
+    this.showModal = true;
+  }
+
+  /**
+   * Closes the modal with the budget form.
+   */
+  closeModal() {
+    this.showModal = false;
+    this.newBudget = undefined;
+  }
+
+  /**
+   * Saves the budget.
+   *
+   * @param budget the budget to save
+   */
+  saveBudget(budget: Budget) {
+    this.budgetService.saveOne(budget).subscribe(() => {
+      this.closeModal();
+      this.reloadData();
     });
   }
 

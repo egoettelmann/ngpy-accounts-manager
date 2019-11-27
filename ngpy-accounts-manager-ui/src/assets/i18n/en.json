@@ -94,6 +94,7 @@
 
   "i18n.views.budget.categories.chart.title": "Budget status",
   "i18n.views.budgets.budget-details.button.edit": "Edit",
+  "i18n.views.budgets.button.create": "Add a new budget",
   "i18n.components.budgets.series.consumption": "Budget consumption",
   "i18n.components.budgets.series.overrun": "Budget overrun",
   "i18n.components.budgets.series.available": "Available budget",
