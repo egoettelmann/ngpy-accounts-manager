@@ -196,6 +196,8 @@ class TransactionRepository:
         :param transaction: the transaction to save
         :return: the saved transaction
         """
+        del transaction.account
+        del transaction.label
         saved_transaction = self.__entity_manager.get_session().merge(transaction)
         try:
             self.__entity_manager.get_session().commit()
