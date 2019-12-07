@@ -13,4 +13,5 @@ tests/.cache
 *.db
 uploads/
 tmp/
+backups/
 version.txt
