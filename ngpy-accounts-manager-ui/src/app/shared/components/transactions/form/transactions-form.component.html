@@ -75,7 +75,8 @@
             (click)="cancel()">
       {{ 'i18n.components.transactions.form.button.cancel' | translate }}
     </button>
-    <button class="btn btn-danger"
+    <button *ngIf="model.id !== undefined"
+            class="btn btn-danger"
             type="button"
             (click)="deleteTransaction()">
       {{ 'i18n.components.transactions.form.button.delete' | translate }}
