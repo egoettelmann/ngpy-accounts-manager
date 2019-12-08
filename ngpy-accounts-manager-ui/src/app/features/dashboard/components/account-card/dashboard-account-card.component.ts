@@ -6,10 +6,10 @@ import { Account } from '../../../../core/models/api.models';
  */
 @Component({
   selector: 'app-dashboard-account-card',
-  templateUrl: './dashboard-accounts-card.component.html',
-  styleUrls: ['./dashboard-accounts-card.component.scss']
+  templateUrl: './dashboard-account-card.component.html',
+  styleUrls: ['./dashboard-account-card.component.scss']
 })
-export class DashboardAccountsCardComponent {
+export class DashboardAccountCardComponent {
 
   /**
    * The account

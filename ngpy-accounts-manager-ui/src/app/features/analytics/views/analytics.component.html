@@ -79,31 +79,31 @@
 
 <div class="clr-row">
   <div class="clr-col-12 clr-col-md-6">
-    <app-analytics-quarterly-chart [chartTitle]="creditChartTitle | translate"
-                                   [data]="analyticsCredit">
-    </app-analytics-quarterly-chart>
+    <app-analytics-bar-chart [chartTitle]="creditChartTitle | translate"
+                             [data]="analyticsCredit">
+    </app-analytics-bar-chart>
   </div>
 
   <div class="clr-col-12 clr-col-md-6">
-    <app-analytics-quarterly-chart [chartTitle]="debitChartTitle | translate"
-                                   [data]="analyticsDebit">
-    </app-analytics-quarterly-chart>
+    <app-analytics-bar-chart [chartTitle]="debitChartTitle | translate"
+                             [data]="analyticsDebit">
+    </app-analytics-bar-chart>
   </div>
 </div>
 
 <div class="clr-row">
   <div class="clr-col-12 clr-col-md-6">
-    <app-analytics-details-chart [chartTitle]="'i18n.views.analytics.table.credit.title' | translate"
-                                 [data]="detailsCredit">
-    </app-analytics-details-chart>
+    <app-analytics-pie-chart [chartTitle]="'i18n.views.analytics.table.credit.title' | translate"
+                             [data]="detailsCredit">
+    </app-analytics-pie-chart>
 
     <app-analytics-details-table [data]="detailsCredit"></app-analytics-details-table>
   </div>
 
   <div class="clr-col-12 clr-col-md-6">
-    <app-analytics-details-chart [chartTitle]="'i18n.views.analytics.table.debit.title' | translate"
-                                 [data]="detailsDebit">
-    </app-analytics-details-chart>
+    <app-analytics-pie-chart [chartTitle]="'i18n.views.analytics.table.debit.title' | translate"
+                             [data]="detailsDebit">
+    </app-analytics-pie-chart>
 
     <app-analytics-details-table [data]="detailsDebit" [expanded]="false"></app-analytics-details-table>
   </div>

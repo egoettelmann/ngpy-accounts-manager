@@ -4,11 +4,11 @@ import { CommonFunctions } from '../../../../shared/utils/common-functions';
 import { CompositeKeyValue } from '../../../../core/models/api.models';
 
 @Component({
-  selector: 'app-analytics-quarterly-chart',
-  templateUrl: './analytics-quarterly-chart.component.html',
-  styleUrls: ['./analytics-quarterly-chart.component.scss']
+  selector: 'app-analytics-bar-chart',
+  templateUrl: './analytics-bar-chart.component.html',
+  styleUrls: ['./analytics-bar-chart.component.scss']
 })
-export class AnalyticsQuarterlyChartComponent implements OnChanges {
+export class AnalyticsBarChartComponent implements OnChanges {
 
   @Input() chartTitle: string;
   @Input() data: CompositeKeyValue[];

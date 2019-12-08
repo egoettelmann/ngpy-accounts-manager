@@ -4,11 +4,11 @@ import { Alerts } from '../../../../core/models/domain.models';
 import { Category } from '../../../../core/models/api.models';
 
 @Component({
-  selector: 'app-dashboard-notifications',
-  templateUrl: './dashboard-notifications.component.html',
-  styleUrls: ['./dashboard-notifications.component.scss']
+  selector: 'app-dashboard-alerts',
+  templateUrl: './dashboard-alerts.component.html',
+  styleUrls: ['./dashboard-alerts.component.scss']
 })
-export class DashboardNotificationsComponent {
+export class DashboardAlertsComponent {
 
   /**
    * The alerts

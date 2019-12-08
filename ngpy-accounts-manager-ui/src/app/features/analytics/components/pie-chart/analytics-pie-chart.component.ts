@@ -3,11 +3,11 @@ import { DecimalPipe } from '@angular/common';
 import { GroupedValue } from '../../../../core/models/domain.models';
 
 @Component({
-  selector: 'app-analytics-details-chart',
-  templateUrl: './analytics-details-chart.component.html',
-  styleUrls: ['./analytics-details-chart.component.scss']
+  selector: 'app-analytics-pie-chart',
+  templateUrl: './analytics-pie-chart.component.html',
+  styleUrls: ['./analytics-pie-chart.component.scss']
 })
-export class AnalyticsDetailsChartComponent implements OnChanges {
+export class AnalyticsPieChartComponent implements OnChanges {
 
   @Input() data: GroupedValue[];
   @Input() chartTitle: string;
