@@ -14,38 +14,56 @@
   outline: none !important;
 }
 
-.w-100 {
-  width: 100% !important;
+/**
+ * Custom widths: w-5, w-10, ..., w-25, ..., w-100
+ */
+$i: 0;
+@while $i <= 100 {
+  .w-#{$i} {
+    width: $i*1% !important;
+  }
+  $i: $i + 5;
 }
 
-.w-40 {
-  width: 40% !important;
+/**
+ * Custom margins/paddings: mb-none, ml-sm, pr-md, mt-lg, pb-xl, ...
+ */
+$sizes: ("none": 0, "sm": .25rem, "md": .5rem, "lg": .75rem, "xl": 1rem);
+$types: ("m": "margin", "p": "padding");
+$directions: ("t": "top", "b": "bottom", "l": "left", "r": "right");
+@each $sKey, $sValue in $sizes {
+  @each $tKey, $tValue in $types {
+    .#{$tKey}-#{$sKey} {
+      #{$tValue}: $sValue !important;
+    }
+    @each $dKey, $dValue in $directions {
+      .#{$tKey}#{$dKey}-#{$sKey} {
+        #{$tValue}-#{$dValue}: $sValue !important;
+      }
+    }
+  }
 }
 
-.w-20 {
-  width: 20% !important;
+/**
+ * Custom text colors
+ */
+$colors: ("danger": #C92100, "warning": #FF8400, "info": #89CBDF, "success": #2f8400);
+@each $cKey, $cValue in $colors {
+  .text-#{$cKey} {
+    color: $cValue !important;
+  }
 }
 
-.w-15 {
-  width: 15% !important;
-}
-
-.mb-1 {
-  margin-bottom: .5rem !important;
-}
-
-.mr-0 {
-  margin-right: 0 !important;
-}
-
-.mr-1 {
-  margin-right: .5rem !important;
-}
-
+/**
+ * Shadow class for cards
+ */
 .card-shadow {
   box-shadow: 0 0.125rem 0 0 #d7d7d7;
 }
 
+/**
+ * Force max with on all form fields
+ */
 .clr-form-control {
   margin-top: 0 !important;
 
@@ -62,22 +80,9 @@
   }
 }
 
-.text-danger {
-  color: #C92100;
-}
-
-.text-warning {
-  color: #FF8400;
-}
-
-.text-info {
-  color: #89CBDF;
-}
-
-.text-success {
-  color: #2f8400;
-}
-
+/**
+ * Truncate text on small devices
+ */
 @media (max-width: 767px) {
   .truncate-md-170 {
     max-width: 170px;

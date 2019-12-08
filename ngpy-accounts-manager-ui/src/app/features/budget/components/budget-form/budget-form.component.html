@@ -8,7 +8,7 @@
     <app-field-wrapper for="name"
                        [i18nLabel]="'i18n.components.budgets.budget-form.name'"
                        [ctrl]="form.get('name')"
-                       class="form-group clr-row mb-1">
+                       class="form-group clr-row mb-md">
       <input id="name"
              clrInput
              [formControlName]="'name'"
@@ -20,7 +20,7 @@
     <app-field-wrapper for="description"
                        [i18nLabel]="'i18n.components.budgets.budget-form.description'"
                        [ctrl]="form.get('description')"
-                       class="form-group clr-row mb-1">
+                       class="form-group clr-row mb-md">
         <textarea id="description"
                   clrTextarea
                   [formControlName]="'description'"
@@ -33,7 +33,7 @@
     <app-field-wrapper for="amount"
                        [i18nLabel]="'i18n.components.budgets.budget-form.amount'"
                        [ctrl]="form.get('amount')"
-                       class="form-group clr-row mb-1">
+                       class="form-group clr-row mb-md">
       <input id="amount"
              clrInput
              [formControlName]="'amount'"
@@ -45,7 +45,7 @@
     <app-field-wrapper for="period"
                        [i18nLabel]="'i18n.components.budgets.budget-form.period'"
                        [ctrl]="form.get('period')"
-                       class="form-group clr-row mb-1">
+                       class="form-group clr-row mb-md">
       <select id="period"
               clrSelect
               [formControlName]="'period'">
@@ -60,7 +60,7 @@
     <app-field-wrapper for="accounts"
                        [i18nLabel]="'i18n.components.budgets.budget-form.accounts'"
                        [ctrl]="form.get('accounts')"
-                       class="form-group clr-row mb-1">
+                       class="form-group clr-row mb-md">
       <app-accounts-toggle [accounts]="accounts"
                            [preSelected]="form.get('accounts').value"
                            (onChange)="selectAccounts($event)">
@@ -71,7 +71,7 @@
     <app-field-wrapper for="labels"
                        [i18nLabel]="'i18n.components.budgets.budget-form.labels'"
                        [ctrl]="form.get('labels')"
-                       class="form-group clr-row mb-1">
+                       class="form-group clr-row mb-md">
       <app-labels-toggle [labels]="labels"
                          [value]="form.get('labels').value"
                          (onChange)="selectLabels($event)">
