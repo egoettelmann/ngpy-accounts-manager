@@ -143,7 +143,12 @@ class BudgetService:
         :return: the total
         """
         date_from = date(status_date.year, status_date.month, 1)
-        date_to = date(status_date.year, status_date.month + 1, 1)
+        to_year = status_date.year
+        to_month = status_date.month + 1
+        if to_month == 13:
+            to_year = to_year + 1
+            to_month = 1
+        date_to = date(to_year, to_month + 1, 1)
         filters = FilterRequest.all(
             FilterRequest.of('date_value', date_from, FilterOperator.GE),
             FilterRequest.of('date_value', date_to, FilterOperator.LT),
