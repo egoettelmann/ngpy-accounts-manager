@@ -161,6 +161,7 @@ class Status:
     'description': types.String(),
     'dateValue': types.DateTime(attribute='date_value', dt_format="iso8601"),
     'amount': types.Float(),
+    'note': types.String(),
     'label_id': types.Integer(),
     'label': types.Nested(Label, ignore_on_parse=True),
     'account_id': types.Integer(),

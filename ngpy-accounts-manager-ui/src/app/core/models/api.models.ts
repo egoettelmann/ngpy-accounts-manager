@@ -78,6 +78,7 @@ export class Transaction {
   description: string;
   dateValue: string;
   amount: number;
+  note: string;
   label: Label;
   account: Account;
 }

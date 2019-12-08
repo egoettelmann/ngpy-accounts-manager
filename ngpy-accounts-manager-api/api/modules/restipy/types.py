@@ -188,6 +188,8 @@ class String(Raw):
         super(String, self).__init__(**kwargs)
 
     def format(self, value):
+        if value is None:
+            return None
         try:
             return str(value)
         except ValueError as ve:

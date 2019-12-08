@@ -3,6 +3,8 @@
       class="clr-form">
 
   <section class="form-block compact">
+
+    <!-- Account -->
     <app-field-wrapper for="account"
                        [i18nLabel]="'i18n.components.transactions.form.account'"
                        [ctrl]="form.get('account_id')"
@@ -16,6 +18,8 @@
         </option>
       </select>
     </app-field-wrapper>
+
+    <!-- Reference -->
     <app-field-wrapper for="reference"
                        [i18nLabel]="'i18n.components.transactions.form.reference'"
                        [ctrl]="form.get('reference')"
@@ -26,6 +30,8 @@
              class="w-100"
              type="text"/>
     </app-field-wrapper>
+
+    <!-- Description -->
     <app-field-wrapper for="description"
                        [i18nLabel]="'i18n.components.transactions.form.description'"
                        [ctrl]="form.get('description')"
@@ -37,6 +43,8 @@
                   rows="3">
         </textarea>
     </app-field-wrapper>
+
+    <!-- Value date -->
     <app-field-wrapper for="dateValue"
                        [i18nLabel]="'i18n.components.transactions.form.dateValue'"
                        [ctrl]="form.get('dateValue')"
@@ -47,6 +55,8 @@
              type="date"
              class="w-100"/>
     </app-field-wrapper>
+
+    <!-- Amount -->
     <app-field-wrapper for="amount"
                        [i18nLabel]="'i18n.components.transactions.form.amount'"
                        [ctrl]="form.get('amount')"
@@ -58,6 +68,7 @@
              type="text"/>
     </app-field-wrapper>
 
+    <!-- Label -->
     <app-field-wrapper for="label"
                        [i18nLabel]="'i18n.components.transactions.form.label'"
                        [ctrl]="form.get('amount')"
@@ -66,6 +77,19 @@
                         [options]="labels"
                         (onSelect)="changeLabel($event)">
       </app-autocomplete>
+    </app-field-wrapper>
+
+    <!-- Additional note -->
+    <app-field-wrapper for="note"
+                       [i18nLabel]="'i18n.components.transactions.form.note'"
+                       [ctrl]="form.get('note')"
+                       class="form-group clr-row mb-1">
+        <textarea id="note"
+                  clrTextarea
+                  [formControlName]="'note'"
+                  class="w-100"
+                  rows="3">
+        </textarea>
     </app-field-wrapper>
   </section>
 

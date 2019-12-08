@@ -81,6 +81,7 @@ export class TransactionsFormComponent implements OnChanges {
         'description': [null],
         'dateValue': [null, [Validators.required]],
         'amount': [null, [Validators.required]],
+        'note': [null],
         'label_id': [null]
       }
     );

@@ -51,7 +51,18 @@
         {{ transaction.reference }}
       </td>
       <td class="text-left truncate-md-170">
-        {{ transaction.description }}
+        <span>{{ transaction.description }}</span>
+        <span *ngIf="transaction.note"
+              class="tooltip tooltip-md tooltip-top-left"
+              role="tooltip"
+              aria-haspopup="true">
+          <clr-icon class="is-solid"
+                    shape="info-circle">
+          </clr-icon>
+          <span class="tooltip-content">
+            <span>{{ transaction.note }}</span><br/>
+          </span>
+        </span>
       </td>
       <td class="text-center text-nowrap clr-hidden-sm-down">
         {{ transaction.dateValue }}
