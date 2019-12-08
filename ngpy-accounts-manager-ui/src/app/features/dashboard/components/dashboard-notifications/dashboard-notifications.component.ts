@@ -37,7 +37,7 @@ export class DashboardNotificationsComponent {
    * Redirects to the label alerts view
    */
   goToLabelAlerts() {
-    this.router.navigate(['search'], {
+    this.router.navigate(['transactions', 'search'], {
       queryParams: {
         labels: ''
       }
@@ -48,7 +48,7 @@ export class DashboardNotificationsComponent {
    * Redirects to the credit category alerts view
    */
   goToCategoryCreditAlerts() {
-    this.router.navigate(['search'], {
+    this.router.navigate(['transactions', 'search'], {
       queryParams: {
         categories: this.debitCategories.map(c => c.id).join(','),
         minAmount: 0
@@ -60,7 +60,7 @@ export class DashboardNotificationsComponent {
    * Redirects to the debit category alerts view
    */
   goToCategoryDebitAlerts() {
-    this.router.navigate(['search'], {
+    this.router.navigate(['transactions', 'search'], {
       queryParams: {
         categories: this.creditCategories.map(c => c.id).join(','),
         maxAmount: 0

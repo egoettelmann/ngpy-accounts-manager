@@ -1,19 +1,19 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Account, Category, Label } from '../../../core/models/api.models';
-import { FilterOperator, FilterRequest } from '../../../core/models/rql.models';
+import { Account, Category, Label } from '../../../../core/models/api.models';
+import { FilterOperator, FilterRequest } from '../../../../core/models/rql.models';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { RqlService } from '../../../core/services/rql.service';
+import { RqlService } from '../../../../core/services/rql.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DateService } from '../../../core/services/date.service';
+import { DateService } from '../../../../core/services/date.service';
 
 @Component({
-  selector: 'app-search-form',
-  templateUrl: './search-form.component.html',
-  styleUrls: ['./search-form.component.scss']
+  selector: 'app-transactions-search-form',
+  templateUrl: './transactions-search-form.component.html',
+  styleUrls: ['./transactions-search-form.component.scss']
 })
-export class SearchFormComponent implements OnInit, OnDestroy {
+export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
 
   @Input() accounts: Account[];
   @Input() labels: Label[];
@@ -171,7 +171,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       'maxAmount': this.searchForm.get('maxAmount').value,
       'description': this.searchForm.get('description').value
     };
-    this.router.navigate(['search'], {
+    this.router.navigate(['transactions', 'search'], {
       queryParams: queryParams
     });
   }

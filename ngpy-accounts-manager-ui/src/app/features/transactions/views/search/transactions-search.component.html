@@ -4,11 +4,11 @@
   <span *ngIf="transactions" class="badge badge-info">{{ transactions?.length }}</span>
 </h3>
 
-<app-search-form [accounts]="accounts"
-                 [labels]="labels"
-                 [categories]="categories"
-                 (searchChange)="loadData($event)">
-</app-search-form>
+<app-transactions-search-form [accounts]="accounts"
+                              [labels]="labels"
+                              [categories]="categories"
+                              (searchChange)="loadData($event)">
+</app-transactions-search-form>
 
 <div class="clr-row" *ngIf="transactions?.length === 500">
   <div class="clr-col-12">

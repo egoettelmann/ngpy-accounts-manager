@@ -1,18 +1,18 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
-import { Account, Category, Label, Transaction } from '../../../core/models/api.models';
+import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
+import { Account, Category, Label, Transaction } from '../../../../core/models/api.models';
 import { zip } from 'rxjs';
-import { TransactionsService } from '../../../core/services/domain/transactions.service';
-import { FilterRequest } from '../../../core/models/rql.models';
-import { AccountsService } from '../../../core/services/domain/accounts.service';
-import { CategoriesService } from '../../../core/services/domain/categories.service';
+import { TransactionsService } from '../../../../core/services/domain/transactions.service';
+import { FilterRequest } from '../../../../core/models/rql.models';
+import { AccountsService } from '../../../../core/services/domain/accounts.service';
+import { CategoriesService } from '../../../../core/services/domain/categories.service';
 
 @Component({
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  templateUrl: './transactions-search.component.html',
+  styleUrls: ['./transactions-search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class TransactionsSearchComponent implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 

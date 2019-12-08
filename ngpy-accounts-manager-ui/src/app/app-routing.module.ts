@@ -38,10 +38,6 @@ const routes: Routes = [
             loadChildren: () => import('./features/budget/budget.module').then(m => m.BudgetModule)
           },
           {
-            path: 'search',
-            loadChildren: () => import('./features/search/search.module').then(m => m.SearchModule)
-          },
-          {
             path: 'settings',
             loadChildren: () => import('./features/settings/settings.module').then(m => m.SettingsModule)
           },

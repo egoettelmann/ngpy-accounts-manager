@@ -82,7 +82,7 @@ export class NavComponent implements OnInit, OnDestroy {
    * @param value the value to search
    */
   search(value: string) {
-    this.router.navigate(['search'], {
+    this.router.navigate(['transactions', 'search'], {
       queryParams: {
         description: value
       }
