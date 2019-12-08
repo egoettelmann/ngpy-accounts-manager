@@ -1,0 +1,59 @@
+<div class="clr-row">
+  <div class="clr-col-12" *ngIf="alerts && alerts.labels > 0">
+    <clr-alert [clrAlertType]="'danger'"
+               [clrAlertIcon]="'exclamation-circle'"
+               [clrAlertClosable]="false">
+      <clr-alert-item>
+        <span class="alert-text">
+          {{ 'i18n.views.dashboard.alerts.labels' | translate:{num: alerts.labels} }}
+        </span>
+        <div class="alert-actions">
+          <a (click)="goToLabelAlerts()" class="alert-action fix-that">
+            {{ 'i18n.views.dashboard.alerts.labels-link' | translate }}
+          </a>
+        </div>
+      </clr-alert-item>
+    </clr-alert>
+  </div>
+
+  <div class="clr-col-12" *ngIf="alerts && (alerts.credits + alerts.debits) !== 0">
+    <clr-alert [clrAlertType]="'danger'"
+               [clrAlertIcon]="'exclamation-circle'"
+               [clrAlertClosable]="false">
+      <clr-alert-item>
+        <span *ngIf="(alerts.credits + alerts.debits) > 0" class="alert-text">
+          {{ 'i18n.views.dashboard.alerts.categories' | translate:{ num: alerts.credits + alerts.debits } }}
+        </span>
+        <span *ngIf="(alerts.credits + alerts.debits) === -1" class="alert-text">
+          {{ 'i18n.views.dashboard.alerts.categories-max' | translate }}
+        </span>
+        <div class="alert-actions" *ngIf="alerts.credits > 0 && alerts.debits > 0">
+          <clr-dropdown>
+            <button class="dropdown-toggle" clrDropdownTrigger>
+              {{ 'i18n.views.dashboard.alerts.categories-link' | translate }}
+              <clr-icon shape="caret down"></clr-icon>
+            </button>
+            <clr-dropdown-menu clrPosition="bottom-right">
+              <a class="dropdown-item" (click)="goToCategoryCreditAlerts()">
+                <span>{{ 'i18n.views.dashboard.alerts.categories-link-credits' | translate: { num: alerts.credits } }}</span>
+              </a>
+              <a class="dropdown-item" (click)="goToCategoryDebitAlerts()">
+                <span>{{ 'i18n.views.dashboard.alerts.categories-link-debits' | translate: { num: alerts.debits } }}</span>
+              </a>
+            </clr-dropdown-menu>
+          </clr-dropdown>
+        </div>
+        <div class="alert-actions" *ngIf="alerts.credits > 0 && alerts.debits == 0">
+          <a (click)="goToCategoryCreditAlerts()" class="alert-action fix-that">
+            {{ 'i18n.views.dashboard.alerts.labels-link' | translate }}
+          </a>
+        </div>
+        <div class="alert-actions" *ngIf="alerts.debits > 0 && alerts.credits == 0">
+          <a (click)="goToCategoryDebitAlerts()" class="alert-action fix-that">
+            {{ 'i18n.views.dashboard.alerts.labels-link' | translate }}
+          </a>
+        </div>
+      </clr-alert-item>
+    </clr-alert>
+  </div>
+</div>

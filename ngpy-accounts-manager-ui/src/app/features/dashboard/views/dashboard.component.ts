@@ -36,23 +36,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  goToLabelAlerts() {
-    this.router.navigate(['search'], {
-      queryParams: {
-        labels: ''
-      }
-    });
-  }
-
-  goToCategoryCreditAlerts() {
-    this.router.navigate(['search'], {
-      queryParams: {
-        categories: '2,3,5',
-        minAmount: 0
-      }
-    });
-  }
-
   goToCategoryDebitAlerts() {
     this.router.navigate(['search'], {
       queryParams: {
