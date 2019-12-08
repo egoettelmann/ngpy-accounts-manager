@@ -31,6 +31,7 @@ import { DateService } from './services/date.service';
 import { BudgetRestService } from './services/rest/budget-rest.service';
 import { BudgetService } from './services/domain/budget.service';
 import { RouterService } from './services/router.service';
+import { CategoriesService } from './services/domain/categories.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -98,6 +99,7 @@ export class CoreModule {
     StatisticsService,
     AlertsService,
     BudgetService,
+    CategoriesService,
 
     /** App services */
     AuthenticationService,

@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-import { CategoriesRestService } from '../../../../core/services/rest/categories-rest.service';
 import { zip } from 'rxjs';
 import { lock, SubscriptionLock } from '../../../../shared/utils/lock-subscriber';
 import { Category, Label } from '../../../../core/models/api.models';
+import { CategoriesService } from '../../../../core/services/domain/categories.service';
 
 @Component({
   templateUrl: './settings-labels.component.html',
@@ -24,12 +24,12 @@ export class SettingsLabelsComponent implements OnInit {
               private router: Router,
               private fb: FormBuilder,
               private labelsService: LabelsRestService,
-              private categoriesService: CategoriesRestService) {
+              private categoriesService: CategoriesService) {
   }
 
   ngOnInit(): void {
     zip(
-      this.categoriesService.getAll(),
+      this.categoriesService.getCategories(),
       this.labelsService.getAll()
     ).subscribe(([categories, labels]) => {
       this.categories = categories;

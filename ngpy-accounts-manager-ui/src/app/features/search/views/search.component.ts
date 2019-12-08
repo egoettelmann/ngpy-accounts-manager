@@ -6,7 +6,7 @@ import { zip } from 'rxjs';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { FilterRequest } from '../../../core/models/rql.models';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
-import { CategoriesRestService } from '../../../core/services/rest/categories-rest.service';
+import { CategoriesService } from '../../../core/services/domain/categories.service';
 
 @Component({
   templateUrl: './search.component.html',
@@ -28,7 +28,7 @@ export class SearchComponent implements OnInit {
               private labelsService: LabelsRestService,
               private transactionsService: TransactionsService,
               private accountsService: AccountsService,
-              private categoriesService: CategoriesRestService
+              private categoriesService: CategoriesService
   ) {
   }
 
@@ -36,7 +36,7 @@ export class SearchComponent implements OnInit {
     zip(
       this.accountsService.getAccounts(),
       this.labelsService.getAll(),
-      this.categoriesService.getAll()
+      this.categoriesService.getCategories()
     ).subscribe(([accounts, labels, categories]) => {
       this.accounts = accounts.slice(0);
       this.labels = labels.slice(0);

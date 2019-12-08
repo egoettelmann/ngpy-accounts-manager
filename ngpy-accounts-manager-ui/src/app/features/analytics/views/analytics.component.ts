@@ -1,5 +1,4 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { CategoriesRestService } from '../../../core/services/rest/categories-rest.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { zip } from 'rxjs';
@@ -9,6 +8,7 @@ import { ChartSerie, GroupedValue } from '../../../core/models/domain.models';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
 import { RouterService } from '../../../core/services/router.service';
+import { CategoriesService } from '../../../core/services/domain/categories.service';
 
 @Component({
   templateUrl: './analytics.component.html',
@@ -33,7 +33,7 @@ export class AnalyticsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
               private accountsService: AccountsService,
-              private categoriesService: CategoriesRestService,
+              private categoriesService: CategoriesService,
               private statisticsService: StatisticsService
   ) {
   }
@@ -45,7 +45,7 @@ export class AnalyticsComponent implements OnInit {
     this.initData();
     zip(
       this.accountsService.getAccounts(),
-      this.categoriesService.getAll()
+      this.categoriesService.getCategories()
     ).subscribe(([accounts, categories]) => {
       this.accounts = accounts.slice(0);
       this.categories = categories.slice(0);

@@ -36,9 +36,9 @@ export class CategoriesRestService {
   /**
    * Deletes a category.
    *
-   * @param category the category to delete
+   * @param categoryId the category id to delete
    */
-  deleteOne(category: Category) {
-    return this.http.delete('/rest/categories/' + category.id);
+  deleteOne(categoryId: number) {
+    return this.http.delete('/rest/categories/' + categoryId);
   }
 }

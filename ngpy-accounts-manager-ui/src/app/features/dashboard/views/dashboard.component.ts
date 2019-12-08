@@ -1,9 +1,11 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Account } from '../../../core/models/api.models';
+import { Account, Category } from '../../../core/models/api.models';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
 import { AlertsService } from '../../../core/services/domain/alerts.service';
 import { Alerts } from '../../../core/models/domain.models';
+import { CategoriesService } from '../../../core/services/domain/categories.service';
+import { zip } from 'rxjs';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -15,32 +17,32 @@ export class DashboardComponent implements OnInit {
 
   public accounts: Account[];
   public alerts: Alerts;
+  public creditCategories: Category[];
+  public debitCategories: Category[];
   public total: number;
 
   constructor(private router: Router,
               private alertsService: AlertsService,
+              private categoriesService: CategoriesService,
               private accountsService: AccountsService
   ) {
   }
 
   ngOnInit(): void {
-    this.alertsService.getAlerts().subscribe(alerts => {
+    zip(
+      this.alertsService.getAlerts(),
+      this.categoriesService.getCategoriesOfType('C'),
+      this.categoriesService.getCategoriesOfType('D')
+    ).subscribe(([alerts, creditCategories, debitCategories]) => {
       this.alerts = alerts;
+      this.creditCategories = creditCategories;
+      this.debitCategories = debitCategories;
     });
     this.accountsService.getActiveAccounts().subscribe(accounts => {
       this.accounts = this.sortAccounts(accounts);
       this.total = 0;
       for (const a of this.accounts) {
         this.total += a.total;
-      }
-    });
-  }
-
-  goToCategoryDebitAlerts() {
-    this.router.navigate(['search'], {
-      queryParams: {
-        categories: '1,4',
-        maxAmount: 0
       }
     });
   }
