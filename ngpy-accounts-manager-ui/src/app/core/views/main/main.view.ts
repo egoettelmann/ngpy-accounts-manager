@@ -6,10 +6,10 @@ import { AppProperties } from '../../models/api.models';
  * The main component
  */
 @Component({
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  templateUrl: './main.view.html',
+  styleUrls: ['./main.view.scss']
 })
-export class MainComponent implements OnInit {
+export class MainView implements OnInit {
 
   /**
    * The application properties

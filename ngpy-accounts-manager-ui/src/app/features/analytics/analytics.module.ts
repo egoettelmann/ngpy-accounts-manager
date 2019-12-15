@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { AnalyticsComponent } from './views/analytics.component';
+import { AnalyticsView } from './views/analytics.view';
 import { AnalyticsRoutingModule } from './analytics-routing.module';
 import { SharedModule } from '../../shared/shared.module';
 import { AnalyticsBarChartComponent } from './components/bar-chart/analytics-bar-chart.component';
@@ -9,7 +9,7 @@ import { AnalyticsDetailsTableComponent } from './components/details-table/analy
 
 @NgModule({
   declarations: [
-    AnalyticsComponent,
+    AnalyticsView,
     AnalyticsPieChartComponent,
     AnalyticsDetailsTableComponent,
     AnalyticsBarChartComponent

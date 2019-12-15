@@ -7,10 +7,10 @@ import { RouterService } from '../../services/router.service';
  * The login component
  */
 @Component({
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  templateUrl: './login.view.html',
+  styleUrls: ['./login.view.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginView implements OnInit {
 
   /**
    * The form in error flag

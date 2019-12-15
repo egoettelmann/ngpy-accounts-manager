@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
-import { TransactionsComponent } from './views/transactions.component';
+import { TransactionsView } from './views/transactions.view';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionsSearchFormComponent } from './components/search-form/transactions-search-form.component';
-import { TransactionsSearchComponent } from './views/search/transactions-search.component';
-import { TransactionsListComponent } from './views/list/transactions-list.component';
+import { TransactionsSearchView } from './views/search/transactions-search.view';
+import { TransactionsListView } from './views/list/transactions-list.view';
+import { TransactionsFormComponent } from './components/form/transactions-form.component';
 
 @NgModule({
   declarations: [
-    TransactionsComponent,
-    TransactionsListComponent,
+    TransactionsView,
+    TransactionsListView,
     TransactionsSearchFormComponent,
-    TransactionsSearchComponent,
+    TransactionsSearchView,
+    TransactionsFormComponent
   ],
   imports: [
     SharedModule,

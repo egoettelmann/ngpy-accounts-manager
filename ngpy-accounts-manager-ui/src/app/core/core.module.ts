@@ -2,8 +2,8 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { NavComponent } from './components/navigation/nav.component';
-import { LoginComponent } from './views/login/login.component';
-import { MainComponent } from './views/main/main.component';
+import { LoginView } from './views/login/login.view';
+import { MainView } from './views/main/main.view';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -63,8 +63,8 @@ export class CoreModule {
    */
   static COMPONENTS_LIST = [
     NavComponent,
-    LoginComponent,
-    MainComponent
+    LoginView,
+    MainView
   ];
 
   /**

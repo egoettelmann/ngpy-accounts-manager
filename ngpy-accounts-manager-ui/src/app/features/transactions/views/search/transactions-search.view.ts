@@ -8,10 +8,10 @@ import { AccountsService } from '../../../../core/services/domain/accounts.servi
 import { CategoriesService } from '../../../../core/services/domain/categories.service';
 
 @Component({
-  templateUrl: './transactions-search.component.html',
-  styleUrls: ['./transactions-search.component.scss']
+  templateUrl: './transactions-search.view.html',
+  styleUrls: ['./transactions-search.view.scss']
 })
-export class TransactionsSearchComponent implements OnInit {
+export class TransactionsSearchView implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 

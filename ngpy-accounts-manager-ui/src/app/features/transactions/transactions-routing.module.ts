@@ -1,21 +1,21 @@
-import { TransactionsComponent } from './views/transactions.component';
+import { TransactionsView } from './views/transactions.view';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { TransactionsListComponent } from './views/list/transactions-list.component';
-import { TransactionsSearchComponent } from './views/search/transactions-search.component';
+import { TransactionsListView } from './views/list/transactions-list.view';
+import { TransactionsSearchView } from './views/search/transactions-search.view';
 
 export const routes: Routes = [
   {
     path: '',
-    component: TransactionsComponent,
+    component: TransactionsView,
     children: [
       {
         path: '',
-        component: TransactionsListComponent
+        component: TransactionsListView
       },
       {
         path: 'search',
-        component: TransactionsSearchComponent
+        component: TransactionsSearchView
       }
     ]
   }

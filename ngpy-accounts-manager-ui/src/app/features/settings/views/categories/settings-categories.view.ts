@@ -5,10 +5,10 @@ import { Category } from '../../../../core/models/api.models';
 import { CategoriesService } from '../../../../core/services/domain/categories.service';
 
 @Component({
-  templateUrl: './settings-categories.component.html',
-  styleUrls: ['./settings-categories.component.scss']
+  templateUrl: './settings-categories.view.html',
+  styleUrls: ['./settings-categories.view.scss']
 })
-export class SettingsCategoriesComponent implements OnInit {
+export class SettingsCategoriesView implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 

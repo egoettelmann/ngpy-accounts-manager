@@ -12,10 +12,10 @@ import { DateService } from '../../../../core/services/date.service';
 import { RouterService } from '../../../../core/services/router.service';
 
 @Component({
-  templateUrl: './transactions-list.component.html',
-  styleUrls: ['./transactions-list.component.scss']
+  templateUrl: './transactions-list.view.html',
+  styleUrls: ['./transactions-list.view.scss']
 })
-export class TransactionsListComponent implements OnInit {
+export class TransactionsListView implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 

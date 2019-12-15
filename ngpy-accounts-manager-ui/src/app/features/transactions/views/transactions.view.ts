@@ -1,10 +1,10 @@
 import { Component, HostBinding } from '@angular/core';
 
 @Component({
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  templateUrl: './transactions.view.html',
+  styleUrls: ['./transactions.view.scss']
 })
-export class SettingsComponent {
+export class TransactionsView {
 
   @HostBinding('class') hostClass = 'content-container';
 

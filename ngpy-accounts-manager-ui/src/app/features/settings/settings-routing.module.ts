@@ -1,30 +1,30 @@
-import { SettingsComponent } from './views/settings.component';
+import { SettingsView } from './views/settings.view';
 import { RouterModule, Routes } from '@angular/router';
-import { SettingsLabelsComponent } from './views/labels/settings-labels.component';
-import { SettingsAccountsComponent } from './views/accounts/settings-accounts.component';
-import { SettingsCategoriesComponent } from './views/categories/settings-categories.component';
+import { SettingsLabelsView } from './views/labels/settings-labels.view';
+import { SettingsAccountsView } from './views/accounts/settings-accounts.view';
+import { SettingsCategoriesView } from './views/categories/settings-categories.view';
 import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
   {
     path: '',
-    component: SettingsComponent,
+    component: SettingsView,
     children: [
       {
         path: 'labels',
-        component: SettingsLabelsComponent
+        component: SettingsLabelsView
       },
       {
         path: 'categories',
-        component: SettingsCategoriesComponent
+        component: SettingsCategoriesView
       },
       {
         path: 'accounts',
-        component: SettingsAccountsComponent
+        component: SettingsAccountsView
       },
       {
         path: 'transactions',
-        component: SettingsComponent
+        component: SettingsView
       },
       {
         path: '',

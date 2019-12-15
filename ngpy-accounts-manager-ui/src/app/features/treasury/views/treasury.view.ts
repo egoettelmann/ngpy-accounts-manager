@@ -10,10 +10,10 @@ import { AccountsService } from '../../../core/services/domain/accounts.service'
 import { RouterService } from '../../../core/services/router.service';
 
 @Component({
-  templateUrl: './treasury.component.html',
-  styleUrls: ['./treasury.component.scss']
+  templateUrl: './treasury.view.html',
+  styleUrls: ['./treasury.view.scss']
 })
-export class TreasuryComponent implements OnInit {
+export class TreasuryView implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 

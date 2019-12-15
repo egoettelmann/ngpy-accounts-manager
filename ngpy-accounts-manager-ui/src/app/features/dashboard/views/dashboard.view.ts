@@ -7,10 +7,10 @@ import { CategoriesService } from '../../../core/services/domain/categories.serv
 import { zip } from 'rxjs';
 
 @Component({
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  templateUrl: './dashboard.view.html',
+  styleUrls: ['./dashboard.view.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardView implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 

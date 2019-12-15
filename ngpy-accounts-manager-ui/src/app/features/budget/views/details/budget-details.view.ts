@@ -9,10 +9,10 @@ import { AccountsService } from '../../../../core/services/domain/accounts.servi
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 
 @Component({
-  templateUrl: './budget-details.component.html',
-  styleUrls: ['./budget-details.component.scss']
+  templateUrl: './budget-details.view.html',
+  styleUrls: ['./budget-details.view.scss']
 })
-export class BudgetDetailsComponent implements OnInit {
+export class BudgetDetailsView implements OnInit {
 
   currentYear: number;
   currentMonth: number;

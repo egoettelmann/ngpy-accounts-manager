@@ -16,14 +16,13 @@ import { AccountsToggleComponent } from './components/toggles/accounts-toggle/ac
 import { MonthsToggleComponent } from './components/toggles/months-toggle/months-toggle.component';
 import { YearsToggleComponent } from './components/toggles/years-toggle/years-toggle.component';
 import { SummaryComponent } from './components/summary/summary.component';
-import { TransactionsFormComponent } from './components/transactions/form/transactions-form.component';
 import { LabelsToggleComponent } from './components/toggles/labels-toggle/labels-toggle.component';
-import { TransactionsTableComponent } from './components/transactions/table/transactions-table.component';
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from '@angular/cdk/layout';
 import { CategoriesToggleComponent } from './components/toggles/categories-toggle/categories-toggle.component';
 import { CardWrapperComponent } from './components/cards/card-wrapper.component';
 import { RouterPathModule } from './modules/router-path/router-path.module';
+import { TransactionsTableComponent } from './components/tables/transactions-table/transactions-table.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +52,6 @@ export class SharedModule {
     MonthsToggleComponent,
     YearsToggleComponent,
     SummaryComponent,
-    TransactionsFormComponent,
     LabelsToggleComponent,
     CategoriesToggleComponent,
     TransactionsTableComponent

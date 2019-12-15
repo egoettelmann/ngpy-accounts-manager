@@ -10,10 +10,10 @@ import { LabelsRestService } from '../../../../core/services/rest/labels-rest.se
 import { zip } from 'rxjs';
 
 @Component({
-  templateUrl: './budget-list.component.html',
-  styleUrls: ['./budget-list.component.scss']
+  templateUrl: './budget-list.view.html',
+  styleUrls: ['./budget-list.view.scss']
 })
-export class BudgetListComponent implements OnInit {
+export class BudgetListView implements OnInit {
 
   currentYear: number;
   currentMonth: number;

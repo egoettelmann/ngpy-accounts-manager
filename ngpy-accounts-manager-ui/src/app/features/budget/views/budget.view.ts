@@ -1,10 +1,10 @@
 import { Component, HostBinding } from '@angular/core';
 
 @Component({
-  templateUrl: './budget.component.html',
-  styleUrls: ['./budget.component.scss']
+  templateUrl: './budget.view.html',
+  styleUrls: ['./budget.view.scss']
 })
-export class BudgetComponent {
+export class BudgetView {
 
   @HostBinding('class') hostClass = 'content-area';
 

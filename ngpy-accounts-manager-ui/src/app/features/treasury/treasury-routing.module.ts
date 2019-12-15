@@ -1,4 +1,4 @@
-import { TreasuryComponent } from './views/treasury.component';
+import { TreasuryView } from './views/treasury.view';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
@@ -8,7 +8,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: TreasuryComponent
+        component: TreasuryView
       }
     ]
   }

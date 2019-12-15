@@ -5,10 +5,10 @@ import { Account } from '../../../../core/models/api.models';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
 
 @Component({
-  templateUrl: './settings-accounts.component.html',
-  styleUrls: ['./settings-accounts.component.scss']
+  templateUrl: './settings-accounts.view.html',
+  styleUrls: ['./settings-accounts.view.scss']
 })
-export class SettingsAccountsComponent implements OnInit {
+export class SettingsAccountsView implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 

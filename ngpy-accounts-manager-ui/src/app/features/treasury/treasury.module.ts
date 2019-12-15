@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 
-import { TreasuryComponent } from './views/treasury.component';
+import { TreasuryView } from './views/treasury.view';
 import { TreasuryRoutingModule } from './treasury-routing.module';
 import { SharedModule } from '../../shared/shared.module';
 import { TreasuryEvolutionChartComponent } from './components/evolution-chart/treasury-evolution-chart.component';
 
 @NgModule({
   declarations: [
-    TreasuryComponent,
+    TreasuryView,
     TreasuryEvolutionChartComponent
   ],
   imports: [

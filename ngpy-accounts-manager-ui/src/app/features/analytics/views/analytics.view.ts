@@ -11,10 +11,10 @@ import { RouterService } from '../../../core/services/router.service';
 import { CategoriesService } from '../../../core/services/domain/categories.service';
 
 @Component({
-  templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss']
+  templateUrl: './analytics.view.html',
+  styleUrls: ['./analytics.view.scss']
 })
-export class AnalyticsComponent implements OnInit {
+export class AnalyticsView implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 

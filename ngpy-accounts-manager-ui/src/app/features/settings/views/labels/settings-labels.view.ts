@@ -8,10 +8,10 @@ import { Category, Label } from '../../../../core/models/api.models';
 import { CategoriesService } from '../../../../core/services/domain/categories.service';
 
 @Component({
-  templateUrl: './settings-labels.component.html',
-  styleUrls: ['./settings-labels.component.scss']
+  templateUrl: './settings-labels.view.html',
+  styleUrls: ['./settings-labels.view.scss']
 })
-export class SettingsLabelsComponent implements OnInit {
+export class SettingsLabelsView implements OnInit {
 
   @HostBinding('class') hostClass = 'content-area';
 

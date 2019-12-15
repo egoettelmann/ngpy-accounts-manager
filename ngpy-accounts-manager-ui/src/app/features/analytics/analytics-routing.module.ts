@@ -1,4 +1,4 @@
-import { AnalyticsComponent } from './views/analytics.component';
+import { AnalyticsView } from './views/analytics.view';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
@@ -8,7 +8,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: AnalyticsComponent
+        component: AnalyticsView
       }
     ]
   }
