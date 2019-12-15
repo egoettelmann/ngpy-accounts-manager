@@ -1,5 +1,4 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { Account, Category, Label, Transaction } from '../../../../core/models/api.models';
 import { zip } from 'rxjs';
@@ -23,9 +22,7 @@ export class TransactionsSearchComponent implements OnInit {
   public labels: Label[];
   public categories: Category[];
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private labelsService: LabelsRestService,
+  constructor(private labelsService: LabelsRestService,
               private transactionsService: TransactionsService,
               private accountsService: AccountsService,
               private categoriesService: CategoriesService

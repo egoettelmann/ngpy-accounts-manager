@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { DateService } from '../../../../core/services/date.service';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
 import { Account, Budget, BudgetStatus, Category, Label } from '../../../../core/models/api.models';
@@ -29,7 +29,6 @@ export class BudgetListComponent implements OnInit {
   showModal = false;
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private routerService: RouterService,
               private dateService: DateService,
               private budgetService: BudgetService,
@@ -94,7 +93,9 @@ export class BudgetListComponent implements OnInit {
     let params = {};
     params = this.routerService.setYear(this.currentYear, params);
     params = this.routerService.setMonth(this.currentMonth, params);
-    this.router.navigate(['budget', budgetId], {
+    this.routerService.navigate('route.budgets.details', {
+      budgetId: budgetId
+    }, {
       queryParams: params
     });
   }

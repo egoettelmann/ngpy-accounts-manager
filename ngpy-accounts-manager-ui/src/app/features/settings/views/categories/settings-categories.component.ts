@@ -1,5 +1,4 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Category } from '../../../../core/models/api.models';
@@ -16,9 +15,7 @@ export class SettingsCategoriesComponent implements OnInit {
   form: FormGroup;
   formArray: FormArray;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private categoriesService: CategoriesService) {
   }
 

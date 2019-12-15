@@ -23,15 +23,20 @@ import { RouterModule } from '@angular/router';
 import { LayoutModule } from '@angular/cdk/layout';
 import { CategoriesToggleComponent } from './components/toggles/categories-toggle/categories-toggle.component';
 import { CardWrapperComponent } from './components/cards/card-wrapper.component';
+import { RouterPathModule } from './modules/router-path/router-path.module';
 
 @NgModule({
-  declarations: SharedModule.COMPONENTS_LIST,
+  declarations: [
+    ...SharedModule.COMPONENTS_LIST,
+    ...SharedModule.DIRECTIVE_LIST
+  ],
   imports: [
-    ...SharedModule.MODULE_LIST
+    ...SharedModule.MODULES_LIST
   ],
   exports: [
     ...SharedModule.COMPONENTS_LIST,
-    ...SharedModule.MODULE_LIST
+    ...SharedModule.DIRECTIVE_LIST,
+    ...SharedModule.MODULES_LIST
   ]
 })
 export class SharedModule {
@@ -44,7 +49,6 @@ export class SharedModule {
     GraphComponent,
     NotificationMessageComponent,
     NotificationModalComponent,
-    KeepFocusDirective,
     AccountsToggleComponent,
     MonthsToggleComponent,
     YearsToggleComponent,
@@ -55,7 +59,11 @@ export class SharedModule {
     TransactionsTableComponent
   ];
 
-  static MODULE_LIST = [
+  static DIRECTIVE_LIST = [
+    KeepFocusDirective
+  ];
+
+  static MODULES_LIST = [
     CommonModule,
     LayoutModule,
     HttpClientModule,
@@ -64,7 +72,8 @@ export class SharedModule {
     ClarityModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxFileDropModule
+    NgxFileDropModule,
+    RouterPathModule
   ];
 
 }

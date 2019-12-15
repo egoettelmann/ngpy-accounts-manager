@@ -1,5 +1,4 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
@@ -20,9 +19,7 @@ export class SettingsLabelsComponent implements OnInit {
   form: FormGroup;
   formArray: FormArray;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private labelsService: LabelsRestService,
               private categoriesService: CategoriesService) {
   }
@@ -91,13 +88,13 @@ export class SettingsLabelsComponent implements OnInit {
   private onFormChange(formGroup: FormGroup, saveLock = new SubscriptionLock()) {
     const value = formGroup.value;
     this.labelsService.saveOne(value).subscribe(savedLabel => {
-      formGroup.patchValue({id: savedLabel.id}, {emitEvent: false});
+      formGroup.patchValue({ id: savedLabel.id }, { emitEvent: false });
       saveLock.release();
     });
   }
 
   private disablePrivateFields(formGroup: FormGroup) {
-    formGroup.get('numTransactions').disable({emitEvent: false});
+    formGroup.get('numTransactions').disable({ emitEvent: false });
   }
 
 }

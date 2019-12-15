@@ -7,6 +7,7 @@ import { debounceTime } from 'rxjs/operators';
 import { RqlService } from '../../../../core/services/rql.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DateService } from '../../../../core/services/date.service';
+import { RouterService } from '../../../../core/services/router.service';
 
 @Component({
   selector: 'app-transactions-search-form',
@@ -26,7 +27,7 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
   private changeSubscription: Subscription;
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
+              private routerService: RouterService,
               private fb: FormBuilder,
               private dateService: DateService,
               private rqlService: RqlService
@@ -171,7 +172,7 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
       'maxAmount': this.searchForm.get('maxAmount').value,
       'description': this.searchForm.get('description').value
     };
-    this.router.navigate(['transactions', 'search'], {
+    this.routerService.navigate('route.transactions.search', {}, {
       queryParams: queryParams
     });
   }

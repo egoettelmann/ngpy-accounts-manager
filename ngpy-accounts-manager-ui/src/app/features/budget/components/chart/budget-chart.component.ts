@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { DecimalPipe } from '@angular/common';
 import { BudgetStatus } from '../../../../core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-budget-chart',
@@ -21,12 +20,10 @@ export class BudgetChartComponent implements OnChanges {
   /**
    * Instantiates the component.
    *
-   * @param router the router
    * @param decimalPipe the decimal pipe
    * @param translateService the translate service
    */
   constructor(
-    private router: Router,
     private decimalPipe: DecimalPipe,
     private translateService: TranslateService
   ) {

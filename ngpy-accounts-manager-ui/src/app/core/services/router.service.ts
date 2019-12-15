@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { DateService } from './date.service';
 import { Location } from '@angular/common';
+import { RouterPathPipe } from '../../shared/modules/router-path/router-path.pipe';
 
 /**
  * The Router service
@@ -10,9 +11,15 @@ import { Location } from '@angular/common';
 export class RouterService {
 
   constructor(private router: Router,
+              private routerPathPipe: RouterPathPipe,
               private location: Location,
               private dateService: DateService
   ) {}
+
+  navigate(routeKey: string, pathVariables?: {[key: string]: any}, extras?: NavigationExtras) {
+    const routePath = this.routerPathPipe.transform(routeKey, pathVariables);
+    this.router.navigate(routePath, extras);
+  }
 
   refresh(commands: any[], queryParams: Params) {
     const url = this.router.createUrlTree(commands, {

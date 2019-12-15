@@ -32,6 +32,9 @@ import { BudgetRestService } from './services/rest/budget-rest.service';
 import { BudgetService } from './services/domain/budget.service';
 import { RouterService } from './services/router.service';
 import { CategoriesService } from './services/domain/categories.service';
+import { RouterPathPipe } from '../shared/modules/router-path/router-path.pipe';
+import { RouterPathModule } from '../shared/modules/router-path/router-path.module';
+import { AppRoutePaths } from './app-route-paths';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -76,6 +79,9 @@ export class CoreModule {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
+    }),
+    RouterPathModule.forRoot({
+      paths: AppRoutePaths
     })
   ];
 

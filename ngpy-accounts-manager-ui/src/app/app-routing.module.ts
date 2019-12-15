@@ -34,7 +34,7 @@ const routes: Routes = [
             loadChildren: () => import('./features/analytics/analytics.module').then(m => m.AnalyticsModule)
           },
           {
-            path: 'budget',
+            path: 'budgets',
             loadChildren: () => import('./features/budget/budget.module').then(m => m.BudgetModule)
           },
           {

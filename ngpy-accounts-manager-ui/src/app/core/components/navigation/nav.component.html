@@ -1,22 +1,22 @@
 <clr-header class="header-6">
   <div class="header-nav" [clr-nav-level]="1">
-    <a [routerLink]="['/dashboard']" routerLinkActive="active" class="nav-link">
+    <a [routerLink]="'route.dashboard' | routerPath" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.dashboard' | translate }}</span>
       <span *ngIf="numAlerts">
         <span>&nbsp;</span>
         <span class="badge badge-danger">{{ numAlerts }}</span>
       </span>
     </a>
-    <a [routerLink]="['/transactions']" routerLinkActive="active" class="nav-link">
+    <a [routerLink]="'route.transactions.list' | routerPath" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.transactions' | translate }}</span>
     </a>
-    <a [routerLink]="['/treasury']" routerLinkActive="active" class="nav-link">
+    <a [routerLink]="'route.treasury' | routerPath" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.treasury' | translate }}</span>
     </a>
-    <a [routerLink]="['/analytics']" routerLinkActive="active" class="nav-link">
+    <a [routerLink]="'route.analytics' | routerPath" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.analytics' | translate }}</span>
     </a>
-    <a [routerLink]="['/budget']" routerLinkActive="active" class="nav-link">
+    <a [routerLink]="'route.budgets.list' | routerPath" routerLinkActive="active" class="nav-link">
       <span class="nav-text">{{ 'i18n.components.navigation.budget' | translate }}</span>
     </a>
   </div>
@@ -32,13 +32,13 @@
     </label>
   </form>
   <div class="header-actions">
-    <a [routerLink]="['/transactions/search']"
+    <a [routerLink]="'route.transactions.search' | routerPath"
        routerLinkActive="active"
        class="nav-link nav-icon clr-hidden-md-up">
       <clr-icon shape="search"></clr-icon>
     </a>
     <app-file-drop></app-file-drop>
-    <a [routerLink]="['/settings']"
+    <a [routerLink]="'route.settings' | routerPath"
        routerLinkActive="active"
        class="nav-link nav-icon clr-hidden-sm-down">
       <clr-icon shape="cog"></clr-icon>

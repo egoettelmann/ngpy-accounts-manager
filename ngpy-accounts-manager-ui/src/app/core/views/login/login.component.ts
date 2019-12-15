@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionRestService } from '../../services/rest/session-rest.service';
-import { Router } from '@angular/router';
 import { AppProperties } from '../../models/api.models';
+import { RouterService } from '../../services/router.service';
 
 /**
  * The login component
@@ -35,10 +35,10 @@ export class LoginComponent implements OnInit {
   /**
    * Instantiates the component.
    *
-   * @param router the router
+   * @param routerService the router service
    * @param sessionService the session service
    */
-  constructor(private router: Router,
+  constructor(private routerService: RouterService,
               private sessionService: SessionRestService
   ) {
   }
@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
     this.formInError = false;
     this.formIsLoading = true;
     this.sessionService.login(this.loginForm).subscribe(() => {
-      this.router.navigate(['']);
+      this.routerService.navigate('route.main');
     }, () => {
       this.formInError = true;
       this.formIsLoading = false;

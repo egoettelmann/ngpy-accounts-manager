@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Account, Budget, BudgetStatus, KeyValue, Label, Transaction } from '../../../../core/models/api.models';
 import { RouterService } from '../../../../core/services/router.service';
 import { DateService } from '../../../../core/services/date.service';
 import { zip } from 'rxjs';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
-import { flatMap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './budget-details.component.html',
@@ -32,7 +31,6 @@ export class BudgetDetailsComponent implements OnInit {
    * Instantiates the component.
    *
    * @param route the activated route
-   * @param router the router
    * @param routerService the router service
    * @param budgetService the budget service
    * @param accountsService the accounts service
@@ -40,13 +38,13 @@ export class BudgetDetailsComponent implements OnInit {
    * @param dateService the date service
    */
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private routerService: RouterService,
               private budgetService: BudgetService,
               private accountsService: AccountsService,
               private labelsService: LabelsRestService,
               private dateService: DateService
-  ) {}
+  ) {
+  }
 
   /**
    * Initializes the component

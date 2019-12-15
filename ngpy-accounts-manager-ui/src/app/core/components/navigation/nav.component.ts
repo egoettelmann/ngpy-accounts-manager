@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SessionRestService } from '../../services/rest/session-rest.service';
-import { Router } from '@angular/router';
 import { AlertsService } from '../../services/domain/alerts.service';
 import { Subscription } from 'rxjs';
+import { RouterPathPipe } from '../../../shared/modules/router-path/router-path.pipe';
+import { RouterService } from '../../services/router.service';
 
 /**
  * The navigation component
@@ -32,12 +33,14 @@ export class NavComponent implements OnInit, OnDestroy {
   /**
    * Instantiates the component.
    *
-   * @param router the router
+   * @param routerService the router service
+   * @param routerPathPipe the router path pipe
    * @param sessionService the session service
    * @param alertsService the alerts service
    */
   constructor(
-    private router: Router,
+    private routerService: RouterService,
+    private routerPathPipe: RouterPathPipe,
     private sessionService: SessionRestService,
     private alertsService: AlertsService
   ) {
@@ -72,7 +75,7 @@ export class NavComponent implements OnInit, OnDestroy {
    */
   clickLogout(): void {
     this.sessionService.logout().subscribe(() => {
-      this.router.navigate(['login']);
+      this.routerService.navigate('route.login');
     });
   }
 
@@ -82,7 +85,7 @@ export class NavComponent implements OnInit, OnDestroy {
    * @param value the value to search
    */
   search(value: string) {
-    this.router.navigate(['transactions', 'search'], {
+    this.routerService.navigate('route.transactions.search', {}, {
       queryParams: {
         description: value
       }

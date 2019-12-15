@@ -1,13 +1,13 @@
 <router-outlet></router-outlet>
 
 <clr-vertical-nav [clr-nav-level]="2">
-  <a clrVerticalNavLink [routerLink]="['./labels']" routerLinkActive="active">
+  <a clrVerticalNavLink [routerLink]="'route.settings.labels' | routerPath" routerLinkActive="active">
     <span class="nav-text">{{ 'i18n.components.navigation.settings.labels' | translate }}</span>
   </a>
-  <a clrVerticalNavLink [routerLink]="['./categories']" routerLinkActive="active">
+  <a clrVerticalNavLink [routerLink]="'route.settings.categories' | routerPath" routerLinkActive="active">
     <span class="nav-text">{{ 'i18n.components.navigation.settings.categories' | translate }}</span>
   </a>
-  <a clrVerticalNavLink [routerLink]="['./accounts']" routerLinkActive="active">
+  <a clrVerticalNavLink [routerLink]="'route.settings.accounts' | routerPath" routerLinkActive="active">
     <span class="nav-text">{{ 'i18n.components.navigation.settings.accounts' | translate }}</span>
   </a>
 </clr-vertical-nav>

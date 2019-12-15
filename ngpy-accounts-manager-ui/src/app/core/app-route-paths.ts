@@ -1,0 +1,16 @@
+export const AppRoutePaths = {
+  'route.main': '',
+  'route.login': '/login',
+  'route.dashboard': '/dashboard',
+  'route.transactions.list': '/transactions',
+  'route.transactions.search': '/transactions/search',
+  'route.treasury': '/treasury',
+  'route.analytics': '/analytics',
+  'route.budgets.list': '/budgets',
+  'route.budgets.details': '/budgets/:budgetId',
+  'route.settings': '/settings',
+  'route.settings.labels': '/settings/labels',
+  'route.settings.categories': '/settings/categories',
+  'route.settings.accounts': '/settings/accounts',
+  'route.settings.transactions': '/settings/transactions',
+};

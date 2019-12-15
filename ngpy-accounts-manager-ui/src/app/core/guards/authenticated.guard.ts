@@ -1,8 +1,9 @@
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { AuthenticationService } from '../services/authentication.service';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { RouterService } from '../services/router.service';
 
 /**
  * The authentication guard
@@ -14,11 +15,11 @@ export class AuthenticatedGuard implements CanActivate {
    * Instantiates the guard.
    *
    * @param authenticationService the authentication service
-   * @param router the router
+   * @param routerService the router service
    */
   constructor(
     private authenticationService: AuthenticationService,
-    private router: Router
+    private routerService: RouterService
   ) {}
 
   /**
@@ -33,7 +34,7 @@ export class AuthenticatedGuard implements CanActivate {
   ): Observable<boolean> {
     return this.authenticationService.getConnectedUser().pipe(
       catchError(err => {
-        this.router.navigate(['login']);
+        this.routerService.navigate('route.login');
         return throwError(err);
       }),
       map(user => {

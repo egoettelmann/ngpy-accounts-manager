@@ -1,5 +1,4 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Account } from '../../../../core/models/api.models';
@@ -16,11 +15,10 @@ export class SettingsAccountsComponent implements OnInit {
   form: FormGroup;
   formArray: FormArray;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private accountsService: AccountsService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.accountsService.getAccounts().subscribe(accounts => {
@@ -53,8 +51,8 @@ export class SettingsAccountsComponent implements OnInit {
       'color': [account.color],
       'notify': [account.notify],
       'active': [account.active],
-      'lastUpdate': [{value: account.lastUpdate, disabled: true}],
-      'total': [{value: account.total, disabled: true}]
+      'lastUpdate': [{ value: account.lastUpdate, disabled: true }],
+      'total': [{ value: account.total, disabled: true }]
     });
 
     formGroup.valueChanges.pipe(

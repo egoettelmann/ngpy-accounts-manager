@@ -1,5 +1,4 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Account, Category } from '../../../core/models/api.models';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
 import { AlertsService } from '../../../core/services/domain/alerts.service';
@@ -21,8 +20,7 @@ export class DashboardComponent implements OnInit {
   public debitCategories: Category[];
   public total: number;
 
-  constructor(private router: Router,
-              private alertsService: AlertsService,
+  constructor(private alertsService: AlertsService,
               private categoriesService: CategoriesService,
               private accountsService: AccountsService
   ) {
