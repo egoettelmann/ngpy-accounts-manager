@@ -81,7 +81,8 @@ export class CoreModule {
       }
     }),
     RouterPathModule.forRoot({
-      paths: AppRoutePaths
+      paths: AppRoutePaths,
+      defaultRoute: ['root', 'main', 'dashboard']
     })
   ];
 

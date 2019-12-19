@@ -14,15 +14,17 @@ export class RouterService {
               private routerPathPipe: RouterPathPipe,
               private location: Location,
               private dateService: DateService
-  ) {}
+  ) {
+  }
 
-  navigate(routeKey: string, pathVariables?: {[key: string]: any}, extras?: NavigationExtras) {
+  navigate(routeKey: string, pathVariables?: Params, extras?: NavigationExtras) {
     const routePath = this.routerPathPipe.transform(routeKey, pathVariables);
     this.router.navigate(routePath, extras);
   }
 
-  refresh(commands: any[], queryParams: Params) {
-    const url = this.router.createUrlTree(commands, {
+  refresh(routeKey: string, pathVariables?: Params, queryParams?: Params) {
+    const routePath = this.routerPathPipe.transform(routeKey, pathVariables);
+    const url = this.router.createUrlTree(routePath, {
       queryParams: queryParams
     }).toString();
     this.location.go(url);

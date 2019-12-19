@@ -6,6 +6,7 @@ import { TransactionsSearchFormComponent } from './components/search-form/transa
 import { TransactionsSearchView } from './views/search/transactions-search.view';
 import { TransactionsListView } from './views/list/transactions-list.view';
 import { TransactionsFormComponent } from './components/form/transactions-form.component';
+import { TransactionsFormView } from './views/form/transactions-form.view';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { TransactionsFormComponent } from './components/form/transactions-form.c
     TransactionsListView,
     TransactionsSearchFormComponent,
     TransactionsSearchView,
-    TransactionsFormComponent
+    TransactionsFormComponent,
+    TransactionsFormView
   ],
   imports: [
     SharedModule,

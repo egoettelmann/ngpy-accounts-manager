@@ -93,8 +93,9 @@ export class TransactionsListView implements OnInit {
    * @param transaction
    */
   openModal(transaction: Transaction) {
-    this.selectedTransaction = transaction;
-    this.showModal = true;
+    this.routerService.navigate('route.transactions.form', {
+      transactionId: transaction.id
+    });
   }
 
   /**
@@ -166,7 +167,7 @@ export class TransactionsListView implements OnInit {
     params = this.routerService.setYear(this.currentYear, params);
     params = this.routerService.setMonth(this.currentMonth, params);
     params = this.routerService.setAccounts(accounts, params);
-    this.routerService.refresh(['transactions'], params);
+    this.routerService.refresh('route.transactions.list', {}, params);
   }
 
   /**

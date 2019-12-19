@@ -1,5 +1,6 @@
 import { Inject, Pipe, PipeTransform } from '@angular/core';
-import { ROUTER_PATH_CONFIG, RouterPathOptions } from './router-path.models';
+import { ROUTER_PATH_CONFIG, RouterPath, RouterPathOptions, RouterPathPart } from './router-path.models';
+import { Params } from '@angular/router';
 
 /**
  * The router path pipe.
@@ -10,7 +11,8 @@ import { ROUTER_PATH_CONFIG, RouterPathOptions } from './router-path.models';
 })
 export class RouterPathPipe implements PipeTransform {
 
-  constructor(@Inject(ROUTER_PATH_CONFIG) private routerPaths: RouterPathOptions) {}
+  constructor(@Inject(ROUTER_PATH_CONFIG) private routerPaths: RouterPathOptions) {
+  }
 
   /**
    * Transforms a provided routeKey into a router link path.
@@ -18,14 +20,15 @@ export class RouterPathPipe implements PipeTransform {
    * @param routeKey the route key
    * @param pathVariables the path variables to substitute
    */
-  transform(routeKey: string, pathVariables?: {[key: string]: any}): string[] {
+  transform(routeKey: string, pathVariables?: Params): RouterPathPart[] {
     // If the route key does not exist, the default route is returned
     if (!this.routerPaths.paths.hasOwnProperty(routeKey)) {
       return this.routerPaths.defaultRoute;
     }
 
     // Otherwise the route path is generated with the path variables
-    return this.generateRoutePath(this.routerPaths.paths[routeKey], pathVariables);
+    console.log(routeKey, this.generateRoutePath(this.routerPaths.paths[routeKey], pathVariables));
+    return ['/', ...this.generateRoutePath(this.routerPaths.paths[routeKey], pathVariables)];
   }
 
   /**
@@ -34,18 +37,17 @@ export class RouterPathPipe implements PipeTransform {
    * @param routePath the route URL
    * @param pathVariables the path variables to substitute
    */
-  private generateRoutePath(routePath: string, pathVariables?: {[key: string]: any}): string[] {
-    const values = routePath.split('/');
-
-    // If no path variables provided, nothing to do
-    if (pathVariables == null) {
-      return values;
+  private generateRoutePath(routePath: RouterPath, pathVariables?: Params): RouterPathPart[] {
+    // If the value is an array, we loop on it
+    if (Array.isArray(routePath)) {
+      return routePath
+        .map(p => this.formatRoutePathPart(p, pathVariables))
+        .filter(p => p != null)
+        .reduce((arr, p) => arr.concat(p), []);
     }
 
-    // Otherwise, all path variables are interpolated
-    return values
-      .map(p => this.formatRoutePathPart(p, pathVariables))
-      .filter(p => p != null);
+    // Formatting the value
+    return this.formatRoutePathPart(routePath, pathVariables);
   }
 
   /**
@@ -54,15 +56,51 @@ export class RouterPathPipe implements PipeTransform {
    * @param routePathPart the route part path to format
    * @param pathVariables the path variables to substitute
    */
-  private formatRoutePathPart(routePathPart: string, pathVariables: {[key: string]: any}): string {
+  private formatRoutePathPart(routePathPart: RouterPathPart, pathVariables: Params): RouterPathPart[] {
+    // If it is a string, formatting it
+    if (typeof routePathPart === 'string' || routePathPart instanceof String) {
+      return this.formatRoute(routePathPart as string, pathVariables);
+    }
+
+    // If it is an outlet, formatting the content of it
+    if (routePathPart.hasOwnProperty('outlets')) {
+      const outlets = {};
+      for (const key in routePathPart.outlets) {
+        if (routePathPart.outlets.hasOwnProperty(key)) {
+          outlets[key] = this.formatRoute(routePathPart.outlets[key], pathVariables);
+        }
+      }
+      return [{
+        outlets: outlets
+      }];
+    }
+
+    return [];
+  }
+
+  /**
+   * Formats a route the provided path variables.
+   *
+   * @param routePathPart the route part path to format
+   * @param pathVariables the path variables to substitute
+   */
+  private formatRoute(routePathPart: string, pathVariables: Params): string[] {
     // If the route path part is null or empty, it should be ignored
     if (routePathPart == null || routePathPart === '') {
-      return undefined;
+      return [];
+    }
+
+    // If the string includes a slash, it should be split and recursively formatted
+    if (routePathPart.includes('/')) {
+      return routePathPart.split('/')
+        .map(p => this.formatRoute(p, pathVariables))
+        .filter(p => p != null)
+        .reduce((arr: string[], p) => arr.concat(p), []);
     }
 
     // If the route path part is not a path variable, nothing to do
     if (!routePathPart.startsWith(this.routerPaths.pathVariableIdentifier)) {
-      return routePathPart;
+      return [routePathPart];
     }
 
     // Extracting the path variable
@@ -70,10 +108,11 @@ export class RouterPathPipe implements PipeTransform {
 
     // If the path variable is not defined, nothing to do
     if (!pathVariables.hasOwnProperty(pathVariable)) {
-      return routePathPart;
+      return [routePathPart];
     }
 
     // Returning the path variable value
-    return pathVariables[pathVariable];
+    return [pathVariables[pathVariable]];
   }
+
 }

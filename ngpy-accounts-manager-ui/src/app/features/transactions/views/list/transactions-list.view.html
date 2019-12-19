@@ -60,20 +60,3 @@
   <clr-icon shape="plus"></clr-icon>
   <span>{{ 'i18n.views.transactions.list.add' | translate }}</span>
 </button>
-
-<clr-modal *ngIf="selectedTransaction"
-           [(clrModalOpen)]="showModal"
-           [clrModalSize]="'lg'"
-           [clrModalClosable]="false"
-           [clrModalStaticBackdrop]="true">
-  <h3 class="modal-title">{{ selectedTransaction.reference }}</h3>
-  <div class="modal-body">
-    <app-transactions-form [model]="selectedTransaction"
-                           [labels]="labels"
-                           [accounts]="accounts"
-                           (onFormSubmit)="saveTransaction($event)"
-                           (onFormCancel)="closeModal()"
-                           (onFormDelete)="deleteTransaction($event)">
-    </app-transactions-form>
-  </div>
-</clr-modal>

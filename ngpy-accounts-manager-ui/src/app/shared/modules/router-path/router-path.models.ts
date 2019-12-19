@@ -1,12 +1,31 @@
 import { InjectionToken } from '@angular/core';
 
 /**
+ * The router outlet path interface
+ */
+export interface RouterOutletPath {
+  outlets: {
+    [key: string]: string
+  };
+}
+
+/**
+ * The router path part type
+ */
+export declare type RouterPathPart = string | RouterOutletPath;
+
+/**
+ * The router path part type
+ */
+export declare type RouterPath = RouterPathPart | RouterPathPart[];
+
+/**
  * The map of route paths.
  *  - the key is used to identify each route
  *  - the value is the path to route to (can contain path variables)
  */
 export interface RouterPaths {
-  [key: string]: string;
+  [key: string]: RouterPath;
 }
 
 /**

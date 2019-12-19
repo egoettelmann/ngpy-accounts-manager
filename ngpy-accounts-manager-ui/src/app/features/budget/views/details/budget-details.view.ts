@@ -161,7 +161,7 @@ export class BudgetDetailsView implements OnInit {
       if (this.isMonthSelectable()) {
         params = this.routerService.setMonth(this.currentMonth, params);
       }
-      this.routerService.refresh(['budget', this.budgetId], params);
+      this.routerService.refresh('route.budgets.list', { budgetId: this.budgetId }, params);
     });
   }
 
