@@ -30,6 +30,14 @@ export class RouterService {
     this.location.go(url);
   }
 
+  openTransactionForm(transactionId?: number) {
+    this.navigate('route.forms.transaction', {
+      transactionId: transactionId
+    }, {
+      queryParamsHandling: 'preserve'
+    });
+  }
+
   getYear(route: ActivatedRoute): number {
     if (!route.snapshot.queryParamMap.has('year')) {
       return this.dateService.getCurrentYear();

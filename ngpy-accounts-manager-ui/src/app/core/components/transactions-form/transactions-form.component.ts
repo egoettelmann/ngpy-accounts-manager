@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Account, Label, Transaction } from '../../../../core/models/api.models';
-import { DateService } from '../../../../core/services/date.service';
+import { Account, Label, Transaction } from '../../models/api.models';
+import { DateService } from '../../services/date.service';
 
 /**
  * The transactions form component

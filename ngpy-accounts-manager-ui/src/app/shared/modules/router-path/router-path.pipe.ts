@@ -27,7 +27,6 @@ export class RouterPathPipe implements PipeTransform {
     }
 
     // Otherwise the route path is generated with the path variables
-    console.log(routeKey, this.generateRoutePath(this.routerPaths.paths[routeKey], pathVariables));
     return ['/', ...this.generateRoutePath(this.routerPaths.paths[routeKey], pathVariables)];
   }
 
@@ -67,7 +66,8 @@ export class RouterPathPipe implements PipeTransform {
       const outlets = {};
       for (const key in routePathPart.outlets) {
         if (routePathPart.outlets.hasOwnProperty(key)) {
-          outlets[key] = this.formatRoute(routePathPart.outlets[key], pathVariables);
+          const outletRoute = this.formatRoute(routePathPart.outlets[key], pathVariables);
+          outlets[key] = outletRoute.length > 0 ? outletRoute : null;
         }
       }
       return [{

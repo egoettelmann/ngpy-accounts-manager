@@ -35,6 +35,9 @@ import { CategoriesService } from './services/domain/categories.service';
 import { RouterPathPipe } from '../shared/modules/router-path/router-path.pipe';
 import { RouterPathModule } from '../shared/modules/router-path/router-path.module';
 import { AppRoutePaths } from './app-route-paths';
+import { FormsView } from './views/main/forms/forms.view';
+import { TransactionsFormComponent } from './components/transactions-form/transactions-form.component';
+import { FormsTransactionView } from './views/main/forms/transaction/forms-transaction.view';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -64,7 +67,10 @@ export class CoreModule {
   static COMPONENTS_LIST = [
     NavComponent,
     LoginView,
-    MainView
+    MainView,
+    FormsView,
+    FormsTransactionView,
+    TransactionsFormComponent
   ];
 
   /**

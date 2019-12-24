@@ -19,7 +19,17 @@ export class TransactionsRestService {
    */
   constructor(private http: HttpClient,
               private rqlService: RqlService
-  ) {}
+  ) {
+  }
+
+  /**
+   * Gets a transaction by its id.
+   *
+   * @param transactionId the transaction id
+   */
+  getOne(transactionId: number): Observable<Transaction> {
+    return this.http.get<Transaction>('/rest/transactions/' + transactionId);
+  }
 
   /**
    * Gets all transactions matching a provided search request.

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Transaction } from '../../models/api.models';
 import { TransactionsRestService } from '../rest/transactions-rest.service';
 import { RqlService } from '../rql.service';
@@ -22,7 +22,20 @@ export class TransactionsService {
   constructor(private transactionRestService: TransactionsRestService,
               private dateService: DateService,
               private rqlService: RqlService
-  ) {}
+  ) {
+  }
+
+  /**
+   * Gets a transaction by its id.
+   *
+   * @param transactionId the transaction id
+   */
+  getOne(transactionId: number): Observable<Transaction> {
+    if (transactionId == null || Number.isNaN(transactionId)) {
+      return of(undefined);
+    }
+    return this.transactionRestService.getOne(transactionId);
+  }
 
   /**
    * Searches transactions with a provided list of criteria.

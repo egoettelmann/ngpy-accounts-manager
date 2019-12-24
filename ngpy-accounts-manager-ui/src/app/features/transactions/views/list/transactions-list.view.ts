@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { zip } from 'rxjs';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../../core/models/api.models';
@@ -28,9 +28,6 @@ export class TransactionsListView implements OnInit {
   public summary: Summary;
   public accounts: Account[];
   public labels: Label[];
-
-  selectedTransaction: Transaction;
-  showModal = false;
 
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
@@ -93,17 +90,7 @@ export class TransactionsListView implements OnInit {
    * @param transaction
    */
   openModal(transaction: Transaction) {
-    this.routerService.navigate('route.transactions.form', {
-      transactionId: transaction.id
-    });
-  }
-
-  /**
-   * Closes the modal with the transaction form.
-   */
-  closeModal() {
-    this.showModal = false;
-    this.selectedTransaction = undefined;
+    this.routerService.openTransactionForm(transaction.id);
   }
 
   /**
@@ -120,28 +107,8 @@ export class TransactionsListView implements OnInit {
    * @param {Transaction} transaction the transaction to save
    */
   saveTransaction(transaction: Transaction) {
-    if (transaction.id != null) {
-      this.transactionsService.updateOne(transaction.id, transaction).subscribe(() => {
-        this.reloadData();
-        this.closeModal();
-      });
-    } else {
-      this.transactionsService.createOne(transaction).subscribe(() => {
-        this.reloadData();
-        this.closeModal();
-      });
-    }
-  }
-
-  /***
-   * Deletes a given transaction.
-   *
-   * @param {Transaction} transaction the transaction to delete
-   */
-  deleteTransaction(transaction: Transaction) {
-    this.transactionsService.deleteOne(transaction).subscribe(() => {
+    this.transactionsService.updateOne(transaction.id, transaction).subscribe(() => {
       this.reloadData();
-      this.closeModal();
     });
   }
 
@@ -163,10 +130,7 @@ export class TransactionsListView implements OnInit {
     this.loadSummary(this.currentYear, this.currentMonth, accounts);
     this.loadRepartition(this.currentYear, this.currentMonth, accounts);
 
-    let params = {};
-    params = this.routerService.setYear(this.currentYear, params);
-    params = this.routerService.setMonth(this.currentMonth, params);
-    params = this.routerService.setAccounts(accounts, params);
+    const params = this.buildQueryParams();
     this.routerService.refresh('route.transactions.list', {}, params);
   }
 
@@ -222,7 +186,7 @@ export class TransactionsListView implements OnInit {
         type: 'column'
       },
       tooltip: {
-        formatter: function () {
+        formatter: function() {
           return '' + this.x + ': <b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>';
         }
       },
@@ -239,6 +203,19 @@ export class TransactionsListView implements OnInit {
       options.series[0].data.push(d.value);
     }
     return options;
+  }
+
+  /**
+   * Builds the current query params
+   */
+  private buildQueryParams(): Params {
+    const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
+
+    let params = {};
+    params = this.routerService.setYear(this.currentYear, params);
+    params = this.routerService.setMonth(this.currentMonth, params);
+    params = this.routerService.setAccounts(accounts, params);
+    return params;
   }
 
 }
