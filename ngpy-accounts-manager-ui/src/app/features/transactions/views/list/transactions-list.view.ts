@@ -126,51 +126,18 @@ export class TransactionsListView implements OnInit {
    */
   private reloadData() {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
-    this.loadTransactions(this.currentYear, this.currentMonth, accounts);
-    this.loadSummary(this.currentYear, this.currentMonth, accounts);
-    this.loadRepartition(this.currentYear, this.currentMonth, accounts);
+    zip(
+      this.transactionsService.getAll(this.currentYear, this.currentMonth, accounts),
+      this.statisticsService.getSummary(accounts, this.currentYear, this.currentMonth),
+      this.statisticsService.getRepartition(this.currentYear, this.currentMonth, accounts)
+    ).subscribe(([transactions, summary, repartition]) => {
+      this.transactions = transactions.slice(0);
+      this.summary = summary;
+      this.graphOptions = this.buildChartOptions(repartition);
+    });
 
     const params = this.buildQueryParams();
     this.routerService.refresh('route.transactions.list', {}, params);
-  }
-
-  /**
-   * Loads the list of transactions.
-   *
-   * @param {number} year the year to filter on
-   * @param {number} month the month to filter on
-   * @param {number[]} accounts the accounts to filter on
-   */
-  private loadTransactions(year: number, month: number, accounts: number[]) {
-    this.transactionsService.getAll(year, month, accounts).subscribe(data => {
-      this.transactions = data.slice(0);
-    });
-  }
-
-  /**
-   * Loads the summary.
-   *
-   * @param {number} year the year to filter on
-   * @param {number} month the month to filter on
-   * @param {number[]} accounts the accounts to filter on
-   */
-  private loadSummary(year: number, month: number, accounts: number[]) {
-    this.statisticsService.getSummary(accounts, year, month).subscribe(data => {
-      this.summary = data;
-    });
-  }
-
-  /**
-   * Loads the repartition data for building the graph.
-   *
-   * @param {number} year the year to filter on
-   * @param {number} month the month to filter on
-   * @param {number[]} accounts the accounts to filter on
-   */
-  private loadRepartition(year: number, month: number, accounts: number[]) {
-    this.statisticsService.getRepartition(year, month, accounts).subscribe(data => {
-      this.graphOptions = this.buildChartOptions(data);
-    });
   }
 
   /**
