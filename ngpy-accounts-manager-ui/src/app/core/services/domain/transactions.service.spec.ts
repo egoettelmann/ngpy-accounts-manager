@@ -41,12 +41,13 @@ describe('TransactionsService', () => {
       result = args;
       return of({});
     });
-    service.getAll(2015, 4, []).subscribe();
+    const sub = service.getAll(2015, 4, []).subscribe();
     expect(restService.getAll).toHaveBeenCalled();
     const expectedDateFrom = format(new Date(2015, 3, 1), 'yyyy-MM-dd');
     const expectedDateTo = format(new Date(2015, 4, 1), 'yyyy-MM-dd');
     expect(result.filter.collection[0].value).toEqual(expectedDateFrom, 'dateFrom is wrong');
     expect(result.filter.collection[1].value).toEqual(expectedDateTo, 'dateTo is wrong');
+    sub.unsubscribe();
   }));
 
   it('getAll should define correct date interval across years', async(() => {
@@ -55,12 +56,13 @@ describe('TransactionsService', () => {
       result = args;
       return of({});
     });
-    service.getAll(2016, 12, []).subscribe();
+    const sub = service.getAll(2016, 12, []).subscribe();
     expect(restService.getAll).toHaveBeenCalled();
     const expectedDateFrom = format(new Date(2016, 11, 1), 'yyyy-MM-dd');
     const expectedDateTo = format(new Date(2017, 0, 1), 'yyyy-MM-dd');
     expect(result.filter.collection[0].value).toEqual(expectedDateFrom, 'dateFrom is wrong');
     expect(result.filter.collection[1].value).toEqual(expectedDateTo, 'dateTo is wrong');
+    sub.unsubscribe();
   }));
 
   it('getTopCredits should define correct date interval', async(() => {
@@ -69,12 +71,13 @@ describe('TransactionsService', () => {
       result = args;
       return of({});
     });
-    service.getTopCredits(2011, [], []).subscribe();
+    const sub = service.getTopCredits(2011, [], []).subscribe();
     expect(restService.getAll).toHaveBeenCalled();
     const expectedDateFrom = format(new Date(2011, 0, 1), 'yyyy-MM-dd');
     const expectedDateTo = format(new Date(2012, 0, 1), 'yyyy-MM-dd');
     expect(result.filter.collection[0].value).toEqual(expectedDateFrom, 'dateFrom is wrong');
     expect(result.filter.collection[1].value).toEqual(expectedDateTo, 'dateTo is wrong');
+    sub.unsubscribe();
   }));
 
   it('getTopDebits should define correct date interval', async(() => {
@@ -83,12 +86,13 @@ describe('TransactionsService', () => {
       result = args;
       return of({});
     });
-    service.getTopDebits(2013, [], []).subscribe();
+    const sub = service.getTopDebits(2013, [], []).subscribe();
     expect(restService.getAll).toHaveBeenCalled();
     const expectedDateFrom = format(new Date(2013, 0, 1), 'yyyy-MM-dd');
     const expectedDateTo = format(new Date(2014, 0, 1), 'yyyy-MM-dd');
     expect(result.filter.collection[0].value).toEqual(expectedDateFrom, 'dateFrom is wrong');
     expect(result.filter.collection[1].value).toEqual(expectedDateTo, 'dateTo is wrong');
+    sub.unsubscribe();
   }));
 
 });

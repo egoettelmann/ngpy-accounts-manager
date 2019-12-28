@@ -1,8 +1,8 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
-import { zip } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
@@ -13,7 +13,7 @@ import { RouterService } from '../../../core/services/router.service';
   templateUrl: './treasury.view.html',
   styleUrls: ['./treasury.view.scss']
 })
-export class TreasuryView implements OnInit {
+export class TreasuryView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
@@ -30,6 +30,11 @@ export class TreasuryView implements OnInit {
   public aggregationCredit: KeyValue[];
   public aggregationDebit: KeyValue[];
 
+  private subscriptions = {
+    static: new Subscription(),
+    active: new Subscription()
+  };
+
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
               private accountsService: AccountsService,
@@ -41,14 +46,20 @@ export class TreasuryView implements OnInit {
 
   ngOnInit(): void {
     this.initData();
-    zip(
+    const sub = combineLatest([
       this.accountsService.getAccounts(),
       this.labelsService.getAll()
-    ).subscribe(([accounts, labels]) => {
+    ]).subscribe(([accounts, labels]) => {
       this.accounts = accounts;
       this.labels = labels;
       this.reloadData();
     });
+    this.subscriptions.static.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.static.unsubscribe();
+    this.subscriptions.active.unsubscribe();
   }
 
   /**
@@ -101,72 +112,29 @@ export class TreasuryView implements OnInit {
   private reloadData() {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
     const labels = this.labelsFilter.length > 0 ? this.labelsFilter : undefined;
-    this.loadSummary(this.currentYear, accounts);
-    this.loadEvolution(this.currentYear, accounts);
-    this.loadAggregation(this.currentYear, accounts, labels);
-    this.loadTops(this.currentYear, accounts, labels);
+    const sub = combineLatest([
+      this.statisticsService.getSummary(accounts, this.currentYear),
+      this.statisticsService.getEvolution(this.currentYear, accounts),
+      this.statisticsService.getAggregation(this.currentYear, accounts, labels, true),
+      this.statisticsService.getAggregation(this.currentYear, accounts, labels, false),
+      this.transactionsService.getTopCredits(this.currentYear, accounts, labels),
+      this.transactionsService.getTopDebits(this.currentYear, accounts, labels)
+    ]).subscribe(([summary, evolution, aggregationCredit, aggregationDebit, credits, debits]) => {
+      this.summary = summary;
+      this.evolution = evolution;
+      this.aggregationCredit = aggregationCredit;
+      this.aggregationDebit = aggregationDebit;
+      this.topTransactionsDesc = credits;
+      this.topTransactionsAsc = debits;
+    });
+    this.subscriptions.active.unsubscribe();
+    this.subscriptions.active = sub;
 
     let params = {};
     params = this.routerService.setYear(this.currentYear, params);
     params = this.routerService.setAccounts(accounts, params);
     params = this.routerService.setLabels(labels, params);
     this.routerService.refresh('route.treasury', {}, params);
-  }
-
-  /**
-   * Loads the evolution data.
-   *
-   * @param {number} year the year to filter on
-   * @param {number[]} accounts the accounts to filter on
-   */
-  private loadEvolution(year: number, accounts: number[]) {
-    this.statisticsService.getEvolution(year, accounts).subscribe(data => {
-      this.evolution = data;
-    });
-  }
-
-  /**
-   * Loads the aggregation data.
-   *
-   * @param {number} year the year to filter on
-   * @param {number[]} accounts the accounts to filter on
-   * @param {number[]} labels the labels to filter on
-   */
-  private loadAggregation(year: number, accounts: number[], labels: number[]) {
-    this.statisticsService.getAggregation(year, accounts, labels, true).subscribe(data => {
-      this.aggregationCredit = data;
-    });
-    this.statisticsService.getAggregation(year, accounts, labels, false).subscribe(data => {
-      this.aggregationDebit = data;
-    });
-  }
-
-  /**
-   * Loads the summary.
-   *
-   * @param {number} year the year to filter on
-   * @param {number[]} accounts the accounts to filter on
-   */
-  private loadSummary(year: number, accounts: number[]) {
-    this.statisticsService.getSummary(accounts, year).subscribe(data => {
-      this.summary = data;
-    });
-  }
-
-  /**
-   * Loads the top transactions (highest credit and debit).
-   *
-   * @param {number} year the year to filter on
-   * @param {number[]} accounts the accounts to filter on
-   * @param {number[]} labels the labels to filter on
-   */
-  private loadTops(year: number, accounts: number[], labels: number[]) {
-    this.transactionsService.getTopCredits(year, accounts, labels).subscribe(data => {
-      this.topTransactionsDesc = data;
-    });
-    this.transactionsService.getTopDebits(year, accounts, labels).subscribe(data => {
-      this.topTransactionsAsc = data;
-    });
   }
 
 }

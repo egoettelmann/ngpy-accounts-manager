@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, zip } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { TransactionsRestService } from '../rest/transactions-rest.service';
-import { map, skip } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { FilterOperator, FilterRequest } from '../../models/rql.models';
 import { Alerts } from '../../models/domain.models';
 
@@ -12,11 +12,6 @@ import { Alerts } from '../../models/domain.models';
 export class AlertsService {
 
   /**
-   * The behavior subject
-   */
-  private subject = new BehaviorSubject<Alerts>(undefined);
-
-  /**
    * Instantiates the service.
    *
    * @param transactionsRestService the transactions rest service
@@ -24,28 +19,14 @@ export class AlertsService {
   constructor(private transactionsRestService: TransactionsRestService) {}
 
   /**
-   * The alert changes triggered each time the alerts are reloaded.
-   */
-  get alertChanges(): Observable<Alerts> {
-    if (this.subject.getValue() === undefined) {
-      this.getAlerts().subscribe(alerts => {
-        this.subject.next(alerts);
-      });
-    }
-    return this.subject.asObservable().pipe(
-      skip(1)
-    );
-  }
-
-  /**
    * Force the loading of the alerts
    */
   getAlerts(): Observable<Alerts> {
-    return zip(
+    return combineLatest([
       this.countUnlabeled(),
       this.countWronglyCategorizedCredits(),
       this.countWronglyCategorizedDebits()
-    ).pipe(
+    ]).pipe(
       map(([labelErrors, creditErrors, debitErrors]) => {
         return {
           labels: labelErrors,

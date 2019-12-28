@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
 import { ActivatedRoute } from '@angular/router';
 import { Account, Budget, BudgetStatus, KeyValue, Label, Transaction } from '../../../../core/models/api.models';
 import { RouterService } from '../../../../core/services/router.service';
 import { DateService } from '../../../../core/services/date.service';
-import { zip } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 
@@ -12,7 +12,7 @@ import { LabelsRestService } from '../../../../core/services/rest/labels-rest.se
   templateUrl: './budget-details.view.html',
   styleUrls: ['./budget-details.view.scss']
 })
-export class BudgetDetailsView implements OnInit {
+export class BudgetDetailsView implements OnInit, OnDestroy {
 
   currentYear: number;
   currentMonth: number;
@@ -26,6 +26,11 @@ export class BudgetDetailsView implements OnInit {
   showModal = false;
 
   private budgetId: number;
+
+  private subscriptions = {
+    static: new Subscription(),
+    active: new Subscription()
+  };
 
   /**
    * Instantiates the component.
@@ -52,14 +57,23 @@ export class BudgetDetailsView implements OnInit {
   ngOnInit(): void {
     this.budgetId = +this.route.snapshot.paramMap.get('budgetId');
     this.initData();
-    zip(
+    const sub = combineLatest([
       this.accountsService.getAccounts(),
       this.labelsService.getAll()
-    ).subscribe(([accounts, labels]) => {
+    ]).subscribe(([accounts, labels]) => {
       this.accounts = accounts;
       this.labels = labels;
       this.reloadData();
     });
+    this.subscriptions.static.add(sub);
+  }
+
+  /**
+   * Triggered once the component is destroyed
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.static.unsubscribe();
+    this.subscriptions.active.unsubscribe();
   }
 
   /**
@@ -139,7 +153,10 @@ export class BudgetDetailsView implements OnInit {
    * Reload the data from the backend and updates the route params
    */
   private reloadData() {
-    this.budgetService.getDetails(this.budgetId).subscribe(budget => {
+    this.subscriptions.active.unsubscribe();
+    this.subscriptions.active = new Subscription();
+
+    const sub = this.budgetService.getDetails(this.budgetId).subscribe(budget => {
       this.budget = budget;
 
       const accountIds = this.budget.accounts.map(a => a.id);
@@ -148,21 +165,23 @@ export class BudgetDetailsView implements OnInit {
       const dateFrom = this.buildStartDate();
       const dateTo = this.buildEndDate();
 
-      zip(
+      const subDetails = combineLatest([
         this.budgetService.getTransactions(dateFrom, dateTo, accountIds, labelIds),
         this.budgetService.getStatusHistory(dateFrom, dateTo, this.budget.period, accountIds, labelIds)
-      ).subscribe(([transactions, data]) => {
+      ]).subscribe(([transactions, statusHistory]) => {
         this.transactions = transactions;
-        this.buildBudgetStatusList(data);
+        this.buildBudgetStatusList(statusHistory);
       });
+      this.subscriptions.active.add(subDetails);
 
       let params = {};
       params = this.routerService.setYear(this.currentYear, params);
       if (this.isMonthSelectable()) {
         params = this.routerService.setMonth(this.currentMonth, params);
       }
-      this.routerService.refresh('route.budgets.list', { budgetId: this.budgetId }, params);
+      this.routerService.refresh('route.budgets.details', { budgetId: this.budgetId }, params);
     });
+    this.subscriptions.active.add(sub);
   }
 
   /**

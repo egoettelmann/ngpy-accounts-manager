@@ -28,7 +28,10 @@ export class NavComponent implements OnInit, OnDestroy {
   /**
    * The alert subscription
    */
-  private alertsSubscription: Subscription;
+  private subscriptions = {
+    static: new Subscription(),
+    active: new Subscription()
+  };
 
   /**
    * Instantiates the component.
@@ -50,8 +53,11 @@ export class NavComponent implements OnInit, OnDestroy {
    * Initializes the component
    */
   ngOnInit(): void {
-    this.alertsService.alertChanges.subscribe(alerts => {
+    const sub = this.alertsService.getAlerts().subscribe(alerts => {
       const numAlerts = alerts.debits + alerts.credits + alerts.labels;
+      if (numAlerts === 0) {
+        this.numAlerts = undefined;
+      }
       if (numAlerts > 0) {
         this.numAlerts = numAlerts.toString();
       }
@@ -59,15 +65,15 @@ export class NavComponent implements OnInit, OnDestroy {
         this.numAlerts = '99+';
       }
     });
+    this.subscriptions.active.add(sub);
   }
 
   /**
    * Triggered when the component is destroyed
    */
   ngOnDestroy(): void {
-    if (this.alertsSubscription) {
-      this.alertsSubscription.unsubscribe();
-    }
+    this.subscriptions.static.unsubscribe();
+    this.subscriptions.active.unsubscribe();
   }
 
   /**

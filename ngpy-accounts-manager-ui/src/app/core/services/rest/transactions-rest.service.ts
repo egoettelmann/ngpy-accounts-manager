@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Transaction } from '../../models/api.models';
 import { RqlService } from '../rql.service';
 import { FilterRequest, SearchRequest } from '../../models/rql.models';
+import { flatMap, startWith, tap } from 'rxjs/operators';
+import { EventBusService } from '../event-bus.service';
 
 /**
  * The transactions rest service.
@@ -16,9 +18,11 @@ export class TransactionsRestService {
    *
    * @param http the HTTP client
    * @param rqlService the RQL service
+   * @param eventBusService the event bus service
    */
   constructor(private http: HttpClient,
-              private rqlService: RqlService
+              private rqlService: RqlService,
+              private eventBusService: EventBusService
   ) {
   }
 
@@ -28,7 +32,10 @@ export class TransactionsRestService {
    * @param transactionId the transaction id
    */
   getOne(transactionId: number): Observable<Transaction> {
-    return this.http.get<Transaction>('/rest/transactions/' + transactionId);
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<Transaction>('/rest/transactions/' + transactionId))
+    );
   }
 
   /**
@@ -38,7 +45,10 @@ export class TransactionsRestService {
    */
   getAll(searchRequest: SearchRequest): Observable<Transaction[]> {
     const params = this.rqlService.buildHttpParams(searchRequest);
-    return this.http.get<Transaction[]>('/rest/transactions', { params: params });
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<Transaction[]>('/rest/transactions', { params: params }))
+    );
   }
 
   /**
@@ -48,7 +58,10 @@ export class TransactionsRestService {
    */
   countAll(filterRequest: FilterRequest): Observable<number> {
     const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
-    return this.http.get<number>('/rest/transactions/count', { params: params });
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<number>('/rest/transactions/count', { params: params }))
+    );
   }
 
   /**
@@ -57,7 +70,9 @@ export class TransactionsRestService {
    * @param transactionId the transaction id
    */
   deleteOne(transactionId: number): Observable<any> {
-    return this.http.delete('/rest/transactions/' + transactionId);
+    return this.http.delete('/rest/transactions/' + transactionId).pipe(
+      tap(() => this.eventBusService.publish('transactions.delete', transactionId))
+    );
   }
 
   /**
@@ -66,7 +81,9 @@ export class TransactionsRestService {
    * @param transaction
    */
   createOne(transaction: Transaction): Observable<Transaction> {
-    return this.http.put<Transaction>('/rest/transactions', JSON.stringify(transaction));
+    return this.http.put<Transaction>('/rest/transactions', JSON.stringify(transaction)).pipe(
+      tap(() => this.eventBusService.publish('transactions.create', transaction))
+    );
   }
 
   /**
@@ -76,7 +93,9 @@ export class TransactionsRestService {
    * @param diff the patch to apply
    */
   updateOne(transactionId: number, diff: any): Observable<Transaction> {
-    return this.http.post<Transaction>('/rest/transactions/' + transactionId, JSON.stringify(diff));
+    return this.http.post<Transaction>('/rest/transactions/' + transactionId, JSON.stringify(diff)).pipe(
+      tap(() => this.eventBusService.publish('transactions.update', transactionId))
+    );
   }
 
 }

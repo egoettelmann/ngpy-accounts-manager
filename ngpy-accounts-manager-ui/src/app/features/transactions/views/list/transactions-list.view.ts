@@ -1,8 +1,8 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { ActivatedRoute, Params } from '@angular/router';
-import { zip } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../../core/models/api.models';
 import { TransactionsService } from '../../../../core/services/domain/transactions.service';
@@ -15,7 +15,7 @@ import { RouterService } from '../../../../core/services/router.service';
   templateUrl: './transactions-list.view.html',
   styleUrls: ['./transactions-list.view.scss']
 })
-export class TransactionsListView implements OnInit {
+export class TransactionsListView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
@@ -28,6 +28,11 @@ export class TransactionsListView implements OnInit {
   public summary: Summary;
   public accounts: Account[];
   public labels: Label[];
+
+  private subscriptions = {
+    static: new Subscription(),
+    active: new Subscription()
+  };
 
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
@@ -42,14 +47,20 @@ export class TransactionsListView implements OnInit {
 
   ngOnInit(): void {
     this.initData();
-    zip(
+    const sub = combineLatest([
       this.accountsService.getAccounts(),
       this.labelsService.getAll()
-    ).subscribe(([accounts, labels]) => {
-      this.accounts = accounts.slice(0);
-      this.labels = labels.slice(0);
+    ]).subscribe(([accounts, labels]) => {
+      this.accounts = accounts;
+      this.labels = labels;
       this.reloadData();
     });
+    this.subscriptions.static.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.static.unsubscribe();
+    this.subscriptions.active.unsubscribe();
   }
 
   /**
@@ -126,15 +137,17 @@ export class TransactionsListView implements OnInit {
    */
   private reloadData() {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
-    zip(
+    const sub = combineLatest([
       this.transactionsService.getAll(this.currentYear, this.currentMonth, accounts),
       this.statisticsService.getSummary(accounts, this.currentYear, this.currentMonth),
       this.statisticsService.getRepartition(this.currentYear, this.currentMonth, accounts)
-    ).subscribe(([transactions, summary, repartition]) => {
+    ]).subscribe(([transactions, summary, repartition]) => {
       this.transactions = transactions.slice(0);
       this.summary = summary;
       this.graphOptions = this.buildChartOptions(repartition);
     });
+    this.subscriptions.active.unsubscribe();
+    this.subscriptions.active = sub;
 
     const params = this.buildQueryParams();
     this.routerService.refresh('route.transactions.list', {}, params);

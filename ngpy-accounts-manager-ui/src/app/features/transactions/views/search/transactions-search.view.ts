@@ -1,7 +1,7 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { Account, Category, Label, Transaction } from '../../../../core/models/api.models';
-import { zip } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { TransactionsService } from '../../../../core/services/domain/transactions.service';
 import { FilterRequest } from '../../../../core/models/rql.models';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
@@ -11,7 +11,7 @@ import { CategoriesService } from '../../../../core/services/domain/categories.s
   templateUrl: './transactions-search.view.html',
   styleUrls: ['./transactions-search.view.scss']
 })
-export class TransactionsSearchView implements OnInit {
+export class TransactionsSearchView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
@@ -22,6 +22,11 @@ export class TransactionsSearchView implements OnInit {
   public labels: Label[];
   public categories: Category[];
 
+  private subscriptions = {
+    static: new Subscription(),
+    active: new Subscription()
+  };
+
   constructor(private labelsService: LabelsRestService,
               private transactionsService: TransactionsService,
               private accountsService: AccountsService,
@@ -30,15 +35,21 @@ export class TransactionsSearchView implements OnInit {
   }
 
   ngOnInit(): void {
-    zip(
+    const sub = combineLatest([
       this.accountsService.getAccounts(),
       this.labelsService.getAll(),
       this.categoriesService.getCategories()
-    ).subscribe(([accounts, labels, categories]) => {
+    ]).subscribe(([accounts, labels, categories]) => {
       this.accounts = accounts.slice(0);
       this.labels = labels.slice(0);
       this.categories = categories.slice(0);
     });
+    this.subscriptions.static.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.static.unsubscribe();
+    this.subscriptions.active.unsubscribe();
   }
 
   /**
@@ -57,11 +68,13 @@ export class TransactionsSearchView implements OnInit {
    */
   loadData(filterRequest: FilterRequest) {
     this.currentSearch = filterRequest;
-    this.transactionsService.search({
+    const sub = this.transactionsService.search({
       filter: filterRequest
     }).subscribe(data => {
       this.transactions = data.slice(0);
     });
+    this.subscriptions.active.unsubscribe();
+    this.subscriptions.active = sub;
 
   }
 
