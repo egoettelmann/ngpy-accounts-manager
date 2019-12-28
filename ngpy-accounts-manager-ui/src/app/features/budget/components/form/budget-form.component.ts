@@ -123,15 +123,15 @@ export class BudgetFormComponent implements OnChanges {
    */
   initFormData(data: Budget) {
     const t = Object.assign({}, data) as any;
-    if (t.accounts != null) {
+    if (t.accounts != null && t.accounts.length > 0) {
       t.accounts = t.accounts.map(account => account.id);
     } else {
-      t.accounts = [];
+      t.accounts = null;
     }
-    if (t.labels != null) {
+    if (t.labels != null && t.labels.length > 0) {
       t.labels = t.labels.map(label => label.id);
     } else {
-      t.labels = [];
+      t.labels = null;
     }
     this.form.patchValue(t);
   }
