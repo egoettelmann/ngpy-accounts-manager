@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DateService } from '../../../../core/services/date.service';
 import { BudgetService } from '../../../../core/services/domain/budget.service';
@@ -7,13 +7,13 @@ import { AccountsService } from '../../../../core/services/domain/accounts.servi
 import * as _ from 'lodash';
 import { RouterService } from '../../../../core/services/router.service';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
-import { zip } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 
 @Component({
   templateUrl: './budget-list.view.html',
   styleUrls: ['./budget-list.view.scss']
 })
-export class BudgetListView implements OnInit {
+export class BudgetListView implements OnInit, OnDestroy {
 
   currentYear: number;
   currentMonth: number;
@@ -27,6 +27,11 @@ export class BudgetListView implements OnInit {
 
   newBudget: Budget;
   showModal = false;
+
+  private subscriptions = {
+    static: new Subscription(),
+    active: new Subscription()
+  };
 
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
@@ -42,14 +47,20 @@ export class BudgetListView implements OnInit {
    */
   ngOnInit(): void {
     this.initData();
-    zip(
+    const sub = combineLatest([
       this.accountsService.getAccounts(),
       this.labelsService.getAll()
-    ).subscribe(([accounts, labels]) => {
+    ]).subscribe(([accounts, labels]) => {
       this.accounts = accounts;
       this.labels = labels;
       this.reloadData();
     });
+    this.subscriptions.static.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.static.unsubscribe();
+    this.subscriptions.active.unsubscribe();
   }
 
   /**
@@ -141,9 +152,11 @@ export class BudgetListView implements OnInit {
    * Reload the data
    */
   private reloadData() {
-    this.budgetService.getStatusList(this.accountsFilter, this.currentYear, this.currentMonth).subscribe(data => {
+    const sub = this.budgetService.getStatusList(this.accountsFilter, this.currentYear, this.currentMonth).subscribe(data => {
       this.budgetStatusList = data;
     });
+    this.subscriptions.active.unsubscribe();
+    this.subscriptions.active = sub;
 
     let params = {};
     params = this.routerService.setYear(this.currentYear, params);

@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Account } from '../../models/api.models';
 import { SearchRequest } from '../../models/rql.models';
 import { RqlService } from '../rql.service';
+import { EventBusService } from '../event-bus.service';
+import { flatMap, startWith, tap } from 'rxjs/operators';
 
 /**
  * The accounts rest service.
@@ -16,9 +18,11 @@ export class AccountsRestService {
    *
    * @param http the HTTP client
    * @param rqlService the RQL service
+   * @param eventBusService the event bus service
    */
   constructor(private http: HttpClient,
-              private rqlService: RqlService
+              private rqlService: RqlService,
+              private eventBusService: EventBusService
   ) {
   }
 
@@ -32,7 +36,10 @@ export class AccountsRestService {
     if (searchRequest != null) {
       params = this.rqlService.buildHttpParams(searchRequest);
     }
-    return this.http.get<Account[]>('/rest/accounts', { params: params });
+    return this.eventBusService.accept(['accounts.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<Account[]>('/rest/accounts', { params: params }))
+    );
   }
 
   /**
@@ -41,7 +48,9 @@ export class AccountsRestService {
    * @param accountId the id of the account to delete
    */
   deleteOne(accountId: number) {
-    return this.http.delete('/rest/accounts/' + accountId);
+    return this.http.delete('/rest/accounts/' + accountId).pipe(
+      tap(() => this.eventBusService.publish('accounts.delete', accountId))
+    );
   }
 
   /**
@@ -50,7 +59,9 @@ export class AccountsRestService {
    * @param account the account to save
    */
   saveOne(account: Account) {
-    return this.http.post('/rest/accounts', JSON.stringify(account));
+    return this.http.post('/rest/accounts', JSON.stringify(account)).pipe(
+      tap(() => this.eventBusService.publish('accounts.update', account))
+    );
   }
 
 }

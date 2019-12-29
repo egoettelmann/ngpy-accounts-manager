@@ -1,7 +1,7 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
-import { zip } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { Account, Category, CompositeKeyValue } from '../../../core/models/api.models';
 import { ChartSerie, GroupedValue } from '../../../core/models/domain.models';
@@ -14,7 +14,7 @@ import { CategoriesService } from '../../../core/services/domain/categories.serv
   templateUrl: './analytics.view.html',
   styleUrls: ['./analytics.view.scss']
 })
-export class AnalyticsView implements OnInit {
+export class AnalyticsView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
@@ -30,6 +30,11 @@ export class AnalyticsView implements OnInit {
   public detailsCredit: GroupedValue[] = [];
   public detailsDebit: GroupedValue[] = [];
 
+  private subscriptions = {
+    static: new Subscription(),
+    active: new Subscription()
+  };
+
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
               private accountsService: AccountsService,
@@ -43,14 +48,23 @@ export class AnalyticsView implements OnInit {
    */
   ngOnInit(): void {
     this.initData();
-    zip(
+    const sub = combineLatest([
       this.accountsService.getAccounts(),
       this.categoriesService.getCategories()
-    ).subscribe(([accounts, categories]) => {
+    ]).subscribe(([accounts, categories]) => {
       this.accounts = accounts.slice(0);
       this.categories = categories.slice(0);
       this.reloadData();
     });
+    this.subscriptions.static.add(sub);
+  }
+
+  /**
+   * Triggered once the component is destroyed
+   */
+  ngOnDestroy(): void {
+    this.subscriptions.static.unsubscribe();
+    this.subscriptions.active.unsubscribe();
   }
 
   /**
@@ -122,21 +136,21 @@ export class AnalyticsView implements OnInit {
   private reloadData() {
     const period = this.quarterly ? 'QUARTER' : 'MONTH';
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
-    this.statisticsService.getAnalytics(this.currentYear, period, 'C', accounts).subscribe(data => {
-      this.analyticsCredit = data;
+    const sub = combineLatest([
+      this.statisticsService.getAnalytics(this.currentYear, period, 'C', accounts),
+      this.statisticsService.getAnalytics(this.currentYear, period, 'D', accounts),
+      this.statisticsService.getAnalytics(this.currentYear, period, 'M', accounts),
+      this.statisticsService.getAnalyticsDetails(this.currentYear, 'C', accounts),
+      this.statisticsService.getAnalyticsDetails(this.currentYear, 'D', accounts)
+    ]).subscribe(([credits, debits, movements, creditDetails, debitDetails]) => {
+      this.analyticsCredit = credits;
+      this.analyticsDebit = debits;
+      this.tableMovements = this.buildTable(movements);
+      this.detailsCredit = this.consolidateDetails(creditDetails);
+      this.detailsDebit = this.consolidateDetails(debitDetails);
     });
-    this.statisticsService.getAnalytics(this.currentYear, period, 'D', accounts).subscribe(data => {
-      this.analyticsDebit = data;
-    });
-    this.statisticsService.getAnalytics(this.currentYear, period, 'M', accounts).subscribe(data => {
-      this.tableMovements = this.buildTable(data);
-    });
-    this.statisticsService.getAnalyticsDetails(this.currentYear, 'C', accounts).subscribe(data => {
-      this.detailsCredit = this.consolidateDetails(data);
-    });
-    this.statisticsService.getAnalyticsDetails(this.currentYear, 'D', accounts).subscribe(data => {
-      this.detailsDebit = this.consolidateDetails(data);
-    });
+    this.subscriptions.active.unsubscribe();
+    this.subscriptions.active = sub;
 
     let params = {};
     params = this.routerService.setAccounts(accounts, params);

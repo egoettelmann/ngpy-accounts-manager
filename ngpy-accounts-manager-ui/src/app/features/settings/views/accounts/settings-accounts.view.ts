@@ -1,19 +1,25 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Account } from '../../../../core/models/api.models';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   templateUrl: './settings-accounts.view.html',
   styleUrls: ['./settings-accounts.view.scss']
 })
-export class SettingsAccountsView implements OnInit {
+export class SettingsAccountsView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
   form: FormGroup;
   formArray: FormArray;
+
+  private subscriptions = {
+    static: new Subscription(),
+    active: new Subscription()
+  };
 
   constructor(private fb: FormBuilder,
               private accountsService: AccountsService
@@ -21,15 +27,19 @@ export class SettingsAccountsView implements OnInit {
   }
 
   ngOnInit(): void {
-    this.accountsService.getAccounts().subscribe(accounts => {
+    const sub = this.accountsService.getAccounts().subscribe(accounts => {
       this.buildForm(accounts);
     });
+    this.subscriptions.static.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.static.unsubscribe();
+    this.subscriptions.active.unsubscribe();
   }
 
   deleteAccount(account: Account) {
-    this.accountsService.deleteOne(account).subscribe(() => {
-      this.ngOnInit();
-    });
+    this.accountsService.deleteOne(account).subscribe();
   }
 
   private buildForm(accounts: Account[]) {
@@ -56,7 +66,7 @@ export class SettingsAccountsView implements OnInit {
     });
 
     formGroup.valueChanges.pipe(
-      debounceTime(100)
+      debounceTime(200)
     ).subscribe(value => {
       this.onFormChange(value);
     });
