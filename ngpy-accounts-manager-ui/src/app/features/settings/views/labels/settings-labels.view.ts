@@ -1,8 +1,8 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-import { zip } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { lock, SubscriptionLock } from '../../../../shared/utils/lock-subscriber';
 import { Category, Label } from '../../../../core/models/api.models';
 import { CategoriesService } from '../../../../core/services/domain/categories.service';
@@ -11,7 +11,7 @@ import { CategoriesService } from '../../../../core/services/domain/categories.s
   templateUrl: './settings-labels.view.html',
   styleUrls: ['./settings-labels.view.scss']
 })
-export class SettingsLabelsView implements OnInit {
+export class SettingsLabelsView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
@@ -19,25 +19,34 @@ export class SettingsLabelsView implements OnInit {
   form: FormGroup;
   formArray: FormArray;
 
+  private subscriptions = {
+    static: new Subscription(),
+    active: new Subscription()
+  };
+
   constructor(private fb: FormBuilder,
               private labelsService: LabelsRestService,
               private categoriesService: CategoriesService) {
   }
 
   ngOnInit(): void {
-    zip(
+    const sub = combineLatest([
       this.categoriesService.getCategories(),
       this.labelsService.getAll()
-    ).subscribe(([categories, labels]) => {
+    ]).subscribe(([categories, labels]) => {
       this.categories = categories;
       this.buildForm(labels.slice(0));
     });
+    this.subscriptions.static.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.static.unsubscribe();
+    this.subscriptions.active.unsubscribe();
   }
 
   deleteLabel(label: Label) {
-    this.labelsService.deleteOne(label).subscribe(() => {
-      this.ngOnInit();
-    });
+    this.labelsService.deleteOne(label).subscribe();
   }
 
   addLabel() {

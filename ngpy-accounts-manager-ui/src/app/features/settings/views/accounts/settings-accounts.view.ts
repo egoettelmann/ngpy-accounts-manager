@@ -66,7 +66,7 @@ export class SettingsAccountsView implements OnInit, OnDestroy {
     });
 
     formGroup.valueChanges.pipe(
-      debounceTime(200)
+      debounceTime(500)
     ).subscribe(value => {
       this.onFormChange(value);
     });
