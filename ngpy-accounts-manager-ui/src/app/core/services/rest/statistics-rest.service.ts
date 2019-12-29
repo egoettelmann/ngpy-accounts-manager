@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { RqlService } from '../rql.service';
 import { FilterRequest } from '../../models/rql.models';
 import { DateService } from '../date.service';
+import { EventBusService } from '../event-bus.service';
+import { flatMap, startWith } from 'rxjs/operators';
 
 /**
  * The statistics rest service
@@ -18,11 +20,14 @@ export class StatisticsRestService {
    * @param http the HTTP client
    * @param dateService the date service
    * @param rqlService the RQL service
+   * @param eventBusService the event bus service
    */
   constructor(private http: HttpClient,
               private dateService: DateService,
-              private rqlService: RqlService
-  ) {}
+              private rqlService: RqlService,
+              private eventBusService: EventBusService
+  ) {
+  }
 
   /**
    * Gets the repartition for a provided filter request.
@@ -31,7 +36,10 @@ export class StatisticsRestService {
    */
   getRepartition(filterRequest: FilterRequest): Observable<KeyValue[]> {
     const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
-    return this.http.get<KeyValue[]>('/rest/stats/repartition', {params: params});
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<KeyValue[]>('/rest/stats/repartition', { params: params }))
+    );
   }
 
   /**
@@ -63,7 +71,10 @@ export class StatisticsRestService {
     // Adding additional filters
     params = this.rqlService.buildHttpParamsFromFilter(filterRequest, params);
 
-    return this.http.get<KeyValue[]>('/rest/stats/evolution', {params: params});
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<KeyValue[]>('/rest/stats/evolution', { params: params }))
+    );
   }
 
   /**
@@ -75,7 +86,11 @@ export class StatisticsRestService {
   getAggregation(period: string, filterRequest: FilterRequest): Observable<KeyValue[]> {
     let params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
     params = params.set('period', period);
-    return this.http.get<any>('/rest/stats/aggregation', {params: params});
+
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<KeyValue[]>('/rest/stats/aggregation', { params: params }))
+    );
   }
 
   /**
@@ -103,7 +118,10 @@ export class StatisticsRestService {
     // Adding additional filters
     params = this.rqlService.buildHttpParamsFromFilter(filterRequest, params);
 
-    return this.http.get<any>('/rest/stats/summary', {params: params});
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<Summary>('/rest/stats/summary', { params: params }))
+    );
   }
 
   /**
@@ -115,7 +133,11 @@ export class StatisticsRestService {
   getAnalytics(period: string, filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {
     let params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
     params = params.set('period', period);
-    return this.http.get<CompositeKeyValue[]>('/rest/stats/analytics', {params: params});
+
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<CompositeKeyValue[]>('/rest/stats/analytics', { params: params }))
+    );
   }
 
   /**
@@ -125,7 +147,10 @@ export class StatisticsRestService {
    */
   getAnalyticsDetails(filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {
     const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
-    return this.http.get<CompositeKeyValue[]>('/rest/stats/analytics/details', {params: params});
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<CompositeKeyValue[]>('/rest/stats/analytics/details', { params: params }))
+    );
   }
 
 }

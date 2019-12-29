@@ -6,6 +6,8 @@ import { RqlService } from '../rql.service';
 import { FilterRequest } from '../../models/rql.models';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { DateService } from '../date.service';
+import { flatMap, startWith, tap } from 'rxjs/operators';
+import { EventBusService } from '../event-bus.service';
 
 /**
  * The budget rest service.
@@ -19,11 +21,14 @@ export class BudgetRestService {
    * @param http the HTTP client
    * @param rqlService the RQL service
    * @param dateService the date service
+   * @param eventBusService the event bus service
    */
   constructor(private http: HttpClient,
               private rqlService: RqlService,
-              private dateService: DateService
-  ) {}
+              private dateService: DateService,
+              private eventBusService: EventBusService
+  ) {
+  }
 
   /**
    * Gets all transactions matching a provided filter request.
@@ -32,7 +37,10 @@ export class BudgetRestService {
    */
   searchAll(filterRequest: FilterRequest): Observable<Budget[]> {
     const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
-    return this.http.get<Budget[]>('/rest/budgets', { params: params });
+    return this.eventBusService.accept(['budgets.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<Budget[]>('/rest/budgets', { params: params }))
+    );
   }
 
   /**
@@ -41,7 +49,10 @@ export class BudgetRestService {
    * @param budgetId the budget id
    */
   getOne(budgetId: number): Observable<Budget> {
-    return this.http.get<Budget>('/rest/budgets/' + budgetId);
+    return this.eventBusService.accept(['budgets.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<Budget>('/rest/budgets/' + budgetId))
+    );
   }
 
   /**
@@ -50,7 +61,9 @@ export class BudgetRestService {
    * @param budgetId the budget id
    */
   deleteOne(budgetId: number): Observable<any> {
-    return this.http.delete('/rest/budgets/' + budgetId);
+    return this.http.delete('/rest/budgets/' + budgetId).pipe(
+      tap(() => this.eventBusService.publish('budgets.delete', budgetId))
+    );
   }
 
   /**
@@ -59,7 +72,9 @@ export class BudgetRestService {
    * @param budget the budget to save
    */
   saveOne(budget: Budget): Observable<Budget> {
-    return this.http.put<Budget>('/rest/budgets', CommonFunctions.removeEmpty(budget));
+    return this.http.put<Budget>('/rest/budgets', CommonFunctions.removeEmpty(budget)).pipe(
+      tap(() => this.eventBusService.publish('budgets.update', budget))
+    );
   }
 
   /**
@@ -76,7 +91,10 @@ export class BudgetRestService {
       params = params.set('date', statusDate);
     }
 
-    return this.http.get<BudgetStatus[]>('/rest/budgets/status', { params: params });
+    return this.eventBusService.accept(['budgets.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<BudgetStatus[]>('/rest/budgets/status', { params: params }))
+    );
   }
 
 }
