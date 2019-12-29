@@ -40,7 +40,7 @@ class User:
     'name': types.String(),
     'description': types.String(),
     'total': types.Float(ignore_on_parse=True),
-    'status': types.String(),
+    'status': types.String(ignore_on_parse=True),
     'color': types.String(),
     'notify': types.Boolean(),
     'active': types.Boolean(),
@@ -55,7 +55,7 @@ class Account:
         self.name = name
         self.description = description
         self.total = total
-        self.status = status
+        self.status = [] if status is None else status
         self.color = color
         self.notify = notify
         self.active = active

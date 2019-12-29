@@ -78,6 +78,8 @@ class AccountRepository:
         :param account: the account to save
         :return: the saved account
         """
+        del account.status
+        del account.transactions
         saved_account = self.__entity_manager.get_session().merge(account)
         try:
             self.__entity_manager.get_session().commit()
