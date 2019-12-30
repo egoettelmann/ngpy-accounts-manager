@@ -179,7 +179,7 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
       if (this.isMonthSelectable()) {
         params = this.routerService.setMonth(this.currentMonth, params);
       }
-      this.routerService.refresh('route.budgets.details', { budgetId: this.budgetId }, params);
+      this.routerService.refresh(this.route, params);
     });
     this.subscriptions.active.add(sub);
   }

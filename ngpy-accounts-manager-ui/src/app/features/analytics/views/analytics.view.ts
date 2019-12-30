@@ -155,7 +155,7 @@ export class AnalyticsView implements OnInit, OnDestroy {
     let params = {};
     params = this.routerService.setAccounts(accounts, params);
     params = this.routerService.setYear(this.currentYear, params);
-    this.routerService.refresh('route.transactions.list', {}, params);
+    this.routerService.refresh(this.route, params);
   }
 
   /**

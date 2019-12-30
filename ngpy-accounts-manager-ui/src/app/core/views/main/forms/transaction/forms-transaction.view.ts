@@ -76,7 +76,7 @@ export class FormsTransactionView implements OnInit, OnDestroy {
 
   closeModal() {
     this.routerService.navigate('route.forms.close', undefined, {
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'preserve'
     });
     this.showModal = false;
   }

@@ -134,7 +134,7 @@ export class TreasuryView implements OnInit, OnDestroy {
     params = this.routerService.setYear(this.currentYear, params);
     params = this.routerService.setAccounts(accounts, params);
     params = this.routerService.setLabels(labels, params);
-    this.routerService.refresh('route.treasury', {}, params);
+    this.routerService.refresh(this.route, params);
   }
 
 }

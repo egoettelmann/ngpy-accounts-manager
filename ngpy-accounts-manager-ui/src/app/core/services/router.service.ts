@@ -22,19 +22,20 @@ export class RouterService {
     this.router.navigate(routePath, extras);
   }
 
-  refresh(routeKey: string, pathVariables?: Params, queryParams?: Params) {
-    const routePath = this.routerPathPipe.transform(routeKey, pathVariables);
-    const url = this.router.createUrlTree(routePath, {
-      queryParams: queryParams
-    }).toString();
-    this.location.go(url);
+  refresh(activatedRoute: ActivatedRoute, queryParams?: Params) {
+    this.router.navigate([],
+      {
+        relativeTo: activatedRoute,
+        queryParams: queryParams,
+        queryParamsHandling: 'merge'
+      });
   }
 
   openTransactionForm(transactionId?: number) {
     this.navigate('route.forms.transaction', {
       transactionId: transactionId
     }, {
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'preserve'
     });
   }
 

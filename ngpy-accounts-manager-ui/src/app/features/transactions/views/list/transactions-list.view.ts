@@ -150,7 +150,7 @@ export class TransactionsListView implements OnInit, OnDestroy {
     this.subscriptions.active = sub;
 
     const params = this.buildQueryParams();
-    this.routerService.refresh('route.transactions.list', {}, params);
+    this.routerService.refresh(this.route, params);
   }
 
   /**

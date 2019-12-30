@@ -162,7 +162,7 @@ export class BudgetListView implements OnInit, OnDestroy {
     params = this.routerService.setYear(this.currentYear, params);
     params = this.routerService.setMonth(this.currentMonth, params);
     params = this.routerService.setAccounts(this.accountsFilter, params);
-    this.routerService.refresh('route.budgets.list', {}, params);
+    this.routerService.refresh(this.route, params);
   }
 
 }
