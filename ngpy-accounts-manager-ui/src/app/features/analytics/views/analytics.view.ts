@@ -128,6 +128,7 @@ export class AnalyticsView implements OnInit, OnDestroy {
   private initData() {
     this.currentYear = this.routerService.getYear(this.route);
     this.accountsFilter = this.routerService.getAccounts(this.route);
+    this.quarterly = this.route.snapshot.queryParamMap.get('quarterly') === 'true';
   }
 
   /**
@@ -155,6 +156,7 @@ export class AnalyticsView implements OnInit, OnDestroy {
     let params = {};
     params = this.routerService.setAccounts(accounts, params);
     params = this.routerService.setYear(this.currentYear, params);
+    params['quarterly'] = this.quarterly;
     this.routerService.refresh(this.route, params);
   }
 
