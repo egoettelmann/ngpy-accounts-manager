@@ -70,6 +70,8 @@ class LabelRepository:
         :param label: the label to save
         :return: the saved label
         """
+        del label.transactions
+        del label.category
         saved_label = self.__entity_manager.get_session().merge(label)
         try:
             self.__entity_manager.get_session().commit()

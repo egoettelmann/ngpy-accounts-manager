@@ -59,6 +59,7 @@ class CategoryRepository:
         :param category: the category to save
         :return: the saved category
         """
+        del category.labels
         saved_category = self.__entity_manager.get_session().merge(category)
         try:
             self.__entity_manager.get_session().commit()
