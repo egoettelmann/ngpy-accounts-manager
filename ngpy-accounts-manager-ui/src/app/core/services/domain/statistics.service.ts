@@ -5,6 +5,7 @@ import { FilterOperator, FilterRequest } from '../../models/rql.models';
 import { Observable } from 'rxjs';
 import { CompositeKeyValue, KeyValue, Summary } from '../../models/api.models';
 import { DateService } from '../date.service';
+import { subMonths, subYears } from 'date-fns';
 
 /**
  * The statistics service
@@ -35,6 +36,42 @@ export class StatisticsService {
     // Building start and end date
     const dateFrom = this.dateService.getPeriodStart(year, month);
     const dateTo = this.dateService.getPeriodEnd(year, month);
+
+    return this.statisticsRestService.getSummary(dateFrom, dateTo, accounts, undefined);
+  }
+
+  /**
+   * Gets the summary of the rolling month for a given list of accounts.
+   *
+   * @param accounts the list of accounts
+   */
+  getRollingMonthSummary(accounts: number[]): Observable<Summary> {
+    const dateTo = new Date();
+    const dateFrom = subMonths(dateTo, 1);
+
+    return this.statisticsRestService.getSummary(dateFrom, dateTo, accounts, undefined);
+  }
+
+  /**
+   * Gets the summary of the rolling month for a given list of accounts.
+   *
+   * @param accounts the list of accounts
+   */
+  getRollingThreeMonthsSummary(accounts: number[]): Observable<Summary> {
+    const dateTo = new Date();
+    const dateFrom = subMonths(dateTo, 3);
+
+    return this.statisticsRestService.getSummary(dateFrom, dateTo, accounts, undefined);
+  }
+
+  /**
+   * Gets the summary of the rolling year for a given list of accounts.
+   *
+   * @param accounts the list of accounts
+   */
+  getRollingYearSummary(accounts: number[]): Observable<Summary> {
+    const dateTo = new Date();
+    const dateFrom = subYears(dateTo, 1);
 
     return this.statisticsRestService.getSummary(dateFrom, dateTo, accounts, undefined);
   }

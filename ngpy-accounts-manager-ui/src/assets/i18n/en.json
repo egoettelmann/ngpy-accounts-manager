@@ -34,6 +34,9 @@
   "i18n.views.login.form.button.submit": "LOGIN",
 
   "i18n.views.dashboard.accounts.total": "Total of all accounts:",
+  "i18n.views.dashboard.accounts.rolling-month": "Rolling month",
+  "i18n.views.dashboard.accounts.rolling-three-months": "Rolling 3 months",
+  "i18n.views.dashboard.accounts.rolling-year": "Rolling year",
   "i18n.views.dashboard.chart.title": "Distribution by account",
   "i18n.views.dashboard.alerts.labels": "There are {{ num }} transactions that are attached to no label.",
   "i18n.views.dashboard.alerts.labels-link": "Fix that",

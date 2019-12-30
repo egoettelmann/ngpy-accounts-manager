@@ -5,14 +5,12 @@
 
 <div class="clr-row">
   <div class="clr-col-12 clr-col-md-6">
-    <div class="card">
-      <div class="card-block">
-        <h4 class="card-title clr-row">
-          <span class="clr-col-6">{{ 'i18n.views.dashboard.accounts.total' | translate }}</span>
-          <span class="clr-col-6 text-right"><strong>{{ total | number:'1.2-2' }}&nbsp;€</strong></span>
-        </h4>
-      </div>
-    </div>
+    <app-dashboard-total-summary *ngIf="accounts"
+                                 [accounts]="accounts"
+                                 [rollingMonthSummary]="rollingMonthSummary"
+                                 [rollingThreeMonthsSummary]="rollingThreeMonthsSummary"
+                                 [rollingYearSummary]="rollingYearSummary">
+    </app-dashboard-total-summary>
 
     <app-dashboard-accounts-chart [chartTitle]="'i18n.views.dashboard.chart.title' | translate"
                                   [accounts]="accounts">
