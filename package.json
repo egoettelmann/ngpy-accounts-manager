@@ -1,6 +1,6 @@
 {
   "name": "ngpy-accounts-manager",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "scripts": {
     "postinstall": "npm install --prefix ngpy-accounts-manager-ui",
     "build": "npm run set-version && npm run build --prefix ngpy-accounts-manager-ui",

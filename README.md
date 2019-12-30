@@ -29,6 +29,15 @@ python ngpy-accounts-manager-api/web.py
 
 ## Release Notes
 
+### `0.6.0`
+
+- Added budget section
+- Fixed quarterly formula
+- Added datepicker for forms
+- Added Python unit tests
+- Added Alembic for DB migrations
+- Major rework of code structure 
+
 ### `0.5.0`
 
 - Added native Python logging
