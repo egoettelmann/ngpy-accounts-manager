@@ -34,7 +34,7 @@ export class RouterService {
     this.navigate('route.forms.transaction', {
       transactionId: transactionId
     }, {
-      queryParamsHandling: 'preserve'
+      queryParamsHandling: 'merge'
     });
   }
 
