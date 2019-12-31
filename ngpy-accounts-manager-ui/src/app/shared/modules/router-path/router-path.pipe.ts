@@ -11,6 +11,22 @@ import { Params } from '@angular/router';
 })
 export class RouterPathPipe implements PipeTransform {
 
+  /**
+   * The default options:
+   *  - `defaultRoute`, the default route (to use as fallback): `['/']`
+   *  - `pathVariableIdentifier`, the prefix to identifier path variables: `:`
+   */
+  private static readonly DEFAULT_OPTIONS: RouterPathOptions = {
+    paths: undefined,
+    defaultRoute: [''],
+    pathVariableIdentifier: ':'
+  };
+
+  /**
+   * Instantiates the pipe.
+   *
+   * @param routerPaths the router paths options
+   */
   constructor(@Inject(ROUTER_PATH_CONFIG) private routerPaths: RouterPathOptions) {
   }
 
@@ -23,7 +39,7 @@ export class RouterPathPipe implements PipeTransform {
   transform(routeKey: string, pathVariables?: Params): RouterPathPart[] {
     // If the route key does not exist, the default route is returned
     if (!this.routerPaths.paths.hasOwnProperty(routeKey)) {
-      return this.routerPaths.defaultRoute;
+      return this.routerPaths.defaultRoute || RouterPathPipe.DEFAULT_OPTIONS.defaultRoute;
     }
 
     // Otherwise the route path is generated with the path variables
@@ -99,7 +115,8 @@ export class RouterPathPipe implements PipeTransform {
     }
 
     // If the route path part is not a path variable, nothing to do
-    if (!routePathPart.startsWith(this.routerPaths.pathVariableIdentifier)) {
+    const pathVariableIdentifier = this.routerPaths.pathVariableIdentifier || RouterPathPipe.DEFAULT_OPTIONS.pathVariableIdentifier;
+    if (!routePathPart.startsWith(pathVariableIdentifier)) {
       return [routePathPart];
     }
 

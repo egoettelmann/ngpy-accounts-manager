@@ -32,7 +32,6 @@ import { BudgetRestService } from './services/rest/budget-rest.service';
 import { BudgetService } from './services/domain/budget.service';
 import { RouterService } from './services/router.service';
 import { CategoriesService } from './services/domain/categories.service';
-import { RouterPathPipe } from '../shared/modules/router-path/router-path.pipe';
 import { RouterPathModule } from '../shared/modules/router-path/router-path.module';
 import { AppRoutePaths } from './app-route-paths';
 import { FormsView } from './views/main/forms/forms.view';
