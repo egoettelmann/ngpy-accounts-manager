@@ -125,18 +125,34 @@ export class StatisticsRestService {
   }
 
   /**
-   * Gets the analytics.
+   * Gets the analytics by category.
    *
    * @param period the period
    * @param filterRequest the filter request
    */
-  getAnalytics(period: string, filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {
+  getAnalyticsByCategory(period: string, filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {
     let params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
     params = params.set('period', period);
 
     return this.eventBusService.accept(['transactions.*']).pipe(
       startWith(0),
-      flatMap(() => this.http.get<CompositeKeyValue[]>('/rest/stats/analytics', { params: params }))
+      flatMap(() => this.http.get<CompositeKeyValue[]>('/rest/stats/analytics/category', { params: params }))
+    );
+  }
+
+  /**
+   * Gets the analytics by label.
+   *
+   * @param period the period
+   * @param filterRequest the filter request
+   */
+  getAnalyticsByLabel(period: string, filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {
+    let params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
+    params = params.set('period', period);
+
+    return this.eventBusService.accept(['transactions.*']).pipe(
+      startWith(0),
+      flatMap(() => this.http.get<CompositeKeyValue[]>('/rest/stats/analytics/label', { params: params }))
     );
   }
 
@@ -145,11 +161,11 @@ export class StatisticsRestService {
    *
    * @param filterRequest the filter request
    */
-  getAnalyticsDetails(filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {
+  getAnalyticsRepartition(filterRequest: FilterRequest): Observable<CompositeKeyValue[]> {
     const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
     return this.eventBusService.accept(['transactions.*']).pipe(
       startWith(0),
-      flatMap(() => this.http.get<CompositeKeyValue[]>('/rest/stats/analytics/details', { params: params }))
+      flatMap(() => this.http.get<CompositeKeyValue[]>('/rest/stats/analytics/repartition', { params: params }))
     );
   }
 

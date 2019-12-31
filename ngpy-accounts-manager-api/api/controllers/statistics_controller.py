@@ -149,10 +149,10 @@ class StatisticsController:
 
         return self.__statistics_service.get_summary(account_ids, date_from, date_to, filter_request)
 
-    @restipy.route('/analytics')
+    @restipy.route('/analytics/category')
     @restipy.format_as(CompositeKeyValue)
-    def get_analytics(self) -> List[CompositeKeyValue]:
-        """Gets the analytics for the provided filters.
+    def get_analytics_by_category(self) -> List[CompositeKeyValue]:
+        """Gets the analytics by category for the provided filters.
 
         :return: the list of (key_one, key_two, value) results
         """
@@ -166,11 +166,30 @@ class StatisticsController:
         # Filter request
         filter_request = self.__rql_parser.parse_filters(request)
 
-        return self.__transaction_service.get_total_by_category_type_over_period(period, filter_request)
+        return self.__transaction_service.get_total_by_category_over_period(period, filter_request)
 
-    @restipy.route('/analytics/details')
+    @restipy.route('/analytics/label')
     @restipy.format_as(CompositeKeyValue)
-    def get_analytics_details(self) -> List[CompositeKeyValue]:
+    def get_analytics_by_label(self) -> List[CompositeKeyValue]:
+        """Gets the analytics by label for the provided filters.
+
+        :return: the list of (key_one, key_two, value) results
+        """
+        # Period
+        period = request.args.get('period')
+        if period is not None:
+            period = PeriodType.resolve(period)
+        if period is None:
+            period = PeriodType.MONTH
+
+        # Filter request
+        filter_request = self.__rql_parser.parse_filters(request)
+
+        return self.__transaction_service.get_total_by_label_over_period(period, filter_request)
+
+    @restipy.route('/analytics/repartition')
+    @restipy.format_as(CompositeKeyValue)
+    def get_analytics_repartition(self) -> List[CompositeKeyValue]:
         """Gets the analytics details for the provided filters.
 
         :return: the list of (key_one, key_two, value) results

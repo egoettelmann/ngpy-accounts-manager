@@ -47,33 +47,9 @@
 
   <!-- Movements table -->
   <div class="clr-col-12 clr-col-md-8">
-    <table class="table table-vertical table-compact card-shadow">
-      <tbody>
-      <tr>
-        <th class="w-20">
-          <span *ngIf="quarterly">{{ 'i18n.views.analytics.quarterly.table.title' | translate }}</span>
-          <span *ngIf="!quarterly">{{ 'i18n.views.analytics.monthly.table.title' | translate }}</span>
-        </th>
-        <th *ngFor="let idx of (quarterly ? [1, 2, 3, 4] : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])" class="text-right">
-          <span>{{ (quarterly ? 'Q' : '') + idx }}</span>
-        </th>
-      </tr>
-      <tr *ngFor="let movement of tableMovements">
-        <th>{{ +movement.name | toCategory:'name' }}</th>
-        <td *ngFor="let d of movement.data" class="text-right">
-          <span>{{ d | number:'1.2-2' }}&nbsp;€</span>
-        </td>
-      </tr>
-      <tr *ngIf="tableMovements.length === 0">
-        <td *ngIf="quarterly" colspan="5">
-          <span>{{ 'i18n.views.analytics.table.no-entries' | translate }}</span>
-        </td>
-        <td *ngIf="!quarterly" colspan="13">
-          <span>{{ 'i18n.views.analytics.table.no-entries' | translate }}</span>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <app-analytics-movements-table [movements]="analyticsMovements"
+                                   [quarterly]="quarterly">
+    </app-analytics-movements-table>
   </div>
 </div>
 

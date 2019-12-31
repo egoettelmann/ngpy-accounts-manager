@@ -1,10 +1,9 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { combineLatest, Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { Account, Category, CompositeKeyValue } from '../../../core/models/api.models';
-import { ChartSerie, GroupedValue } from '../../../core/models/domain.models';
+import { GroupedValue } from '../../../core/models/domain.models';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
 import { RouterService } from '../../../core/services/router.service';
@@ -26,7 +25,7 @@ export class AnalyticsView implements OnInit, OnDestroy {
   public categories: Category[];
   public analyticsCredit: CompositeKeyValue[];
   public analyticsDebit: CompositeKeyValue[];
-  public tableMovements: ChartSerie[] = [];
+  public analyticsMovements: CompositeKeyValue[];
   public detailsCredit: GroupedValue[] = [];
   public detailsDebit: GroupedValue[] = [];
 
@@ -138,15 +137,15 @@ export class AnalyticsView implements OnInit, OnDestroy {
     const period = this.quarterly ? 'QUARTER' : 'MONTH';
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
     const sub = combineLatest([
-      this.statisticsService.getAnalytics(this.currentYear, period, 'C', accounts),
-      this.statisticsService.getAnalytics(this.currentYear, period, 'D', accounts),
-      this.statisticsService.getAnalytics(this.currentYear, period, 'M', accounts),
-      this.statisticsService.getAnalyticsDetails(this.currentYear, 'C', accounts),
-      this.statisticsService.getAnalyticsDetails(this.currentYear, 'D', accounts)
+      this.statisticsService.getAnalyticsByCategory(this.currentYear, period, 'C', accounts),
+      this.statisticsService.getAnalyticsByCategory(this.currentYear, period, 'D', accounts),
+      this.statisticsService.getAnalyticsByCategory(this.currentYear, period, 'M', accounts),
+      this.statisticsService.getAnalyticsRepartition(this.currentYear, 'C', accounts),
+      this.statisticsService.getAnalyticsRepartition(this.currentYear, 'D', accounts)
     ]).subscribe(([credits, debits, movements, creditDetails, debitDetails]) => {
       this.analyticsCredit = credits;
       this.analyticsDebit = debits;
-      this.tableMovements = this.buildTable(movements);
+      this.analyticsMovements = movements;
       this.detailsCredit = this.consolidateDetails(creditDetails);
       this.detailsDebit = this.consolidateDetails(debitDetails);
     });
@@ -158,46 +157,6 @@ export class AnalyticsView implements OnInit, OnDestroy {
     params = this.routerService.setYear(this.currentYear, params);
     params['quarterly'] = this.quarterly;
     this.routerService.refresh(this.route, params);
-  }
-
-  /**
-   * Builds the aggregation table.
-   *
-   * @param data the data to aggregate
-   * @returns the aggregated data for the table
-   */
-  private buildTable(data: CompositeKeyValue[]): ChartSerie[] {
-    const movements: ChartSerie[] = [];
-    let categories = [];
-    const series = {};
-
-    // Generating list of categories
-    for (const d of data) {
-      if (!categories.includes(d.keyOne)) {
-        categories.push(d.keyOne);
-      }
-    }
-    categories = categories.sort((a: string, b: string) => {
-      return a.localeCompare(b);
-    });
-
-    for (const d of data) {
-      const categoryIdx = categories.indexOf(d.keyOne);
-      if (!series.hasOwnProperty(d.keyTwo)) {
-        series[d.keyTwo] = [];
-      }
-      CommonFunctions.resizeArray(series[d.keyTwo], 0, this.quarterly ? 3 : 11);
-      series[d.keyTwo][categoryIdx] = d.value;
-    }
-    for (const key in series) {
-      if (series.hasOwnProperty(key)) {
-        movements.push({
-          name: key,
-          data: series[key]
-        });
-      }
-    }
-    return movements;
   }
 
   /**

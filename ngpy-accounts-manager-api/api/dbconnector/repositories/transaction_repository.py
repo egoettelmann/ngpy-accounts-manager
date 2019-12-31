@@ -124,11 +124,11 @@ class TransactionRepository:
         logging.debug(query)
         return query.all()
 
-    def get_grouped_by_type_over_period(self,
+    def get_grouped_by_category_over_period(self,
                                         period: PeriodType,
                                         filter_request: FilterRequest
                                         ) -> List[QCompositeKeyValue]:
-        """Gets the transaction amount grouped by category type and period matching the provided filters.
+        """Gets the transaction amount grouped by category and period matching the provided filters.
 
         :param period: the period
         :param filter_request: the filter request
@@ -141,6 +141,27 @@ class TransactionRepository:
             label('key_two', CategoryDbo.id)
         )
         query = self.__query_builder.build(query, filters=filter_request, groups=['label.category.id'])
+        query = query.group_by(period_expr)
+        logging.debug(query)
+        return query.all()
+
+    def get_grouped_by_label_over_period(self,
+                                         period: PeriodType,
+                                         filter_request: FilterRequest
+                                         ) -> List[QCompositeKeyValue]:
+        """Gets the transaction amount grouped by label and period matching the provided filters.
+
+        :param period: the period
+        :param filter_request: the filter request
+        :return: the list of (key_one, key_two, value) results
+        """
+        period_expr = self.period_expression(period, TransactionDbo.date_value)
+        query = self.__entity_manager.query(
+            label('value', func.sum(TransactionDbo.amount)),
+            label('key_one', period_expr),
+            label('key_two', LabelDbo.id)
+        )
+        query = self.__query_builder.build(query, filters=filter_request, groups=['label.label.id'])
         query = query.group_by(period_expr)
         logging.debug(query)
         return query.all()

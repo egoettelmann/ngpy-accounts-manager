@@ -130,12 +130,12 @@ describe('StatisticsService', () => {
 
   it('getAnalytics should define correct date interval', async(() => {
     let result = [];
-    spyOn(restService, 'getAnalytics').and.callFake((...args) => {
+    spyOn(restService, 'getAnalyticsByCategory').and.callFake((...args) => {
       result = args;
       return of({});
     });
     service.getAnalytics(2016, undefined, '', []).subscribe();
-    expect(restService.getAnalytics).toHaveBeenCalled();
+    expect(restService.getAnalyticsByCategory).toHaveBeenCalled();
     const expectedDateFrom = format(new Date(2016, 0, 1), 'yyyy-MM-dd');
     const expectedDateTo = format(new Date(2017, 0, 1), 'yyyy-MM-dd');
     expect(result[1].collection[0].value).toEqual(expectedDateFrom, 'dateFrom is wrong');

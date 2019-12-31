@@ -6,13 +6,15 @@ import { SharedModule } from '../../shared/shared.module';
 import { AnalyticsBarChartComponent } from './components/bar-chart/analytics-bar-chart.component';
 import { AnalyticsPieChartComponent } from './components/pie-chart/analytics-pie-chart.component';
 import { AnalyticsDetailsTableComponent } from './components/details-table/analytics-details-table.component';
+import { AnalyticsMovementsTableComponent } from './components/movements-table/analytics-movements-table.component';
 
 @NgModule({
   declarations: [
     AnalyticsView,
     AnalyticsPieChartComponent,
     AnalyticsDetailsTableComponent,
-    AnalyticsBarChartComponent
+    AnalyticsBarChartComponent,
+    AnalyticsMovementsTableComponent
   ],
   imports: [
     SharedModule,

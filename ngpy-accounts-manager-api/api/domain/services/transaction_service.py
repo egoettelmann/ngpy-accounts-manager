@@ -102,17 +102,33 @@ class TransactionService:
             values.append(KeyValue(kv.key, kv.value))
         return values
 
-    def get_total_by_category_type_over_period(self,
+    def get_total_by_category_over_period(self,
                                                period: PeriodType,
                                                filter_request: FilterRequest
                                                ) -> List[CompositeKeyValue]:
-        """Gets the total by category type matching the provided filters.
+        """Gets the total by category type and period matching the provided filters.
 
         :param period: the period
         :param filter_request: the filter request
         :return: the list of (key_one, key_two, value) results
         """
-        entries = self.__repository.get_grouped_by_type_over_period(period, filter_request)
+        entries = self.__repository.get_grouped_by_category_over_period(period, filter_request)
+        values = []
+        for kv in entries:
+            values.append(CompositeKeyValue(kv.key_one, kv.key_two, kv.value))
+        return values
+
+    def get_total_by_label_over_period(self,
+                                       period: PeriodType,
+                                       filter_request: FilterRequest
+                                       ) -> List[CompositeKeyValue]:
+        """Gets the total by label and period matching the provided filters.
+
+        :param period: the period
+        :param filter_request: the filter request
+        :return: the list of (key_one, key_two, value) results
+        """
+        entries = self.__repository.get_grouped_by_label_over_period(period, filter_request)
         values = []
         for kv in entries:
             values.append(CompositeKeyValue(kv.key_one, kv.key_two, kv.value))

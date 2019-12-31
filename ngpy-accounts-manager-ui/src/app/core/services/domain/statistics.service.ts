@@ -161,14 +161,14 @@ export class StatisticsService {
   }
 
   /**
-   * Gets the analytics for a given list of accounts.
+   * Gets the analytics by category for a given list of accounts.
    *
    * @param year the year
    * @param period the aggregation period
    * @param categoryType the category type to filter on
    * @param accounts the list of accounts
    */
-  getAnalytics(year: number, period: string, categoryType: string, accounts: number[]): Observable<CompositeKeyValue[]> {
+  getAnalyticsByCategory(year: number, period: string, categoryType: string, accounts: number[]): Observable<CompositeKeyValue[]> {
     // Building start and end date
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
@@ -189,7 +189,39 @@ export class StatisticsService {
       );
     }
 
-    return this.statisticsRestService.getAnalytics(period, filter);
+    return this.statisticsRestService.getAnalyticsByCategory(period, filter);
+  }
+
+  /**
+   * Gets the analytics by label for a given list of accounts.
+   *
+   * @param year the year
+   * @param period the aggregation period
+   * @param categoryId the category id to filter on
+   * @param accounts the list of accounts
+   */
+  getAnalyticsByLabel(year: number, period: string, categoryId: number, accounts: number[]): Observable<CompositeKeyValue[]> {
+    // Building start and end date
+    const dateFrom = this.dateService.getPeriodStart(year);
+    const dateTo = this.dateService.getPeriodEnd(year);
+
+    // Adding date and amount filters
+    let filter = FilterRequest.all(
+      FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT),
+      FilterRequest.of('categoryId', categoryId, FilterOperator.EQ)
+    );
+
+    // Adding the account filters
+    if (accounts && accounts.length > 0) {
+      const accountList = this.rqlService.formatList(accounts);
+      filter = FilterRequest.all(
+        FilterRequest.of('accountId', accountList, FilterOperator.IN),
+        filter
+      );
+    }
+
+    return this.statisticsRestService.getAnalyticsByLabel(period, filter);
   }
 
   /**
@@ -199,7 +231,7 @@ export class StatisticsService {
    * @param categoryType the category type to filter
    * @param accounts the list of accounts
    */
-  getAnalyticsDetails(year: number, categoryType: string, accounts: number[]): Observable<CompositeKeyValue[]> {
+  getAnalyticsRepartition(year: number, categoryType: string, accounts: number[]): Observable<CompositeKeyValue[]> {
     // Building start and end date
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
@@ -220,7 +252,7 @@ export class StatisticsService {
       );
     }
 
-    return this.statisticsRestService.getAnalyticsDetails(filter);
+    return this.statisticsRestService.getAnalyticsRepartition(filter);
   }
 
 }
