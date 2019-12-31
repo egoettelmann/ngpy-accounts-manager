@@ -38,6 +38,7 @@ import { FormsView } from './views/main/forms/forms.view';
 import { TransactionsFormComponent } from './components/transactions-form/transactions-form.component';
 import { FormsTransactionView } from './views/main/forms/transaction/forms-transaction.view';
 import { EventBusService } from './services/event-bus.service';
+import { LabelsService } from './services/domain/labels.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -113,6 +114,7 @@ export class CoreModule {
     AlertsService,
     BudgetService,
     CategoriesService,
+    LabelsService,
 
     /** App services */
     AuthenticationService,

@@ -1,11 +1,11 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { combineLatest, Subscription } from 'rxjs';
 import { lock, SubscriptionLock } from '../../../../shared/utils/lock-subscriber';
 import { Category, Label } from '../../../../core/models/api.models';
 import { CategoriesService } from '../../../../core/services/domain/categories.service';
+import { LabelsService } from '../../../../core/services/domain/labels.service';
 
 @Component({
   templateUrl: './settings-labels.view.html',
@@ -25,14 +25,14 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
   };
 
   constructor(private fb: FormBuilder,
-              private labelsService: LabelsRestService,
+              private labelsService: LabelsService,
               private categoriesService: CategoriesService) {
   }
 
   ngOnInit(): void {
     const sub = combineLatest([
       this.categoriesService.getCategories(),
-      this.labelsService.getAll()
+      this.labelsService.getLabels()
     ]).subscribe(([categories, labels]) => {
       this.categories = categories;
       this.buildForm(labels.slice(0));

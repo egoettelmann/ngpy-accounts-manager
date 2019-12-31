@@ -36,11 +36,11 @@ export class LabelsRestService {
   /**
    * Deletes a label.
    *
-   * @param label the label to delete
+   * @param labelId the label id to delete
    */
-  deleteOne(label: Label) {
-    return this.http.delete('/rest/labels/' + label.id).pipe(
-      tap(() => this.eventBusService.publish('labels.delete', label.id))
+  deleteOne(labelId: number): Observable<any> {
+    return this.http.delete('/rest/labels/' + labelId).pipe(
+      tap(() => this.eventBusService.publish('labels.delete', labelId))
     );
   }
 

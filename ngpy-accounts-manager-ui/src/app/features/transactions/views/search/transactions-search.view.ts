@@ -1,11 +1,11 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { Account, Category, Label, Transaction } from '../../../../core/models/api.models';
 import { combineLatest, Subscription } from 'rxjs';
 import { TransactionsService } from '../../../../core/services/domain/transactions.service';
 import { FilterRequest } from '../../../../core/models/rql.models';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
 import { CategoriesService } from '../../../../core/services/domain/categories.service';
+import { LabelsService } from '../../../../core/services/domain/labels.service';
 
 @Component({
   templateUrl: './transactions-search.view.html',
@@ -27,7 +27,7 @@ export class TransactionsSearchView implements OnInit, OnDestroy {
     active: new Subscription()
   };
 
-  constructor(private labelsService: LabelsRestService,
+  constructor(private labelsService: LabelsService,
               private transactionsService: TransactionsService,
               private accountsService: AccountsService,
               private categoriesService: CategoriesService
@@ -37,7 +37,7 @@ export class TransactionsSearchView implements OnInit, OnDestroy {
   ngOnInit(): void {
     const sub = combineLatest([
       this.accountsService.getAccounts(),
-      this.labelsService.getAll(),
+      this.labelsService.getLabels(),
       this.categoriesService.getCategories()
     ]).subscribe(([accounts, labels, categories]) => {
       this.accounts = accounts.slice(0);

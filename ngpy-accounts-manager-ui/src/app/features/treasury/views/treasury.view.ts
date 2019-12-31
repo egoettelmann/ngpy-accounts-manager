@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
 import { combineLatest, Subscription } from 'rxjs';
-import { LabelsRestService } from '../../../core/services/rest/labels-rest.service';
 import { TransactionsService } from '../../../core/services/domain/transactions.service';
 import { StatisticsService } from '../../../core/services/domain/statistics.service';
 import { AccountsService } from '../../../core/services/domain/accounts.service';
 import { RouterService } from '../../../core/services/router.service';
+import { LabelsService } from '../../../core/services/domain/labels.service';
 
 @Component({
   templateUrl: './treasury.view.html',
@@ -38,7 +38,7 @@ export class TreasuryView implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
               private accountsService: AccountsService,
-              private labelsService: LabelsRestService,
+              private labelsService: LabelsService,
               private statisticsService: StatisticsService,
               private transactionsService: TransactionsService
   ) {
@@ -48,7 +48,7 @@ export class TreasuryView implements OnInit, OnDestroy {
     this.initData();
     const sub = combineLatest([
       this.accountsService.getAccounts(),
-      this.labelsService.getAll()
+      this.labelsService.getLabels()
     ]).subscribe(([accounts, labels]) => {
       this.accounts = accounts;
       this.labels = labels;

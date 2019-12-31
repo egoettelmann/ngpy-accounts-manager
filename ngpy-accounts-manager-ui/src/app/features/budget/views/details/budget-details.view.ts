@@ -6,7 +6,7 @@ import { RouterService } from '../../../../core/services/router.service';
 import { DateService } from '../../../../core/services/date.service';
 import { combineLatest, Subscription } from 'rxjs';
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
-import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
+import { LabelsService } from '../../../../core/services/domain/labels.service';
 
 @Component({
   templateUrl: './budget-details.view.html',
@@ -46,7 +46,7 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
               private routerService: RouterService,
               private budgetService: BudgetService,
               private accountsService: AccountsService,
-              private labelsService: LabelsRestService,
+              private labelsService: LabelsService,
               private dateService: DateService
   ) {
   }
@@ -59,7 +59,7 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
     this.initData();
     const sub = combineLatest([
       this.accountsService.getAccounts(),
-      this.labelsService.getAll()
+      this.labelsService.getLabels()
     ]).subscribe(([accounts, labels]) => {
       this.accounts = accounts;
       this.labels = labels;

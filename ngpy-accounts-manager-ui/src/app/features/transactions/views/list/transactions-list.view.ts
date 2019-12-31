@@ -1,6 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import * as _ from 'lodash';
@@ -10,6 +9,7 @@ import { StatisticsService } from '../../../../core/services/domain/statistics.s
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
 import { DateService } from '../../../../core/services/date.service';
 import { RouterService } from '../../../../core/services/router.service';
+import { LabelsService } from '../../../../core/services/domain/labels.service';
 
 @Component({
   templateUrl: './transactions-list.view.html',
@@ -36,7 +36,7 @@ export class TransactionsListView implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
-              private labelsService: LabelsRestService,
+              private labelsService: LabelsService,
               private transactionsService: TransactionsService,
               private statisticsService: StatisticsService,
               private accountsService: AccountsService,
@@ -49,7 +49,7 @@ export class TransactionsListView implements OnInit, OnDestroy {
     this.initData();
     const sub = combineLatest([
       this.accountsService.getAccounts(),
-      this.labelsService.getAll()
+      this.labelsService.getLabels()
     ]).subscribe(([accounts, labels]) => {
       this.accounts = accounts;
       this.labels = labels;

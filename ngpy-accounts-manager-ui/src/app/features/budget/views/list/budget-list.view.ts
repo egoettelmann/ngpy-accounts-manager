@@ -6,8 +6,8 @@ import { Account, Budget, BudgetStatus, Category, Label } from '../../../../core
 import { AccountsService } from '../../../../core/services/domain/accounts.service';
 import * as _ from 'lodash';
 import { RouterService } from '../../../../core/services/router.service';
-import { LabelsRestService } from '../../../../core/services/rest/labels-rest.service';
 import { combineLatest, Subscription } from 'rxjs';
+import { LabelsService } from '../../../../core/services/domain/labels.service';
 
 @Component({
   templateUrl: './budget-list.view.html',
@@ -37,7 +37,7 @@ export class BudgetListView implements OnInit, OnDestroy {
               private routerService: RouterService,
               private dateService: DateService,
               private budgetService: BudgetService,
-              private labelsService: LabelsRestService,
+              private labelsService: LabelsService,
               private accountsService: AccountsService
   ) {
   }
@@ -49,7 +49,7 @@ export class BudgetListView implements OnInit, OnDestroy {
     this.initData();
     const sub = combineLatest([
       this.accountsService.getAccounts(),
-      this.labelsService.getAll()
+      this.labelsService.getLabels()
     ]).subscribe(([accounts, labels]) => {
       this.accounts = accounts;
       this.labels = labels;
