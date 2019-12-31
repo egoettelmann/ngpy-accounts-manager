@@ -10,6 +10,7 @@ import { AccountsService } from '../../../../core/services/domain/accounts.servi
 import { DateService } from '../../../../core/services/date.service';
 import { RouterService } from '../../../../core/services/router.service';
 import { LabelsService } from '../../../../core/services/domain/labels.service';
+import { ToLabelPipe } from '../../../../shared/pipes/to-label.pipe';
 
 @Component({
   templateUrl: './transactions-list.view.html',
@@ -41,7 +42,8 @@ export class TransactionsListView implements OnInit, OnDestroy {
               private statisticsService: StatisticsService,
               private accountsService: AccountsService,
               private dateService: DateService,
-              private decimalPipe: DecimalPipe
+              private decimalPipe: DecimalPipe,
+              private toLabelPipe: ToLabelPipe
   ) {
   }
 
@@ -179,7 +181,8 @@ export class TransactionsListView implements OnInit, OnDestroy {
       }]
     };
     for (const d of data) {
-      options.xAxis.categories.push(d.key);
+      const labelName = this.toLabelPipe.transform(+d.key, 'name');
+      options.xAxis.categories.push(labelName);
       options.series[0].data.push(d.value);
     }
     return options;

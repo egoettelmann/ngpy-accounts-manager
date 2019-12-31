@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { GroupedValue } from '../../../../core/models/domain.models';
+import { ToLabelPipe } from '../../../../shared/pipes/to-label.pipe';
+import { ToCategoryPipe } from '../../../../shared/pipes/to-category.pipe';
 
 @Component({
   selector: 'app-analytics-pie-chart',
@@ -14,7 +16,10 @@ export class AnalyticsPieChartComponent implements OnChanges {
 
   public chartOptions: any;
 
-  constructor(private decimalPipe: DecimalPipe) {
+  constructor(private decimalPipe: DecimalPipe,
+              private toLabelPipe: ToLabelPipe,
+              private toCategoryPipe: ToCategoryPipe
+  ) {
   }
 
   /**
@@ -38,21 +43,24 @@ export class AnalyticsPieChartComponent implements OnChanges {
       chart: {
         type: 'pie'
       },
-      tooltip: {
-        formatter: function () {
-          return '<b>' + this.key + '</b><br/>'
-            + '<b>' + that.decimalPipe.transform(this.point.data, '1.2-2') + ' €</b>'
-            + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
+      legend: {
+        labelFormatter: function() {
+          return that.toCategoryPipe.transform(+this.name, 'name');
         }
       },
       plotOptions: {
         pie: {
-          center: ['50%', '50%']
+          center: ['50%', '50%'],
+          dataLabels: {
+            formatter: function() {
+              return that.toLabelPipe.transform(+this.key, 'name');
+            }
+          }
         },
         series: {
           point: {
             events: {
-              legendItemClick: function () {
+              legendItemClick: function() {
                 const parentName = this.name;
                 const details = this.series.chart.series[1].data;
                 details.forEach((point) => {
@@ -76,13 +84,29 @@ export class AnalyticsPieChartComponent implements OnChanges {
         dataLabels: {
           enabled: false
         },
-        showInLegend: true
+        showInLegend: true,
+        tooltip: {
+          headerFormat: '',
+          pointFormatter: function() {
+            return '<b>' + that.toCategoryPipe.transform(+this.name, 'name') + '</b><br/>'
+              + '<b>' + that.decimalPipe.transform(this.data, '1.2-2') + ' €</b>'
+              + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
+          }
+        }
       }, {
         name: 'labels',
         size: '80%',
         innerSize: '60%',
         data: [],
-        allowPointSelect: true
+        allowPointSelect: true,
+        tooltip: {
+          headerFormat: '',
+          pointFormatter: function() {
+            return '<b>' + that.toLabelPipe.transform(+this.name, 'name') + '</b><br/>'
+              + '<b>' + that.decimalPipe.transform(this.data, '1.2-2') + ' €</b>'
+              + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
+          }
+        }
       }]
     };
 

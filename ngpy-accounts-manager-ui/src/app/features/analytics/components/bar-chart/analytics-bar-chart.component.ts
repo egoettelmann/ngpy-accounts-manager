@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { CommonFunctions } from '../../../../shared/utils/common-functions';
 import { CompositeKeyValue } from '../../../../core/models/api.models';
+import { ToCategoryPipe } from '../../../../shared/pipes/to-category.pipe';
 
 @Component({
   selector: 'app-analytics-bar-chart',
@@ -15,7 +16,9 @@ export class AnalyticsBarChartComponent implements OnChanges {
 
   public chartOptions: any;
 
-  constructor(private decimalPipe: DecimalPipe) {
+  constructor(private decimalPipe: DecimalPipe,
+              private toCategoryPipe: ToCategoryPipe
+  ) {
   }
 
   /**
@@ -40,10 +43,15 @@ export class AnalyticsBarChartComponent implements OnChanges {
         type: 'column'
       },
       tooltip: {
-        formatter: function () {
-          return '<b>' + this.series.name + '</b><br/>'
+        formatter: function() {
+          return '<b>' + that.toCategoryPipe.transform(+this.series.name, 'name') + '</b><br/>'
             + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
             + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
+        }
+      },
+      legend: {
+        labelFormatter: function() {
+          return that.toCategoryPipe.transform(+this.name, 'name');
         }
       },
       xAxis: {
@@ -52,7 +60,7 @@ export class AnalyticsBarChartComponent implements OnChanges {
       yAxis: {
         stackLabels: {
           enabled: true,
-          formatter: function () {
+          formatter: function() {
             return that.decimalPipe.transform(this.total, '1.2-2') + ' €';
           }
         }
@@ -62,7 +70,7 @@ export class AnalyticsBarChartComponent implements OnChanges {
           stacking: 'percent',
           dataLabels: {
             enabled: true,
-            formatter: function () {
+            formatter: function() {
               return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
             }
           }

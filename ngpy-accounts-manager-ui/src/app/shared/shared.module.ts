@@ -23,11 +23,14 @@ import { CategoriesToggleComponent } from './components/toggles/categories-toggl
 import { CardWrapperComponent } from './components/cards/card-wrapper.component';
 import { RouterPathModule } from './modules/router-path/router-path.module';
 import { TransactionsTableComponent } from './components/tables/transactions-table/transactions-table.component';
+import { ToLabelPipe } from './pipes/to-label.pipe';
+import { ToCategoryPipe } from './pipes/to-category.pipe';
 
 @NgModule({
   declarations: [
     ...SharedModule.COMPONENTS_LIST,
-    ...SharedModule.DIRECTIVE_LIST
+    ...SharedModule.DIRECTIVE_LIST,
+    ...SharedModule.PIPES_LIST
   ],
   imports: [
     ...SharedModule.MODULES_LIST
@@ -35,6 +38,7 @@ import { TransactionsTableComponent } from './components/tables/transactions-tab
   exports: [
     ...SharedModule.COMPONENTS_LIST,
     ...SharedModule.DIRECTIVE_LIST,
+    ...SharedModule.PIPES_LIST,
     ...SharedModule.MODULES_LIST
   ]
 })
@@ -59,6 +63,11 @@ export class SharedModule {
 
   static DIRECTIVE_LIST = [
     KeepFocusDirective
+  ];
+
+  static PIPES_LIST = [
+    ToLabelPipe,
+    ToCategoryPipe
   ];
 
   static MODULES_LIST = [

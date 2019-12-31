@@ -39,6 +39,8 @@ import { TransactionsFormComponent } from './components/transactions-form/transa
 import { FormsTransactionView } from './views/main/forms/transaction/forms-transaction.view';
 import { EventBusService } from './services/event-bus.service';
 import { LabelsService } from './services/domain/labels.service';
+import { ToLabelPipe } from '../shared/pipes/to-label.pipe';
+import { ToCategoryPipe } from '../shared/pipes/to-category.pipe';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -128,6 +130,8 @@ export class CoreModule {
 
     /** Pipes */
     DecimalPipe,
+    ToLabelPipe,
+    ToCategoryPipe,
 
     /** Guards */
     AuthenticatedGuard,

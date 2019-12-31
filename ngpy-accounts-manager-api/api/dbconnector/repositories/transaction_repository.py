@@ -92,14 +92,13 @@ class TransactionRepository:
         """
         value_expr = func.sum(TransactionDbo.amount)
         query = self.__entity_manager.query(
-            label('key', LabelDbo.name),
+            label('key', LabelDbo.id),
             label('value', value_expr)
         ).join(
             LabelDbo.transactions
         )
         query = self.__query_builder.build(query, filters=filter_request)
         query = query.group_by(LabelDbo.id)
-        query = query.group_by(LabelDbo.name)
         query = query.order_by(desc(value_expr))
         logging.debug(query)
         return query.all()
@@ -139,9 +138,9 @@ class TransactionRepository:
         query = self.__entity_manager.query(
             label('value', func.sum(TransactionDbo.amount)),
             label('key_one', period_expr),
-            label('key_two', CategoryDbo.name)
+            label('key_two', CategoryDbo.id)
         )
-        query = self.__query_builder.build(query, filters=filter_request, groups=['label.category.name'])
+        query = self.__query_builder.build(query, filters=filter_request, groups=['label.category.id'])
         query = query.group_by(period_expr)
         logging.debug(query)
         return query.all()
@@ -154,10 +153,10 @@ class TransactionRepository:
         """
         query = self.__entity_manager.query(
             label('value', func.sum(TransactionDbo.amount)),
-            label('key_one', CategoryDbo.name),
-            label('key_two', LabelDbo.name),
+            label('key_one', CategoryDbo.id),
+            label('key_two', LabelDbo.id),
         )
-        query = self.__query_builder.build(query, filters=filter_request, groups=['label.name', 'label.category.name'])
+        query = self.__query_builder.build(query, filters=filter_request, groups=['label.id', 'label.category.id'])
         logging.debug(query)
         return query.all()
 
@@ -215,18 +214,18 @@ class TransactionRepository:
         :return: the period expression
         """
         if period == PeriodType.DAY:
-            return cast(extract('year', column), String)\
-                   + '-'\
-                   + self.__entity_manager.query_adapter.pad(extract('month', column), '00')\
-                   + '-'\
+            return cast(extract('year', column), String) \
+                   + '-' \
+                   + self.__entity_manager.query_adapter.pad(extract('month', column), '00') \
+                   + '-' \
                    + self.__entity_manager.query_adapter.pad(extract('day', column), '00')
         if period == PeriodType.MONTH:
-            return cast(extract('year', column), String)\
-                   + '-'\
+            return cast(extract('year', column), String) \
+                   + '-' \
                    + self.__entity_manager.query_adapter.pad(extract('month', column), '00')
         if period == PeriodType.QUARTER:
-            return cast(extract('year', column), String)\
-                   + '-Q'\
+            return cast(extract('year', column), String) \
+                   + '-Q' \
                    + cast(cast(cast(extract('month', TransactionDbo.date_value) - 1, Integer) / 3 + 1, Integer), String)
         if period == PeriodType.YEAR:
             return cast(extract('year', column), String)
