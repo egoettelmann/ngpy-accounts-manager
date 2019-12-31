@@ -59,7 +59,7 @@
         </th>
       </tr>
       <tr *ngFor="let movement of tableMovements">
-        <th>{{ movement.name }}</th>
+        <th>{{ +movement.name | toCategory:'name' }}</th>
         <td *ngFor="let d of movement.data" class="text-right">
           <span>{{ d | number:'1.2-2' }}&nbsp;€</span>
         </td>
