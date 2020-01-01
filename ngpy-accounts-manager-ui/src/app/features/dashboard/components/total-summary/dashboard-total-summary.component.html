@@ -8,7 +8,7 @@
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
       <div class="clr-row">
-        <div class="clr-offset-1 clr-col-11 clr-col-md-7">
+        <div class="clr-offset-1 clr-col-11 clr-col-md-6">
           <strong>{{ 'i18n.views.dashboard.accounts.rolling-month' | translate }}</strong>
         </div>
         <div class="clr-col-6 clr-col-md-2 text-right" [ngClass]="getAmountColor(summaries.month.total)">
@@ -16,12 +16,12 @@
           <clr-icon *ngIf="summaries.month.performance < 0" shape="minus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></clr-icon>
           <span>&nbsp;{{ summaries.month.performance | number:'1.2-2' }} %</span>
         </div>
-        <div class="clr-col-6 clr-col-md-2 text-right" [ngClass]="getAmountColor(summaries.month.total)">
+        <div class="clr-col-6 clr-col-md-3 text-right" [ngClass]="getAmountColor(summaries.month.total)">
           <strong>{{ summaries.month.total | number:'1.2-2' }} €</strong>
         </div>
       </div>
       <div class="clr-row">
-        <div class="clr-offset-1 clr-col-11 clr-col-md-7">
+        <div class="clr-offset-1 clr-col-11 clr-col-md-6">
           <strong>{{ 'i18n.views.dashboard.accounts.rolling-three-months' | translate }}</strong>
         </div>
         <div class="clr-col-6 clr-col-md-2 text-right" [ngClass]="getAmountColor(summaries.threeMonths.total)">
@@ -29,12 +29,12 @@
           <clr-icon *ngIf="summaries.threeMonths.performance < 0" shape="minus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></clr-icon>
           <span>&nbsp;{{ summaries.threeMonths.performance | number:'1.2-2' }} %</span>
         </div>
-        <div class="clr-col-6 clr-col-md-2 text-right" [ngClass]="getAmountColor(summaries.threeMonths.total)">
+        <div class="clr-col-6 clr-col-md-3 text-right" [ngClass]="getAmountColor(summaries.threeMonths.total)">
           <strong>{{ summaries.threeMonths.total | number:'1.2-2' }} €</strong>
         </div>
       </div>
       <div class="clr-row">
-        <div class="clr-offset-1 clr-col-11 clr-col-md-7">
+        <div class="clr-offset-1 clr-col-11 clr-col-md-6">
           <strong>{{ 'i18n.views.dashboard.accounts.rolling-year' | translate }}</strong>
         </div>
         <div class="clr-col-6 clr-col-md-2 text-right" [ngClass]="getAmountColor(summaries.year.total)">
@@ -42,7 +42,7 @@
           <clr-icon *ngIf="summaries.year.performance < 0" shape="minus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></clr-icon>
           <span>&nbsp;{{ summaries.year.performance | number:'1.2-2' }} %</span>
         </div>
-        <div class="clr-col-6 clr-col-md-2 text-right" [ngClass]="getAmountColor(summaries.year.total)">
+        <div class="clr-col-6 clr-col-md-3 text-right" [ngClass]="getAmountColor(summaries.year.total)">
           <strong>{{ summaries.year.total | number:'1.2-2' }} €</strong>
         </div>
       </div>
