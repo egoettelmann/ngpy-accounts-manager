@@ -164,7 +164,7 @@ class BudgetService:
         :return: the total
         """
         quarter = int((status_date.month - 1) / 3) + 1
-        start_month = (quarter - 1) * 3
+        start_month = (quarter - 1) * 3 + 1
         date_from = date(status_date.year, start_month, 1)
         if quarter == 4:
             date_to = date(status_date.year, quarter * 3, 1)
