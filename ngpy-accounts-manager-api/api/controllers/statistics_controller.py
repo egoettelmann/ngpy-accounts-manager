@@ -38,6 +38,7 @@ class StatisticsController:
             'description': 'description',
             'amount': 'amount',
             'dateValue': 'date_value',
+            'categoryId': 'label.category.id',
             'categoryType': 'label.category.type'
         })
 

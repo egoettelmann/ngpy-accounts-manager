@@ -3,6 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { CommonFunctions } from '../../../../shared/utils/common-functions';
 import { CompositeKeyValue } from '../../../../core/models/api.models';
 import { ToCategoryPipe } from '../../../../shared/pipes/to-category.pipe';
+import { ToLabelPipe } from '../../../../shared/pipes/to-label.pipe';
 
 @Component({
   selector: 'app-analytics-bar-chart',
@@ -13,11 +14,13 @@ export class AnalyticsBarChartComponent implements OnChanges {
 
   @Input() chartTitle: string;
   @Input() data: CompositeKeyValue[];
+  @Input() byCategories: true;
 
   public chartOptions: any;
 
   constructor(private decimalPipe: DecimalPipe,
-              private toCategoryPipe: ToCategoryPipe
+              private toCategoryPipe: ToCategoryPipe,
+              private toLabelPipe: ToLabelPipe
   ) {
   }
 
@@ -44,14 +47,14 @@ export class AnalyticsBarChartComponent implements OnChanges {
       },
       tooltip: {
         formatter: function() {
-          return '<b>' + that.toCategoryPipe.transform(+this.series.name, 'name') + '</b><br/>'
+          return '<b>' + that.resolveName(this.series.name) + '</b><br/>'
             + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
             + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
         }
       },
       legend: {
         labelFormatter: function() {
-          return that.toCategoryPipe.transform(+this.name, 'name');
+          return that.resolveName(this.name);
         }
       },
       xAxis: {
@@ -108,6 +111,18 @@ export class AnalyticsBarChartComponent implements OnChanges {
       }
     }
     return options;
+  }
+
+  /**
+   * Resolves the name by the id.
+   *
+   * @param id the id to resolve
+   */
+  private resolveName(id: string): string {
+    if (this.byCategories) {
+      return this.toCategoryPipe.transform(+id, 'name');
+    }
+    return this.toLabelPipe.transform(+id, 'name');
   }
 
 }

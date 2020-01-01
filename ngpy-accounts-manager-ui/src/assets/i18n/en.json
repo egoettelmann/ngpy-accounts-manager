@@ -94,6 +94,7 @@
   "i18n.views.analytics.monthly.chart.debit.title": "Debiting transactions by month",
   "i18n.views.analytics.table.credit.title": "Crediting transactions by category",
   "i18n.views.analytics.table.debit.title": "Debiting transactions by category",
+  "i18n.views.analytics.modal.title": "Transactions by labels",
 
   "i18n.views.budget.categories.chart.title": "Budget status",
   "i18n.views.budgets.budget-details.button.edit": "Edit",

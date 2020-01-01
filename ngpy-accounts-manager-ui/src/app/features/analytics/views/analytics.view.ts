@@ -18,21 +18,26 @@ export class AnalyticsView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  public currentYear: number;
-  public accountsFilter: number[] = [];
-  public quarterly = true;
+  currentYear: number;
+  accountsFilter: number[] = [];
+  quarterly = true;
 
-  public accounts: Account[];
-  public categories: Category[];
-  public analyticsCredit: CompositeKeyValue[];
-  public analyticsDebit: CompositeKeyValue[];
-  public analyticsMovements: CompositeKeyValue[];
-  public detailsCredit: GroupedValue[] = [];
-  public detailsDebit: GroupedValue[] = [];
+  accounts: Account[];
+  categories: Category[];
+  analyticsCredit: CompositeKeyValue[];
+  analyticsDebit: CompositeKeyValue[];
+  analyticsMovements: CompositeKeyValue[];
+  detailsCredit: GroupedValue[] = [];
+  detailsDebit: GroupedValue[] = [];
+
+  selectedCategory: number;
+  analyticsByLabel: CompositeKeyValue[];
+  showModal = false;
 
   private subscriptions = {
     static: new Subscription(),
-    active: new Subscription()
+    active: new Subscription(),
+    detail: new Subscription()
   };
 
   constructor(private route: ActivatedRoute,
@@ -129,11 +134,29 @@ export class AnalyticsView implements OnInit, OnDestroy {
    * @param categoryId the category id
    */
   displayCategoryDetails(categoryId: number) {
+    this.selectedCategory = categoryId;
     const period = this.quarterly ? 'QUARTER' : 'MONTH';
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
-    const sub = this.statisticsService.getAnalyticsByLabel(this.currentYear, period, categoryId, accounts).subscribe(data => {
-      sub.unsubscribe();
+    const sub = this.statisticsService.getAnalyticsByLabel(this.currentYear, period, categoryId, accounts).subscribe(analyticsByLabel => {
+      this.analyticsByLabel = analyticsByLabel;
+      this.showModal = true;
     });
+    this.subscriptions.detail = new Subscription();
+    this.subscriptions.detail.add(sub);
+  }
+
+  /**
+   * Closes the modal.
+   *
+   * @param open false if the modal should be closed
+   */
+  closeModal(open: boolean) {
+    if (!open) {
+      this.selectedCategory = undefined;
+      this.analyticsByLabel = undefined;
+      this.showModal = false;
+      this.subscriptions.detail.unsubscribe();
+    }
   }
 
   /**

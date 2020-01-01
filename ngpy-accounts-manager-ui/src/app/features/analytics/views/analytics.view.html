@@ -94,3 +94,18 @@
   </div>
 </div>
 
+<clr-modal *ngIf="analyticsByLabel"
+           [clrModalOpen]="showModal"
+           (clrModalOpenChange)="closeModal($event)"
+           [clrModalSize]="'lg'"
+           [clrModalClosable]="true"
+           [clrModalStaticBackdrop]="true">
+  <h3 class="modal-title">{{ selectedCategory | toCategory:'name' }}</h3>
+  <div class="modal-body">
+    <app-analytics-bar-chart [chartTitle]="'i18n.views.analytics.modal.title' | translate"
+                             [data]="analyticsByLabel"
+                             [byCategories]="false">
+    </app-analytics-bar-chart>
+  </div>
+</clr-modal>
+
