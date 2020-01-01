@@ -25,4 +25,5 @@ matrix:
       install:
         - npm install
       script:
+        - npm run build
         - npm run test
