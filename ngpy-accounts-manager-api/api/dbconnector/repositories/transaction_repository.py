@@ -161,7 +161,7 @@ class TransactionRepository:
             label('key_one', period_expr),
             label('key_two', LabelDbo.id)
         )
-        query = self.__query_builder.build(query, filters=filter_request, groups=['label.label.id'])
+        query = self.__query_builder.build(query, filters=filter_request, groups=['label.id'])
         query = query.group_by(period_expr)
         logging.debug(query)
         return query.all()

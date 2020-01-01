@@ -8,6 +8,7 @@ import { StatisticsService } from '../../../core/services/domain/statistics.serv
 import { AccountsService } from '../../../core/services/domain/accounts.service';
 import { RouterService } from '../../../core/services/router.service';
 import { CategoriesService } from '../../../core/services/domain/categories.service';
+import { DateService } from '../../../core/services/date.service';
 
 @Component({
   templateUrl: './analytics.view.html',
@@ -38,7 +39,8 @@ export class AnalyticsView implements OnInit, OnDestroy {
               private routerService: RouterService,
               private accountsService: AccountsService,
               private categoriesService: CategoriesService,
-              private statisticsService: StatisticsService
+              private statisticsService: StatisticsService,
+              private dateService: DateService
   ) {
   }
 
@@ -103,7 +105,7 @@ export class AnalyticsView implements OnInit, OnDestroy {
    *
    * @param quarterly
    */
-  public getPeriodSelectLabel(quarterly: boolean) {
+  getPeriodSelectLabel(quarterly: boolean) {
     return quarterly ? 'i18n.views.analytics.period.select.quarterly' : 'i18n.views.analytics.period.select.monthly';
   }
 
@@ -119,6 +121,38 @@ export class AnalyticsView implements OnInit, OnDestroy {
    */
   get debitChartTitle() {
     return this.quarterly ? 'i18n.views.analytics.quarterly.chart.debit.title' : 'i18n.views.analytics.monthly.chart.debit.title';
+  }
+
+  /**
+   * Displays the details of a category.
+   *
+   * @param categoryId the category id
+   */
+  displayCategoryDetails(categoryId: number) {
+    const period = this.quarterly ? 'QUARTER' : 'MONTH';
+    const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
+    const sub = this.statisticsService.getAnalyticsByLabel(this.currentYear, period, categoryId, accounts).subscribe(data => {
+      sub.unsubscribe();
+    });
+  }
+
+  /**
+   * Goes to the list of transactions with a given label.
+   *
+   * @param labelId the label id
+   */
+  goToLabelDetails(labelId: number) {
+    const accounts = this.accountsFilter.length > 0 ? this.accountsFilter.join(',') : undefined;
+    const minDate = this.dateService.format(this.dateService.getPeriodStart(this.currentYear));
+    const maxDate = this.dateService.format(this.dateService.getPeriodEnd(this.currentYear));
+    this.routerService.navigate('route.transactions.search', {}, {
+      queryParams: {
+        labels: '' + labelId,
+        minDate: minDate,
+        maxDate: maxDate,
+        accounts: accounts
+      }
+    });
   }
 
   /**

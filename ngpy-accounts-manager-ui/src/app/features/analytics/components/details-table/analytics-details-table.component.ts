@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { GroupedValue } from '../../../../core/models/domain.models';
 
 @Component({
@@ -10,5 +10,16 @@ export class AnalyticsDetailsTableComponent {
 
   @Input() data: GroupedValue[];
   @Input() expanded = true;
+
+  @Output() categoryClick = new EventEmitter<number>();
+  @Output() labelClick = new EventEmitter<number>();
+
+  clickOnCategory(categoryId: number) {
+    this.categoryClick.emit(categoryId);
+  }
+
+  clickOnLabel(labelId: number) {
+    this.labelClick.emit(labelId);
+  }
 
 }

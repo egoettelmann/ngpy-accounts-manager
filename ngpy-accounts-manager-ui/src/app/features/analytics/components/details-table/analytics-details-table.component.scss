@@ -1,4 +1,29 @@
-.stacked-column-2 {
+.stacked-column-6 {
+  display: inline-block;
+  width: calc(100% - 2px);
+}
+
+.stacked-column-5 {
+  display: inline-block;
+  width: calc(83.333% - 2px);
+}
+
+.stacked-column-4 {
+  display: inline-block;
+  width: calc(66.667% - 2px);
+}
+
+.stacked-column-3 {
   display: inline-block;
   width: calc(50% - 2px);
+}
+
+.stacked-column-2 {
+  display: inline-block;
+  width: calc(33.333% - 2px);
+}
+
+.stacked-column-1 {
+  display: inline-block;
+  width: calc(16.667% - 2px);
 }

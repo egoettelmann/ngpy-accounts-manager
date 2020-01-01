@@ -47,7 +47,8 @@
 
   <!-- Movements table -->
   <div class="clr-col-12 clr-col-md-8">
-    <app-analytics-movements-table [movements]="analyticsMovements"
+    <app-analytics-movements-table *ngIf="analyticsMovements"
+                                   [movements]="analyticsMovements"
                                    [quarterly]="quarterly">
     </app-analytics-movements-table>
   </div>
@@ -73,7 +74,11 @@
                              [data]="detailsCredit">
     </app-analytics-pie-chart>
 
-    <app-analytics-details-table [data]="detailsCredit"></app-analytics-details-table>
+    <app-analytics-details-table [data]="detailsCredit"
+                                 [expanded]="true"
+                                 (categoryClick)="displayCategoryDetails($event)"
+                                 (labelClick)="goToLabelDetails($event)">
+    </app-analytics-details-table>
   </div>
 
   <div class="clr-col-12 clr-col-md-6">
@@ -81,7 +86,11 @@
                              [data]="detailsDebit">
     </app-analytics-pie-chart>
 
-    <app-analytics-details-table [data]="detailsDebit" [expanded]="false"></app-analytics-details-table>
+    <app-analytics-details-table [data]="detailsDebit"
+                                 [expanded]="false"
+                                 (categoryClick)="displayCategoryDetails($event)"
+                                 (labelClick)="goToLabelDetails($event)">
+    </app-analytics-details-table>
   </div>
 </div>
 
