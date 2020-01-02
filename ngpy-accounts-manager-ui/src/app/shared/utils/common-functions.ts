@@ -42,4 +42,17 @@ export class CommonFunctions {
     }
   }
 
+  /**
+   * Checks if a given string matches the provided pattern.
+   *
+   * @param value the value to check
+   * @param pattern the pattern to match
+   */
+  public static matches(value: string, pattern: string): boolean {
+    let regexp = pattern.replace('.', '\\.');
+    regexp = regexp.replace('*', '.+');
+    const regExp = new RegExp('^' + regexp + '$');
+    return regExp.test(value);
+  }
+
 }

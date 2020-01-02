@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Category } from '../../models/api.models';
 import { EventBusService } from '../event-bus.service';
-import { flatMap, shareReplay, startWith, tap } from 'rxjs/operators';
+import { flatMap, startWith, tap } from 'rxjs/operators';
+import { CacheService } from '../cache.service';
 
 /**
  * The categories rest service
@@ -18,9 +19,11 @@ export class CategoriesRestService {
    *
    * @param http the HTTP client
    * @param eventBusService the event bus service
+   * @param cacheService the cache service
    */
   constructor(private http: HttpClient,
-              private eventBusService: EventBusService
+              private eventBusService: EventBusService,
+              private cacheService: CacheService
   ) {
   }
 
@@ -41,7 +44,7 @@ export class CategoriesRestService {
    */
   saveOne(category: Category) {
     return this.http.post('/rest/categories', category).pipe(
-      tap(() => this.resetCache()),
+      tap(() => this.cacheService.evict('categories.*')),
       tap(() => this.eventBusService.publish('categories.update', category))
     );
   }
@@ -53,7 +56,7 @@ export class CategoriesRestService {
    */
   deleteOne(categoryId: number) {
     return this.http.delete('/rest/categories/' + categoryId).pipe(
-      tap(() => this.resetCache()),
+      tap(() => this.cacheService.evict('categories.*')),
       tap(() => this.eventBusService.publish('categories.delete', categoryId))
     );
   }
@@ -62,19 +65,10 @@ export class CategoriesRestService {
    * Load the categories (from the cache if available)
    */
   private loadCategories(): Observable<Category[]> {
-    if (this.categories == null) {
-      this.categories = this.http.get<Category[]>('/rest/categories').pipe(
-        shareReplay(1)
-      );
-    }
-    return this.categories;
-  }
-
-  /**
-   * Resets the cache
-   */
-  private resetCache() {
-    this.categories = undefined;
+    return this.cacheService.retrieve<Category[]>(
+      'categories.all',
+      this.http.get<Category[]>('/rest/categories')
+    );
   }
 
 }

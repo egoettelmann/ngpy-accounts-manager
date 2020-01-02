@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { CommonFunctions } from '../../shared/utils/common-functions';
 
 /**
  * The event bus message interface
@@ -43,24 +44,11 @@ export class EventBusService {
     return this.eventBus.pipe(
       filter(event => {
         return patterns.some(pattern => {
-          return this.matches(event.channel, pattern);
+          return CommonFunctions.matches(event.channel, pattern);
         });
       }),
       map(event => event.message)
     );
-  }
-
-  /**
-   * Checks if a given channel matches the provided pattern.
-   *
-   * @param channel the channel to check
-   * @param pattern the pattern to match
-   */
-  private matches(channel: string, pattern: string): boolean {
-    let regexp = pattern.replace('.', '\\.');
-    regexp = regexp.replace('*', '.+');
-    const regExp = new RegExp('^' + regexp + '$');
-    return regExp.test(channel);
   }
 
 }
