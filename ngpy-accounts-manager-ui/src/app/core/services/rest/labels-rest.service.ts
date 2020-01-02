@@ -4,13 +4,15 @@ import { Observable } from 'rxjs';
 import { Label } from '../../models/api.models';
 import { CommonFunctions } from '../../../shared/utils/common-functions';
 import { EventBusService } from '../event-bus.service';
-import { flatMap, startWith, tap } from 'rxjs/operators';
+import { flatMap, shareReplay, startWith, tap } from 'rxjs/operators';
 
 /**
  * The labels rest service.
  */
 @Injectable()
 export class LabelsRestService {
+
+  private labels: Observable<Label[]>;
 
   /**
    * Instantiates the service.
@@ -29,7 +31,7 @@ export class LabelsRestService {
   getAll(): Observable<Label[]> {
     return this.eventBusService.accept(['labels.*']).pipe(
       startWith(0),
-      flatMap(() => this.http.get<Label[]>('/rest/labels'))
+      flatMap(() => this.loadLabels())
     );
   }
 
@@ -40,6 +42,7 @@ export class LabelsRestService {
    */
   deleteOne(labelId: number): Observable<any> {
     return this.http.delete('/rest/labels/' + labelId).pipe(
+      tap(() => this.resetCache()),
       tap(() => this.eventBusService.publish('labels.delete', labelId))
     );
   }
@@ -51,8 +54,28 @@ export class LabelsRestService {
    */
   saveOne(label: Label): Observable<Label> {
     return this.http.post<Label>('/rest/labels', CommonFunctions.removeEmpty(label)).pipe(
+      tap(() => this.resetCache()),
       tap(() => this.eventBusService.publish('labels.update', label))
     );
+  }
+
+  /**
+   * Load the labels (from the cache if available)
+   */
+  private loadLabels(): Observable<Label[]> {
+    if (this.labels == null) {
+      this.labels = this.http.get<Label[]>('/rest/labels').pipe(
+        shareReplay(1)
+      );
+    }
+    return this.labels;
+  }
+
+  /**
+   * Resets the cache
+   */
+  private resetCache() {
+    this.labels = undefined;
   }
 
 }

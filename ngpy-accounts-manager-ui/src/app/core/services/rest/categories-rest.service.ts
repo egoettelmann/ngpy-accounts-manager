@@ -3,13 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Category } from '../../models/api.models';
 import { EventBusService } from '../event-bus.service';
-import { flatMap, startWith, tap } from 'rxjs/operators';
+import { flatMap, shareReplay, startWith, tap } from 'rxjs/operators';
 
 /**
  * The categories rest service
  */
 @Injectable()
 export class CategoriesRestService {
+
+  private categories: Observable<Category[]>;
 
   /**
    * Instantiates the service.
@@ -28,7 +30,7 @@ export class CategoriesRestService {
   getAll(): Observable<Category[]> {
     return this.eventBusService.accept(['categories.*']).pipe(
       startWith(0),
-      flatMap(() => this.http.get<Category[]>('/rest/categories'))
+      flatMap(() => this.loadCategories())
     );
   }
 
@@ -39,6 +41,7 @@ export class CategoriesRestService {
    */
   saveOne(category: Category) {
     return this.http.post('/rest/categories', category).pipe(
+      tap(() => this.resetCache()),
       tap(() => this.eventBusService.publish('categories.update', category))
     );
   }
@@ -50,7 +53,28 @@ export class CategoriesRestService {
    */
   deleteOne(categoryId: number) {
     return this.http.delete('/rest/categories/' + categoryId).pipe(
+      tap(() => this.resetCache()),
       tap(() => this.eventBusService.publish('categories.delete', categoryId))
     );
   }
+
+  /**
+   * Load the categories (from the cache if available)
+   */
+  private loadCategories(): Observable<Category[]> {
+    if (this.categories == null) {
+      this.categories = this.http.get<Category[]>('/rest/categories').pipe(
+        shareReplay(1)
+      );
+    }
+    return this.categories;
+  }
+
+  /**
+   * Resets the cache
+   */
+  private resetCache() {
+    this.categories = undefined;
+  }
+
 }
