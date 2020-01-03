@@ -41,6 +41,7 @@ import { EventBusService } from './services/event-bus.service';
 import { LabelsService } from './services/domain/labels.service';
 import { ToLabelPipe } from '../shared/pipes/to-label.pipe';
 import { ToCategoryPipe } from '../shared/pipes/to-category.pipe';
+import { CacheService } from './services/cache.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -127,6 +128,7 @@ export class CoreModule {
     DateService,
     RouterService,
     EventBusService,
+    CacheService,
 
     /** Pipes */
     DecimalPipe,
