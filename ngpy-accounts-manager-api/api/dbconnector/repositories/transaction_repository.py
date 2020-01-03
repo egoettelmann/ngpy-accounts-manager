@@ -202,6 +202,8 @@ class TransactionRepository:
         :return: if the creation was successful
         """
         for transaction in transactions:
+            del transaction.account
+            del transaction.label
             self.__entity_manager.get_session().add(transaction)
         try:
             self.__entity_manager.get_session().commit()
