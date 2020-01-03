@@ -14,7 +14,7 @@ export class AnalyticsBarChartComponent implements OnChanges {
 
   @Input() chartTitle: string;
   @Input() data: CompositeKeyValue[];
-  @Input() byCategories: true;
+  @Input() byCategories = true;
 
   public chartOptions: any;
 
