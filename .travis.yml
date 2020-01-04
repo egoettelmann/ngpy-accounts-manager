@@ -27,3 +27,12 @@ matrix:
       script:
         - npm run build
         - npm run test
+
+# Merge to master and push
+after_success:
+  - test $TRAVIS_BRANCH = "feature/ci" && test $TRAVIS_PULL_REQUEST = "false"
+  - git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* || exit
+  - git fetch --all || exit
+  - git checkout master || exit
+  - git merge --ff-only "$TRAVIS_COMMIT" || exit
+  - git push https://${GITHUB_TOKEN}@github.com/egoettelmann/ngpy-accounts-manager.git
