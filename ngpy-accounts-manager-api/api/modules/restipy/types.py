@@ -196,6 +196,8 @@ class String(Raw):
             raise SerializationException(ve)
 
     def parse(self, value):
+        if value is None:
+            return None
         try:
             return str(value)
         except ValueError as ve:
