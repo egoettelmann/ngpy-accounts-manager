@@ -11,20 +11,25 @@ Small webapp to manage accounts with some statistics.
 - Angular 8
 - Flask / SQLAlchemy
 
-## Installation and run
+## Installation, build and run
 
-First, install and build the frontend:
-
-```
-npm install --prefix frontend
-npm run build --prefix frontend
-```
-
-Then, install and run the backend with python:
+First, install and run the backend with python:
 
 ```
 pip install -r requirements.txt
 python ngpy-accounts-manager-api/web.py
+```
+
+Then, install and run the frontend through the Webpack dev server:
+
+```
+npm install
+npm run start --prefix ngpy-accounts-manager-ui
+```
+
+To simply build the frontend:
+```
+npm run build
 ```
 
 ## Release Notes
@@ -79,8 +84,6 @@ python ngpy-accounts-manager-api/web.py
 
 ### Tech
 
-- Unit tests
-- Review the lifecycle of the db's session
 - Create a PWA with Angular ?
 
 ### Features
@@ -88,7 +91,6 @@ python ngpy-accounts-manager-api/web.py
 - Add possibility to close a period at a given date
   - Impossible to change amount or account of a transaction before this date
   - Period can only be closed at a date of 30 days before the current day
-- Add comment field to transactions
 - Add sort and filters on transactions table
 - Add document section for RIB
 - Some machine learning on existing labels for auto-importing transactions
