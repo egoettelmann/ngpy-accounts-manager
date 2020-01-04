@@ -43,8 +43,8 @@ jobs:
 
     # Merge to master and push
     - stage: merge
+      if: (NOT type IN (pull_request)) AND (branch = develop)
       script:
-        - test $TRAVIS_BRANCH = "develop" && test $TRAVIS_PULL_REQUEST = "false" || exit 0
         - git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* || exit
         - git fetch --all || exit
         - git checkout master || exit
