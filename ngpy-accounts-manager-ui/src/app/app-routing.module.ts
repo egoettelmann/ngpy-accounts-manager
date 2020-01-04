@@ -5,6 +5,7 @@ import { MainView } from './core/views/main/main.view';
 import { AuthenticatedGuard } from './core/guards/authenticated.guard';
 import { FormsView } from './core/views/main/forms/forms.view';
 import { FormsTransactionView } from './core/views/main/forms/transaction/forms-transaction.view';
+import { MainResolverService } from './core/services/resolvers/main-resolver.service';
 
 const routes: Routes = [
   {
@@ -15,6 +16,9 @@ const routes: Routes = [
     path: '',
     component: MainView,
     canActivate: [AuthenticatedGuard],
+    resolve: {
+      data: MainResolverService
+    },
     children: [
       {
         path: 'dashboard',

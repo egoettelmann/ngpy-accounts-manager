@@ -12,8 +12,6 @@ import { CacheService } from '../cache.service';
 @Injectable()
 export class CategoriesRestService {
 
-  private categories: Observable<Category[]>;
-
   /**
    * Instantiates the service.
    *

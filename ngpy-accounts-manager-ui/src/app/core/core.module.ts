@@ -42,6 +42,7 @@ import { LabelsService } from './services/domain/labels.service';
 import { ToLabelPipe } from '../shared/pipes/to-label.pipe';
 import { ToCategoryPipe } from '../shared/pipes/to-category.pipe';
 import { CacheService } from './services/cache.service';
+import { MainResolverService } from './services/resolvers/main-resolver.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -129,6 +130,7 @@ export class CoreModule {
     RouterService,
     EventBusService,
     CacheService,
+    MainResolverService,
 
     /** Pipes */
     DecimalPipe,
