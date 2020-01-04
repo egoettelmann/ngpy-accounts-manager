@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { filter, map, shareReplay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 import { CommonFunctions } from '../../shared/utils/common-functions';
 
 /**
@@ -16,7 +16,12 @@ export class CacheService {
     [key: string]: Observable<any>
   } = {};
 
-
+  /**
+   * Retrieves an observable from the cache (otherwise registers it).
+   *
+   * @param cacheKey the cache key
+   * @param observable the observable to use if cache not present
+   */
   retrieve<T>(cacheKey: string, observable: Observable<T>): Observable<T> {
     if (!this.cache.hasOwnProperty(cacheKey)) {
       this.cache[cacheKey] = observable.pipe(
@@ -26,6 +31,11 @@ export class CacheService {
     return this.cache[cacheKey];
   }
 
+  /**
+   * Evicts all values from the cache with a key matching the pattern.
+   *
+   * @param cacheKeyPattern the cache key pattern
+   */
   evict(cacheKeyPattern: string) {
     for (const cacheKey in this.cache) {
       if (!this.cache.hasOwnProperty(cacheKey)) {
