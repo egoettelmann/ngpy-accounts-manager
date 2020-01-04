@@ -1,7 +1,8 @@
+import hashlib
 from typing import List, Optional
 
 from ..models import Transaction, KeyValue, CompositeKeyValue, PeriodType
-from ..search_request import SearchRequest, FilterRequest, FilterOperator
+from ..search_request import SearchRequest, FilterRequest
 from ...dbconnector.entities import TransactionDbo
 from ...dbconnector.repositories import TransactionRepository
 from ...mapping import Mapper
@@ -103,9 +104,9 @@ class TransactionService:
         return values
 
     def get_total_by_category_over_period(self,
-                                               period: PeriodType,
-                                               filter_request: FilterRequest
-                                               ) -> List[CompositeKeyValue]:
+                                          period: PeriodType,
+                                          filter_request: FilterRequest
+                                          ) -> List[CompositeKeyValue]:
         """Gets the total by category type and period matching the provided filters.
 
         :param period: the period
@@ -162,21 +163,26 @@ class TransactionService:
         :param transaction: the transaction to create
         :return: the created transaction
         """
-        return self.__repository.save_one(
-            self.__mapper.map(
-                transaction,
-                TransactionDbo
-            )
+        dbo = self.__mapper.map(
+            transaction,
+            TransactionDbo
         )
+        dbo.hash = self.__calculate_hash(dbo)
+        return self.__repository.save_one(dbo)
 
-    def create_all(self, transactions) -> bool:
+    def create_all(self, transactions: List[Transaction]) -> bool:
         """Creates all provided transactions.
 
         :param transactions: the transactions to create
         :return: if the creation was successful or not
         """
-        # FIXME: should use domain model !
-        return self.__repository.create_all(transactions)
+        dbos = self.__mapper.map_all(
+            transactions,
+            TransactionDbo
+        )
+        for t in dbos:
+            t.hash = self.__calculate_hash(t)
+        return self.__repository.create_all(dbos)
 
     def update_one(self, transaction: Transaction) -> Transaction:
         """Updates a transaction.
@@ -208,3 +214,11 @@ class TransactionService:
                     labels.append(label_id)
             return labels
         return None
+
+    @staticmethod
+    def __calculate_hash(transaction: Transaction) -> str:
+        s = str(transaction.account_id) \
+            + transaction.reference \
+            + transaction.date_value.strftime("%Y-%m-%d") \
+            + "{0:.2f}".format(transaction.amount)
+        return hashlib.md5(s.encode('utf-8')).hexdigest()

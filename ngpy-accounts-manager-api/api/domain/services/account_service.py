@@ -1,4 +1,3 @@
-import hashlib
 import logging
 from datetime import date, datetime, timedelta
 from typing import List
@@ -10,7 +9,6 @@ from ..importers.resolve import Resolver
 from ..models import Account, Notification
 from ..search_request import FilterRequest, FilterOperator, SearchRequest
 from ...dbconnector.entities import AccountDbo
-from ...dbconnector.entities import TransactionDbo
 from ...dbconnector.repositories import AccountRepository
 from ...mapping import Mapper
 from ...modules.depynject import injectable
@@ -143,14 +141,9 @@ class AccountService:
         parser = self.__resolver.resolve(filename)
         account_name = parser.get_account_name()
         account = self.find_by_name(account_name)
-        transactions = self.__mapper.map_all(
-            parser.parse(),
-            TransactionDbo
-        )
+        transactions = parser.parse()
         for t in transactions:
             t.account_id = account.id
-            s = str(t.account_id) + t.reference + t.date_value.strftime("%Y-%m-%d") + "{0:.2f}".format(t.amount)
-            t.hash = hashlib.md5(s.encode('utf-8')).hexdigest()
         try:
             return self.__transaction_service.create_all(transactions)
         except Exception as e:
