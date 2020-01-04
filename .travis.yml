@@ -1,3 +1,9 @@
+# Excluding some branches
+branches:
+  except:
+    - master
+
+# Tests
 matrix:
   include:
 
