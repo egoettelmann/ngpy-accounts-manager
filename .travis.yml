@@ -35,4 +35,4 @@ after_success:
   - git fetch --all || exit
   - git checkout master || exit
   - git merge --ff-only "$TRAVIS_COMMIT" || exit
-  - git push https://${GITHUB_TOKEN}@github.com/egoettelmann/ngpy-accounts-manager.git
+  - git push https://${GITHUB_TOKEN}@github.com/egoettelmann/ngpy-accounts-manager.git || exit
