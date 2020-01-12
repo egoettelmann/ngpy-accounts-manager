@@ -18,31 +18,24 @@
     </app-card-wrapper>
 
     <!-- Period select-->
-    <table class="table table-compact table-vertical card-shadow">
-      <tbody>
-      <tr>
-        <th class="text-left align-middle w-40">{{ 'i18n.views.analytics.period.select.title' | translate }}</th>
-        <td class="text-right">
-          <clr-dropdown class="text-right">
-            <button type="button" class="btn btn-link" clrDropdownTrigger>
-              {{ getPeriodSelectLabel(quarterly) | translate }}
-              <clr-icon shape="caret down"></clr-icon>
-            </button>
-            <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
-              <button *ngFor="let period of [true, false]"
-                      type="button"
-                      clrDropdownItem
-                      (click)="changePeriod(period)">
-                <clr-icon *ngIf="period === quarterly" shape="success-standard" class="is-success"></clr-icon>
-                <span *ngIf="period !== quarterly" class="icon-empty">&nbsp;</span>
-                &nbsp;{{ getPeriodSelectLabel(period) | translate }}
-              </button>
-            </clr-dropdown-menu>
-          </clr-dropdown>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <app-card-wrapper [label]="'i18n.views.analytics.period.select.title' | translate">
+      <clr-dropdown class="text-right">
+        <button type="button" class="btn btn-link" clrDropdownTrigger>
+          {{ getPeriodSelectLabel(quarterly) | translate }}
+          <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
+          <button *ngFor="let period of [true, false]"
+                  type="button"
+                  clrDropdownItem
+                  (click)="changePeriod(period)">
+            <clr-icon *ngIf="period === quarterly" shape="success-standard" class="is-success"></clr-icon>
+            <span *ngIf="period !== quarterly" class="icon-empty">&nbsp;</span>
+            &nbsp;{{ getPeriodSelectLabel(period) | translate }}
+          </button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </app-card-wrapper>
   </div>
 
   <!-- Movements table -->
