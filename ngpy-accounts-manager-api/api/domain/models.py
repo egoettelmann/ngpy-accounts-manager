@@ -89,14 +89,17 @@ class CompositeKeyValue:
     'id': types.Integer(),
     'name': types.String(),
     'type': types.String(),
+    'color': types.String(),
     'numLabels': types.Integer(attribute='num_labels', ignore_on_parse=True),
 })
 class Category:
 
-    def __init__(self, id: int = None, name: str = None, type: str = None, num_labels: int = None) -> None:
+    def __init__(self, id: int = None, name: str = None,
+                 type: str = None, color: str = None, num_labels: int = None) -> None:
         self.id = id
         self.name = name
         self.type = type
+        self.color = color
         self.num_labels = num_labels
 
 

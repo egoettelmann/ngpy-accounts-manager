@@ -25,7 +25,8 @@ d_injector = Depynject(providers={
 })
 
 # Configuring Entity Manager
-em = EntityManager(os.environ['DATABASE_URL'])
+database_connection_url = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
+em = EntityManager(database_connection_url)
 d_injector.register_singleton(em)
 
 # Registering the App Properties

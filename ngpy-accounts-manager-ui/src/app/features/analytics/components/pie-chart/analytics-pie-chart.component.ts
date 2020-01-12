@@ -117,7 +117,8 @@ export class AnalyticsPieChartComponent implements OnChanges {
       categories.push({
         name: group.label,
         y: group.percentage,
-        data: group.amount
+        data: group.amount,
+        color: that.toCategoryPipe.transform(+group.label, 'color')
       });
 
       // Adding details

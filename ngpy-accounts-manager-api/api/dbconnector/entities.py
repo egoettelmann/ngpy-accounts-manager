@@ -97,13 +97,15 @@ class CategoryDbo(EntityManager.get_base()):
     id = Column(Integer, primary_key=True)
     name = Column(String(250), unique=True)
     type = Column(String(10))
+    color = Column(String(50))
     labels = relationship('LabelDbo', backref='category')
 
-    def __init__(self, id=None, name=None, type=None):
+    def __init__(self, id=None, name=None, type=None, color=None):
         """Construtor"""
         self.id = id
         self.name = name
         self.type = type
+        self.color = color
 
     def __repr__(self):
         """String representation"""

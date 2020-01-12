@@ -57,6 +57,7 @@ export class SettingsCategoriesView implements OnInit, OnDestroy {
       'id': [category.id],
       'name': [category.name],
       'type': [category.type],
+      'color': [category.color],
       'numLabels': [{ value: category.numLabels, disabled: true }]
     });
 

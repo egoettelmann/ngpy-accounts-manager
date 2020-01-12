@@ -135,7 +135,7 @@ export class AnalyticsBarChartComponent implements OnChanges {
    */
   private resolveColor(id: string): string {
     if (this.byCategories) {
-      return undefined;
+      return this.toCategoryPipe.transform(+id, 'color');
     }
     return this.toLabelPipe.transform(+id, 'color');
   }
