@@ -126,7 +126,8 @@ export class AnalyticsPieChartComponent implements OnChanges {
           name: details.label,
           y: details.percentage,
           data: details.amount,
-          parent: group.label
+          parent: group.label,
+          color: that.toLabelPipe.transform(+details.label, 'color')
         });
       }
     }

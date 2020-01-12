@@ -181,9 +181,13 @@ export class TransactionsListView implements OnInit, OnDestroy {
       }]
     };
     for (const d of data) {
-      const labelName = this.toLabelPipe.transform(+d.key, 'name');
-      options.xAxis.categories.push(labelName);
-      options.series[0].data.push(d.value);
+      const label = this.toLabelPipe.transform(+d.key) as Label;
+      const point = {
+        y: d.value,
+        color: label.color
+      };
+      options.xAxis.categories.push(label.name);
+      options.series[0].data.push(point);
     }
     return options;
   }

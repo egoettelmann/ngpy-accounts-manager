@@ -57,15 +57,18 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
         name: this.translateService.instant('i18n.views.treasury.chart.credits'),
         type: 'column',
         data: [],
-        stacking: 'normal'
+        stacking: 'normal',
+        color: '#90ed7d'
       }, {
         name: this.translateService.instant('i18n.views.treasury.chart.debits'),
         type: 'column',
         data: [],
-        stacking: 'normal'
+        stacking: 'normal',
+        color: '#f45b5b'
       }, {
         name: this.translateService.instant('i18n.views.treasury.chart.evolution'),
-        data: []
+        data: [],
+        color: '#434348'
       }]
     };
     evolution.forEach(eItem => {

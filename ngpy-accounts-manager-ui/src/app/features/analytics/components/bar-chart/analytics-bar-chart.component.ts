@@ -99,14 +99,17 @@ export class AnalyticsBarChartComponent implements OnChanges {
         series[d.keyTwo] = [];
       }
       CommonFunctions.resizeArray(series[d.keyTwo], 0, categoryIdx);
-      series[d.keyTwo][categoryIdx] = d.value;
+      series[d.keyTwo][categoryIdx] = {
+        y: d.value
+      };
     }
     options.xAxis.categories = categories;
     for (const key in series) {
       if (series.hasOwnProperty(key)) {
         options.series.push({
           name: key,
-          data: series[key]
+          data: series[key],
+          color: this.resolveColor(key)
         });
       }
     }
@@ -123,6 +126,18 @@ export class AnalyticsBarChartComponent implements OnChanges {
       return this.toCategoryPipe.transform(+id, 'name');
     }
     return this.toLabelPipe.transform(+id, 'name');
+  }
+
+  /**
+   * Resolves the color by the id.
+   *
+   * @param id the id to resolve
+   */
+  private resolveColor(id: string): string {
+    if (this.byCategories) {
+      return undefined;
+    }
+    return this.toLabelPipe.transform(+id, 'color');
   }
 
 }
