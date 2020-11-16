@@ -1,62 +1,43 @@
+import sys
 import logging
 import os
 
-from flask import Flask, request, session
+sys.path.append('./site-packages')
+
+from flask import request, session
 from flask_cors import CORS
 
-from api.controllers import *
-from api.dbconnector.manager import EntityManager
-from api.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
-from api.modules.depynject import Depynject
-from api.modules.di_providers import RequestDiProvider
-from api.modules.restipy import Api
+from app.modules.depynject import Depynject
+from app.modules.di_providers import RequestDiProvider
 
-######################
-# Configuring Logging
-######################
-logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
+from app.controllers import *
+from app.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
 
-###################################
+from app.main import app, entity_manager, app_properties
+from app.modules.restipy import Api
+
 # Configuring Dependency Injection
-###################################
 rdi_provider = RequestDiProvider()
-d_injector = Depynject(providers={
+depynject_container = Depynject(providers={
     'request': rdi_provider.provide
 })
+depynject_container.register_singleton(entity_manager)
+depynject_container.register_singleton(app_properties, 'app_properties')
 
-# Configuring Entity Manager
-database_connection_url = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
-em = EntityManager(database_connection_url)
-d_injector.register_singleton(em)
-
-# Registering the App Properties
-app_properties = {}
-version_file_path = os.path.join(os.path.dirname(__file__), 'version.txt')
-with open(version_file_path, 'r') as version_file:
-    app_properties['version'] = version_file.read()
-d_injector.register_singleton(app_properties, 'app_properties')
-
-###################
-# Building the App
-###################
-static_folder_path = os.path.join(os.path.dirname(__file__), '../ngpy-accounts-manager-ui/dist')
-app = Flask(__name__,
-            static_folder=static_folder_path,
-            static_url_path=''
-            )
+# Adding secret jey for encrypting cookies
 app.secret_key = os.environ['SESSION_SECRET_KEY']
 
 # Configuring CORS
-CORS(app, origins='http://localhost:4210', supports_credentials=True)
+CORS(app, origins='http://localhost:4200', supports_credentials=True)
 
 # Building the api (the Restful app)
 api = Api(app,
           prefix='/rest',
-          di_provider=d_injector.provide,
+          di_provider=depynject_container.provide,
           exception_handler=ApplicationExceptionHandler()
           )
 
-# Registering the controllers
+# Registering the api.controllers
 api.register(AccountController)
 api.register(BudgetController)
 api.register(LabelController)
@@ -105,4 +86,4 @@ def teardown_request(exception):
 # Starting the WebApp
 ######################
 if __name__ == '__main__':
-    app.run(debug=True, port=5050, threaded=True)
+    app.run(debug=True, port=5050, threaded=True, host='0.0.0.0')

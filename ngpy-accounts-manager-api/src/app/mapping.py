@@ -10,7 +10,7 @@ from .modules.depynject import injectable
 @injectable('object_mapper')
 class Mapper(ObjectMapper):
     """
-    The object mapper to map domain objects to/from database objects
+    The object mapper to map api.domain objects to/from database objects
     """
     T = TypeVar('T')
 

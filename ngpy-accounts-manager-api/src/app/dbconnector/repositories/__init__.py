@@ -1,4 +1,4 @@
-﻿# Importing all repositories
+# Importing all repositories
 from .account_repository import AccountRepository
 from .budget_repository import BudgetRepository
 from .category_repository import CategoryRepository

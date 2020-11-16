@@ -3,6 +3,7 @@
 *.iml
 
 # Build related files
+target
 node_modules
 venv
 *.pyc

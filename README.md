@@ -82,6 +82,21 @@ npm run build
 
 ## Roadmap
 
+### Migration to AWS
+
+- Database
+  - best option seems to be Aurora Serverless
+    - https://aws.amazon.com/fr/rds/aurora/serverless/
+    - https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html
+- Frontend
+  - push to public s3 bucket
+- Deploy
+  - Github Actions may be a solution
+    - https://blog.jakoblind.no/aws-lambda-github-actions/
+  - CircleCI
+    - https://circleci.com/orbs/registry/orb/circleci/aws-sam-serverless
+  - Otherwise Travis, AWS CodeBuild/CodeDeploy ?
+
 ### Tech
 
 - Create a PWA with Angular ?

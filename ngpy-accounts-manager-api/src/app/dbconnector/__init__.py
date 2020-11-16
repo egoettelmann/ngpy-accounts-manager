@@ -1,4 +1,4 @@
-﻿# Importing the entity manager
+# Importing the entity manager
 from .manager import EntityManager, RequestScopedSession
 
 # Importing the query helpers
