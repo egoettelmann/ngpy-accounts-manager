@@ -43,6 +43,7 @@ import { ToLabelPipe } from '../shared/pipes/to-label.pipe';
 import { ToCategoryPipe } from '../shared/pipes/to-category.pipe';
 import { CacheService } from './services/cache.service';
 import { MainResolverService } from './services/resolvers/main-resolver.service';
+import { ConfigurationService } from './services/configuration.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -121,6 +122,7 @@ export class CoreModule {
     LabelsService,
 
     /** App services */
+    ConfigurationService,
     AuthenticationService,
     NotificationService,
     KeepFocusService,

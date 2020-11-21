@@ -1,0 +1,9 @@
+server {
+  listen 80;
+  server_name frontend;
+  location / {
+    root /usr/share/nginx/html;
+    rewrite ^/assets/config/application\.json$ /assets/config/application-${NGINX_PROFILE}.json break;
+    try_files $uri /index.html;
+  }
+}

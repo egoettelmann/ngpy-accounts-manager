@@ -9,7 +9,7 @@ services:
     ports:
       - 5050:5050
     volumes:
-    - ./ngpy-accounts-manager-api/src/app:/var/task/app:ro,delegated
+      - ./ngpy-accounts-manager-api/src/app:/var/task/app:ro,delegated
     environment:
       DATABASE_URI: postgresql://api:password@db:5432/api
       SESSION_SECRET_KEY: abcdef
@@ -32,3 +32,7 @@ services:
     restart: always
     ports:
       - 4200:80
+    volumes:
+      - ./ngpy-accounts-manager-ui/dist:/usr/share/nginx/html
+    environment:
+      NGINX_PROFILE: dev

@@ -29,7 +29,10 @@ RUN npm run build:dev
 ##################
 FROM nginx:1.19.4
 
+# Copying the Nginx custom configuration
+COPY ./docker/default.conf.template /etc/nginx/templates/
+
 # Adding the app
 COPY --from=0 /build/dist /usr/share/nginx/html
 
-# TODO: add some custom configuration (and
+# TODO: add some custom configuration
