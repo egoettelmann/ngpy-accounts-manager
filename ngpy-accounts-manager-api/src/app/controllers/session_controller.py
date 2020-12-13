@@ -32,7 +32,7 @@ class SessionController:
 
         :return: the app properties
         """
-        return self.__app_properties
+        return self.__app_properties['public']
 
     @restipy.route('/login', methods=['POST'])
     def login(self) -> dict:

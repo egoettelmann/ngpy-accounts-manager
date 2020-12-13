@@ -13,7 +13,6 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt -t ./target/site-packages
 
 # Copying sources and assets
-#COPY ./assets ./target/assets
 COPY ./src ./target
 
 # Packaging

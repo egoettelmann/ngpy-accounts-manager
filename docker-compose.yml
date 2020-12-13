@@ -13,6 +13,7 @@ services:
     environment:
       DATABASE_URI: postgresql://api:password@db:5432/api
       SESSION_SECRET_KEY: abcdef
+      ENV_PROFILE: docker
 
   # Database
   db:

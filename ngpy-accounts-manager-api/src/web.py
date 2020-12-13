@@ -1,6 +1,6 @@
-import sys
 import logging
 import os
+import sys
 
 sys.path.append('./site-packages')
 
@@ -28,7 +28,7 @@ depynject_container.register_singleton(app_properties, 'app_properties')
 app.secret_key = os.environ['SESSION_SECRET_KEY']
 
 # Configuring CORS
-CORS(app, origins='http://localhost:4200', supports_credentials=True)
+CORS(app, origins=app_properties['frontendUrl'], supports_credentials=True)
 
 # Building the api (the Restful app)
 api = Api(app,
