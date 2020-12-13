@@ -34,4 +34,4 @@ USER sbx_user1051
 # Adding the app
 COPY --from=0 /build/target .
 
-ENTRYPOINT ["python", "web.py"]
+ENTRYPOINT ["./entrypoint.sh"]
