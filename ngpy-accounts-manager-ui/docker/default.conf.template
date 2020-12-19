@@ -4,6 +4,7 @@ server {
   location / {
     root /usr/share/nginx/html;
     rewrite ^/assets/config/application\.json$ /assets/config/application-${NGINX_PROFILE}.json break;
+    rewrite ^/assets/config/application-(.*)\.json$ /404 break;
     try_files $uri /index.html;
   }
 }
