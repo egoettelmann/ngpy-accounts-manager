@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { publishReplay, refCount } from 'rxjs/operators';
 
 /**
  * The configuration service.
@@ -10,9 +10,9 @@ import { tap } from 'rxjs/operators';
 export class ConfigurationService {
 
   /**
-   * The app properties.
+   * The app properties observable.
    */
-  private appProperties: any;
+  private appProperties: Observable<any>;
 
   /**
    * Instantiates the service.
@@ -27,13 +27,12 @@ export class ConfigurationService {
    */
   getAppProperties(): Observable<any> {
     if (this.appProperties == null) {
-      return this.http.get('/assets/config/application.json').pipe(
-        tap(data => {
-          this.appProperties = data;
-        })
+      this.appProperties = this.http.get('/assets/config/application.json').pipe(
+        publishReplay(1),
+        refCount()
       );
     }
-    return of(this.appProperties);
+    return this.appProperties;
   }
 
 }
