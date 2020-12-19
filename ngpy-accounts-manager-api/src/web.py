@@ -22,13 +22,13 @@ depynject_container = Depynject(providers={
     'request': rdi_provider.provide
 })
 depynject_container.register_singleton(entity_manager)
-depynject_container.register_singleton(app_properties, 'app_properties')
+depynject_container.register_singleton(app_properties)
 
 # Adding secret jey for encrypting cookies
-app.secret_key = os.environ['SESSION_SECRET_KEY']
+app.secret_key = app_properties.session_secret_key
 
 # Configuring CORS
-CORS(app, origins=app_properties['frontendUrl'], supports_credentials=True)
+CORS(app, origins=app_properties.cors_origin, supports_credentials=True)
 
 # Building the api (the Restful app)
 api = Api(app,

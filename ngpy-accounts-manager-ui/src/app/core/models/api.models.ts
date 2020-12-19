@@ -45,7 +45,7 @@ export class CompositeKeyValue {
  * The application properties DTO
  */
 export class AppProperties {
-  version: string;
+  appVersion: string;
 }
 
 /**

@@ -3,6 +3,7 @@ import logging
 import bcrypt
 from flask import request, session
 
+from ..config import AppProperties
 from ..domain.exceptions import NotAuthenticatedException, WrongLoginException
 from ..domain.models import User
 from ..domain.services import UserService
@@ -17,7 +18,7 @@ class SessionController:
     The session controller that handles all user related API requests.
     """
 
-    def __init__(self, user_service: UserService, app_properties: dict):
+    def __init__(self, user_service: UserService, app_properties: AppProperties):
         """Constructor
 
         :param user_service: the user service
@@ -27,12 +28,13 @@ class SessionController:
         self.__app_properties = app_properties
 
     @restipy.route('/properties', methods=['GET'])
-    def properties(self) -> dict:
+    @restipy.format_as(AppProperties)
+    def properties(self) -> AppProperties:
         """Gets the app properties
 
         :return: the app properties
         """
-        return self.__app_properties['public']
+        return self.__app_properties
 
     @restipy.route('/login', methods=['POST'])
     def login(self) -> dict:

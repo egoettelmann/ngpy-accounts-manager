@@ -4,16 +4,19 @@ services:
 
   # API
   api:
-    build: ./ngpy-accounts-manager-api
+    build:
+      context: ./ngpy-accounts-manager-api
+      args:
+        SOURCE_VERSION: 'dev'
     restart: always
     ports:
       - 5050:5050
     volumes:
       - ./ngpy-accounts-manager-api/src/app:/var/task/app:ro,delegated
     environment:
-      DATABASE_URI: postgresql://api:password@db:5432/api
-      SESSION_SECRET_KEY: abcdef
-      ENV_PROFILE: docker
+      DATABASE_URI: 'postgresql://${DB_USERNAME}:${DB_PASSWORD}@db:5432/api'
+      SESSION_SECRET_KEY: '${SESSION_SECRET_KEY}'
+      CORS_ORIGIN: '${FRONTEND_URI}'
 
   # Database
   db:
@@ -24,16 +27,19 @@ services:
     volumes:
       - ./database:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_USER: api
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'
 
   # UI
   ui:
-    build: ./ngpy-accounts-manager-ui
+    build:
+      context: ./ngpy-accounts-manager-ui
+      args:
+        API_URI: '${BACKEND_URI}'
     restart: always
     ports:
       - 4200:80
     volumes:
       - ./ngpy-accounts-manager-ui/dist:/usr/share/nginx/html
     environment:
-      NGINX_PROFILE: dev
+      NGINX_PROFILE: 'dev'

@@ -15,9 +15,14 @@ RUN pip install -r requirements.txt -t ./target/site-packages
 # Copying sources and assets
 COPY ./src ./target
 
+# Defining version
+ARG SOURCE_VERSION
+ENV SOURCE_VERSION $SOURCE_VERSION
+RUN echo "$(date +%F).$SOURCE_VERSION" > ./target/assets/version.txt
+
 # Packaging
 WORKDIR /build/target
-RUN zip -9yr ngpy-accounts-manager-api.zip .
+RUN zip -9yrq ngpy-accounts-manager-api.zip .
 
 ##################
 # Run image

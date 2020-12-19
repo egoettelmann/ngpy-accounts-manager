@@ -1,32 +1,26 @@
-import yaml
 import logging
 import os
 
 from flask import Flask
 
+from .config import AppProperties
 from .dbconnector import EntityManager
 
 # Configuring Logging
 logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
 
-# Configuring Database
-database_connection_url = os.environ.get('DATABASE_URI', 'sqlite:///database.db')
-entity_manager = EntityManager(database_connection_url)
-
-# Loading config (app_properties)
-ENV_PROFILE = os.getenv('ENV_PROFILE', 'dev')
+# Loading app_properties
 ROOT_PATH = os.getenv('LAMBDA_TASK_ROOT', '..')
-# Loading base config
-base_config_file = ROOT_PATH + '/assets/config/config.yml'
-base_content = open(base_config_file).read()
-base_config = yaml.full_load(base_content)
-# Loading custom config
-custom_config = {}
-custom_config_file = ROOT_PATH + '/assets/config/config-' + ENV_PROFILE + '.yml'
-if os.path.exists(custom_config_file):
-    custom_content = open(custom_config_file).read()
-    custom_config = yaml.full_load(custom_content)
-app_properties = {**base_config, **custom_config}
+version_file = ROOT_PATH + '/assets/version.txt'
+app_properties = AppProperties(
+    database_url=os.getenv('DATABASE_URI', 'sqlite:///database.db'),
+    session_secret_key=os.getenv('SESSION_SECRET_KEY'),
+    cors_origin=os.getenv('CORS_ORIGIN'),
+    app_version=open(version_file).read().rstrip()
+)
+
+# Configuring Database
+entity_manager = EntityManager(app_properties.database_url)
 
 # Instantiating the App
 app = Flask(__name__)

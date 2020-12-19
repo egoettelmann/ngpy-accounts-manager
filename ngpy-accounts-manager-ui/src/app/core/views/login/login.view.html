@@ -29,7 +29,7 @@
       <button type="submit" class="btn btn-primary" [hidden]="formIsLoading">{{ 'i18n.views.login.form.button.submit' | translate }}</button>
     </div>
     <div *ngIf="appProperties" class="login-footer">
-      <span class="login-version">{{ appProperties.version }}</span>
+      <span class="login-version">{{ appProperties.appVersion }}</span>
     </div>
   </form>
 </div>
