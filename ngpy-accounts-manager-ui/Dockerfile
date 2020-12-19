@@ -1,7 +1,12 @@
 ##################
 # Build image
 ##################
-FROM node:15.2.0-alpine3.12
+FROM node:15.4.0 AS build-img-ui
+
+# Adding build dependencies: envsubst
+RUN apt-get update \
+  && apt-get -y install gettext-base \
+  && apt-get clean
 
 # Defining build folder
 WORKDIR /build
@@ -14,12 +19,16 @@ COPY ./package-lock.json .
 RUN npm ci
 
 # Copying sources and assets
-#COPY ./assets ./target/assets
 COPY ./angular.json .
 COPY ./browserslist .
 COPY ./tsconfig.json .
 COPY ./tslint.json .
 COPY ./src ./src
+
+# Filtering assets for environment variables
+ARG PROD_BACKEND_URI
+ENV PROD_BACKEND_URI $PROD_BACKEND_URI
+RUN find ./src/assets/config/. -type f -exec bash -c 'envsubst < $1 > $1.tmp && mv $1.tmp $1' -- {} \;
 
 # Packaging
 RUN npm run build:dev
@@ -33,6 +42,4 @@ FROM nginx:1.19.4
 COPY ./docker/default.conf.template /etc/nginx/templates/
 
 # Adding the app
-COPY --from=0 /build/dist /usr/share/nginx/html
-
-# TODO: add some custom configuration
+COPY --from=build-img-ui /build/dist /usr/share/nginx/html

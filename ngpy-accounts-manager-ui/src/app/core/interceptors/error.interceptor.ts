@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { NotificationService } from '../services/notification.service';
 import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
@@ -32,12 +31,7 @@ export class ErrorInterceptor implements HttpInterceptor {
    * @param next the handler
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // const apiReq = req.clone();
-    const baseUrl = environment.baseUrl;
-    let apiReq = req.clone();
-    if (!req.url.startsWith('/assets')) {
-      apiReq = req.clone({url: baseUrl + req.url, withCredentials: true});
-    }
+    const apiReq = req.clone();
     return next.handle(apiReq).pipe(
       catchError((err: any) => {
         if (err instanceof HttpErrorResponse) {

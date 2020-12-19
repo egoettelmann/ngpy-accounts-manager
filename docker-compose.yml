@@ -10,7 +10,7 @@ services:
         SOURCE_VERSION: 'dev'
     restart: always
     ports:
-      - 5050:5050
+      - 5000:5050
     volumes:
       - ./ngpy-accounts-manager-api/src/app:/var/task/app:ro,delegated
     environment:
@@ -35,7 +35,7 @@ services:
     build:
       context: ./ngpy-accounts-manager-ui
       args:
-        API_URI: '${BACKEND_URI}'
+        PROD_BACKEND_URI: '${BACKEND_URI}'
     restart: always
     ports:
       - 4200:80

@@ -44,6 +44,8 @@ import { ToCategoryPipe } from '../shared/pipes/to-category.pipe';
 import { CacheService } from './services/cache.service';
 import { MainResolverService } from './services/resolvers/main-resolver.service';
 import { ConfigurationService } from './services/configuration.service';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ApiUrlInterceptor } from './interceptors/api-url.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -62,7 +64,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ...CoreModule.COMPONENTS_LIST
   ],
   providers: [
-    ...CoreModule.PROVIDER_LIST
+    ...CoreModule.PROVIDER_LIST,
+    ...CoreModule.INTERCEPTOR_LIST
   ]
 })
 export class CoreModule {
@@ -99,7 +102,7 @@ export class CoreModule {
   ];
 
   /**
-   * Services, pipes, interceptors, guards, etc.
+   * Services, pipes, guards, etc.
    */
   static PROVIDER_LIST = [
     /** REST services */
@@ -140,9 +143,23 @@ export class CoreModule {
     ToCategoryPipe,
 
     /** Guards */
-    AuthenticatedGuard,
+    AuthenticatedGuard
+  ];
 
-    /** Interceptors */
+  /**
+   * Services, pipes, guards, etc.
+   */
+  static INTERCEPTOR_LIST = [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiUrlInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,

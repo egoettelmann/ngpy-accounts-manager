@@ -1,7 +1,7 @@
 ##################
 # Build image
 ##################
-FROM lambci/lambda:build-python3.7
+FROM lambci/lambda:build-python3.7 AS build-img-api
 
 # Defining build folder
 WORKDIR /build
@@ -36,6 +36,6 @@ RUN chmod +x ./entrypoint.sh
 USER sbx_user1051
 
 # Adding the app
-COPY --from=0 /build/target .
+COPY --from=build-img-api /build/target .
 
 ENTRYPOINT ["./entrypoint.sh"]

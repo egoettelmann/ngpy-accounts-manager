@@ -1,3 +1,4 @@
 {
-  "environment": "dev"
+  "environment": "dev",
+  "apiUrl": "http://localhost:5000"
 }

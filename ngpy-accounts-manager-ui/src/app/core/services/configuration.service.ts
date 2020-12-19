@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 /**
  * The configuration service.
  */
 @Injectable()
 export class ConfigurationService {
+
+  /**
+   * The app properties.
+   */
+  private appProperties: any;
 
   /**
    * Instantiates the service.
@@ -20,7 +26,14 @@ export class ConfigurationService {
    * Gets all labels
    */
   getAppProperties(): Observable<any> {
-    return this.http.get('/assets/config/application.json');
+    if (this.appProperties == null) {
+      return this.http.get('/assets/config/application.json').pipe(
+        tap(data => {
+          this.appProperties = data;
+        })
+      );
+    }
+    return of(this.appProperties);
   }
 
 }
