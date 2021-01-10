@@ -1,6 +1,6 @@
 ﻿from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import Table, Column, ForeignKey
-from sqlalchemy.sql.sqltypes import Date, Numeric, Integer, String, Boolean
+from sqlalchemy.sql.sqltypes import Date, DateTime, Numeric, Integer, String, Boolean
 
 from . import EntityManager
 
@@ -149,9 +149,11 @@ class TransactionDbo(EntityManager.get_base()):
     note = Column(String(250))
     label_id = Column(Integer, ForeignKey('labels.id'))
     hash = Column(String(250), unique=True)
+    create_datetime = Column(DateTime())
 
     def __init__(self, id=None, account_id=None, date_compta=None, date_operation=None, description=None,
-                 reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None):
+                 reference=None, date_value=None, amount=None, note=None, label_id=None, hash=None,
+                 create_datetime=None):
         """Constructor"""
         self.id = id
         self.account_id = account_id
@@ -164,6 +166,7 @@ class TransactionDbo(EntityManager.get_base()):
         self.note = note
         self.label_id = label_id
         self.hash = hash
+        self.create_datetime = create_datetime
 
     def __repr__(self):
         """String representation"""
