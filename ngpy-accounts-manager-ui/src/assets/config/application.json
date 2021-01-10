@@ -1,4 +1,4 @@
 {
   "environment": "default",
-  "apiUrl": "UNDEFINED"
+  "apiUrl": "${PROD_BACKEND_URI}"
 }

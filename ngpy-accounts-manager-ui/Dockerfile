@@ -1,11 +1,12 @@
 ##################
 # Build image
 ##################
-FROM node:15.4.0 AS build-img-ui
+FROM node:15.4.0 AS build
 
 # Adding build dependencies: envsubst
 RUN apt-get update \
   && apt-get -y install gettext-base \
+  && apt-get -y install zip \
   && apt-get clean
 
 # Defining build folder
@@ -30,8 +31,15 @@ ARG PROD_BACKEND_URI
 ENV PROD_BACKEND_URI $PROD_BACKEND_URI
 RUN find ./src/assets/config/. -type f -exec bash -c 'envsubst < $1 > $1.tmp && mv $1.tmp $1' -- {} \;
 
-# Packaging
+# Building adn packaging
 RUN npm run build:dev
+WORKDIR /build/dist
+RUN zip -9yrq ngpy-accounts-manager-ui.zip .
+
+# Copying archive to output folder
+WORKDIR /build/output
+RUN cp /build/dist/ngpy-accounts-manager-ui.zip .
+RUN ls -al /build/output
 
 ##################
 # Run image
@@ -42,4 +50,4 @@ FROM nginx:1.19.4
 COPY ./docker/default.conf.template /etc/nginx/templates/
 
 # Adding the app
-COPY --from=build-img-ui /build/dist /usr/share/nginx/html
+COPY --from=build /build/dist /usr/share/nginx/html

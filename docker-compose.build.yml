@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+
+  # API
+  api:
+    build:
+      context: ./ngpy-accounts-manager-api
+      target: build
+      args:
+        SOURCE_VERSION: 'prd'
+    command: ls -al
+
+  # UI
+  ui:
+    build:
+      context: ./ngpy-accounts-manager-ui
+      target: build
+      args:
+        PROD_BACKEND_URI: 'https://${DOMAIN_NAME_API}'

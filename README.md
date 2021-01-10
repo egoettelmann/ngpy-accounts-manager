@@ -32,6 +32,20 @@ To simply build the frontend:
 npm run build
 ```
 
+### Docker build
+
+As an alternative, you can build the entire stack using Docker:
+
+```shell script
+docker-compose -f docker-compose.build.yml up --build --no-start -V
+```
+
+And then get the artifacts:
+```shell script
+docker cp ngpy-accounts-manager_ui_1:/build/output/ngpy-accounts-manager-ui.zip ./target/ngpy-accounts-manager-ui.zip
+docker cp ngpy-accounts-manager_api_1:/build/output/ngpy-accounts-manager-api.zip ./target/ngpy-accounts-manager-api.zip
+```
+
 ## Release Notes
 
 ### `0.6.0`
