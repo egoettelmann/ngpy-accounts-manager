@@ -15,3 +15,6 @@ uploads/
 tmp/
 backups/
 version.txt
+
+# Environment file
+.env
