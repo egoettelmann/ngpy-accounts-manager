@@ -30,6 +30,13 @@ class BaseAppException(Exception):
         return msg
 
 
+class NotFoundException(BaseAppException):
+    """
+    The not found exception
+    """
+    pass
+
+
 class NotAuthenticatedException(BaseAppException):
     """
     The not authenticated exception
@@ -65,6 +72,7 @@ class ApplicationExceptionHandler(DefaultExceptionHandler):
         Declares all bindings
         """
         super(ApplicationExceptionHandler, self).__init__()
-        self.add(NotAuthenticatedException, 'A403', 'not_authenticated', 403)
         self.add(WrongLoginException, 'A400', 'wrong_login_or_password', 400)
+        self.add(NotAuthenticatedException, 'A403', 'not_authenticated', 403)
+        self.add(NotFoundException, 'A404', 'not_found', 404)
         self.add(FileImportException, 'A409', 'file_import_failed', 409)

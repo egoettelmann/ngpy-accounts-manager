@@ -1,17 +1,16 @@
 import logging
-import os
 import sys
 
 sys.path.append('./site-packages')
 
-from flask import request, session
+from flask import jsonify, request, session
 from flask_cors import CORS
 
 from app.modules.depynject import Depynject
 from app.modules.di_providers import RequestDiProvider
 
 from app.controllers import *
-from app.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException
+from app.domain.exceptions import ApplicationExceptionHandler, NotAuthenticatedException, NotFoundException
 
 from app.main import app, entity_manager, app_properties
 from app.modules.restipy import Api
@@ -52,8 +51,16 @@ api.register(SessionController)
 ##############################
 @app.route('/')
 def serve_app():
-    logging.info('Loading index page')
-    return app.send_static_file('index.html')
+    logging.info('Loading root page')
+    return jsonify(
+        version=app_properties.app_version
+    )
+
+
+@app.errorhandler(404)
+def not_found(e):
+    logging.warning('Not found: %s', e)
+    return api.return_exception(NotFoundException('Not found'))
 
 
 ########################

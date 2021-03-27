@@ -10,7 +10,7 @@ from .dbconnector import EntityManager
 logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
 
 # Loading app_properties
-ROOT_PATH = os.getenv('LAMBDA_TASK_ROOT', '..')
+ROOT_PATH = os.getenv('LAMBDA_TASK_ROOT', '.')
 version_file = ROOT_PATH + '/assets/version.txt'
 app_properties = AppProperties(
     database_url=os.getenv('DATABASE_URI', 'sqlite:///database.db'),
