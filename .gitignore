@@ -15,8 +15,5 @@ tests/.cache
 *.db
 uploads/
 tmp/
-backups/
+database/backups/
 version.txt
-
-# Environment file
-.env
