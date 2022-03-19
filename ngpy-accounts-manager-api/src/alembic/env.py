@@ -25,7 +25,8 @@ target_metadata = None
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-database_connection_url = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
+database_connection_url = os.environ.get('DATABASE_URI', 'sqlite:///database.db')
+#config.set_main_option('sqlalchemy.url', database_connection_url)
 
 
 def run_migrations_offline():

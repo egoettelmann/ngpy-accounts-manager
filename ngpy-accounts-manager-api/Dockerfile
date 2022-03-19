@@ -34,13 +34,21 @@ RUN ls -al /build/output
 ##################
 FROM lambci/lambda:python3.7
 
+# Switching user to root
+USER root
+
+# Adding wait script
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait .
+RUN chmod +x ./wait
+
 # Adding entrypoint script
 COPY ./docker/entrypoint.sh .
-USER root
 RUN chmod +x ./entrypoint.sh
+
+# Switching user
 USER sbx_user1051
 
 # Adding the app
 COPY --from=build /build/target .
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ./wait && ./entrypoint.sh

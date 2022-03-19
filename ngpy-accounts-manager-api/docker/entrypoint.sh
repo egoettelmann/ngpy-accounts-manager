@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
-#python migrate.py || exit
+
+# Running migrations
+python migrate.py || exit
+
+# Starting web server
 exec python web.py

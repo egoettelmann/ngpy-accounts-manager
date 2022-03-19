@@ -22,8 +22,7 @@ CREATE TABLE public."categories"
 (
   id SERIAL PRIMARY KEY,
   name VARCHAR(250) UNIQUE,
-  type VARCHAR(10),
-  color VARCHAR(50)
+  type VARCHAR(10)
 )
 ;
 
@@ -67,31 +66,5 @@ CREATE TABLE public."user"
   id SERIAL PRIMARY KEY,
   login VARCHAR(50),
   password VARCHAR(250)
-)
-;
-
-CREATE TABLE public."budgets"
-(
-    id INTEGER PRIMARY KEY,
-    name VARCHAR(50) UNIQUE,
-    description VARCHAR(250),
-    period VARCHAR(50),
-    amount NUMERIC(25, 2)
-)
-;
-
-CREATE TABLE public."budgets_accounts"
-(
-    budget_id INTEGER REFERENCES budgets NULL,
-    account_id INTEGER REFERENCES accounts NULL,
-    PRIMARY KEY (budget_id, account_id)
-)
-;
-
-CREATE TABLE public."budgets_labels"
-(
-    budget_id INTEGER REFERENCES budgets NULL,
-    label_id INTEGER REFERENCES labels NULL,
-    PRIMARY KEY (budget_id, label_id)
 )
 ;

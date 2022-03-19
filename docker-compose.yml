@@ -17,18 +17,7 @@ services:
       DATABASE_URI: 'postgresql://${DB_USERNAME}:${DB_PASSWORD}@db:5432/api'
       SESSION_SECRET_KEY: '${SESSION_SECRET_KEY}'
       CORS_ORIGIN: '${FRONTEND_URI}'
-
-  # Database
-  db:
-    image: postgres
-    restart: always
-    ports:
-      - 5432:5432
-    volumes:
-      - ./database:/docker-entrypoint-initdb.d
-    environment:
-      POSTGRES_USER: '${DB_USERNAME}'
-      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+      WAIT_HOSTS: db:5432
 
   # UI
   ui:
@@ -43,3 +32,15 @@ services:
       - ./ngpy-accounts-manager-ui/dist:/usr/share/nginx/html
     environment:
       NGINX_PROFILE: 'dev'
+
+  # Database
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'

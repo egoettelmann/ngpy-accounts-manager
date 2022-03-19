@@ -147,7 +147,7 @@ export class CoreModule {
   ];
 
   /**
-   * Services, pipes, guards, etc.
+   * Interceptors
    */
   static INTERCEPTOR_LIST = [
     {
