@@ -5,7 +5,7 @@ import hashlib
 from typing import List
 
 from .parser import Parser
-from ..models import Transaction
+from ...models import Transaction
 
 
 class IngParser(Parser):

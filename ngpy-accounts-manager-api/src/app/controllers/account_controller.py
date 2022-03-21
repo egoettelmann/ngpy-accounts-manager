@@ -3,7 +3,7 @@ from typing import List
 from flask import request
 
 from ..domain.models import Account
-from ..domain.services import AccountService, NotificationService
+from ..domain.services import AccountService
 from ..modules import restipy
 from ..modules.depynject import injectable
 from ..rql_parser import RqlRequestParser
@@ -16,17 +16,12 @@ class AccountController:
     The account controller that handles all API requests
     """
 
-    def __init__(self,
-                 account_service: AccountService,
-                 notification_service: NotificationService
-                 ) -> None:
+    def __init__(self, account_service: AccountService) -> None:
         """Constructor
 
         :param account_service: the account service
-        :param notification_service: the notification service
         """
         self.__account_service = account_service
-        self.__notification_service = notification_service
         self.__rql_parser = RqlRequestParser({
             'name': 'name',
             'description': 'description',

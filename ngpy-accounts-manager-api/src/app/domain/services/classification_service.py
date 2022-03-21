@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import List
+from typing import List, Optional
 
 import joblib
 import numpy
@@ -9,7 +9,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 
-from ..models import Transaction
+from ..models import Transaction, Label
 from ..search_request import PageRequest, SearchRequest, SortRequest
 from ..services.label_service import LabelService
 from ..services.transaction_service import TransactionService
@@ -17,9 +17,9 @@ from ...modules.depynject import injectable
 
 
 @injectable()
-class Classifier:
+class ClassificationService:
     """
-    The classifier class that defines all business operations.
+    The classification service class that defines all business operations.
     """
 
     def __init__(self,
@@ -33,28 +33,33 @@ class Classifier:
         """
         self.__transaction_service = transaction_service
         self.__label_service = label_service
+        self.__threshold = 0.7
         self.__pipeline_filename = 'storage/current_pipeline.sav'
         self.__current_pipeline = None
         if os.path.exists(self.__pipeline_filename):
             self.__current_pipeline = joblib.load(self.__pipeline_filename)
 
-    def get_training_data(self, size: int = 10000) -> List[Transaction]:
-        search_request = SearchRequest(
-            None,
-            SortRequest(
-                'date_value',
-                True
-            ),
-            PageRequest(
-                0,
-                size
-            )
-        )
-        return self.__transaction_service.search_all(search_request)
+    def predict(self, sentence: str) -> Optional[int]:
+        # Performing prediction
+        probabilities = self.__current_pipeline.predict_proba([sentence])
+        prediction_indexes = numpy.argmax(probabilities, axis=1)
+        classes = self.__current_pipeline.classes_
+        predictions = [classes[i] for i in prediction_indexes]
 
-    def train(self) -> None:
+        # Checking that threshold is reached
+        prediction_idx = prediction_indexes[0]
+        proba = probabilities[0][prediction_idx]
+        label_id = predictions[0].item()
+        if proba < self.__threshold:
+            logging.debug('Prediction failed for "%s": "%s" (%s)', sentence, label_id, proba)
+            return None
+
+        logging.debug('Prediction success for "%s": "%s" (%s)', sentence, label_id, proba)
+        return label_id
+
+    def perform_training(self) -> None:
         # Loading training data
-        transactions = self.get_training_data()
+        transactions = self._get_training_data()
 
         # Creating training sets
         sentences = numpy.array([t.description for t in transactions])
@@ -88,9 +93,9 @@ class Classifier:
             joblib.dump(new_pipeline, self.__pipeline_filename)
             logging.info('Stored new version of model to: %s', self.__pipeline_filename)
 
-    def predict(self) -> None:
+    def predict_sample(self) -> None:
         # Loading prediction data
-        transactions = self.get_training_data(1000)
+        transactions = self._get_training_data(1000)
 
         # Creating prediction sets
         sentences = numpy.array([t.description for t in transactions])
@@ -109,3 +114,17 @@ class Classifier:
             label = self.__label_service.get_by_id(label_id.item())
             proba = probabilities[idx][prediction_idx]
             logging.info('Prediction for "%s": "%s" (%s)', sentence, label.name, proba)
+
+    def _get_training_data(self, size: int = 10000) -> List[Transaction]:
+        search_request = SearchRequest(
+            None,
+            SortRequest(
+                'date_value',
+                True
+            ),
+            PageRequest(
+                0,
+                size
+            )
+        )
+        return self.__transaction_service.search_all(search_request)

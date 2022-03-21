@@ -1,6 +1,6 @@
 from typing import List
 
-from ..models import Transaction
+from ...models import Transaction
 
 
 class Parser:

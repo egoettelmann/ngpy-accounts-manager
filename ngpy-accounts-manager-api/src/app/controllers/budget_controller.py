@@ -4,7 +4,7 @@ from datetime import date, datetime
 from flask import request
 
 from ..domain.models import Budget, BudgetStatus
-from ..domain.services import BudgetService, AccountService
+from ..domain.services import BudgetService
 from ..modules import restipy
 from ..modules.depynject import injectable
 from ..rql_parser import RqlRequestParser
@@ -17,17 +17,12 @@ class BudgetController:
     The budget controller that handles all API requests
     """
 
-    def __init__(self,
-                 budget_service: BudgetService,
-                 account_service: AccountService
-                 ) -> None:
+    def __init__(self,budget_service: BudgetService) -> None:
         """Constructor
 
         :param budget_service: the budget service
-        :param account_service: the account service
         """
         self.__budget_service = budget_service
-        self.__account_service = account_service
         self.__rql_parser = RqlRequestParser({
             'accountId': 'accounts.id',
             'labelId': 'labels.id',

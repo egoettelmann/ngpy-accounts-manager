@@ -5,7 +5,7 @@ from typing import List, TypeVar
 
 from . import BpalcParser, IngParser, IngLuxParser
 from . import Parser
-from ...modules.depynject import injectable
+from ....modules.depynject import injectable
 
 T = TypeVar('T')
 

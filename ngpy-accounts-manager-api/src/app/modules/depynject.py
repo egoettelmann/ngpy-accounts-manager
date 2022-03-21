@@ -68,7 +68,6 @@ def inject(silent=False, **hints):
                         if arg_name in hints and isinstance(hints[arg_name], str):
                             # Is there a hint given as a string ?
                             resolve_name = hints[arg_name]
-                        logging.debug('Injecting [%s=%s] in method %s', arg_name, resolve_name, m.__qualname__)
                         try:
                             kwargs[arg_name] = instance.provide(resolve_name)
                         except InjectionError as e:

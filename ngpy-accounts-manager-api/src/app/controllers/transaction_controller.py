@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 from ..domain.exceptions import FileImportException
 from ..domain.models import Transaction
-from ..domain.services import TransactionService, AccountService
+from ..domain.services import TransactionService, ImportService
 from ..modules import restipy
 from ..modules.depynject import injectable
 from ..rql_parser import RqlRequestParser
@@ -21,15 +21,15 @@ class TransactionController:
 
     def __init__(self,
                  transaction_service: TransactionService,
-                 account_service: AccountService
+                 import_service: ImportService
                  ) -> None:
         """Constructor
 
         :param transaction_service: the transaction service
-        :param account_service: the account service
+        :param import_service: the import service
         """
         self.__transaction_service = transaction_service
-        self.__account_service = account_service
+        self.__import_service = import_service
         self.__rql_parser = RqlRequestParser({
             'accountId': 'account_id',
             'labelId': 'label_id',
@@ -115,7 +115,7 @@ class TransactionController:
             filename = secure_filename(file.filename)
             saved_filename = os.path.join(tmp_folder, filename)
             file.save(saved_filename)
-            return self.__account_service.import_file(saved_filename)
+            return self.__import_service.import_file(saved_filename)
         raise FileImportException("Impossible to import file")
 
     @staticmethod

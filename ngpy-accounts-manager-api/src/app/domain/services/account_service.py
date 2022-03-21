@@ -4,8 +4,6 @@ from typing import List
 
 from .status_service import StatusService
 from .transaction_service import TransactionService
-from ..exceptions import FileImportException
-from ..importers.resolve import Resolver
 from ..models import Account, Notification
 from ..search_request import FilterRequest, FilterOperator, SearchRequest
 from ...dbconnector.entities import AccountDbo
@@ -24,8 +22,7 @@ class AccountService:
                  account_repository: AccountRepository,
                  object_mapper: Mapper,
                  transaction_service: TransactionService,
-                 status_service: StatusService,
-                 resolver: Resolver
+                 status_service: StatusService
                  ) -> None:
         """Constructor
 
@@ -33,13 +30,11 @@ class AccountService:
         :param object_mapper: the object mapper
         :param transaction_service: the transaction service
         :param status_service: the status service
-        :param resolver: the import resolver
         """
         self.__repository = account_repository
         self.__mapper = object_mapper
         self.__transaction_service = transaction_service
         self.__status_service = status_service
-        self.__resolver = resolver
 
     def get_all_accounts(self, search_request: SearchRequest = None) -> List[Account]:
         """Gets the list of all accounts matching the provided filters.
@@ -131,23 +126,6 @@ class AccountService:
         if result is None:
             result = 0
         return total + result
-
-    def import_file(self, filename: str) -> bool:
-        """Imports a file of transactions.
-
-        :param filename: the file to import
-        :return: if the import was successful or not
-        """
-        parser = self.__resolver.resolve(filename)
-        account_name = parser.get_account_name()
-        account = self.find_by_name(account_name)
-        transactions = parser.parse()
-        for t in transactions:
-            t.account_id = account.id
-        try:
-            return self.__transaction_service.create_all(transactions)
-        except Exception as e:
-            raise FileImportException("Impossible to import file", cause=e)
 
     def get_notification_levels(self) -> (str, List[Notification]):
         """Gets the notification levels of all accounts.
