@@ -9,15 +9,15 @@ class RequestDiProvider:
         self.di_list = {}
 
     def provide(self, class_ref, i_args, di_instance):
-        id = Depynject.to_camel_case(class_ref.__name__)
+        identifier = Depynject.to_camel_case(class_ref.__name__)
 
         if not hasattr(g, 'injectable_objects'):
             g.injectable_objects = {}
 
-        if id not in g.injectable_objects:
-            g.injectable_objects[id] = di_instance.create_new_instance(class_ref, i_args)
+        if identifier not in g.injectable_objects:
+            g.injectable_objects[identifier] = di_instance.create_new_instance(class_ref, i_args)
 
-        return g.injectable_objects[id]
+        return g.injectable_objects[identifier]
 
     def clear(self):
         if hasattr(g, 'injectable_objects'):
@@ -27,6 +27,20 @@ class RequestDiProvider:
                 if callable(close_op):
                     v.close()
             g.pop('injectable_objects', None)
+
+
+class StaticSingletonDiProvider:
+
+    def __init__(self):
+        self.di_list = {}
+
+    def provide(self, class_ref, i_args, di_instance):
+        identifier = Depynject.to_camel_case(class_ref.__name__)
+
+        if identifier not in self.di_list:
+            self.di_list[identifier] = di_instance.create_new_instance(class_ref, i_args)
+
+        return self.di_list[identifier]
 
 
 class SimplePrototypeDiProvider:

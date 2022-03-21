@@ -57,7 +57,6 @@ class Classifier:
         transactions = self.get_training_data()
 
         # Creating training sets
-        # TODO: check if other attributes could be added (account, amount, etc.)
         sentences = numpy.array([t.description for t in transactions])
         labels = numpy.array([t.label_id for t in transactions])
         X_train, X_test, y_train, y_test = train_test_split(
