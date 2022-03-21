@@ -19,6 +19,7 @@ joblib==1.1.0
 scikit-learn==1.0.2
 scipy==1.7.3
 threadpoolctl==3.1.0
+joblib==1.1.0
 
 # Test dependencies
 pytest==2.9.1

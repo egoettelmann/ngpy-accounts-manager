@@ -13,6 +13,7 @@ services:
       - 5000:5050
     volumes:
       - ./ngpy-accounts-manager-api/src/app:/var/task/app:ro,delegated
+      - ./database/storage:/var/task/storage
     environment:
       DATABASE_URI: 'postgresql://${DB_USERNAME}:${DB_PASSWORD}@db:5432/api'
       SESSION_SECRET_KEY: '${SESSION_SECRET_KEY}'

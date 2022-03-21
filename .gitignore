@@ -16,4 +16,5 @@ tests/.cache
 uploads/
 tmp/
 database/backups/
+database/storage/
 version.txt
