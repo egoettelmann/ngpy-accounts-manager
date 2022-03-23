@@ -246,6 +246,7 @@ class BudgetStatus:
     """
     The Budget status model
     """
+
     def __init__(self, budget: Budget = None, spending: float = None):
         """Constructor"""
         self.budget = budget
@@ -254,3 +255,16 @@ class BudgetStatus:
     def __repr__(self):
         """String representation"""
         return '<BudgetStatus %r, %r>' % (self.budget.id, self.spending)
+
+
+@restipy.convertible({
+    'imported': types.Integer(),
+    'assigned': types.Integer(),
+    'total_amount': types.Float()
+})
+class ImportResult:
+
+    def __init__(self, imported: int = None, assigned: int = None, total_amount: float = None) -> None:
+        self.imported = imported
+        self.assigned = assigned
+        self.total_amount = total_amount

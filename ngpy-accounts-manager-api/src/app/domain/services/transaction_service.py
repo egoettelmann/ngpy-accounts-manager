@@ -172,7 +172,7 @@ class TransactionService:
         dbo.create_datetime = datetime.datetime.now()
         return self.__repository.save_one(dbo)
 
-    def create_all(self, transactions: List[Transaction]) -> bool:
+    def create_all(self, transactions: List[Transaction]) -> None:
         """Creates all provided transactions.
 
         :param transactions: the transactions to create
@@ -183,10 +183,10 @@ class TransactionService:
             TransactionDbo
         )
         create_datetime = datetime.datetime.now()
-        for t in dbos:
-            t.create_datetime = create_datetime
-            t.hash = self.__calculate_hash(t)
-        return self.__repository.create_all(dbos)
+        for dbo in dbos:
+            dbo.create_datetime = create_datetime
+            dbo.hash = self.__calculate_hash(dbo)
+        self.__repository.create_all(dbos)
 
     def update_one(self, transaction: Transaction) -> Transaction:
         """Updates a transaction.

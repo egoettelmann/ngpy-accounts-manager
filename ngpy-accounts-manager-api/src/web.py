@@ -27,6 +27,7 @@ depynject_container.register_singleton(app_properties)
 app.secret_key = app_properties.session_secret_key
 
 # Configuring CORS
+logging.debug('Enabling CORS for %s', app_properties.cors_origin)
 CORS(app, origins=app_properties.cors_origin, supports_credentials=True)
 
 # Building the api (the Restful app)
@@ -68,7 +69,7 @@ def not_found(e):
 ########################
 @app.before_request
 def before_request():
-    logging.info('REQUESTING %s %s', request.path, request.endpoint)
+    logging.debug('%s %s forwarding to %s', request.method, request.path, request.endpoint)
     if request.method != 'OPTIONS' \
             and request.path.startswith(api.prefix) \
             and not request.endpoint.startswith('SessionController'):

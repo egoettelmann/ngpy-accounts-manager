@@ -1,18 +1,18 @@
-<clr-modal *ngIf="errorNotification"
+<clr-modal *ngIf="notification"
            [(clrModalOpen)]="showNotification"
            [clrModalClosable]="false"
            [clrModalStaticBackdrop]="true">
   <h3 class="modal-title"
-      [ngClass]="cssClasses.textColor[errorNotification.type]">
-    {{ translationPrefix + errorNotification.code | translate }}
+      [ngClass]="cssClasses.textColor[notification.type]">
+    {{ translationPrefix + notification.code | translate }}
   </h3>
   <div class="modal-body">
-    <p>{{ translationPrefix + errorNotification.content | translate }}</p>
+    <p [innerHTML]="translationPrefix + notification.content | translate:notification.data"></p>
   </div>
   <div class="modal-footer text-center">
     <button type="button"
             class="btn"
-            [ngClass]="cssClasses.button[errorNotification.type]"
+            [ngClass]="cssClasses.button[notification.type]"
             (click)="hideNotification()">
       <span [translate]="'i18n.components.notification.modal.button.ok'"></span>
     </button>

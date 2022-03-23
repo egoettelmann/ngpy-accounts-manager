@@ -63,11 +63,12 @@ export class FileDropComponent {
    * @param file the file to upload
    */
   private uploadFile(file: File) {
-    this.uploadService.uploadFile(file, file.name).subscribe(() => {
+    this.uploadService.uploadFile(file, file.name).subscribe((result) => {
       this.notificationService.broadcast({
         type: 'SUCCESS',
         code: 'B200',
-        content: 'file_import_success'
+        content: 'file_import_success',
+        data: result
       });
     });
   }

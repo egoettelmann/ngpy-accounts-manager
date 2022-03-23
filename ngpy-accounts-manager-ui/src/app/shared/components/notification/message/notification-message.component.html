@@ -1,10 +1,10 @@
-<clr-alert *ngIf="errorNotification"
+<clr-alert *ngIf="notification"
            [hidden]="!showNotification"
-           [clrAlertType]="cssClasses.alert[errorNotification.type]"
+           [clrAlertType]="cssClasses.alert[notification.type]"
            [clrAlertClosable]="false">
   <clr-alert-item>
-    <span class="alert-text">
-      {{ translationPrefix + errorNotification.code | translate }}
+    <span class="alert-text"
+          [innerHTML]="translationPrefix + notification.code | translate">
     </span>
   </clr-alert-item>
 </clr-alert>

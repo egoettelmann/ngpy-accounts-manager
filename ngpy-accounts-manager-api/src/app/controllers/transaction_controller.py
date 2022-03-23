@@ -5,7 +5,7 @@ from flask import request
 from werkzeug.utils import secure_filename
 
 from ..domain.exceptions import FileImportException
-from ..domain.models import Transaction
+from ..domain.models import Transaction, ImportResult
 from ..domain.services import TransactionService, ImportService
 from ..modules import restipy
 from ..modules.depynject import injectable
@@ -102,7 +102,8 @@ class TransactionController:
         return self.__transaction_service.update_one(transaction)
 
     @restipy.route('/upload-file', methods=['POST'])
-    def upload_file(self) -> bool:
+    @restipy.format_as(ImportResult)
+    def upload_file(self) -> ImportResult:
         """Handles the upload of a file.
 
         :return: true if the upload succeeded

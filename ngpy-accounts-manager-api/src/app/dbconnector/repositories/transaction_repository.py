@@ -195,7 +195,7 @@ class TransactionRepository:
         total = query.scalar()
         return 0 if total is None else total
 
-    def create_all(self, transactions: List[TransactionDbo]) -> bool:
+    def create_all(self, transactions: List[TransactionDbo]) -> None:
         """Creates a provided list of transactions in database
 
         :param transactions: the list of transactions
@@ -210,7 +210,6 @@ class TransactionRepository:
         except:
             self.__entity_manager.get_session().rollback()
             raise
-        return True
 
     def save_one(self, transaction: TransactionDbo) -> TransactionDbo:
         """Saves a transaction (create and update).

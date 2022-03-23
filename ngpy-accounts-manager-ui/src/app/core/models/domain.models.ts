@@ -23,6 +23,7 @@ export class Notification {
   public type: string;
   public code: string;
   public content: string;
+  public data?: {[key: string]: string};
 }
 
 /**

@@ -26,7 +26,7 @@ export abstract class AbstractNotificationComponent implements OnChanges {
   /**
    * The current error notification
    */
-  public errorNotification: Notification;
+  public notification: Notification;
 
   /**
    * The show notification flag
@@ -77,7 +77,7 @@ export abstract class AbstractNotificationComponent implements OnChanges {
    */
   private startSubscription() {
     this.subscription = this.notificationService.subscribe((n) => {
-      this.errorNotification = n;
+      this.notification = n;
       this.showNotification = true;
       if (this.dismiss !== undefined) {
         setTimeout(
