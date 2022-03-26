@@ -1,11 +1,15 @@
 <div class="center">
-  <ngx-file-drop [dropZoneLabel]="'i18n.components.file-drop.header-text' | translate"
-                 [dropZoneClassName]="'file-drop'"
-                 [contentClassName]="'content'"
-                 (click)="fileInput.click()"
-                 (onFileDrop)="dropped($event)">
-    <input #fileInput class="hidden-xs-up" type="file" (change)="input($event)" />
-  </ngx-file-drop>
+  <div class="file-drop">
+    <ngx-file-drop [dropZoneLabel]="'i18n.components.file-drop.header-text' | translate"
+                   [dropZoneClassName]="'file-drop-zone'"
+                   [contentClassName]="'content'"
+                   (click)="fileInput.click()"
+                   (onFileDrop)="dropped($event)"
+                   [hidden]="formIsLoading">
+      <input #fileInput class="hidden-xs-up" type="file" (change)="input($event)" />
+    </ngx-file-drop>
+    <div class="spinner spinner-sm" [hidden]="!formIsLoading"></div>
+  </div>
 </div>
 
 <app-notification-modal [type]="'SUCCESS'"></app-notification-modal>

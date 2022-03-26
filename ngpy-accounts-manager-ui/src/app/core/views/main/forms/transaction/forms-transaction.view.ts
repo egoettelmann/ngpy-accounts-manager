@@ -42,7 +42,7 @@ export class FormsTransactionView implements OnInit, OnDestroy {
     ]).subscribe(([transaction, accounts, labels]) => {
       this.selectedTransaction = transaction;
       if (this.selectedTransaction == null) {
-        this.selectedTransaction = new Transaction();
+        this.selectedTransaction = {};
       }
       this.accounts = accounts.slice(0);
       this.labels = labels.slice(0);

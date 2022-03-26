@@ -72,10 +72,10 @@ export class ToCategoryPipe implements PipeTransform, OnDestroy {
    * @param categoryId the category id
    */
   private defaultCategory(categoryId: number): Category {
-    const defaultCategory = new Category();
-    defaultCategory.id = categoryId;
-    defaultCategory.name = '';
-    return defaultCategory;
+    return {
+      id: categoryId,
+      name: ''
+    };
   }
 
   /**

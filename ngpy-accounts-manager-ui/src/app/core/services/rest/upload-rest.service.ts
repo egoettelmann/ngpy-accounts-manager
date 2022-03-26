@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EventBusService } from '../event-bus.service';
 import { tap } from 'rxjs/operators';
+import { ImportResult } from '../../models/api.models';
 
 /**
  * The upload rest service.
@@ -27,7 +28,7 @@ export class UploadRestService {
    * @param fileContent the file to upload
    * @param fileName the file name
    */
-  uploadFile(fileContent: any, fileName: string): Observable<any> {
+  uploadFile(fileContent: any, fileName: string): Observable<ImportResult> {
     const formData = new FormData();
     formData.append('file', fileContent, fileName);
     return this.http.post<any>('/rest/transactions/upload-file', formData).pipe(

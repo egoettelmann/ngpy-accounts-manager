@@ -110,7 +110,7 @@ export class TransactionsListView implements OnInit, OnDestroy {
    * Opens the transaction form modal with a new transaction
    */
   addTransaction() {
-    const newTransaction = new Transaction();
+    const newTransaction = {};
     this.openModal(newTransaction);
   }
 

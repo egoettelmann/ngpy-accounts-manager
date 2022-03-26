@@ -2,13 +2,16 @@
   background-color: #103548;
   line-height: 2.5rem;
   height: 2.5rem;
-  padding: 0 1rem;
   color: black;
+  min-width: 140px;
+  padding: 0 1rem;
+  text-align: center;
 
   .content {
     height: auto !important;
     color: #FAFAFA !important;
     opacity: 0.65;
     font-weight: 500;
+    cursor: pointer;
   }
 }

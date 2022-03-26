@@ -115,7 +115,7 @@ export class BudgetListView implements OnInit, OnDestroy {
    * Opens the modal with the budget form.
    */
   openModal() {
-    this.newBudget = new Budget();
+    this.newBudget = {};
     this.showModal = true;
   }
 

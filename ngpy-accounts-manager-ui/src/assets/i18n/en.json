@@ -9,7 +9,7 @@
   "i18n.error.A409": "File import failed",
   "i18n.error.file_import_failed": "Impossible to upload the provided file",
   "i18n.error.B200": "File import successful",
-  "i18n.error.file_import_success": "The provided file has been uploaded successfully.<br/> A total of <strong>{{assigned}}</strong> from <strong>{{imported}}</strong> transactions have been assigned.",
+  "i18n.error.file_import_success": "The provided file has been uploaded successfully.<br/> A total of <strong>{{assigned}}</strong> from <strong>{{imported}}</strong> transactions have been assigned.<br/> The total imported amount is of <strong>{{ total_amount }}</strong>",
 
   "i18n.app.title": "Account Manager",
 

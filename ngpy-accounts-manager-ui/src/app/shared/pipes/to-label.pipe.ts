@@ -72,11 +72,11 @@ export class ToLabelPipe implements PipeTransform, OnDestroy {
    * @param labelId the label id
    */
   private defaultLabel(labelId: number): Label {
-    const defaultLabel = new Label();
-    defaultLabel.id = labelId;
-    defaultLabel.name = '';
-    defaultLabel.color = '#cccccc';
-    return defaultLabel;
+    return {
+      id: labelId,
+      name: '',
+      color: '#cccccc'
+    };
   }
 
   /**

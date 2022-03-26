@@ -1,7 +1,7 @@
 /**
  * The account DTO
  */
-export class Account {
+export interface Account {
   id: number;
   name: string;
   description: string;
@@ -16,18 +16,18 @@ export class Account {
 /**
  * The category DTO
  */
-export class Category {
+export interface Category {
   id: number;
   name: string;
-  type: string;
-  color: string;
-  numLabels: number;
+  type?: string;
+  color?: string;
+  numLabels?: number;
 }
 
 /**
  * The key/value DTO
  */
-export class KeyValue {
+export interface KeyValue {
   key: string;
   value: number;
 }
@@ -35,7 +35,7 @@ export class KeyValue {
 /**
  * The composite key/value DTO
  */
-export class CompositeKeyValue {
+export interface CompositeKeyValue {
   keyOne: string;
   keyTwo: string;
   value: number;
@@ -44,26 +44,26 @@ export class CompositeKeyValue {
 /**
  * The application properties DTO
  */
-export class AppProperties {
+export interface AppProperties {
   appVersion: string;
 }
 
 /**
  * The label DTO
  */
-export class Label {
+export interface Label {
   id: number;
   name: string;
   color: string;
-  icon: string;
-  category: Category;
-  numTransactions: number;
+  icon?: string;
+  category?: Category;
+  numTransactions?: number;
 }
 
 /**
  * The summary DTO
  */
-export class Summary {
+export interface Summary {
   amountStart: number;
   amountEnd: number;
   totalCredit: number;
@@ -73,34 +73,43 @@ export class Summary {
 /**
  * The transaction DTO
  */
-export class Transaction {
-  id: number;
-  reference: string;
-  description: string;
-  dateValue: string;
-  amount: number;
-  note: string;
-  label: Label;
-  account: Account;
+export interface Transaction {
+  id?: number;
+  reference?: string;
+  description?: string;
+  dateValue?: string;
+  amount?: number;
+  note?: string;
+  label?: Label;
+  account?: Account;
 }
 
 /**
  * The budget DTO
  */
-export class Budget {
-  id: number;
-  name: string;
-  description: string;
-  period: string;
-  amount: number;
-  accounts: Account[];
-  labels: Label[];
+export interface Budget {
+  id?: number;
+  name?: string;
+  description?: string;
+  period?: string;
+  amount?: number;
+  accounts?: Account[];
+  labels?: Label[];
 }
 
 /**
  * The budget status DTO
  */
-export class BudgetStatus {
+export interface BudgetStatus {
   budget: Budget;
   spending: number;
+}
+
+/**
+ * The import result DTO
+ */
+export interface ImportResult {
+  imported: number;
+  assigned: number;
+  total_amount: number;
 }

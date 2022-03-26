@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ConfigurationService } from './core/services/configuration.service';
 
 /**
  * The app component
@@ -10,26 +9,18 @@ import { ConfigurationService } from './core/services/configuration.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   /**
    * Instantiates the component.
    *
-   * @param configurationService the configuration service
    * @param translateService the translate service
    */
   constructor(
-    private configurationService: ConfigurationService,
     private translateService: TranslateService
   ) {
     translateService.setDefaultLang('en');
     translateService.use('en');
-  }
-
-  ngOnInit(): void {
-    this.configurationService.getAppProperties().subscribe(data => {
-      console.log('appProperties', data);
-    });
   }
 
 }

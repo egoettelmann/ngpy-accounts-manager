@@ -2,6 +2,8 @@ import { Component, NgZone, ViewEncapsulation } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { UploadRestService } from '../../../../core/services/rest/upload-rest.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { finalize } from 'rxjs/operators';
+import { DecimalPipe } from '@angular/common';
 
 /**
  * The file drop component
@@ -15,15 +17,22 @@ import { NotificationService } from '../../../../core/services/notification.serv
 export class FileDropComponent {
 
   /**
+   * The form is loading flag
+   */
+  public formIsLoading = false;
+
+  /**
    * Instantiates the component.
    *
    * @param uploadService the upload service
    * @param notificationService the notification service
+   * @param decimalPipe the decimal pipe
    * @param ngZone the angular zone to manage the drop callback
    */
   constructor(
     private uploadService: UploadRestService,
     private notificationService: NotificationService,
+    private decimalPipe: DecimalPipe,
     private ngZone: NgZone
   ) {}
 
@@ -63,12 +72,21 @@ export class FileDropComponent {
    * @param file the file to upload
    */
   private uploadFile(file: File) {
-    this.uploadService.uploadFile(file, file.name).subscribe((result) => {
+    this.formIsLoading = true;
+    this.uploadService.uploadFile(file, file.name).pipe(
+      finalize(() => {
+        this.formIsLoading = false;
+      })
+    ).subscribe((result) => {
       this.notificationService.broadcast({
         type: 'SUCCESS',
         code: 'B200',
         content: 'file_import_success',
-        data: result
+        data: {
+          imported: ''+result.imported,
+          assigned: ''+result.assigned,
+          total_amount: this.decimalPipe.transform(result.total_amount, '1.2-2') + ' €'
+        }
       });
     });
   }
