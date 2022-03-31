@@ -4,20 +4,24 @@
 </app-dashboard-alerts>
 
 <div class="clr-row">
-  <div class="clr-col-12 clr-col-md-6">
-    <app-dashboard-total-summary *ngIf="accounts"
-                                 [accounts]="accounts"
-                                 [rollingMonthSummary]="rollingMonthSummary"
-                                 [rollingThreeMonthsSummary]="rollingThreeMonthsSummary"
-                                 [rollingYearSummary]="rollingYearSummary">
-    </app-dashboard-total-summary>
-
-    <app-dashboard-accounts-chart [chartTitle]="'i18n.views.dashboard.chart.title' | translate"
-                                  [accounts]="accounts">
-    </app-dashboard-accounts-chart>
+  <div *ngIf="accounts == null" class="clr-col-12 loader">
+    <clr-spinner [clrMedium]="true"></clr-spinner>
   </div>
 
-  <div class="clr-col-12 clr-col-md-6">
+  <div *ngIf="accounts" class="clr-col-12 clr-col-md-6">
+    <app-dashboard-total-summary [accounts]="accounts"
+                                 [rollingMonthSummary]="rollingMonthSummary"
+                                 [rollingThreeMonthsSummary]="rollingThreeMonthsSummary"
+                                 [rollingYearSummary]="rollingYearSummary"
+    ></app-dashboard-total-summary>
+
+    <app-dashboard-accounts-chart *ngIf="accounts"
+                                  [accounts]="accounts"
+                                  [chartTitle]="'i18n.views.dashboard.chart.title' | translate"
+    ></app-dashboard-accounts-chart>
+  </div>
+
+  <div *ngIf="accounts" class="clr-col-12 clr-col-md-6">
     <app-dashboard-account-card *ngFor="let account of accounts"
                                 [account]="account">
     </app-dashboard-account-card>
