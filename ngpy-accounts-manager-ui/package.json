@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=4210",
-    "build": "ng build --aot --prod --build-optimizer",
+    "build": "ng build --configuration production",
     "build:dev": "ng build",
     "test": "ng test -- --watch=false --no-progress --browsers=ChromeHeadlessCI",
     "test:dev": "ng test -- --watch=true --browsers=Chrome",

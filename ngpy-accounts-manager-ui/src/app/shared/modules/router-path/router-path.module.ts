@@ -23,7 +23,7 @@ export class RouterPathModule {
    *
    * @param routerPathOptions the router paths options
    */
-  static forRoot(routerPathOptions: RouterPathOptions): ModuleWithProviders {
+  static forRoot(routerPathOptions: RouterPathOptions): ModuleWithProviders<RouterPathModule> {
     return {
       ngModule: RouterPathModule,
       providers: [
