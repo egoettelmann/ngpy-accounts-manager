@@ -1,18 +1,20 @@
 import logging
 
-from .types import String as StringType
+from .types import String as StringType, Raw as RawType
 from .converter import Converter
 
 
 @Converter.convertible({
     'code': StringType(),
-    'message': StringType()
+    'message': StringType(),
+    'context': RawType()
 })
-class ErrorMessage:
+class RestError:
 
-    def __init__(self, code, message):
+    def __init__(self, code, message, context: dict = None):
         self.code = code
         self.message = message
+        self.context = {} if context is None else context
 
 
 class DefaultExceptionHandler:
@@ -24,7 +26,8 @@ class DefaultExceptionHandler:
     def add(self, exception_ref, code, message='internal_error', http_status=500):
         self.exceptions.append({
             'reference': exception_ref,
-            'error': ErrorMessage(code, message),
+            'code': code,
+            'message': message,
             'status': http_status
         })
 
@@ -37,12 +40,19 @@ class DefaultExceptionHandler:
         if isinstance(e, self.exceptions[idx]['reference']):
             logging.error('An error occurred while handling request: %s', e)
             return (
-                self.build(self.exceptions[idx]['error']),
+                self.build(
+                    self.exceptions[idx]['code'],
+                    self.exceptions[idx]['message'],
+                    e
+                ),
                 self.exceptions[idx]['status']
             )
         else:
             return self.handle(e, idx - 1)
 
-    @Converter.format_as(ErrorMessage)
-    def build(self, em):
-        return em
+    @Converter.format_as(RestError)
+    def build(self, code: str, message: str, e: any = None):
+        context = {}
+        if hasattr(e, 'context'):
+            context = e.context
+        return RestError(code, message, context)

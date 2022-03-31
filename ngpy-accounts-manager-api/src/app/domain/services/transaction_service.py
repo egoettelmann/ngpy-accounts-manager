@@ -2,6 +2,7 @@ import datetime
 import hashlib
 from typing import List, Optional
 
+from ..exceptions import DuplicateElementsException
 from ..models import Transaction, KeyValue, CompositeKeyValue, PeriodType
 from ..search_request import SearchRequest, FilterRequest
 from ...dbconnector.entities import TransactionDbo
@@ -168,7 +169,7 @@ class TransactionService:
             transaction,
             TransactionDbo
         )
-        dbo.hash = self.__calculate_hash(dbo)
+        dbo.hash = self.calculate_digest(dbo)
         dbo.create_datetime = datetime.datetime.now()
         return self.__repository.save_one(dbo)
 
@@ -178,14 +179,17 @@ class TransactionService:
         :param transactions: the transactions to create
         :return: if the creation was successful or not
         """
-        dbos = self.__mapper.map_all(
-            transactions,
-            TransactionDbo
-        )
         create_datetime = datetime.datetime.now()
-        for dbo in dbos:
+        dbos = []
+        digests = set()
+        for transaction in transactions:
+            dbo = self.__mapper.map(transaction, TransactionDbo)
             dbo.create_datetime = create_datetime
-            dbo.hash = self.__calculate_hash(dbo)
+            dbo.hash = self.calculate_digest(dbo)
+            if dbo.hash in digests:
+                raise DuplicateElementsException("Same transaction appears twice in provided list", vars(transaction))
+            digests.add(dbo.hash)
+            dbos.append(dbo)
         self.__repository.create_all(dbos)
 
     def update_one(self, transaction: Transaction) -> Transaction:
@@ -220,7 +224,18 @@ class TransactionService:
         return None
 
     @staticmethod
-    def __calculate_hash(transaction: Transaction) -> str:
+    def calculate_digest(transaction: Transaction) -> str:
+        """Calculates a digest for the given transaction.
+        It should be able to identify uniquely a transaction.
+        The digest takes into account:
+          - the account_id
+          - the reference
+          - the date_value
+          - the amount
+
+        :param transaction: the transaction
+        :return: the hash
+        """
         s = str(transaction.account_id) \
             + transaction.reference \
             + transaction.date_value.strftime("%Y-%m-%d") \

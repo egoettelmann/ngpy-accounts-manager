@@ -45,7 +45,7 @@ class Resolver:
             return IngLuxParser(filename)
         else:
             logging.error('Impossible to find appropriate parser')
-            raise ResolveError('Cannot resolve importer for file with %s columns' % str(num_cols))
+            raise ResolveError('Cannot resolve parser for file with %s columns' % str(num_cols))
 
 
 class ResolveError(Exception):

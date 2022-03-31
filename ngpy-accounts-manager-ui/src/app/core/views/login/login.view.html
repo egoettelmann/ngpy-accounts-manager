@@ -1,13 +1,13 @@
 <div class="login-wrapper">
-  <form class="login" autocomplete="off" (ngSubmit)="tryLogin()">
+  <form class="login" autocomplete="off" [formGroup]="loginForm" (ngSubmit)="tryLogin()">
     <div class="title">
       <h3 class="welcome">{{ 'i18n.views.login.welcome.text' | translate }}</h3>
-      {{ 'i18n.app.title' | translate }}
+      <div>{{ 'i18n.app.title' | translate }}</div>
       <h5 class="hint">{{ 'i18n.views.login.help-text' | translate }}</h5>
     </div>
     <div class="login-group">
       <div [hidden]="formIsLoading">
-        <input [(ngModel)]="loginForm.username"
+        <input [formControlName]="'username'"
                autocomplete="off"
                clrInput
                name="username"
@@ -15,7 +15,7 @@
                type="text"
                id="login_username"
                [placeholder]="'i18n.views.login.form.placeholder.username' | translate">
-        <input [(ngModel)]="loginForm.password"
+        <input [formControlName]="'password'"
                autocomplete="off"
                clrInput
                name="password"
@@ -23,10 +23,26 @@
                type="password"
                id="login_password"
                [placeholder]="'i18n.views.login.form.placeholder.password' | translate">
-        <app-notification-message></app-notification-message>
+        <clr-alert *ngIf="loginForm.errors"
+                   [clrAlertType]="'danger'"
+                   [clrAlertClosable]="false">
+          <clr-alert-item *ngFor="let error of loginForm.errors | keyvalue">
+            <span class="alert-text"
+                  [innerHTML]="'i18n.error.' + error.key | translate">
+            </span>
+          </clr-alert-item>
+        </clr-alert>
       </div>
-      <div class="spinner spinner-sm" [hidden]="!formIsLoading">{{ 'i18n.views.login.loading' | translate }}</div>
-      <button type="submit" class="btn btn-primary" [hidden]="formIsLoading">{{ 'i18n.views.login.form.button.submit' | translate }}</button>
+      <div class="spinner spinner-sm"
+           [hidden]="!formIsLoading">
+        <span>{{ 'i18n.views.login.loading' | translate }}</span>
+      </div>
+      <button type="submit"
+              class="btn btn-primary"
+              [disabled]="loginForm.invalid"
+              [hidden]="formIsLoading">
+        <span>{{ 'i18n.views.login.form.button.submit' | translate }}</span>
+      </button>
     </div>
     <div *ngIf="appProperties" class="login-footer">
       <span class="login-version">{{ appProperties.appVersion }}</span>
@@ -34,4 +50,4 @@
   </form>
 </div>
 
-<app-notification-modal [type]="'ERROR'"></app-notification-modal>
+<app-notification-modal></app-notification-modal>

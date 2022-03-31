@@ -2,8 +2,10 @@ import { Component, NgZone, ViewEncapsulation } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { UploadRestService } from '../../../../core/services/rest/upload-rest.service';
 import { NotificationService } from '../../../../core/services/notification.service';
-import { finalize } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { DecimalPipe } from '@angular/common';
+import { RestError } from '../../../../core/models/api.models';
+import { EMPTY } from 'rxjs';
 
 /**
  * The file drop component
@@ -74,15 +76,22 @@ export class FileDropComponent {
   private uploadFile(file: File) {
     this.formIsLoading = true;
     this.uploadService.uploadFile(file, file.name).pipe(
+      catchError((err: RestError) => {
+        this.notificationService.notify({
+          type: 'ERROR',
+          ...err
+        });
+        return EMPTY;
+      }),
       finalize(() => {
         this.formIsLoading = false;
       })
     ).subscribe((result) => {
-      this.notificationService.broadcast({
+      this.notificationService.notify({
         type: 'SUCCESS',
         code: 'B200',
-        content: 'file_import_success',
-        data: {
+        message: 'file_import_success',
+        context: {
           imported: ''+result.imported,
           assigned: ''+result.assigned,
           total_amount: this.decimalPipe.transform(result.total_amount, '1.2-2') + ' €'

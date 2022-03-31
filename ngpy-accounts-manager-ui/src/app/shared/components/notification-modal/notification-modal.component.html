@@ -1,5 +1,5 @@
 <clr-modal *ngIf="notification"
-           [(clrModalOpen)]="showNotification"
+           [clrModalOpen]="!!notification"
            [clrModalClosable]="false"
            [clrModalStaticBackdrop]="true">
   <h3 class="modal-title"
@@ -7,7 +7,7 @@
     {{ translationPrefix + notification.code | translate }}
   </h3>
   <div class="modal-body">
-    <p [innerHTML]="translationPrefix + notification.content | translate:notification.data"></p>
+    <p [innerHTML]="translationPrefix + notification.message | translate:notification.context"></p>
   </div>
   <div class="modal-footer text-center">
     <button type="button"

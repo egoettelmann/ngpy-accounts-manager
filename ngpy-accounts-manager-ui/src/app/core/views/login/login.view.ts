@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { SessionRestService } from '../../services/rest/session-rest.service';
 import { AppProperties } from '../../models/api.models';
 import { RouterService } from '../../services/router.service';
+import { catchError, finalize } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EMPTY, throwError } from 'rxjs';
 
 /**
  * The login component
@@ -13,19 +16,14 @@ import { RouterService } from '../../services/router.service';
 export class LoginView implements OnInit {
 
   /**
-   * The form in error flag
+   * The login form
    */
-  public formInError = false;
+  public loginForm?: FormGroup;
 
   /**
    * The form is loading flag
    */
   public formIsLoading = false;
-
-  /**
-   * The login form object
-   */
-  public loginForm: { username?: String, password?: String } = {};
 
   /**
    * The app properties
@@ -37,9 +35,11 @@ export class LoginView implements OnInit {
    *
    * @param routerService the router service
    * @param sessionService the session service
+   * @param fb the form builder
    */
   constructor(private routerService: RouterService,
-              private sessionService: SessionRestService
+              private sessionService: SessionRestService,
+              private fb: FormBuilder
   ) {
   }
 
@@ -47,6 +47,7 @@ export class LoginView implements OnInit {
    * Initializes the component
    */
   ngOnInit(): void {
+    this.buildForm();
     this.sessionService.getProperties().subscribe(data => {
       this.appProperties = data;
     });
@@ -57,14 +58,37 @@ export class LoginView implements OnInit {
    * If the login is successful, redirects to the app.
    */
   tryLogin(): void {
-    this.formInError = false;
+    if (this.loginForm.invalid || this.formIsLoading) {
+      return;
+    }
     this.formIsLoading = true;
-    this.sessionService.login(this.loginForm).subscribe(() => {
+    this.sessionService.login(this.loginForm.value).pipe(
+      catchError(err => this.handleLoginError(err))
+    ).subscribe(() => {
       this.routerService.navigate('route.main');
     }, () => {
-      this.formInError = true;
       this.formIsLoading = false;
     });
+  }
+
+  private buildForm() {
+    this.loginForm = this.fb.group({
+      'username': [null, [Validators.required]],
+      'password': [null, [Validators.required]]
+    });
+  }
+
+  private handleLoginError(error) {
+    if (!error || error.code !== 'A400') {
+      return throwError(error);
+    }
+
+    this.loginForm.setErrors({
+      [error.message]: true
+    });
+
+    this.formIsLoading = false;
+    return EMPTY;
   }
 
 }

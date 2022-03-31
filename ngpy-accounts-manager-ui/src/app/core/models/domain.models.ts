@@ -17,13 +17,18 @@ export class ChartSerie {
 }
 
 /**
+ * The notification type
+ */
+export type NotificationType = 'ERROR' | 'INFO' | 'WARNING' | 'SUCCESS';
+
+/**
  * The notification model
  */
 export class Notification {
-  public type: string;
+  public type: NotificationType;
   public code: string;
-  public content: string;
-  public data?: {[key: string]: string};
+  public message: string;
+  public context?: any;
 }
 
 /**

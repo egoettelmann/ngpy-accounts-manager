@@ -3,12 +3,21 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { NotificationService } from '../services/notification.service';
 import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { RestError } from '../models/api.models';
 
 /**
  * The error interceptor
  */
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+
+  /**
+   * The fallback error (for unknown errors)
+   */
+  private readonly fallbackError: RestError = {
+    code: 'T500',
+    message: 'unexpected_error'
+  };
 
   /**
    * The notification service.
@@ -25,7 +34,9 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   /**
-   * Intercepts the request to notify for any error happening on an HTTP call.
+   * Intercepts the request to transform any errors happening on the HTTP call.
+   * Any error will be transformed into a Notification.
+   * Additionally, 500 errors will be notified (to be displayed in modal).
    *
    * @param req the request
    * @param next the handler
@@ -34,21 +45,42 @@ export class ErrorInterceptor implements HttpInterceptor {
     const apiReq = req.clone();
     return next.handle(apiReq).pipe(
       catchError((err: any) => {
-        if (err instanceof HttpErrorResponse) {
-          const notif = {
+        // Transforming error into RestError
+        const restError = this.buildRestError(err);
+
+        // Technical exception are notified (to be displayed in modal)
+        if (err.status > 500) {
+          this.notificationService.notify({
             type: 'ERROR',
-            code: 'T500',
-            content: 'unhandled_server_error'
-          };
-          if (err.error !== undefined) {
-            notif.code = err.error.code;
-            notif.content = err.error.message;
-          }
-          this.notificationService.broadcast(notif);
+            ...restError
+          });
         }
-        return throwError(err);
+
+        // Errors are re-thrown as RestErrors
+        return throwError(restError);
       })
     );
+  }
+
+  private buildRestError(err: any): RestError {
+    // Not an HTTP error: returning fallback with context
+    if (!(err instanceof HttpErrorResponse)) {
+      return {
+        ...this.fallbackError,
+        context: err
+      };
+    }
+
+    // No error details provided: returning fallback with context
+    if (err.error === undefined) {
+      return {
+        ...this.fallbackError,
+        context: err
+      };
+    }
+
+    // Extracting details
+    return err.error as RestError;
   }
 
 }

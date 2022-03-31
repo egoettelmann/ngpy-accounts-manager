@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
-import { Observable, throwError } from 'rxjs';
+import { EMPTY, Observable, throwError } from 'rxjs';
 import { AuthenticationService } from '../services/authentication.service';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -35,7 +35,7 @@ export class AuthenticatedGuard implements CanActivate {
     return this.authenticationService.getConnectedUser().pipe(
       catchError(err => {
         this.routerService.navigate('route.login');
-        return throwError(err);
+        return EMPTY;
       }),
       map(user => {
         return !!user;

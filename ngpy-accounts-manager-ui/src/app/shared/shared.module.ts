@@ -8,8 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AutocompleteComponent } from './components/form/autocomplete/autocomplete.component';
 import { FileDropComponent } from './components/form/file-drop/file-drop.component';
 import { GraphComponent } from './components/graph/graph.component';
-import { NotificationMessageComponent } from './components/notification/message/notification-message.component';
-import { NotificationModalComponent } from './components/notification/modal/notification-modal.component';
+import { NotificationModalComponent } from './components/notification-modal/notification-modal.component';
 import { FieldWrapperComponent } from './components/form/field-wrapper/field-wrapper.component';
 import { KeepFocusDirective } from './directives/keep-focus.directive';
 import { AccountsToggleComponent } from './components/toggles/accounts-toggle/accounts-toggle.component';
@@ -50,7 +49,6 @@ export class SharedModule {
     FieldWrapperComponent,
     CardWrapperComponent,
     GraphComponent,
-    NotificationMessageComponent,
     NotificationModalComponent,
     AccountsToggleComponent,
     MonthsToggleComponent,

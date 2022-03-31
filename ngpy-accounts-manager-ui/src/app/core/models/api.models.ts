@@ -1,4 +1,20 @@
 /**
+ * The application properties DTO
+ */
+export interface AppProperties {
+  appVersion: string;
+}
+
+/**
+ * The rest error DTO
+ */
+export interface RestError {
+  code: string;
+  message: string;
+  context?: any;
+}
+
+/**
  * The account DTO
  */
 export interface Account {
@@ -39,13 +55,6 @@ export interface CompositeKeyValue {
   keyOne: string;
   keyTwo: string;
   value: number;
-}
-
-/**
- * The application properties DTO
- */
-export interface AppProperties {
-  appVersion: string;
 }
 
 /**

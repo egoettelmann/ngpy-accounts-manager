@@ -6,18 +6,18 @@ class BaseAppException(Exception):
     The base app exception class that all other app specific exception can/should extend
     """
 
-    def __init__(self, message: str, params: dict = None, cause: Exception = None):
+    def __init__(self, message: str, context: dict = None, cause: Exception = None):
         """Constructor
 
         :param message: the message
-        :param params: the params of the exception
+        :param context: the context of the exception
         :param cause: the original exception
         """
         super(BaseAppException, self).__init__(message)
         self.message = message
-        if not params:
-            params = {}
-        self.params = params
+        if not context:
+            context = {}
+        self.context = context
         self.cause = cause
 
     def __str__(self):
@@ -55,6 +55,15 @@ class FileImportException(BaseAppException):
     """
     The file import exception
     """
+    def __init__(self, message: str, cause: Exception = None):
+        context = {'reason': message}
+        super().__init__(message, context, cause)
+
+
+class DuplicateElementsException(BaseAppException):
+    """
+    The duplicate elements exception
+    """
     pass
 
 
@@ -73,6 +82,6 @@ class ApplicationExceptionHandler(DefaultExceptionHandler):
         """
         super(ApplicationExceptionHandler, self).__init__()
         self.add(WrongLoginException, 'A400', 'wrong_login_or_password', 400)
-        self.add(NotAuthenticatedException, 'A403', 'not_authenticated', 403)
+        self.add(NotAuthenticatedException, 'A401', 'not_authenticated', 401)
         self.add(NotFoundException, 'A404', 'not_found', 404)
         self.add(FileImportException, 'A409', 'file_import_failed', 409)

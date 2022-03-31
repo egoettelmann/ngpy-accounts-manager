@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Notification } from '../models/domain.models';
+import { Notification, NotificationType } from '../models/domain.models';
 import { filter } from 'rxjs/operators';
-import { Subject, Subscription } from 'rxjs';
-
-type NotificationCallback = (notification: Notification) => void | any;
+import { Observable, Subject } from 'rxjs';
 
 /**
  * The notification service
@@ -21,20 +19,19 @@ export class NotificationService {
    *
    * @param notification the notification to broadcast
    */
-  broadcast(notification: Notification): void {
+  notify(notification: Notification): void {
     this.handler.next(notification);
   }
 
   /**
-   * Subscribes a callback to a given type of notification.
+   * Gets all notifications of a given type.
    *
-   * @param callback the callback to execute
-   * @param type the optional type (if undefined, subscribes to all notifications)
+   * @param type the optional type (if undefined, all notifications will be returned)
    */
-  subscribe(callback: NotificationCallback, type?: string): Subscription {
-    return this.handler.pipe(
+  get(type?: NotificationType): Observable<Notification> {
+    return this.handler.asObservable().pipe(
       filter(n => type === undefined || n.type === type)
-    ).subscribe(callback);
+    );
   }
 
 }

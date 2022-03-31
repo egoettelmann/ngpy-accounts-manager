@@ -117,7 +117,7 @@ class TransactionController:
             saved_filename = os.path.join(tmp_folder, filename)
             file.save(saved_filename)
             return self.__import_service.import_file(saved_filename)
-        raise FileImportException("Impossible to import file")
+        raise FileImportException("Provided file is not allowed for import")
 
     @staticmethod
     def allowed_file(filename: str) -> bool:

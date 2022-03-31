@@ -2,11 +2,13 @@ import logging
 from typing import List
 
 from sqlalchemy import cast, Integer, String
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import extract, func, desc, label
 
 from ..entities import LabelDbo, TransactionDbo, CategoryDbo, QKeyValue, QCompositeKeyValue
 from ..manager import EntityManager
 from ..query_builder import QueryBuilder
+from ...domain.exceptions import DuplicateElementsException
 from ...domain.models import PeriodType
 from ...domain.search_request import SearchRequest, FilterRequest
 from ...modules.depynject import injectable
@@ -207,6 +209,9 @@ class TransactionRepository:
             self.__entity_manager.get_session().add(transaction)
         try:
             self.__entity_manager.get_session().commit()
+        except IntegrityError as e:
+            self.__entity_manager.get_session().rollback()
+            raise DuplicateElementsException("Transaction conflicts with existing one in database", e.params)
         except:
             self.__entity_manager.get_session().rollback()
             raise
