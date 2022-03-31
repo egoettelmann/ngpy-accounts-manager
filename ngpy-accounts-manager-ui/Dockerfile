@@ -21,7 +21,7 @@ RUN npm ci
 
 # Copying sources and assets
 COPY ./angular.json .
-COPY ./browserslist .
+COPY .browserslistrc .
 COPY ./tsconfig.json .
 COPY ./tslint.json .
 COPY ./src ./src
