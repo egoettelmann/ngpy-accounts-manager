@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DateService } from '../../../../core/services/date.service';
-import { BudgetService } from '../../../../core/services/domain/budget.service';
-import { Account, Budget, BudgetStatus, Category, Label } from '../../../../core/models/api.models';
-import { AccountsService } from '../../../../core/services/domain/accounts.service';
+import { DateService } from '@core/services/date.service';
+import { BudgetService } from '@core/services/domain/budget.service';
+import { Account, Budget, BudgetStatus, Category, Label } from '@core/models/api.models';
+import { AccountsService } from '@core/services/domain/accounts.service';
 import * as _ from 'lodash';
-import { RouterService } from '../../../../core/services/router.service';
+import { RouterService } from '@core/services/router.service';
 import { combineLatest, Subscription } from 'rxjs';
-import { LabelsService } from '../../../../core/services/domain/labels.service';
+import { LabelsService } from '@core/services/domain/labels.service';
 
 @Component({
   templateUrl: './budget-list.view.html',
@@ -15,17 +15,17 @@ import { LabelsService } from '../../../../core/services/domain/labels.service';
 })
 export class BudgetListView implements OnInit, OnDestroy {
 
-  currentYear: number;
-  currentMonth: number;
+  currentYear?: number;
+  currentMonth?: number;
   accountsFilter: number[] = [];
 
-  accounts: Account[];
-  labels: Label[];
-  categories: Category[];
+  accounts?: Account[];
+  labels?: Label[];
+  categories?: Category[];
 
-  budgetStatusList: BudgetStatus[];
+  budgetStatusList?: BudgetStatus[];
 
-  newBudget: Budget;
+  newBudget?: Budget;
   showModal = false;
 
   private subscriptions = {
@@ -66,9 +66,9 @@ export class BudgetListView implements OnInit, OnDestroy {
   /**
    * Triggered on account change.
    *
-   * @param {Account[]} accounts the new list of accounts
+   * @param accounts the new list of accounts
    */
-  changeAccounts(accounts: number[]) {
+  changeAccounts(accounts: number[]): void {
     if (!_.isEqual(this.accountsFilter, accounts)) {
       this.accountsFilter = accounts.slice(0);
       this.reloadData();
@@ -78,9 +78,9 @@ export class BudgetListView implements OnInit, OnDestroy {
   /**
    * Triggered on year change.
    *
-   * @param year
+   * @param year the new year
    */
-  changeYear(year: number) {
+  changeYear(year: number): void {
     this.currentYear = year;
     this.reloadData();
   }
@@ -88,9 +88,9 @@ export class BudgetListView implements OnInit, OnDestroy {
   /**
    * Triggered on month change.
    *
-   * @param month
+   * @param month the new month
    */
-  changeMonth(month: number) {
+  changeMonth(month: number): void {
     this.currentMonth = month;
     this.reloadData();
   }
@@ -100,12 +100,16 @@ export class BudgetListView implements OnInit, OnDestroy {
    *
    * @param budgetId the budget id
    */
-  goToDetails(budgetId: number) {
+  goToDetails(budgetId: number): void {
+    if (this.currentYear == null || this.currentMonth == null) {
+      return;
+    }
+
     let params = {};
     params = this.routerService.setYear(this.currentYear, params);
     params = this.routerService.setMonth(this.currentMonth, params);
     this.routerService.navigate('route.budgets.details', {
-      budgetId: budgetId
+      budgetId
     }, {
       queryParams: params
     });
@@ -114,7 +118,7 @@ export class BudgetListView implements OnInit, OnDestroy {
   /**
    * Opens the modal with the budget form.
    */
-  openModal() {
+  openModal(): void {
     this.newBudget = {};
     this.showModal = true;
   }
@@ -122,7 +126,7 @@ export class BudgetListView implements OnInit, OnDestroy {
   /**
    * Closes the modal with the budget form.
    */
-  closeModal() {
+  closeModal(): void {
     this.showModal = false;
     this.newBudget = undefined;
   }
@@ -132,7 +136,7 @@ export class BudgetListView implements OnInit, OnDestroy {
    *
    * @param budget the budget to save
    */
-  saveBudget(budget: Budget) {
+  saveBudget(budget: Budget): void {
     this.budgetService.saveOne(budget).subscribe(() => {
       this.closeModal();
       this.reloadData();
@@ -142,7 +146,7 @@ export class BudgetListView implements OnInit, OnDestroy {
   /**
    * Initializes the component with the data from the route
    */
-  private initData() {
+  private initData(): void {
     this.currentYear = this.routerService.getYear(this.route);
     this.currentMonth = this.routerService.getMonth(this.route);
     this.accountsFilter = this.routerService.getAccounts(this.route);
@@ -151,7 +155,10 @@ export class BudgetListView implements OnInit, OnDestroy {
   /**
    * Reload the data
    */
-  private reloadData() {
+  private reloadData(): void {
+    if (this.currentYear == null || this.currentMonth == null) {
+      return;
+    }
     const sub = this.budgetService.getStatusList(this.accountsFilter, this.currentYear, this.currentMonth).subscribe(data => {
       this.budgetStatusList = data;
     });

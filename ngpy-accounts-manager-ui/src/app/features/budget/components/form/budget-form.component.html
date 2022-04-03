@@ -1,4 +1,5 @@
-<form [formGroup]="form"
+<form *ngIf="form"
+      [formGroup]="form"
       (ngSubmit)="submitForm()"
       class="clr-form">
 
@@ -62,7 +63,7 @@
                        [ctrl]="form.get('accounts')"
                        class="form-group clr-row mb-md">
       <app-accounts-toggle [accounts]="accounts"
-                           [preSelected]="form.get('accounts').value"
+                           [preSelected]="form?.get('accounts')?.value"
                            (onChange)="selectAccounts($event)">
       </app-accounts-toggle>
     </app-field-wrapper>
@@ -73,7 +74,7 @@
                        [ctrl]="form.get('labels')"
                        class="form-group clr-row mb-md">
       <app-labels-toggle [labels]="labels"
-                         [value]="form.get('labels').value"
+                         [value]="form?.get('labels')?.value"
                          (onChange)="selectLabels($event)">
       </app-labels-toggle>
     </app-field-wrapper>
@@ -85,7 +86,7 @@
             (click)="cancel()">
       {{ 'i18n.components.budgets.budget-form.button.cancel' | translate }}
     </button>
-    <button *ngIf="model.id !== undefined"
+    <button *ngIf="model?.id !== undefined"
             class="btn btn-danger"
             type="button"
             (click)="deleteBudget()">

@@ -1,5 +1,5 @@
 import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
-import { Label, Transaction } from '../../../../core/models/api.models';
+import { Label, Transaction } from '@core/models/api.models';
 
 /**
  * The transactions table component
@@ -13,12 +13,12 @@ export class TransactionsTableComponent {
   /**
    * The list of transactions
    */
-  @Input() transactions: Transaction[];
+  @Input() transactions?: Transaction[];
 
   /**
    * The list of labels
    */
-  @Input() labels: Label[];
+  @Input() labels?: Label[];
 
   /**
    * If the transactions are editable or not
@@ -38,7 +38,7 @@ export class TransactionsTableComponent {
   /**
    * The reference to the action buttons
    */
-  @ContentChild('actionButtons', { static: false }) actionButtons: TemplateRef<any>;
+  @ContentChild('actionButtons', { static: false }) actionButtons?: TemplateRef<any>;
 
   /**
    * Changes the label of the provided transaction.
@@ -46,7 +46,7 @@ export class TransactionsTableComponent {
    * @param label the new label
    * @param transaction the transaction to change
    */
-  changeLabel(label: Label, transaction: Transaction) {
+  changeLabel(label: Label, transaction: Transaction): void {
     if (label
       && transaction
       && transaction.label
@@ -63,7 +63,7 @@ export class TransactionsTableComponent {
    * @param labelString the label to create
    * @param transaction the transaction to modify
    */
-  addLabel(labelString: string, transaction: Transaction) {
+  addLabel(labelString: string, transaction: Transaction): void {
     if (transaction) {
       console.log('Add new label', labelString);
     }
@@ -74,7 +74,10 @@ export class TransactionsTableComponent {
    *
    * @param amount the amount
    */
-  getAmountColor(amount: number): string {
+  getAmountColor(amount?: number): string {
+    if (amount == null) {
+      return '';
+    }
     return amount < 0 ? 'text-danger' : 'text-success';
   }
 

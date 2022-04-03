@@ -1,7 +1,7 @@
 ##################
 # Build image
 ##################
-FROM node:15.4.0 AS build
+FROM node:16.14.2 AS build
 
 # Adding build dependencies: envsubst
 RUN apt-get update \
@@ -20,8 +20,9 @@ COPY ./package-lock.json .
 RUN npm ci
 
 # Copying sources and assets
-COPY ./angular.json .
 COPY .browserslistrc .
+COPY ./angular.json .
+COPY ./tsconfig.app.json .
 COPY ./tsconfig.json .
 COPY ./tslint.json .
 COPY ./src ./src
@@ -31,14 +32,14 @@ ARG PROD_BACKEND_URI
 ENV PROD_BACKEND_URI $PROD_BACKEND_URI
 RUN find ./src/assets/config/. -type f -exec bash -c 'envsubst < $1 > $1.tmp && mv $1.tmp $1' -- {} \;
 
-# Building adn packaging
-RUN npm run build:dev
-WORKDIR /build/dist
+# Building and packaging
+RUN npm run build
+WORKDIR /build/dist/ngpy-accounts-manager-ui
 RUN zip -9yrq ngpy-accounts-manager-ui.zip .
 
 # Copying archive to output folder
 WORKDIR /build/output
-RUN cp /build/dist/ngpy-accounts-manager-ui.zip .
+RUN cp /build/dist/ngpy-accounts-manager-ui/ngpy-accounts-manager-ui.zip .
 RUN ls -al /build/output
 
 ##################

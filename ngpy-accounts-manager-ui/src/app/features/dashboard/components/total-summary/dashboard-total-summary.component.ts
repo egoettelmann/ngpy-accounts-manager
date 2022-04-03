@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Account, Summary } from '../../../../core/models/api.models';
+import { Account, Summary } from '@core/models/api.models';
 
 /**
  * The total summary interface
@@ -22,32 +22,32 @@ export class DashboardTotalSummaryComponent implements OnInit {
   /**
    * The list of accounts
    */
-  @Input() accounts: Account[];
+  @Input() accounts?: Account[];
 
   /**
    * The rolling month summary
    */
-  @Input() rollingMonthSummary: Summary;
+  @Input() rollingMonthSummary?: Summary;
 
   /**
    * The rolling three months summary
    */
-  @Input() rollingThreeMonthsSummary: Summary;
+  @Input() rollingThreeMonthsSummary?: Summary;
 
   /**
    * The rolling year summary
    */
-  @Input() rollingYearSummary: Summary;
+  @Input() rollingYearSummary?: Summary;
 
   /**
    * The total of all accounts
    */
-  total: number;
+  total?: number;
 
   /**
    * The summaries
    */
-  summaries: {
+  summaries?: {
     month: TotalSummary,
     threeMonths: TotalSummary,
     year: TotalSummary
@@ -79,6 +79,10 @@ export class DashboardTotalSummaryComponent implements OnInit {
    */
   private calculateTotal(): number {
     let total = 0;
+    if (this.accounts == null) {
+      return total;
+    }
+
     for (const a of this.accounts) {
       total += a.total;
     }
@@ -90,7 +94,14 @@ export class DashboardTotalSummaryComponent implements OnInit {
    *
    * @param summary the total summary
    */
-  private calculateSummary(summary: Summary): TotalSummary {
+  private calculateSummary(summary?: Summary): TotalSummary {
+    if (summary == null) {
+      return {
+        total: 0,
+        performance: 0
+      };
+    }
+
     return {
       total: summary.totalDebit + summary.totalCredit,
       performance: (summary.amountEnd / summary.amountStart - 1) * 100

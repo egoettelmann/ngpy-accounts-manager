@@ -30,7 +30,7 @@ export class DateService {
   /**
    * Gets the current year.
    */
-  getCurrentYear() {
+  getCurrentYear(): number {
     return new Date().getFullYear();
   }
 
@@ -52,11 +52,9 @@ export class DateService {
    * Gets a list of years from a given start year to the current year.
    */
   getYearsList(startYear?: number): number[] {
-    if (startYear === undefined) {
-      startYear = this.startingYear;
-    }
-    return Array.from(Array(this.getCurrentYear() - startYear + 1))
-      .map((e, i) => i + startYear)
+    const start = startYear != null ? startYear : this.startingYear;
+    return Array.from(Array(this.getCurrentYear() - start + 1))
+      .map((e, i) => i + start)
       .reverse();
   }
 

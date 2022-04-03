@@ -32,7 +32,7 @@ export class StatisticsService {
    * @param year the year
    * @param month the optional month
    */
-  getSummary(accounts: number[], year: number, month?: number): Observable<Summary> {
+  getSummary(accounts: number[] | undefined, year: number, month?: number): Observable<Summary> {
     // Building start and end date
     const dateFrom = this.dateService.getPeriodStart(year, month);
     const dateTo = this.dateService.getPeriodEnd(year, month);
@@ -45,7 +45,7 @@ export class StatisticsService {
    *
    * @param accounts the list of accounts
    */
-  getRollingMonthSummary(accounts: number[]): Observable<Summary> {
+  getRollingMonthSummary(accounts?: number[]): Observable<Summary> {
     const dateTo = new Date();
     const dateFrom = subMonths(dateTo, 1);
 
@@ -57,7 +57,7 @@ export class StatisticsService {
    *
    * @param accounts the list of accounts
    */
-  getRollingThreeMonthsSummary(accounts: number[]): Observable<Summary> {
+  getRollingThreeMonthsSummary(accounts?: number[]): Observable<Summary> {
     const dateTo = new Date();
     const dateFrom = subMonths(dateTo, 3);
 
@@ -69,7 +69,7 @@ export class StatisticsService {
    *
    * @param accounts the list of accounts
    */
-  getRollingYearSummary(accounts: number[]): Observable<Summary> {
+  getRollingYearSummary(accounts?: number[]): Observable<Summary> {
     const dateTo = new Date();
     const dateFrom = subYears(dateTo, 1);
 
@@ -84,7 +84,7 @@ export class StatisticsService {
    * @param labels the labels to filter
    * @param credit filter credit transactions if true, filters debit transactions if false
    */
-  getAggregation(year: number, accounts: number[], labels: number[], credit: boolean): Observable<KeyValue[]> {
+  getAggregation(year: number, accounts?: number[], labels?: number[], credit?: boolean): Observable<KeyValue[]> {
     // Building start and end date
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
@@ -92,9 +92,16 @@ export class StatisticsService {
     // Adding date and amount filters
     let filter = FilterRequest.all(
       FilterRequest.of('dateValue', this.dateService.format(dateFrom), FilterOperator.GE),
-      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT),
-      FilterRequest.of('amount', 0, credit ? FilterOperator.GE : FilterOperator.LT)
+      FilterRequest.of('dateValue', this.dateService.format(dateTo), FilterOperator.LT)
     );
+
+    // Adding credit/debit filter
+    if (credit != null) {
+      filter = FilterRequest.all(
+        filter,
+        FilterRequest.of('amount', 0, credit ? FilterOperator.GE : FilterOperator.LT)
+      );
+    }
 
     // Adding the account filters
     if (accounts && accounts.length > 0) {
@@ -123,7 +130,7 @@ export class StatisticsService {
    * @param year the year of the evolution
    * @param accounts the list of accounts
    */
-  getEvolution(year: number, accounts: number[]): Observable<KeyValue[]> {
+  getEvolution(year: number, accounts?: number[]): Observable<KeyValue[]> {
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
 
@@ -137,7 +144,7 @@ export class StatisticsService {
    * @param month the month
    * @param accounts the list of accounts
    */
-  getRepartition(year: number, month: number, accounts: number[]): Observable<KeyValue[]> {
+  getRepartition(year: number, month: number, accounts?: number[]): Observable<KeyValue[]> {
     // Building start and end date
     const dateFrom = this.dateService.getPeriodStart(year, month);
     const dateTo = this.dateService.getPeriodEnd(year, month);
@@ -168,7 +175,7 @@ export class StatisticsService {
    * @param categoryType the category type to filter on
    * @param accounts the list of accounts
    */
-  getAnalyticsByCategory(year: number, period: string, categoryType: string, accounts: number[]): Observable<CompositeKeyValue[]> {
+  getAnalyticsByCategory(year: number, period: string, categoryType: string, accounts?: number[]): Observable<CompositeKeyValue[]> {
     // Building start and end date
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
@@ -181,7 +188,7 @@ export class StatisticsService {
     );
 
     // Adding the account filters
-    if (accounts && accounts.length > 0) {
+    if (accounts != null && accounts.length > 0) {
       const accountList = this.rqlService.formatList(accounts);
       filter = FilterRequest.all(
         FilterRequest.of('accountId', accountList, FilterOperator.IN),
@@ -200,7 +207,7 @@ export class StatisticsService {
    * @param categoryId the category id to filter on
    * @param accounts the list of accounts
    */
-  getAnalyticsByLabel(year: number, period: string, categoryId: number, accounts: number[]): Observable<CompositeKeyValue[]> {
+  getAnalyticsByLabel(year: number, period: string, categoryId: number, accounts?: number[]): Observable<CompositeKeyValue[]> {
     // Building start and end date
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
@@ -213,7 +220,7 @@ export class StatisticsService {
     );
 
     // Adding the account filters
-    if (accounts && accounts.length > 0) {
+    if (accounts != null && accounts.length > 0) {
       const accountList = this.rqlService.formatList(accounts);
       filter = FilterRequest.all(
         FilterRequest.of('accountId', accountList, FilterOperator.IN),
@@ -231,7 +238,7 @@ export class StatisticsService {
    * @param categoryType the category type to filter
    * @param accounts the list of accounts
    */
-  getAnalyticsRepartition(year: number, categoryType: string, accounts: number[]): Observable<CompositeKeyValue[]> {
+  getAnalyticsRepartition(year: number, categoryType: string, accounts?: number[]): Observable<CompositeKeyValue[]> {
     // Building start and end date
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
@@ -244,7 +251,7 @@ export class StatisticsService {
     );
 
     // Adding the account filters
-    if (accounts && accounts.length > 0) {
+    if (accounts != null && accounts.length > 0) {
       const accountList = this.rqlService.formatList(accounts);
       filter = FilterRequest.all(
         FilterRequest.of('accountId', accountList, FilterOperator.IN),

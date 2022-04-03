@@ -1,11 +1,11 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { Account, Category, Summary } from '../../../core/models/api.models';
-import { AccountsService } from '../../../core/services/domain/accounts.service';
-import { AlertsService } from '../../../core/services/domain/alerts.service';
-import { Alerts } from '../../../core/models/domain.models';
-import { CategoriesService } from '../../../core/services/domain/categories.service';
+import { Account, Category, Summary } from '@core/models/api.models';
+import { AccountsService } from '@core/services/domain/accounts.service';
+import { AlertsService } from '@core/services/domain/alerts.service';
+import { Alerts } from '@core/models/domain.models';
+import { CategoriesService } from '@core/services/domain/categories.service';
 import { combineLatest, Subscription } from 'rxjs';
-import { StatisticsService } from '../../../core/services/domain/statistics.service';
+import { StatisticsService } from '@core/services/domain/statistics.service';
 
 @Component({
   templateUrl: './dashboard.view.html',
@@ -15,13 +15,13 @@ export class DashboardView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  public accounts: Account[];
-  public alerts: Alerts;
-  public creditCategories: Category[];
-  public debitCategories: Category[];
-  public rollingMonthSummary: Summary;
-  public rollingThreeMonthsSummary: Summary;
-  public rollingYearSummary: Summary;
+  public accounts?: Account[];
+  public alerts?: Alerts;
+  public creditCategories?: Category[];
+  public debitCategories?: Category[];
+  public rollingMonthSummary?: Summary;
+  public rollingThreeMonthsSummary?: Summary;
+  public rollingYearSummary?: Summary;
 
   private subscriptions = {
     static: new Subscription(),

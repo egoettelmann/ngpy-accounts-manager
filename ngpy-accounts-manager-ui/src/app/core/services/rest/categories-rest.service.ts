@@ -40,8 +40,8 @@ export class CategoriesRestService {
    *
    * @param category the category to save
    */
-  saveOne(category: Category) {
-    return this.http.post('/rest/categories', category).pipe(
+  saveOne(category: Category): Observable<Category> {
+    return this.http.post<Category>('/rest/categories', category).pipe(
       tap(() => this.cacheService.evict('categories.*')),
       tap(() => this.eventBusService.publish('categories.update', category))
     );
@@ -52,8 +52,8 @@ export class CategoriesRestService {
    *
    * @param categoryId the category id to delete
    */
-  deleteOne(categoryId: number) {
-    return this.http.delete('/rest/categories/' + categoryId).pipe(
+  deleteOne(categoryId: number): Observable<void> {
+    return this.http.delete<void>('/rest/categories/' + categoryId).pipe(
       tap(() => this.cacheService.evict('categories.*')),
       tap(() => this.eventBusService.publish('categories.delete', categoryId))
     );

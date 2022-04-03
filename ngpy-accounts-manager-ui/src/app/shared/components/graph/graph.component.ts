@@ -15,7 +15,7 @@ export class GraphComponent implements OnChanges, AfterViewInit {
   /**
    * The title of the graph
    */
-  @Input() title: string;
+  @Input() title?: string;
 
   /**
    * The graph options
@@ -25,7 +25,7 @@ export class GraphComponent implements OnChanges, AfterViewInit {
   /**
    * The reference to the graph container element
    */
-  @ViewChild('graphContainer', { static: false }) graphContainer: ElementRef;
+  @ViewChild('graphContainer', { static: false }) graphContainer?: ElementRef;
 
   /**
    * The graph default options
@@ -36,7 +36,7 @@ export class GraphComponent implements OnChanges, AfterViewInit {
       width: null
     },
     title: {
-      text: null
+      text: undefined
     },
     yAxis: {
       labels: {
@@ -72,7 +72,7 @@ export class GraphComponent implements OnChanges, AfterViewInit {
   /**
    * Draws the chart
    */
-  private drawChart() {
+  private drawChart(): void {
     if (this.options && this.graphContainer) {
       const opts = _.merge({}, this.defaultOptions, this.options);
       Highcharts.chart(this.graphContainer.nativeElement, opts);

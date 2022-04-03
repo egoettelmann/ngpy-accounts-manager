@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Account, Category, Label } from '../../../../core/models/api.models';
-import { FilterOperator, FilterRequest } from '../../../../core/models/rql.models';
+import { Account, Category, Label } from '@core/models/api.models';
+import { FilterOperator, FilterRequest } from '@core/models/rql.models';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { RqlService } from '../../../../core/services/rql.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DateService } from '../../../../core/services/date.service';
-import { RouterService } from '../../../../core/services/router.service';
+import { RqlService } from '@core/services/rql.service';
+import { ActivatedRoute } from '@angular/router';
+import { DateService } from '@core/services/date.service';
+import { RouterService } from '@core/services/router.service';
 
 @Component({
   selector: 'app-transactions-search-form',
@@ -16,15 +16,15 @@ import { RouterService } from '../../../../core/services/router.service';
 })
 export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
 
-  @Input() accounts: Account[];
-  @Input() labels: Label[];
-  @Input() categories: Category[];
+  @Input() accounts?: Account[];
+  @Input() labels?: Label[];
+  @Input() categories?: Category[];
 
   @Output() searchChange = new EventEmitter<FilterRequest>();
 
-  searchForm: FormGroup;
+  searchForm?: FormGroup;
 
-  private changeSubscription: Subscription;
+  private changeSubscription?: Subscription;
 
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
@@ -56,9 +56,9 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
    *
    * @param accounts the selected accounts
    */
-  changeAccounts(accounts: number[]) {
+  changeAccounts(accounts: (number | null)[]): void {
     const accountIds = accounts.length === 0 ? null : accounts;
-    this.searchForm.get('accounts').setValue(accountIds);
+    this.searchForm?.get('accounts')?.setValue(accountIds);
   }
 
   /**
@@ -66,8 +66,8 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
    *
    * @param labelIds the selected label ids
    */
-  changeLabels(labelIds: number[]) {
-    this.searchForm.get('labels').setValue(labelIds);
+  changeLabels(labelIds: (number | null)[]): void {
+    this.searchForm?.get('labels')?.setValue(labelIds);
   }
 
   /**
@@ -75,8 +75,8 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
    *
    * @param categoryIds the selected category ids
    */
-  changeCategories(categoryIds: number[]) {
-    this.searchForm.get('categories').setValue(categoryIds);
+  changeCategories(categoryIds: (number | null)[]): void {
+    this.searchForm?.get('categories')?.setValue(categoryIds);
   }
 
   /**
@@ -85,30 +85,34 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
    * @param field the field (minDate or maxDate)
    * @param value the new date
    */
-  changeDate(field: string, value: Date) {
-    this.searchForm.get(field).setValue(value);
+  changeDate(field: string, value: Date): void {
+    this.searchForm?.get(field)?.setValue(value);
   }
 
   /**
    * Builds the form
    */
-  private buildForm() {
+  private buildForm(): void {
     this.searchForm = this.fb.group({
-      'accounts': [null],
-      'labels': [null],
-      'categories': [null],
-      'minDate': [null],
-      'maxDate': [null],
-      'minAmount': [null],
-      'maxAmount': [null],
-      'description': [null]
+      accounts: [null],
+      labels: [null],
+      categories: [null],
+      minDate: [null],
+      maxDate: [null],
+      minAmount: [null],
+      maxAmount: [null],
+      description: [null]
     });
   }
 
   /**
    * Registers the value change listeners on the form
    */
-  private registerFormChanges() {
+  private registerFormChanges(): void {
+    if (this.searchForm == null) {
+      return;
+    }
+
     this.changeSubscription = this.searchForm.valueChanges.pipe(
       debounceTime(200)
     ).subscribe(value => {
@@ -123,57 +127,62 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
   /**
    * Init the form with the route query params
    */
-  private initFormData() {
+  private initFormData(): void {
     const queryParams = this.route.snapshot.queryParamMap;
     const formData = {} as any;
-    if (queryParams.has('minDate')) {
-      formData.minDate = this.dateService.parse(queryParams.get('minDate'));
+    const minDate = queryParams.get('minDate');
+    if (minDate != null) {
+      formData.minDate = this.dateService.parse(minDate);
     }
-    if (queryParams.has('maxDate')) {
-      formData.maxDate = this.dateService.parse(queryParams.get('maxDate'));
+    const maxDate = queryParams.get('maxDate');
+    if (maxDate != null) {
+      formData.maxDate = this.dateService.parse(maxDate);
     }
     formData.minAmount = queryParams.get('minAmount');
     formData.maxAmount = queryParams.get('maxAmount');
-    if (queryParams.has('accounts')) {
-      formData.accounts = queryParams.get('accounts')
+    const accounts = queryParams.get('accounts');
+    if (accounts != null) {
+      formData.accounts = accounts
         .split(',')
         .map(a => +a);
     }
-    if (queryParams.has('labels')) {
-      formData.labels = queryParams.get('labels')
+    const labels = queryParams.get('labels');
+    if (labels != null) {
+      formData.labels = labels
         .split(',')
         .map(a => a === '' ? null : +a);
     }
-    if (queryParams.has('categories')) {
-      formData.categories = queryParams.get('categories')
+    const categories = queryParams.get('categories');
+    if (categories != null) {
+      formData.categories = categories
         .split(',')
         .map(a => a === '' ? null : +a);
     }
     formData.description = queryParams.get('description');
-    this.searchForm.patchValue(formData);
+    this.searchForm?.patchValue(formData);
   }
 
   /**
    * Update the route params with the form data
    */
-  private updateRouteParams() {
-    const accounts = this.searchForm.get('accounts').value ? this.searchForm.get('accounts').value.join(',') : undefined;
-    const labels = this.searchForm.get('labels').value ? this.searchForm.get('labels').value.join(',') : undefined;
-    const categories = this.searchForm.get('categories').value ? this.searchForm.get('categories').value.join(',') : undefined;
-    const minDate = this.searchForm.get('minDate').value ? this.dateService.format(this.searchForm.get('minDate').value) : undefined;
-    const maxDate = this.searchForm.get('maxDate').value ? this.dateService.format(this.searchForm.get('maxDate').value) : undefined;
+  private updateRouteParams(): void {
+    const accounts = this.searchForm?.get('accounts')?.value ? this.searchForm?.get('accounts')?.value.join(',') : undefined;
+    const labels = this.searchForm?.get('labels')?.value ? this.searchForm?.get('labels')?.value.join(',') : undefined;
+    const categories = this.searchForm?.get('categories')?.value ? this.searchForm?.get('categories')?.value.join(',') : undefined;
+    const minDate = this.searchForm?.get('minDate')?.value ? this.dateService.format(this.searchForm?.get('minDate')?.value) : undefined;
+    const maxDate = this.searchForm?.get('maxDate')?.value ? this.dateService.format(this.searchForm?.get('maxDate')?.value) : undefined;
     const queryParams = {
-      'accounts': accounts,
-      'labels': labels,
-      'categories': categories,
-      'minDate': minDate,
-      'maxDate': maxDate,
-      'minAmount': this.searchForm.get('minAmount').value,
-      'maxAmount': this.searchForm.get('maxAmount').value,
-      'description': this.searchForm.get('description').value
+      accounts,
+      labels,
+      categories,
+      minDate,
+      maxDate,
+      minAmount: this.searchForm?.get('minAmount')?.value,
+      maxAmount: this.searchForm?.get('maxAmount')?.value,
+      description: this.searchForm?.get('description')?.value
     };
     this.routerService.navigate('route.transactions.search', {}, {
-      queryParams: queryParams
+      queryParams
     });
   }
 
@@ -182,7 +191,7 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
    *
    * @param formData the form data
    */
-  private buildFilterRequest(formData: any): FilterRequest {
+  private buildFilterRequest(formData: any): FilterRequest | undefined {
     const filters: FilterRequest[] = [];
 
     // Adding the accounts
@@ -220,7 +229,7 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
       filters.push(FilterRequest.of('amount', formData.minAmount, FilterOperator.GE));
     }
 
-    // Adding the min amount
+    // Adding the max amount
     if (formData.maxAmount != null && formData.maxAmount !== '') {
       filters.push(FilterRequest.of('amount', formData.maxAmount, FilterOperator.LT));
     }

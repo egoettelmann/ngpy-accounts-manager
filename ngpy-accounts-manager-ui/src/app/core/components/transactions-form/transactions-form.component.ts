@@ -15,17 +15,17 @@ export class TransactionsFormComponent implements OnChanges {
   /**
    * The transaction
    */
-  @Input() model: Transaction;
+  @Input() model?: Transaction;
 
   /**
    * the available labels
    */
-  @Input() labels: Label[];
+  @Input() labels?: Label[];
 
   /**
    * The available accounts
    */
-  @Input() accounts: Account[];
+  @Input() accounts?: Account[];
 
   /**
    * Triggered when the form is submitted
@@ -45,7 +45,7 @@ export class TransactionsFormComponent implements OnChanges {
   /**
    * The form group
    */
-  form: FormGroup;
+  form?: FormGroup;
 
   /**
    * Instantiates the component.
@@ -73,16 +73,16 @@ export class TransactionsFormComponent implements OnChanges {
   /**
    * Builds the form
    */
-  buildForm() {
+  buildForm(): void {
     this.form = this.fb.group(
       {
-        'account_id': [null, [Validators.required]],
-        'reference': [null, [Validators.required]],
-        'description': [null],
-        'dateValue': [null, [Validators.required]],
-        'amount': [null, [Validators.required]],
-        'note': [null],
-        'label_id': [null]
+        account_id: [null, [Validators.required]],
+        reference: [null, [Validators.required]],
+        description: [null],
+        dateValue: [null, [Validators.required]],
+        amount: [null, [Validators.required]],
+        note: [null],
+        label_id: [null]
       }
     );
   }
@@ -92,10 +92,14 @@ export class TransactionsFormComponent implements OnChanges {
    *
    * @param data the form data
    */
-  initFormData(data: Transaction) {
+  initFormData(data: Transaction): void {
     const t = Object.assign({}, data) as Transaction;
-    t.dateValue = this.dateService.parse(t.dateValue) as any;
-    this.form.patchValue(t);
+    if (t.dateValue) {
+      t.dateValue = this.dateService.parse(t.dateValue) as any;
+    }
+    if (this.form) {
+      this.form.patchValue(t);
+    }
   }
 
   /**
@@ -103,8 +107,11 @@ export class TransactionsFormComponent implements OnChanges {
    *
    * @param label the new label
    */
-  changeLabel(label: Label) {
-    this.form.patchValue({ 'label_id': label.id });
+  changeLabel(label: Label): void {
+    if (!this.form) {
+      return;
+    }
+    this.form.patchValue({ label_id: label.id });
   }
 
   /**
@@ -112,14 +119,20 @@ export class TransactionsFormComponent implements OnChanges {
    *
    * @param value the new date
    */
-  changeDate(value: Date) {
-    this.form.get('dateValue').setValue(value);
+  changeDate(value: Date): void {
+    if (!this.form) {
+      return;
+    }
+    this.form.get('dateValue')?.setValue(value);
   }
 
   /**
    * Submits the form
    */
-  submitForm() {
+  submitForm(): void {
+    if (!this.form) {
+      return;
+    }
     const t = Object.assign({}, this.model, this.form.value) as Transaction;
     t.dateValue = this.dateService.format(t.dateValue as any);
     this.onFormSubmit.emit(t);
@@ -128,7 +141,7 @@ export class TransactionsFormComponent implements OnChanges {
   /**
    * Deletes the transaction
    */
-  deleteTransaction() {
+  deleteTransaction(): void {
     const t = Object.assign({}, this.model);
     this.onFormDelete.emit(t);
   }
@@ -136,7 +149,7 @@ export class TransactionsFormComponent implements OnChanges {
   /**
    * Cancels
    */
-  cancel() {
+  cancel(): void {
     const t = Object.assign({}, this.model);
     this.onFormCancel.emit(t);
   }

@@ -12,7 +12,7 @@ export class ConfigurationService {
   /**
    * The app properties observable.
    */
-  private appProperties: Observable<any>;
+  private appProperties?: Observable<any>;
 
   /**
    * Instantiates the service.

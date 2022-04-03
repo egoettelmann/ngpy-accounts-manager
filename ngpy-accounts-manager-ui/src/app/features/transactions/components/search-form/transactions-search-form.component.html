@@ -1,11 +1,13 @@
-<div [formGroup]="searchForm" class="clr-row">
+<div *ngIf="searchForm"
+     [formGroup]="searchForm"
+     class="clr-row">
 
   <div class="clr-col-12 clr-col-md-4">
     <!-- Accounts -->
     <app-card-wrapper *ngIf="accounts"
                       [label]="'i18n.components.accounts.account-toggle.label' | translate">
       <app-accounts-toggle [accounts]="accounts"
-                           [preSelected]="searchForm.get('accounts').value"
+                           [preSelected]="searchForm.get('accounts')?.value"
                            (onChange)="changeAccounts($event)">
       </app-accounts-toggle>
     </app-card-wrapper>
@@ -14,7 +16,7 @@
     <app-card-wrapper *ngIf="labels"
                       [label]="'i18n.components.transactions.label-toggle.label' | translate">
       <app-labels-toggle [labels]="labels"
-                         [value]="searchForm.get('labels').value"
+                         [value]="searchForm.get('labels')?.value"
                          (onChange)="changeLabels($event)">
       </app-labels-toggle>
     </app-card-wrapper>
@@ -24,7 +26,7 @@
                       [label]="'i18n.components.transactions.category-toggle.label' | translate">
       <app-categories-toggle *ngIf="categories"
                              [categories]="categories"
-                             [value]="searchForm.get('categories').value"
+                             [value]="searchForm.get('categories')?.value"
                              (onChange)="changeCategories($event)">
       </app-categories-toggle>
     </app-card-wrapper>
@@ -39,7 +41,7 @@
           <div class="clr-form">
             <input id="minDate"
                    class="clr-input w-100"
-                   [clrDate]="searchForm.get('minDate').value"
+                   [clrDate]="searchForm.get('minDate')?.value"
                    (clrDateChange)="changeDate('minDate', $event)"
                    type="date"
                    autocomplete="off" />
@@ -53,7 +55,7 @@
           <div class="clr-form">
             <input id="maxDate"
                    class="clr-input w-100"
-                   [clrDate]="searchForm.get('maxDate').value"
+                   [clrDate]="searchForm.get('maxDate')?.value"
                    (clrDateChange)="changeDate('maxDate', $event)"
                    type="date"
                    autocomplete="off" />

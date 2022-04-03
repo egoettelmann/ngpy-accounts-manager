@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Budget } from '../../../../core/models/api.models';
+import { Budget } from '@core/models/api.models';
 
 @Component({
   selector: 'app-budget-card',
@@ -8,6 +8,6 @@ import { Budget } from '../../../../core/models/api.models';
 })
 export class BudgetCardComponent {
 
-  @Input() budget: Budget;
+  @Input() budget?: Budget;
 
 }

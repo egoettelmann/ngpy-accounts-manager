@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Account, Label, Transaction } from '../../../../models/api.models';
+import { Account, Label, Transaction } from '@core/models/api.models';
 import { combineLatest, Subscription } from 'rxjs';
-import { AccountsService } from '../../../../services/domain/accounts.service';
+import { AccountsService } from '@core/services/domain/accounts.service';
 import { ActivatedRoute } from '@angular/router';
-import { TransactionsService } from '../../../../services/domain/transactions.service';
-import { RouterService } from '../../../../services/router.service';
-import { LabelsService } from '../../../../services/domain/labels.service';
+import { TransactionsService } from '@core/services/domain/transactions.service';
+import { RouterService } from '@core/services/router.service';
+import { LabelsService } from '@core/services/domain/labels.service';
 
 @Component({
   templateUrl: './forms-transaction.view.html',
@@ -13,9 +13,9 @@ import { LabelsService } from '../../../../services/domain/labels.service';
 })
 export class FormsTransactionView implements OnInit, OnDestroy {
 
-  labels: Label[];
-  accounts: Account[];
-  selectedTransaction: Transaction;
+  labels?: Label[];
+  accounts?: Account[];
+  selectedTransaction?: Transaction;
 
   showModal = false;
 
@@ -34,7 +34,11 @@ export class FormsTransactionView implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const transactionId = +this.route.snapshot.paramMap.get('transactionId');
+    const param = this.route.snapshot.paramMap.get('transactionId');
+    let transactionId;
+    if (param != null) {
+      transactionId = +param;
+    }
     const sub = combineLatest([
       this.transactionsService.getOne(transactionId),
       this.accountsService.getAccounts(),
@@ -56,7 +60,7 @@ export class FormsTransactionView implements OnInit, OnDestroy {
     this.subscriptions.active.unsubscribe();
   }
 
-  saveTransaction(transaction: Transaction) {
+  saveTransaction(transaction: Transaction): void {
     if (transaction.id != null) {
       this.transactionsService.updateOne(transaction.id, transaction).subscribe(() => {
         this.closeModal();
@@ -68,13 +72,13 @@ export class FormsTransactionView implements OnInit, OnDestroy {
     }
   }
 
-  deleteTransaction(transaction: Transaction) {
+  deleteTransaction(transaction: Transaction): void {
     this.transactionsService.deleteOne(transaction).subscribe(() => {
       this.closeModal();
     });
   }
 
-  closeModal() {
+  closeModal(): void {
     this.routerService.navigate('route.forms.close', undefined, {
       queryParamsHandling: 'preserve'
     });

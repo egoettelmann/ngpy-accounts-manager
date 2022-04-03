@@ -1,11 +1,11 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { Account, Category, Label, Transaction } from '../../../../core/models/api.models';
+import { Account, Category, Label, Transaction } from '@core/models/api.models';
 import { combineLatest, Subscription } from 'rxjs';
-import { TransactionsService } from '../../../../core/services/domain/transactions.service';
-import { FilterRequest } from '../../../../core/models/rql.models';
-import { AccountsService } from '../../../../core/services/domain/accounts.service';
-import { CategoriesService } from '../../../../core/services/domain/categories.service';
-import { LabelsService } from '../../../../core/services/domain/labels.service';
+import { TransactionsService } from '@core/services/domain/transactions.service';
+import { FilterRequest } from '@core/models/rql.models';
+import { AccountsService } from '@core/services/domain/accounts.service';
+import { CategoriesService } from '@core/services/domain/categories.service';
+import { LabelsService } from '@core/services/domain/labels.service';
 
 @Component({
   templateUrl: './transactions-search.view.html',
@@ -15,12 +15,12 @@ export class TransactionsSearchView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  public currentSearch: FilterRequest;
+  public currentSearch?: FilterRequest;
 
-  public transactions: Transaction[];
+  public transactions?: Transaction[];
   public accounts: Account[] = [];
-  public labels: Label[];
-  public categories: Category[];
+  public labels?: Label[];
+  public categories?: Category[];
 
   private subscriptions = {
     static: new Subscription(),
@@ -57,7 +57,10 @@ export class TransactionsSearchView implements OnInit, OnDestroy {
    *
    * @param transaction the transaction to save
    */
-  saveTransaction(transaction: Transaction) {
+  saveTransaction(transaction: Transaction): void {
+    if (transaction.id == null) {
+      return;
+    }
     this.transactionsService.updateOne(transaction.id, transaction).subscribe(() => {
       this.loadData(this.currentSearch);
     });
@@ -66,7 +69,7 @@ export class TransactionsSearchView implements OnInit, OnDestroy {
   /**
    * Loads the data based on the selected filters
    */
-  loadData(filterRequest: FilterRequest) {
+  loadData(filterRequest?: FilterRequest): void {
     this.currentSearch = filterRequest;
     const sub = this.transactionsService.search({
       filter: filterRequest

@@ -38,7 +38,7 @@ export class RouterPathPipe implements PipeTransform {
    */
   transform(routeKey: string, pathVariables?: Params): RouterPathPart[] {
     // If the route key does not exist, the default route is returned
-    if (!this.routerPaths.paths.hasOwnProperty(routeKey)) {
+    if (!this.routerPaths.paths?.hasOwnProperty(routeKey)) {
       return this.routerPaths.defaultRoute || RouterPathPipe.DEFAULT_OPTIONS.defaultRoute;
     }
 
@@ -71,15 +71,15 @@ export class RouterPathPipe implements PipeTransform {
    * @param routePathPart the route part path to format
    * @param pathVariables the path variables to substitute
    */
-  private formatRoutePathPart(routePathPart: RouterPathPart, pathVariables: Params): RouterPathPart[] {
+  private formatRoutePathPart(routePathPart: RouterPathPart, pathVariables?: Params): RouterPathPart[] {
     // If it is a string, formatting it
-    if (typeof routePathPart === 'string' || routePathPart instanceof String) {
+    if (typeof routePathPart === 'string') {
       return this.formatRoute(routePathPart as string, pathVariables);
     }
 
     // If it is an outlet, formatting the content of it
     if (routePathPart.hasOwnProperty('outlets')) {
-      const outlets = {};
+      const outlets: any = {};
       for (const key in routePathPart.outlets) {
         if (routePathPart.outlets.hasOwnProperty(key)) {
           const outletRoute = this.formatRoute(routePathPart.outlets[key], pathVariables);
@@ -87,7 +87,7 @@ export class RouterPathPipe implements PipeTransform {
         }
       }
       return [{
-        outlets: outlets
+        outlets
       }];
     }
 
@@ -100,7 +100,7 @@ export class RouterPathPipe implements PipeTransform {
    * @param routePathPart the route part path to format
    * @param pathVariables the path variables to substitute
    */
-  private formatRoute(routePathPart: string, pathVariables: Params): string[] {
+  private formatRoute(routePathPart: string, pathVariables?: Params): string[] {
     // If the route path part is null or empty, it should be ignored
     if (routePathPart == null || routePathPart === '') {
       return [];
@@ -116,20 +116,24 @@ export class RouterPathPipe implements PipeTransform {
 
     // If the route path part is not a path variable, nothing to do
     const pathVariableIdentifier = this.routerPaths.pathVariableIdentifier || RouterPathPipe.DEFAULT_OPTIONS.pathVariableIdentifier;
-    if (!routePathPart.startsWith(pathVariableIdentifier)) {
+    if (pathVariableIdentifier != null && !routePathPart.startsWith(pathVariableIdentifier)) {
       return [routePathPart];
     }
 
     // Extracting the path variable
-    const pathVariable = routePathPart.substr(1);
+    const pathVariable = routePathPart.substring(1);
 
     // If the path variable is not defined, nothing to do
-    if (!pathVariables.hasOwnProperty(pathVariable)) {
+    if (pathVariables != null && !pathVariables.hasOwnProperty(pathVariable)) {
       return [routePathPart];
     }
 
     // Returning the path variable value
-    return [pathVariables[pathVariable]];
+    if (pathVariables != null) {
+      return [pathVariables[pathVariable]];
+    }
+
+    return [];
   }
 
 }

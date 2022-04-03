@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
-import { CommonFunctions } from '../../shared/utils/common-functions';
+import { CommonFunctions } from '@shared/utils/common-functions';
 
 /**
  * The cache service
@@ -36,7 +36,7 @@ export class CacheService {
    *
    * @param cacheKeyPattern the cache key pattern
    */
-  evict(cacheKeyPattern: string) {
+  evict(cacheKeyPattern: string): void {
     for (const cacheKey in this.cache) {
       if (!this.cache.hasOwnProperty(cacheKey)) {
         continue;

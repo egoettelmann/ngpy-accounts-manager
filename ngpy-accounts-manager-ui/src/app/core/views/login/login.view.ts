@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { SessionRestService } from '../../services/rest/session-rest.service';
 import { AppProperties } from '../../models/api.models';
 import { RouterService } from '../../services/router.service';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EMPTY, throwError } from 'rxjs';
+import { EMPTY, Observable, throwError } from 'rxjs';
 
 /**
  * The login component
@@ -28,7 +28,7 @@ export class LoginView implements OnInit {
   /**
    * The app properties
    */
-  public appProperties: AppProperties;
+  public appProperties?: AppProperties;
 
   /**
    * Instantiates the component.
@@ -58,7 +58,7 @@ export class LoginView implements OnInit {
    * If the login is successful, redirects to the app.
    */
   tryLogin(): void {
-    if (this.loginForm.invalid || this.formIsLoading) {
+    if (!this.loginForm || this.loginForm.invalid || this.formIsLoading) {
       return;
     }
     this.formIsLoading = true;
@@ -71,19 +71,19 @@ export class LoginView implements OnInit {
     });
   }
 
-  private buildForm() {
+  private buildForm(): void {
     this.loginForm = this.fb.group({
-      'username': [null, [Validators.required]],
-      'password': [null, [Validators.required]]
+      username: [null, [Validators.required]],
+      password: [null, [Validators.required]]
     });
   }
 
-  private handleLoginError(error) {
+  private handleLoginError(error: any): Observable<never> {
     if (!error || error.code !== 'A400') {
       return throwError(error);
     }
 
-    this.loginForm.setErrors({
+    this.loginForm?.setErrors({
       [error.message]: true
     });
 

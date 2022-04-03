@@ -5,7 +5,7 @@
       <span class="clr-col-6 text-right"><strong>{{ total | number:'1.2-2' }}&nbsp;€</strong></span>
     </h4>
   </div>
-  <ul class="list-group list-group-flush">
+  <ul *ngIf="summaries" class="list-group list-group-flush">
     <li class="list-group-item">
       <div class="clr-row">
         <div class="clr-offset-1 clr-col-11 clr-col-md-6">

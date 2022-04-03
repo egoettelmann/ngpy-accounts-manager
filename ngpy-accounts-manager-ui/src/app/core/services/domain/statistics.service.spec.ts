@@ -2,18 +2,18 @@ import { async, TestBed } from '@angular/core/testing';
 import { StatisticsService } from './statistics.service';
 import { StatisticsRestService } from '../rest/statistics-rest.service';
 import { RqlService } from '../rql.service';
-import { of } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { format } from 'date-fns';
 import { DateService } from '../date.service';
 
 class MockStatisticsRestService {
-  getSummary() {}
-  getRepartition() {}
-  getAggregation() {}
-  getEvolution() {}
-  getAnalyticsByCategory() {}
-  getAnalyticsByLabel() {}
-  getAnalyticsRepartition() {}
+  getSummary(): void {}
+  getRepartition(): void {}
+  getAggregation(): void {}
+  getEvolution(): void {}
+  getAnalyticsByCategory(): void {}
+  getAnalyticsByLabel(): void {}
+  getAnalyticsRepartition(): void {}
 }
 
 describe('StatisticsService', () => {
@@ -40,10 +40,10 @@ describe('StatisticsService', () => {
   }));
 
   it('getSummary should define correct date interval', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getSummary').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     service.getSummary([], 2015, 4).subscribe();
     expect(restService.getSummary).toHaveBeenCalled();
@@ -52,10 +52,10 @@ describe('StatisticsService', () => {
   }));
 
   it('getSummary should define correct date interval across years', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getSummary').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     service.getSummary([], 2018, 12).subscribe();
     expect(restService.getSummary).toHaveBeenCalled();
@@ -64,10 +64,10 @@ describe('StatisticsService', () => {
   }));
 
   it('getSummary should define correct date interval without months', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getSummary').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     service.getSummary([], 2013).subscribe();
     expect(restService.getSummary).toHaveBeenCalled();
@@ -76,12 +76,12 @@ describe('StatisticsService', () => {
   }));
 
   it('getAggregation should define correct date interval', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getAggregation').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
-    service.getAggregation(2013, [], [], undefined).subscribe();
+    service.getAggregation(2013, [], [], true).subscribe();
     expect(restService.getAggregation).toHaveBeenCalled();
     const expectedDateFrom = format(new Date(2013, 0, 1), 'yyyy-MM-dd');
     const expectedDateTo = format(new Date(2014, 0, 1), 'yyyy-MM-dd');
@@ -90,10 +90,10 @@ describe('StatisticsService', () => {
   }));
 
   it('getEvolution should define correct date interval', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getEvolution').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     service.getEvolution(2013, []).subscribe();
     expect(restService.getEvolution).toHaveBeenCalled();
@@ -102,10 +102,10 @@ describe('StatisticsService', () => {
   }));
 
   it('getRepartition should define correct date interval', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getRepartition').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     service.getRepartition(2015, 11, []).subscribe();
     expect(restService.getRepartition).toHaveBeenCalled();
@@ -116,10 +116,10 @@ describe('StatisticsService', () => {
   }));
 
   it('getRepartition should define correct date interval across years', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getRepartition').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     service.getRepartition(2015, 12, []).subscribe();
     expect(restService.getRepartition).toHaveBeenCalled();
@@ -130,12 +130,12 @@ describe('StatisticsService', () => {
   }));
 
   it('getAnalyticsByCategory should define correct date interval', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getAnalyticsByCategory').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
-    service.getAnalyticsByCategory(2016, undefined, '', []).subscribe();
+    service.getAnalyticsByCategory(2016, '', '', []).subscribe();
     expect(restService.getAnalyticsByCategory).toHaveBeenCalled();
     const expectedDateFrom = format(new Date(2016, 0, 1), 'yyyy-MM-dd');
     const expectedDateTo = format(new Date(2017, 0, 1), 'yyyy-MM-dd');
@@ -144,12 +144,12 @@ describe('StatisticsService', () => {
   }));
 
   it('getAnalyticsByLabel should define correct date interval', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getAnalyticsByLabel').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
-    service.getAnalyticsByLabel(2016, undefined, 1, []).subscribe();
+    service.getAnalyticsByLabel(2016, '', 1, []).subscribe();
     expect(restService.getAnalyticsByLabel).toHaveBeenCalled();
     const expectedDateFrom = format(new Date(2016, 0, 1), 'yyyy-MM-dd');
     const expectedDateTo = format(new Date(2017, 0, 1), 'yyyy-MM-dd');
@@ -158,12 +158,12 @@ describe('StatisticsService', () => {
   }));
 
   it('getAnalyticsRepartition should define correct date interval', async(() => {
-    let result = [];
+    let result: any[] = [];
     spyOn(restService, 'getAnalyticsRepartition').and.callFake((...args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
-    service.getAnalyticsRepartition(2011, undefined, []).subscribe();
+    service.getAnalyticsRepartition(2011, '', []).subscribe();
     expect(restService.getAnalyticsRepartition).toHaveBeenCalled();
     const expectedDateFrom = format(new Date(2011, 0, 1), 'yyyy-MM-dd');
     const expectedDateTo = format(new Date(2012, 0, 1), 'yyyy-MM-dd');

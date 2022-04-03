@@ -14,23 +14,23 @@ export class FieldWrapperComponent {
   /**
    * The label/control binding identifier
    */
-  @Input() for: string;
+  @Input() for?: string;
 
   /**
    * The translation key to use as label
    */
-  @Input() i18nLabel: string;
+  @Input() i18nLabel?: string;
 
   /**
    * The form control
    */
-  @Input() ctrl: AbstractControl;
+  @Input() ctrl?: AbstractControl | null;
 
   /**
    * Checks if the control is touched and has errors
    */
-  public isValid() {
-    return this.ctrl.touched && this.ctrl.errors;
+  public isInvalid(): boolean {
+    return !!this.ctrl && this.ctrl.touched && !!this.ctrl.errors;
   }
 
 }

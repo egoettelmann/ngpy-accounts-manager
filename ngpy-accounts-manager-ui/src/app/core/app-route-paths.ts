@@ -1,14 +1,16 @@
 /**
  * The app route paths
  */
-export const AppRoutePaths = {
+import { RouterPaths } from '@shared/modules/router-path/router-path.models';
+
+export const AppRoutePaths: RouterPaths = {
 
   // Login
   'route.login': '/login',
 
   // Forms
   'route.forms.transaction': [{ outlets: { form: '/forms/transactions/:transactionId' } }],
-  'route.forms.close': [{ outlets: { form: null } }],
+  'route.forms.close': [{ outlets: { form: '' } }],
 
   // Dashboard
   'route.dashboard': '/dashboard',

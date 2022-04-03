@@ -41,7 +41,7 @@ export class CategoriesService {
    *
    * @param category the category to delete
    */
-  deleteOne(category: Category) {
+  deleteOne(category: Category): Observable<void> {
     return this.categoriesRestService.deleteOne(category.id);
   }
 
@@ -50,7 +50,7 @@ export class CategoriesService {
    *
    * @param category the category to save
    */
-  saveOne(category: Category) {
+  saveOne(category: Category): Observable<Category> {
     return this.categoriesRestService.saveOne(category);
   }
 

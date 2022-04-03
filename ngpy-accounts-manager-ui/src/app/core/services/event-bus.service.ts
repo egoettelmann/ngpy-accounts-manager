@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { CommonFunctions } from '../../shared/utils/common-functions';
+import { CommonFunctions } from '@shared/utils/common-functions';
 
 /**
  * The event bus message interface
@@ -28,10 +28,10 @@ export class EventBusService {
    * @param channel the channel to publish to
    * @param message the message to publish
    */
-  publish(channel: string, message?: any) {
+  publish(channel: string, message?: any): void {
     this.eventBus.next({
-      channel: channel,
-      message: message
+      channel,
+      message
     });
   }
 

@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { BudgetStatus } from '../../../../core/models/api.models';
+import { BudgetStatus } from '@core/models/api.models';
 
 /**
  * The budget summary component
@@ -14,12 +14,12 @@ export class BudgetSummaryComponent implements OnChanges {
   /**
    * The list of budget status
    */
-  @Input() statusList: BudgetStatus[];
+  @Input() statusList?: BudgetStatus[];
 
   /**
    * The calculated summary
    */
-  public summary: {
+  public summary?: {
     budget: number,
     available: number,
     overrun: number,
@@ -51,7 +51,7 @@ export class BudgetSummaryComponent implements OnChanges {
    *
    * @param statusList the status list
    */
-  private calculateSummary(statusList: BudgetStatus[]) {
+  private calculateSummary(statusList: BudgetStatus[]): void {
     const summary = {
       budget: 0,
       available: 0,
@@ -60,6 +60,9 @@ export class BudgetSummaryComponent implements OnChanges {
     };
 
     statusList.forEach(item => {
+      if (item.budget == null || item.budget.amount == null) {
+        return;
+      }
       summary.budget = summary.budget + item.budget.amount;
       const diff = item.budget.amount - Math.abs(item.spending);
       if (diff > 0) {

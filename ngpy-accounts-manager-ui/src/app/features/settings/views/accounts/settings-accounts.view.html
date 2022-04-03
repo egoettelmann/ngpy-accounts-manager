@@ -1,4 +1,7 @@
-<h3>{{ 'i18n.views.settings.accounts.title' | translate }} <span class="badge">{{ formArray?.controls.length }}</span></h3>
+<h3>
+  <span>{{ 'i18n.views.settings.accounts.title' | translate }}</span>
+  <span class="badge">{{ accountForms.length }}</span>
+</h3>
 
 <form [formGroup]="form" *ngIf="form" class="clr-form">
   <table class="table card-shadow" [formArrayName]="'accounts'">
@@ -15,7 +18,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let accountForm of formArray.controls" [formGroup]="accountForm">
+    <tr *ngFor="let accountForm of accountForms" [formGroup]="accountForm">
       <td class="text-left">
         <input class="clr-input w-100" type="text" [formControlName]="'name'" />
       </td>
@@ -24,7 +27,7 @@
       </td>
       <td class="text-left">
           <span class="badge"
-                [style.background]="accountForm.get('color').value">
+                [style.background]="accountForm?.get('color')?.value">
             <span>&nbsp;</span>
           </span>
         <input class="clr-input" type="text" [formControlName]="'color'" />
@@ -35,8 +38,8 @@
       <td class="text-left">
         <input type="checkbox" [formControlName]="'active'" clrToggle />
       </td>
-      <td class="text-right">{{ accountForm.get('lastUpdate').value }}</td>
-      <td class="text-right">{{ accountForm.get('total').value | number:'1.2-2' }}&nbsp;€</td>
+      <td class="text-right">{{ accountForm?.get('lastUpdate')?.value }}</td>
+      <td class="text-right">{{ accountForm?.get('total')?.value | number:'1.2-2' }}&nbsp;€</td>
       <td>
         <button type="button" class="btn btn-sm btn-icon btn-danger" (click)="deleteAccount(accountForm.value)">
           <clr-icon shape="trash" size="16"></clr-icon>

@@ -1,7 +1,7 @@
 /**
  * The sort request
  */
-export class SortRequest {
+export interface SortRequest {
   sort: string;
   sortDirection?: 'ASC' | 'DESC';
 }
@@ -9,7 +9,7 @@ export class SortRequest {
 /**
  * The page request
  */
-export class PageRequest {
+export interface PageRequest {
   page: number;
   pageSize?: number;
 }
@@ -33,11 +33,11 @@ export enum FilterOperator {
  * The filter request
  */
 export class FilterRequest {
-  operator: FilterOperator;
-  field: string;
-  value: string | number | boolean;
-  collection: FilterRequest[];
-  isAnd: boolean;
+  operator?: FilterOperator;
+  field?: string;
+  value?: string | number | boolean | null;
+  collection?: FilterRequest[];
+  isAnd?: boolean;
 
   /**
    * The constructor is private to prevent instantiating it directly.
@@ -51,7 +51,7 @@ export class FilterRequest {
    * @param value the value to filter
    * @param operator the operator to apply as filter
    */
-  static of(field: string, value: string | number | boolean, operator: FilterOperator): FilterRequest {
+  static of(field: string, value: string | number | boolean | null, operator: FilterOperator): FilterRequest {
     const filterRequest = new FilterRequest();
     filterRequest.field = field;
     filterRequest.value = value;
@@ -66,15 +66,18 @@ export class FilterRequest {
    */
   static all(...filters: FilterRequest[]): FilterRequest {
     if (filters.length === 1) {
-      const item = filters[0];
-      return FilterRequest.of(item.field, item.value, item.operator);
+      return filters[0];
     }
     const filterRequest = new FilterRequest();
     filterRequest.isAnd = true;
     filterRequest.collection = [];
     filters.forEach(f => {
+      if (filterRequest.collection == null) {
+        return;
+      }
+
       // Same type collections are flattened
-      if (f.isCollection() && f.isAnd) {
+      if (f.collection != null && f.isAnd) {
         filterRequest.collection.push(...f.collection);
       } else {
         filterRequest.collection.push(f);
@@ -90,15 +93,18 @@ export class FilterRequest {
    */
   static either(...filters: FilterRequest[]): FilterRequest {
     if (filters.length === 1) {
-      const item = filters[0];
-      return FilterRequest.of(item.field, item.value, item.operator);
+      return filters[0];
     }
     const filterRequest = new FilterRequest();
     filterRequest.isAnd = false;
     filterRequest.collection = [];
     filters.forEach(f => {
+      if (filterRequest.collection == null) {
+        return;
+      }
+
       // Same type collections are flattened
-      if (f.isCollection() && !f.isAnd) {
+      if (f.collection != null && !f.isAnd) {
         filterRequest.collection.push(...f.collection);
       } else {
         filterRequest.collection.push(f);
@@ -108,31 +114,25 @@ export class FilterRequest {
   }
 
   /**
-   * Checks if it is a collection or not
-   */
-  isCollection(): boolean {
-    return this.collection !== undefined;
-  }
-
-  /**
    * Transforms the filter request to an RQL string.
    */
   toString(): string {
     let result = '';
-    if (this.isCollection()) {
+    if (this.collection != null) {
       if (this.isAnd) {
         result += 'and(';
       } else {
         result += 'or(';
       }
       result += this.collection.map(fr => fr.toString()).join(';');
-    } else {
+      result += ')';
+    } else if (this.operator != null) {
       result += this.operator.toString() + '(';
       result += this.field;
       result += ',';
       result += encodeURIComponent('' + this.value);
+      result += ')';
     }
-    result += ')';
     return result;
   }
 
@@ -141,7 +141,7 @@ export class FilterRequest {
 /**
  * The search request
  */
-export class SearchRequest {
+export interface SearchRequest {
   filter?: FilterRequest;
   page?: PageRequest;
   sort?: SortRequest;

@@ -31,7 +31,7 @@ export class AccountsService {
   getActiveAccounts(): Observable<Account[]> {
     const filter = FilterRequest.of('active', true, FilterOperator.EQ);
     return this.accountsRestService.findAll({
-      filter: filter
+      filter
     });
   }
 
@@ -40,7 +40,7 @@ export class AccountsService {
    *
    * @param account the account to delete
    */
-  deleteOne(account: Account) {
+  deleteOne(account: Account): Observable<void> {
     return this.accountsRestService.deleteOne(account.id);
   }
 
@@ -49,7 +49,7 @@ export class AccountsService {
    *
    * @param account the account to save
    */
-  saveOne(account: Account) {
+  saveOne(account: Account): Observable<Account> {
     return this.accountsRestService.saveOne(account);
   }
 

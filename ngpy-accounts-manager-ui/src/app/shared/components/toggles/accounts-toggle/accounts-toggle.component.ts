@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { Account } from '../../../../core/models/api.models';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Account } from '@core/models/api.models';
 import * as _ from 'lodash';
 
 /**
@@ -14,7 +14,7 @@ export class AccountsToggleComponent implements OnChanges {
   /**
    * The available accounts
    */
-  @Input() accounts: Account[];
+  @Input() accounts?: Account[];
 
   /**
    * The pre-selected accounts
@@ -34,9 +34,9 @@ export class AccountsToggleComponent implements OnChanges {
   /**
    * Triggered on any input changes.
    *
-   * @param changes
+   * @param changes changes
    */
-  ngOnChanges(changes) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.preSelected && this.preSelected != null) {
       if (this.preSelected.length === 0) {
         this.toggleAllAccounts();
@@ -70,7 +70,7 @@ export class AccountsToggleComponent implements OnChanges {
    *
    * @param account the account to toggle
    */
-  toggleAccount(account: Account) {
+  toggleAccount(account: Account): void {
     if (this.isSelected(account)) {
       const idx = this.selectedAccounts.indexOf(account.id);
       if (this.selectedAccounts.length > 1) {
@@ -85,7 +85,10 @@ export class AccountsToggleComponent implements OnChanges {
   /**
    * Toggles all accounts.
    */
-  toggleAllAccounts() {
+  toggleAllAccounts(): void {
+    if (!this.accounts) {
+      return;
+    }
     const selectedAccounts = this.accounts.map(a => a.id);
     if (!_.isEqual(selectedAccounts, this.selectedAccounts)) {
       this.selectedAccounts = selectedAccounts;
@@ -98,7 +101,7 @@ export class AccountsToggleComponent implements OnChanges {
    *
    * @param accounts the account ids to toggle
    */
-  private toggleAccounts(accounts: number[]) {
+  private toggleAccounts(accounts: number[]): void {
     const selectedAccounts = accounts.slice(0);
     if (!_.isEqual(selectedAccounts, this.selectedAccounts)) {
       this.selectedAccounts = selectedAccounts;
@@ -110,6 +113,9 @@ export class AccountsToggleComponent implements OnChanges {
    * Get the list of selected account ids.
    */
   private getSelectedAccounts(): number[] {
+    if (!this.accounts) {
+      return [];
+    }
     const accountIds = this.accounts.filter((a) => {
       return this.selectedAccounts.indexOf(a.id) > -1;
     }).map(a => a.id);

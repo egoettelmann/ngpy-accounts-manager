@@ -37,10 +37,9 @@
         <span class="tooltip tooltip-sm tooltip-top-right"
               role="tooltip"
               aria-haspopup="true">
-          <clr-icon *ngIf="transaction.label.icon"
-                    class="is-solid"
-                    [attr.shape]="transaction.label.icon"
-                    [style.color]="transaction.label.color">
+          <clr-icon class="is-solid"
+                    [attr.shape]="transaction.label?.icon"
+                    [style.color]="transaction.label?.color">
           </clr-icon>
           <span class="tooltip-content">
             <span>{{ transaction.label?.name }}</span><br/>
@@ -71,7 +70,7 @@
           [ngClass]="getAmountColor(transaction.amount)">
         <span>{{ transaction.amount | number:'1.2-2' }}&nbsp;€</span>
       </td>
-      <td *ngIf="editable">
+      <td *ngIf="editable && actionButtons">
         <ng-container *ngTemplateOutlet="actionButtons;context:{'transaction': transaction}"></ng-container>
       </td>
     </tr>

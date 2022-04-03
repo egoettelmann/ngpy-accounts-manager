@@ -3,14 +3,15 @@ import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Params } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import * as _ from 'lodash';
-import { Account, KeyValue, Label, Summary, Transaction } from '../../../../core/models/api.models';
-import { TransactionsService } from '../../../../core/services/domain/transactions.service';
-import { StatisticsService } from '../../../../core/services/domain/statistics.service';
-import { AccountsService } from '../../../../core/services/domain/accounts.service';
-import { DateService } from '../../../../core/services/date.service';
-import { RouterService } from '../../../../core/services/router.service';
-import { LabelsService } from '../../../../core/services/domain/labels.service';
-import { ToLabelPipe } from '../../../../shared/pipes/to-label.pipe';
+import { Account, KeyValue, Label, Summary, Transaction } from '@core/models/api.models';
+import { TransactionsService } from '@core/services/domain/transactions.service';
+import { StatisticsService } from '@core/services/domain/statistics.service';
+import { AccountsService } from '@core/services/domain/accounts.service';
+import { DateService } from '@core/services/date.service';
+import { RouterService } from '@core/services/router.service';
+import { LabelsService } from '@core/services/domain/labels.service';
+import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
+import { Options, XrangePointOptionsObject } from 'highcharts';
 
 @Component({
   templateUrl: './transactions-list.view.html',
@@ -20,15 +21,15 @@ export class TransactionsListView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  public currentYear: number;
-  public currentMonth: number;
-  public accountsFilter: number[];
+  public currentYear?: number;
+  public currentMonth?: number;
+  public accountsFilter: number[] = [];
 
-  public transactions: Transaction[];
+  public transactions?: Transaction[];
   public graphOptions: any;
-  public summary: Summary;
-  public accounts: Account[];
-  public labels: Label[];
+  public summary?: Summary;
+  public accounts?: Account[];
+  public labels?: Label[];
 
   private subscriptions = {
     static: new Subscription(),
@@ -70,7 +71,7 @@ export class TransactionsListView implements OnInit, OnDestroy {
    *
    * @param accounts the new list of accounts
    */
-  changeAccounts(accounts: number[]) {
+  changeAccounts(accounts: number[]): void {
     if (!_.isEqual(this.accountsFilter, accounts)) {
       this.accountsFilter = accounts.slice(0);
       this.reloadData();
@@ -80,9 +81,9 @@ export class TransactionsListView implements OnInit, OnDestroy {
   /**
    * Triggered on year change.
    *
-   * @param year
+   * @param year the new year
    */
-  changeYear(year: number) {
+  changeYear(year: number): void {
     this.currentYear = year;
     this.reloadData();
   }
@@ -90,9 +91,9 @@ export class TransactionsListView implements OnInit, OnDestroy {
   /**
    * Triggerd on month change.
    *
-   * @param month
+   * @param month the new month
    */
-  changeMonth(month: number) {
+  changeMonth(month: number): void {
     this.currentMonth = month;
     this.reloadData();
   }
@@ -100,16 +101,16 @@ export class TransactionsListView implements OnInit, OnDestroy {
   /**
    * Opens the modal with the transaction form.
    *
-   * @param transaction
+   * @param transaction the transaction
    */
-  openModal(transaction: Transaction) {
+  openModal(transaction: Transaction): void {
     this.routerService.openTransactionForm(transaction.id);
   }
 
   /**
    * Opens the transaction form modal with a new transaction
    */
-  addTransaction() {
+  addTransaction(): void {
     const newTransaction = {};
     this.openModal(newTransaction);
   }
@@ -117,9 +118,12 @@ export class TransactionsListView implements OnInit, OnDestroy {
   /**
    * Saves an existing or a new transaction.
    *
-   * @param {Transaction} transaction the transaction to save
+   * @param transaction the transaction to save
    */
-  saveTransaction(transaction: Transaction) {
+  saveTransaction(transaction: Transaction): void {
+    if (transaction.id == null) {
+      return;
+    }
     this.transactionsService.updateOne(transaction.id, transaction).subscribe(() => {
       this.reloadData();
     });
@@ -128,7 +132,7 @@ export class TransactionsListView implements OnInit, OnDestroy {
   /**
    * Initializes the component with the data from the route
    */
-  private initData() {
+  private initData(): void {
     this.currentYear = this.routerService.getYear(this.route);
     this.currentMonth = this.routerService.getMonth(this.route);
     this.accountsFilter = this.routerService.getAccounts(this.route);
@@ -137,7 +141,10 @@ export class TransactionsListView implements OnInit, OnDestroy {
   /**
    * Loads the data for the view
    */
-  private reloadData() {
+  private reloadData(): void {
+    if (this.currentYear == null || this.currentMonth == null) {
+      return;
+    }
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
     const sub = combineLatest([
       this.transactionsService.getAll(this.currentYear, this.currentMonth, accounts),
@@ -161,35 +168,42 @@ export class TransactionsListView implements OnInit, OnDestroy {
    * @param data the graph data
    * @returns the chart options
    */
-  private buildChartOptions(data: KeyValue[]) {
+  private buildChartOptions(data: KeyValue[]): Options {
     const that = this;
-    const options = {
+    const [categories, series] = this.buildChartSeries(data);
+    return {
       chart: {
         type: 'column'
       },
       tooltip: {
-        formatter: function() {
+        formatter(): string {
           return '' + this.x + ': <b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>';
         }
       },
       xAxis: {
-        categories: []
+        categories
       },
       series: [{
-        data: [],
+        type: 'column',
+        data: series,
         showInLegend: false
       }]
     };
-    for (const d of data) {
+  }
+
+  private buildChartSeries(values: KeyValue[]): [string[], XrangePointOptionsObject[]] {
+    const categories: string[] = [];
+    const series: XrangePointOptionsObject[] = [];
+    for (const d of values) {
       const label = this.toLabelPipe.transform(+d.key) as Label;
       const point = {
         y: d.value,
         color: label.color
       };
-      options.xAxis.categories.push(label.name);
-      options.series[0].data.push(point);
+      categories.push(label.name);
+      series.push(point);
     }
-    return options;
+    return [categories, series];
   }
 
   /**
@@ -199,8 +213,12 @@ export class TransactionsListView implements OnInit, OnDestroy {
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
 
     let params = {};
-    params = this.routerService.setYear(this.currentYear, params);
-    params = this.routerService.setMonth(this.currentMonth, params);
+    if (this.currentYear != null) {
+      params = this.routerService.setYear(this.currentYear, params);
+    }
+    if (this.currentMonth != null) {
+      params = this.routerService.setMonth(this.currentMonth, params);
+    }
     params = this.routerService.setAccounts(accounts, params);
     return params;
   }

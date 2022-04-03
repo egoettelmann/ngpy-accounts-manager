@@ -7,7 +7,7 @@ import { MonoTypeOperatorFunction, Observable, Operator, Subject, Subscriber, Te
  *
  * @param {SubscriptionLock} subscriptionLock the subscription lock
  * @param {number} buffer the number of emitted values (during an ongoing lock) to keep
- * @returns {MonoTypeOperatorFunction<T>}
+ * @returns {MonoTypeOperatorFunction}
  */
 export function lock<T>(subscriptionLock: SubscriptionLock, buffer = 1): MonoTypeOperatorFunction<T> {
   return (source: Observable<T>) => source.lift(new LockOperator(subscriptionLock, buffer));
@@ -36,7 +36,7 @@ class LockOperator<T> implements Operator<T, T> {
  *  - a buffer value of n will keep the n latest values
  */
 class LockSubscriber<T> extends Subscriber<T> {
-  private _isComplete = false;
+  private isComplete = false;
   private keptValues: T[] = [];
 
   constructor(destination: Subscriber<T>,
@@ -51,14 +51,18 @@ class LockSubscriber<T> extends Subscriber<T> {
    * Does nothing if the lock is set, otherwise sets the lock.
    * Once the complete flag is set and there are no values left, the destination is completed.
    */
-  lockNext() {
+  lockNext(): void {
     if (!this.subscriptionLock.locked) {
       if (this.keptValues.length) {
         this.subscriptionLock.lock();
         const val = this.keptValues.shift();
-        this.destination.next(val);
-      } else if (this._isComplete) {
-        this.destination.complete();
+        if (this.destination.next) {
+          this.destination.next(val);
+        }
+      } else if (this.isComplete) {
+        if (this.destination.complete) {
+          this.destination.complete();
+        }
       }
     }
   }
@@ -66,7 +70,7 @@ class LockSubscriber<T> extends Subscriber<T> {
   /**
    * Calls the subscription with the next value.
    *
-   * @param {T} value the value to emit
+   * @param value the value to emit
    * @private
    */
   protected _next(value: T): void {
@@ -82,8 +86,8 @@ class LockSubscriber<T> extends Subscriber<T> {
    * Once all remaining values are emitted, the destination will be completed.
    * @private
    */
-  protected _complete() {
-    this._isComplete = true;
+  protected _complete(): void {
+    this.isComplete = true;
     this.lockNext();
   }
 
@@ -93,17 +97,19 @@ class LockSubscriber<T> extends Subscriber<T> {
    * @param {SubscriptionLock} subscriptionLock the subscription lock
    * @private
    */
-  private _registerOnLockChanges(subscriptionLock: SubscriptionLock) {
+  private _registerOnLockChanges(subscriptionLock: SubscriptionLock): void {
     subscriptionLock.lockChanges
       .pipe(
         filter((b) => !b),
         catchError((err) => {
-          this.destination.error(err);
+          if (this.destination.error) {
+            this.destination.error(err);
+          }
           return throwError(err);
         })
       ).subscribe(() => {
-        this.lockNext();
-      });
+      this.lockNext();
+    });
   }
 
 }
@@ -114,9 +120,9 @@ class LockSubscriber<T> extends Subscriber<T> {
  * Once the timeout is reached, the observable is terminated with an exception.
  */
 export class SubscriptionLock {
-  private _lockChanges = new Subject<boolean>();
-  private _locked = false;
-  private _timeoutRef: any;
+  private lockChangesSubject = new Subject<boolean>();
+  private isLocked = false;
+  private timeoutRef: any;
 
   /**
    * If the given timeout is less or equal to 0, the lock won't have a timeout.
@@ -130,11 +136,11 @@ export class SubscriptionLock {
    * Sets the lock, registers the timeout and triggers a lock change.
    * Calling this when the lock is already sets does nothing.
    */
-  public lock() {
-    if (!this._locked) {
-      this._locked = true;
-      this._timeoutRef = setTimeout(() => this._throwError(), this.timeout);
-      this._lockChanges.next(this._locked);
+  public lock(): void {
+    if (!this.isLocked) {
+      this.isLocked = true;
+      this.timeoutRef = setTimeout(() => this._throwError(), this.timeout);
+      this.lockChangesSubject.next(this.isLocked);
     }
   }
 
@@ -142,11 +148,11 @@ export class SubscriptionLock {
    * Releases the lock, clears the timeout and triggers a lock change.
    * Calling this when no lock is set does nothing.
    */
-  public release() {
-    if (this._locked) {
-      this._locked = false;
-      clearTimeout(this._timeoutRef);
-      this._lockChanges.next(this._locked);
+  public release(): void {
+    if (this.isLocked) {
+      this.isLocked = false;
+      clearTimeout(this.timeoutRef);
+      this.lockChangesSubject.next(this.isLocked);
     }
   }
 
@@ -156,7 +162,7 @@ export class SubscriptionLock {
    * @returns {boolean} the lock's status
    */
   get locked(): boolean {
-    return this._locked;
+    return this.isLocked;
   }
 
   /**
@@ -168,7 +174,7 @@ export class SubscriptionLock {
    * @returns {Observable<boolean>} the lock's status as observable
    */
   get lockChanges(): Observable<boolean> {
-    return this._lockChanges.asObservable();
+    return this.lockChangesSubject.asObservable();
   }
 
   /**
@@ -176,9 +182,9 @@ export class SubscriptionLock {
    * Does nothing if the timeout is less or equal to 0.
    * @private
    */
-  private _throwError() {
+  private _throwError(): void {
     if (this.timeout > 0) {
-      this._lockChanges.error('Timeout');
+      this.lockChangesSubject.error('Timeout');
     }
   }
 

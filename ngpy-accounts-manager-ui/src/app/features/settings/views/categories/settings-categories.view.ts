@@ -1,8 +1,8 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-import { Category } from '../../../../core/models/api.models';
-import { CategoriesService } from '../../../../core/services/domain/categories.service';
+import { Category } from '@core/models/api.models';
+import { CategoriesService } from '@core/services/domain/categories.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,8 +13,8 @@ export class SettingsCategoriesView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  form: FormGroup;
-  formArray: FormArray;
+  form?: FormGroup;
+  formArray?: FormArray;
 
   private subscriptions = {
     static: new Subscription(),
@@ -37,28 +37,35 @@ export class SettingsCategoriesView implements OnInit, OnDestroy {
     this.subscriptions.active.unsubscribe();
   }
 
-  deleteCategory(category: Category) {
+  deleteCategory(category: Category): void {
     this.categoriesService.deleteOne(category).subscribe();
   }
 
-  private buildForm(categories: Category[]) {
+  get categoryForms(): FormGroup[] {
+    if (this.formArray == null) {
+      return [];
+    }
+    return this.formArray.controls as FormGroup[];
+  }
+
+  private buildForm(categories: Category[]): void {
     this.form = this.fb.group({
-      'categories': this.fb.array([])
+      categories: this.fb.array([])
     });
     this.formArray = this.form.get('categories') as FormArray;
     categories.map(category => {
       const control = this.buildFormControl(category);
-      this.formArray.push(control);
+      this.formArray?.push(control);
     });
   }
 
   private buildFormControl(category: Category): FormGroup {
     const formGroup = this.fb.group({
-      'id': [category.id],
-      'name': [category.name],
-      'type': [category.type],
-      'color': [category.color],
-      'numLabels': [{ value: category.numLabels, disabled: true }]
+      id: [category.id],
+      name: [category.name],
+      type: [category.type],
+      color: [category.color],
+      numLabels: [{ value: category.numLabels, disabled: true }]
     });
 
     formGroup.valueChanges.pipe(
@@ -70,7 +77,7 @@ export class SettingsCategoriesView implements OnInit, OnDestroy {
     return formGroup;
   }
 
-  private onFormChange(value: Category) {
+  private onFormChange(value: Category): void {
     this.categoriesService.saveOne(value).subscribe();
   }
 

@@ -6,11 +6,11 @@ export class CommonFunctions {
   /**
    * Resizes an array.
    *
-   * @param {number[]} arrayToResize the array to resize
-   * @param {number} placeholder the placeholder to set for new values
-   * @param {number} maxSize the max size of the array
+   * @param arrayToResize the array to resize
+   * @param placeholder the placeholder to set for new values
+   * @param maxSize the max size of the array
    */
-  public static resizeArray(arrayToResize: number[], placeholder: number, maxSize: number) {
+  public static resizeArray(arrayToResize: number[], placeholder: number, maxSize: number): void {
     for (let i = arrayToResize.length; i <= maxSize; i++) {
       arrayToResize[i] = placeholder;
     }

@@ -1,10 +1,10 @@
 import { Component, NgZone, ViewEncapsulation } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
-import { UploadRestService } from '../../../../core/services/rest/upload-rest.service';
-import { NotificationService } from '../../../../core/services/notification.service';
+import { UploadRestService } from '@core/services/rest/upload-rest.service';
+import { NotificationService } from '@core/services/notification.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { DecimalPipe } from '@angular/common';
-import { RestError } from '../../../../core/models/api.models';
+import { RestError } from '@core/models/api.models';
 import { EMPTY } from 'rxjs';
 
 /**
@@ -41,9 +41,9 @@ export class FileDropComponent {
   /**
    * Event triggered through a "drop".
    *
-   * @param files
+   * @param files the dropped files
    */
-  public dropped(files: NgxFileDropEntry[]) {
+  public dropped(files: NgxFileDropEntry[]): void {
     if (!files || files.length !== 1 || !files[0].fileEntry.isFile) {
       return;
     }
@@ -58,9 +58,9 @@ export class FileDropComponent {
   /**
    * Event triggered through an input="file".
    *
-   * @param event
+   * @param event the input event
    */
-  public input(event: any) {
+  public input(event: any): void {
     if (!event.target || !event.target.files || event.target.files.length !== 1) {
       return;
     }
@@ -73,7 +73,7 @@ export class FileDropComponent {
    *
    * @param file the file to upload
    */
-  private uploadFile(file: File) {
+  private uploadFile(file: File): void {
     this.formIsLoading = true;
     this.uploadService.uploadFile(file, file.name).pipe(
       catchError((err: RestError) => {
@@ -92,8 +92,8 @@ export class FileDropComponent {
         code: 'B200',
         message: 'file_import_success',
         context: {
-          imported: ''+result.imported,
-          assigned: ''+result.assigned,
+          imported: '' + result.imported,
+          assigned: '' + result.assigned,
           total_amount: this.decimalPipe.transform(result.total_amount, '1.2-2') + ' €'
         }
       });

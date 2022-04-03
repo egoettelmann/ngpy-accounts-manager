@@ -1,7 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { KeyValue } from '../../../../core/models/api.models';
+import { KeyValue } from '@core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
+import { Options, SeriesColumnOptions, SeriesLineOptions } from 'highcharts';
 
 @Component({
   selector: 'app-treasury-evolution-chart',
@@ -10,10 +11,10 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class TreasuryEvolutionChartComponent implements OnChanges {
 
-  @Input() evolutionData: KeyValue[];
-  @Input() aggregationCreditData: KeyValue[];
-  @Input() aggregationDebitData: KeyValue[];
-  @Input() chartTitle: string;
+  @Input() evolutionData?: KeyValue[];
+  @Input() aggregationCreditData?: KeyValue[];
+  @Input() aggregationDebitData?: KeyValue[];
+  @Input() chartTitle?: string;
 
   public chartOptions: any;
 
@@ -42,57 +43,77 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
    * @param aggregationDebit the graph data for the aggregation part (debit)
    * @returns the chart options
    */
-  private buildChartOptions(evolution: KeyValue[], aggregationCredit: KeyValue[], aggregationDebit: KeyValue[]) {
+  private buildChartOptions(evolution: KeyValue[], aggregationCredit: KeyValue[], aggregationDebit: KeyValue[]): Options {
     const that = this;
-    const options = {
+    const [categories, credits, debits, lines] = this.buildChartSeries(evolution, aggregationCredit, aggregationDebit);
+    return {
       tooltip: {
-        formatter: function () {
+        formatter(): string {
           return '' + this.x + ': <b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>';
         }
       },
       xAxis: {
-        categories: []
+        categories
       },
-      series: [{
+      series: [
+        credits,
+        debits,
+        lines
+      ]
+    };
+  }
+
+  private buildChartSeries(
+    evolution: KeyValue[],
+    aggregationCredit: KeyValue[],
+    aggregationDebit: KeyValue[]
+  ): [string[], SeriesColumnOptions, SeriesColumnOptions, SeriesLineOptions] {
+    const categories: string[] = [];
+    const creditSeries: number[] = [];
+    const debitSeries: number[] = [];
+    const evolutionSeries: number[] = [];
+    evolution.forEach(eItem => {
+      categories.push(eItem.key);
+      evolutionSeries.push(eItem.value);
+
+      aggregationCredit.forEach(aItem => {
+        if (aItem.key === eItem.key) {
+          creditSeries.push(aItem.value);
+        }
+      });
+      aggregationDebit.forEach(aItem => {
+        if (aItem.key === eItem.key) {
+          debitSeries.push(aItem.value);
+        }
+      });
+      if (evolutionSeries.length > creditSeries.length) {
+        creditSeries.push(0);
+      }
+      if (evolutionSeries.length > debitSeries.length) {
+        debitSeries.push(0);
+      }
+    });
+    return [
+      categories,
+      {
         name: this.translateService.instant('i18n.views.treasury.chart.credits'),
         type: 'column',
-        data: [],
+        data: creditSeries,
         stacking: 'normal',
         color: '#90ed7d'
       }, {
         name: this.translateService.instant('i18n.views.treasury.chart.debits'),
         type: 'column',
-        data: [],
+        data: debitSeries,
         stacking: 'normal',
         color: '#f45b5b'
       }, {
         name: this.translateService.instant('i18n.views.treasury.chart.evolution'),
-        data: [],
+        type: 'line',
+        data: evolutionSeries,
         color: '#434348'
-      }]
-    };
-    evolution.forEach(eItem => {
-      options.xAxis.categories.push(eItem.key);
-      options.series[2].data.push(eItem.value);
-
-      aggregationCredit.forEach(aItem => {
-        if (aItem.key === eItem.key) {
-          options.series[0].data.push(aItem.value);
-        }
-      });
-      aggregationDebit.forEach(aItem => {
-        if (aItem.key === eItem.key) {
-          options.series[1].data.push(aItem.value);
-        }
-      });
-      if (options.series[2].data.length > options.series[0].data.length) {
-        options.series[0].data.push(0);
       }
-      if (options.series[2].data.length > options.series[1].data.length) {
-        options.series[1].data.push(0);
-      }
-    });
-    return options;
+    ];
   }
 
 }

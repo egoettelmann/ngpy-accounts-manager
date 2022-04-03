@@ -1,8 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { GroupedValue } from '../../../../core/models/domain.models';
-import { ToLabelPipe } from '../../../../shared/pipes/to-label.pipe';
-import { ToCategoryPipe } from '../../../../shared/pipes/to-category.pipe';
+import { GroupedValue } from '@core/models/domain.models';
+import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
+import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
+import { Options, PointOptionsObject } from 'highcharts';
 
 @Component({
   selector: 'app-analytics-pie-chart',
@@ -11,8 +12,8 @@ import { ToCategoryPipe } from '../../../../shared/pipes/to-category.pipe';
 })
 export class AnalyticsPieChartComponent implements OnChanges {
 
-  @Input() data: GroupedValue[];
-  @Input() chartTitle: string;
+  @Input() data?: GroupedValue[];
+  @Input() chartTitle?: string;
 
   public chartOptions: any;
 
@@ -37,14 +38,15 @@ export class AnalyticsPieChartComponent implements OnChanges {
    * @param data the graph data
    * @returns the chart options
    */
-  private buildChartOptions(data: any) {
+  private buildChartOptions(data: GroupedValue[]): Options {
     const that = this;
-    const options = {
+    const [categories, series] = this.buildChartSeries(data);
+    return {
       chart: {
         type: 'pie'
       },
       legend: {
-        labelFormatter: function() {
+        labelFormatter(): string {
           return that.toCategoryPipe.transform(+this.name, 'name');
         }
       },
@@ -52,7 +54,10 @@ export class AnalyticsPieChartComponent implements OnChanges {
         pie: {
           center: ['50%', '50%'],
           dataLabels: {
-            formatter: function() {
+            formatter(): string {
+              if (this.key == null) {
+                return '';
+              }
               return that.toLabelPipe.transform(+this.key, 'name');
             }
           }
@@ -60,11 +65,11 @@ export class AnalyticsPieChartComponent implements OnChanges {
         series: {
           point: {
             events: {
-              legendItemClick: function() {
+              legendItemClick(): void {
                 const parentName = this.name;
                 const details = this.series.chart.series[1].data;
                 details.forEach((point) => {
-                  if (point.parent === parentName) {
+                  if (point.options?.custom?.parent === parentName) {
                     if (point.visible) {
                       point.setVisible(false);
                     } else {
@@ -78,63 +83,73 @@ export class AnalyticsPieChartComponent implements OnChanges {
         }
       },
       series: [{
+        type: 'pie',
         name: 'categories',
         size: '60%',
-        data: [],
+        data: categories,
         dataLabels: {
           enabled: false
         },
         showInLegend: true,
         tooltip: {
           headerFormat: '',
-          pointFormatter: function() {
+          pointFormatter(): string {
             return '<b>' + that.toCategoryPipe.transform(+this.name, 'name') + '</b><br/>'
-              + '<b>' + that.decimalPipe.transform(this.data, '1.2-2') + ' €</b>'
+              + '<b>' + that.decimalPipe.transform(this.options?.custom?.amount, '1.2-2') + ' €</b>'
               + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
           }
         }
       }, {
+        type: 'pie',
         name: 'labels',
         size: '80%',
         innerSize: '60%',
-        data: [],
+        data: series,
         allowPointSelect: true,
         tooltip: {
           headerFormat: '',
-          pointFormatter: function() {
+          pointFormatter(): string {
             return '<b>' + that.toLabelPipe.transform(+this.name, 'name') + '</b><br/>'
-              + '<b>' + that.decimalPipe.transform(this.data, '1.2-2') + ' €</b>'
+              + '<b>' + that.decimalPipe.transform(this.options?.custom?.amount, '1.2-2') + ' €</b>'
               + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
           }
         }
       }]
     };
+  }
 
-    const categories = [];
-    const series = [];
-    for (const group of data) {
+  private buildChartSeries(values: GroupedValue[]): PointOptionsObject[][] {
+    const categories: PointOptionsObject[] = [];
+    const series: PointOptionsObject[] = [];
+    for (const group of values) {
       // Adding categories
       categories.push({
         name: group.label,
         y: group.percentage,
-        data: group.amount,
-        color: that.toCategoryPipe.transform(+group.label, 'color')
+        custom: {
+          amount: group.amount
+        },
+        color: this.toCategoryPipe.transform(+group.label, 'color')
       });
+
+      if (group.details == null) {
+        continue;
+      }
 
       // Adding details
       for (const details of group.details) {
         series.push({
           name: details.label,
           y: details.percentage,
-          data: details.amount,
-          parent: group.label,
-          color: that.toLabelPipe.transform(+details.label, 'color')
+          custom: {
+            amount: details.amount,
+            parent: group.label
+          },
+          color: this.toLabelPipe.transform(+details.label, 'color')
         });
       }
     }
-    options.series[0].data = categories;
-    options.series[1].data = series;
-    return options;
+    return [categories, series];
   }
 
 }

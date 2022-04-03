@@ -1,8 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { BudgetStatus } from '../../../../core/models/api.models';
+import { BudgetStatus } from '@core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { Options, PointOptionsObject, SeriesColumnOptions } from 'highcharts';
 
 @Component({
   selector: 'app-budget-history-chart',
@@ -11,8 +12,8 @@ import { Router } from '@angular/router';
 })
 export class BudgetHistoryChartComponent implements OnChanges {
 
-  @Input() chartTitle: string;
-  @Input() data: BudgetStatus[];
+  @Input() chartTitle?: string;
+  @Input() data?: BudgetStatus[];
 
   public chartOptions: any;
 
@@ -45,21 +46,22 @@ export class BudgetHistoryChartComponent implements OnChanges {
    * @param data the graph data
    * @returns the chart options
    */
-  private buildChartOptions(data: BudgetStatus[]) {
+  private buildChartOptions(data: BudgetStatus[]): Options {
     const that = this;
-    const options = {
+    const [categories, series] = this.buildChartSeries(data);
+    return {
       chart: {
         type: 'column'
       },
       tooltip: {
-        formatter: function () {
+        formatter(): string {
           return '<b>' + this.series.name + '</b><br/>'
             + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
-            + ' (' + this.point.relativeRatio + ')';
+            + ' (' + this.point.options.custom?.relativeRatio + ')';
         }
       },
       xAxis: {
-        categories: []
+        categories
       },
       yAxis: {
         labels: {
@@ -71,26 +73,30 @@ export class BudgetHistoryChartComponent implements OnChanges {
           stacking: 'normal',
           dataLabels: {
             enabled: true,
-            formatter: function () {
+            formatter(): string {
               if (this.y === 0) {
-                return;
+                return '';
               }
               return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
             }
           }
         }
       },
-      series: []
+      series
     };
-    const categories = [];
-    const series = {
-      consumption: [],
-      overrun: [],
-      available: []
-    };
+  }
+
+  private buildChartSeries(values: BudgetStatus[]): [string[], SeriesColumnOptions[]] {
+    const categories: string[] = [];
+    const consumption: PointOptionsObject[] = [];
+    const overrun: PointOptionsObject[] = [];
+    const available: PointOptionsObject[] = [];
 
     // Generating list of categories
-    for (const d of data) {
+    for (const d of values) {
+      if (d.budget == null || d.budget.name == null || d.budget.amount == null) {
+        continue;
+      }
       if (!categories.includes(d.budget.name)) {
         categories.push(d.budget.name);
       }
@@ -98,53 +104,68 @@ export class BudgetHistoryChartComponent implements OnChanges {
       const totalSpending = Math.abs(d.spending);
       const totalBudget = d.budget.amount;
       if (totalSpending > totalBudget) {
-        series.consumption[categoryIdx] = {
+        // Spending are exceeding budget
+        consumption[categoryIdx] = {
           y: totalBudget,
-          relativeRatio: this.decimalPipe.transform(100, '1.2-2') + '%',
-          budgetId: d.budget.id
+          custom: {
+            relativeRatio: this.decimalPipe.transform(100, '1.2-2') + '%',
+            budgetId: d.budget.id
+          }
         };
         const aboveRatio = (totalSpending / totalBudget) - 1;
-        series.overrun[categoryIdx] = {
+        overrun[categoryIdx] = {
           y: totalSpending - totalBudget,
-          relativeRatio: '+' + this.decimalPipe.transform(aboveRatio * 100, '1.2-2') + '%',
-          budgetId: d.budget.id
+          custom: {
+            relativeRatio: '+' + this.decimalPipe.transform(aboveRatio * 100, '1.2-2') + '%',
+            budgetId: d.budget.id
+          }
         };
-        series.available[categoryIdx] = {
+        available[categoryIdx] = {
           y: 0
         };
-      } else {
-        const budgetRatio = totalSpending / totalBudget;
-        series.consumption[categoryIdx] = {
-          y: totalSpending,
+        continue;
+      }
+
+      // Spending below budget
+      const budgetRatio = totalSpending / totalBudget;
+      consumption[categoryIdx] = {
+        y: totalSpending,
+        custom: {
           relativeRatio: this.decimalPipe.transform(budgetRatio * 100, '1.2-2') + '%',
           budgetId: d.budget.id
-        };
-        const belowRatio = (totalBudget - totalSpending) / totalBudget;
-        series.available[categoryIdx] = {
-          y: totalBudget - totalSpending,
+        }
+      };
+      const belowRatio = (totalBudget - totalSpending) / totalBudget;
+      available[categoryIdx] = {
+        y: totalBudget - totalSpending,
+        custom: {
           relativeRatio: this.decimalPipe.transform(belowRatio * 100, '1.2-2') + '%',
           budgetId: d.budget.id
-        };
-        series.overrun[categoryIdx] = {
-          y: 0
-        };
-      }
+        }
+      };
+      overrun[categoryIdx] = {
+        y: 0
+      };
     }
-    options.xAxis.categories = categories;
-    options.series = [{
-      name: this.translateService.instant('i18n.components.budgets.series.overrun'),
-      data: series.overrun,
-      color: '#f45b5b'
-    }, {
-      name: this.translateService.instant('i18n.components.budgets.series.available'),
-      data: series.available,
-      color: '#90ed7d'
-    }, {
-      name: this.translateService.instant('i18n.components.budgets.series.consumption'),
-      data: series.consumption,
-      color: '#7cb5ec'
-    }];
-    return options;
-  }
 
+    return [
+      categories,
+      [{
+        type: 'column',
+        name: this.translateService.instant('i18n.components.budgets.series.overrun'),
+        data: overrun,
+        color: '#f45b5b'
+      }, {
+        type: 'column',
+        name: this.translateService.instant('i18n.components.budgets.series.available'),
+        data: available,
+        color: '#90ed7d'
+      }, {
+        type: 'column',
+        name: this.translateService.instant('i18n.components.budgets.series.consumption'),
+        data: consumption,
+        color: '#7cb5ec'
+      }]
+    ];
+  }
 }

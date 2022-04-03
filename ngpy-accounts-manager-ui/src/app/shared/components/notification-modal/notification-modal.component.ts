@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NotificationService } from '../../../core/services/notification.service';
+import { NotificationService } from '@core/services/notification.service';
 import { Subscription } from 'rxjs';
-import { Notification } from '../../../core/models/domain.models';
+import { Notification } from '@core/models/domain.models';
 
 /**
  * The notification modal component
@@ -15,12 +15,12 @@ export class NotificationModalComponent implements OnInit, OnDestroy {
   /**
    * The subscription to the notifications
    */
-  private subscription: Subscription;
+  private subscription?: Subscription;
 
   /**
    * The current error notification
    */
-  public notification: Notification;
+  public notification?: Notification;
 
   /**
    * The translation prefix
@@ -85,7 +85,7 @@ export class NotificationModalComponent implements OnInit, OnDestroy {
   /**
    * Starts the subscription to the notifications
    */
-  private startSubscription() {
+  private startSubscription(): void {
     this.subscription = this.notificationService.get().subscribe((notification) => {
       this.notification = notification;
     });

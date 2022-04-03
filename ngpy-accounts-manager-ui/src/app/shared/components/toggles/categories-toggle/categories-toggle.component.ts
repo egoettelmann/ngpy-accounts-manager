@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { Category } from '../../../../core/models/api.models';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Category } from '@core/models/api.models';
 import * as _ from 'lodash';
 
 /**
@@ -14,7 +14,7 @@ export class CategoriesToggleComponent implements OnChanges {
   /**
    * The available categories
    */
-  @Input() categories: Category[];
+  @Input() categories?: Category[];
 
   /**
    * The selected values
@@ -29,14 +29,14 @@ export class CategoriesToggleComponent implements OnChanges {
   /**
    * The currently selected categories
    */
-  selectedCategories: number[];
+  selectedCategories?: number[];
 
   /**
    * Triggered on each input change.
    *
    * @param changes the input changes
    */
-  ngOnChanges(changes) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (this.value && changes.value !== undefined) {
       if (this.value.length === 0) {
         this.toggleAllCategories();
@@ -70,7 +70,7 @@ export class CategoriesToggleComponent implements OnChanges {
    *
    * @param categoryId the category id to toggle
    */
-  toggleCategory(categoryId: number) {
+  toggleCategory(categoryId: number): void {
     if (this.selectedCategories === undefined) {
       this.selectedCategories = [];
     }
@@ -88,7 +88,7 @@ export class CategoriesToggleComponent implements OnChanges {
   /**
    * Toggles all categories
    */
-  toggleAllCategories() {
+  toggleAllCategories(): void {
     if (this.selectedCategories !== undefined) {
       this.selectedCategories = undefined;
       this.onChange.emit(this.selectedCategories);
@@ -100,7 +100,7 @@ export class CategoriesToggleComponent implements OnChanges {
    *
    * @param categories the categories to toggle
    */
-  toggleCategories(categories: number[]) {
+  toggleCategories(categories: number[]): void {
     const selectedCategories = categories.slice(0);
     if (!_.isEqual(selectedCategories, this.selectedCategories)) {
       this.selectedCategories = selectedCategories;

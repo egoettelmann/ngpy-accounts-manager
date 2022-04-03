@@ -1,6 +1,6 @@
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
-import { LabelsService } from '../../core/services/domain/labels.service';
-import { Label } from '../../core/models/api.models';
+import { LabelsService } from '@core/services/domain/labels.service';
+import { Label } from '@core/models/api.models';
 import { Subscription } from 'rxjs';
 
 /**
@@ -16,7 +16,7 @@ export class ToLabelPipe implements PipeTransform, OnDestroy {
   /**
    * The available labels
    */
-  private labels: Label[];
+  private labels?: Label[];
 
   /**
    * The subscription
@@ -85,12 +85,12 @@ export class ToLabelPipe implements PipeTransform, OnDestroy {
    * @param label the label
    * @param attribute the attribute to extract
    */
-  private getAttribute(label: Label, attribute: string): any {
+  private getAttribute(label: Label, attribute?: string): any {
     if (attribute == null) {
       return label;
     }
-    if (label.hasOwnProperty(attribute)) {
-      return label[attribute];
+    if (attribute && label.hasOwnProperty(attribute)) {
+      return (label as any)[attribute];
     }
     return null;
   }

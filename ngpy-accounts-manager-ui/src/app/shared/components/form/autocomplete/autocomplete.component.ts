@@ -13,7 +13,7 @@ export class AutocompleteComponent implements OnChanges {
   /**
    * The unique id
    */
-  @Input() uuid: string;
+  @Input() uuid?: string;
 
   /**
    * The current value
@@ -23,7 +23,7 @@ export class AutocompleteComponent implements OnChanges {
   /**
    * The available options
    */
-  @Input() options: any[];
+  @Input() options?: any[];
 
   /**
    * The value attribute
@@ -53,7 +53,7 @@ export class AutocompleteComponent implements OnChanges {
   /**
    * The available options
    */
-  public ngOptions: any[];
+  public ngOptions?: any[];
 
   /**
    * The currently selected model
@@ -85,8 +85,8 @@ export class AutocompleteComponent implements OnChanges {
    *
    * @param inputText the input
    */
-  onChange(inputText) {
-    if (inputText) {
+  onChange(inputText: string): void {
+    if (inputText && this.options) {
       this.ngOptions = this.options.filter(o => {
         const regExp = new RegExp(inputText, 'i');
         return regExp.test(o[this.labelAttribute]);
@@ -101,7 +101,7 @@ export class AutocompleteComponent implements OnChanges {
    *
    * @param opt the option to check
    */
-  isSelected(opt: any) {
+  isSelected(opt: any): boolean {
     return (
       this.selectedModel
       && this.selectedModel.hasOwnProperty(this.valueAttribute)
@@ -114,7 +114,7 @@ export class AutocompleteComponent implements OnChanges {
    *
    * @param event the keyboard event
    */
-  select(event: KeyboardEvent) {
+  select(event: KeyboardEvent): void {
     switch (event.code) {
       case 'Enter':
       case 'Tab':
@@ -134,7 +134,7 @@ export class AutocompleteComponent implements OnChanges {
   /**
    * Validates the selection
    */
-  validate() {
+  validate(): void {
     if (this.selectedModel) {
       this.onSelect.emit(this.selectedModel);
     } else {
@@ -148,7 +148,7 @@ export class AutocompleteComponent implements OnChanges {
    *
    * @param model the model to select
    */
-  selectClick(model: any) {
+  selectClick(model: any): void {
     this.selectedModel = model;
     this.ngModel = this.selectedModel[this.labelAttribute];
     this.validate();
@@ -157,9 +157,9 @@ export class AutocompleteComponent implements OnChanges {
   /**
    * Selects the next element
    */
-  selectNext() {
+  selectNext(): void {
     const currentIndex = this.findCurrentIndex();
-    if (this.ngOptions.length > currentIndex + 1) {
+    if (this.ngOptions && this.ngOptions.length > currentIndex + 1) {
       this.selectedModel = this.ngOptions[currentIndex + 1];
       this.ngModel = this.selectedModel[this.labelAttribute];
     }
@@ -168,11 +168,9 @@ export class AutocompleteComponent implements OnChanges {
   /**
    * Selects the previous element
    */
-  selectPrevious() {
+  selectPrevious(): void {
     const currentIndex = this.findCurrentIndex();
-    if (currentIndex > 0
-      && this.ngOptions.length > currentIndex - 1
-    ) {
+    if (this.ngOptions && currentIndex > 0 && this.ngOptions.length > currentIndex - 1) {
       this.selectedModel = this.ngOptions[currentIndex - 1];
       this.ngModel = this.selectedModel[this.labelAttribute];
     }
@@ -181,7 +179,7 @@ export class AutocompleteComponent implements OnChanges {
   /**
    * Handles the focus out event on the input
    */
-  onFocusOut() {
+  onFocusOut(): void {
     setTimeout(() => {
       this.ngOptions = undefined;
     });

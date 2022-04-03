@@ -1,19 +1,19 @@
 /**
  * The grouped value model
  */
-export class GroupedValue {
-  public label: string;
-  public amount: number;
-  public percentage: number;
-  public details?: GroupedValue[];
+export interface GroupedValue {
+  label: string;
+  amount: number;
+  percentage: number;
+  details?: GroupedValue[];
 }
 
 /**
  * The chart serie model
  */
-export class ChartSerie {
-  public name: string;
-  public data: number[];
+export interface ChartSerie {
+  name: string;
+  data: number[];
 }
 
 /**
@@ -24,18 +24,18 @@ export type NotificationType = 'ERROR' | 'INFO' | 'WARNING' | 'SUCCESS';
 /**
  * The notification model
  */
-export class Notification {
-  public type: NotificationType;
-  public code: string;
-  public message: string;
-  public context?: any;
+export interface Notification {
+  type: NotificationType;
+  code: string;
+  message: string;
+  context?: any;
 }
 
 /**
  * The alerts model
  */
-export class Alerts {
-  public labels: number;
-  public credits: number;
-  public debits: number;
+export interface Alerts {
+  labels: number;
+  credits: number;
+  debits: number;
 }

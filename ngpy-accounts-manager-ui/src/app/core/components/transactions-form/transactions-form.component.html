@@ -1,4 +1,5 @@
-<form [formGroup]="form"
+<form *ngIf="form"
+      [formGroup]="form"
       (ngSubmit)="submitForm()"
       class="clr-form">
 
@@ -50,7 +51,7 @@
                        [ctrl]="form.get('dateValue')"
                        class="form-group clr-row mb-md">
       <input id="dateValue"
-             [clrDate]="form.get('dateValue').value"
+             [clrDate]="form?.get('dateValue')?.value"
              (clrDateChange)="changeDate($event)"
              type="date"
              class="w-100"/>
@@ -73,7 +74,7 @@
                        [i18nLabel]="'i18n.components.transactions.form.label'"
                        [ctrl]="form.get('amount')"
                        class="form-group clr-row mb-md">
-      <app-autocomplete [value]="model.label"
+      <app-autocomplete [value]="model?.label"
                         [options]="labels"
                         (onSelect)="changeLabel($event)">
       </app-autocomplete>
@@ -99,7 +100,7 @@
             (click)="cancel()">
       {{ 'i18n.components.transactions.form.button.cancel' | translate }}
     </button>
-    <button *ngIf="model.id !== undefined"
+    <button *ngIf="model?.id !== undefined"
             class="btn btn-danger"
             type="button"
             (click)="deleteTransaction()">

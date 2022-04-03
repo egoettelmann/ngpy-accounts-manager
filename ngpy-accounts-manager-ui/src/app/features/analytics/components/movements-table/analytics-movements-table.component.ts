@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ChartSerie } from '../../../../core/models/domain.models';
-import { CompositeKeyValue } from '../../../../core/models/api.models';
-import { CommonFunctions } from '../../../../shared/utils/common-functions';
+import { ChartSerie } from '@core/models/domain.models';
+import { CompositeKeyValue } from '@core/models/api.models';
+import { CommonFunctions } from '@shared/utils/common-functions';
 
 @Component({
   selector: 'app-analytics-movements-table',
@@ -10,13 +10,16 @@ import { CommonFunctions } from '../../../../shared/utils/common-functions';
 })
 export class AnalyticsMovementsTableComponent implements OnChanges {
 
-  @Input() movements: CompositeKeyValue[];
-  @Input() quarterly: boolean;
+  @Input() movements?: CompositeKeyValue[];
+  @Input() quarterly?: boolean;
 
-  tableMovements: ChartSerie[];
+  tableMovements?: ChartSerie[];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.movements || changes.quarterly) {
+    if (!changes.movements && !changes.quarterly) {
+      return;
+    }
+    if (this.movements) {
       this.tableMovements = this.buildTable(this.movements);
     }
   }
@@ -29,8 +32,8 @@ export class AnalyticsMovementsTableComponent implements OnChanges {
    */
   private buildTable(data: CompositeKeyValue[]): ChartSerie[] {
     const movements: ChartSerie[] = [];
-    let categories = [];
-    const series = {};
+    let categories: string[] = [];
+    const series: any = {};
 
     // Generating list of categories
     for (const d of data) {

@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import { Summary } from '../../../core/models/api.models';
+import { Summary } from '@core/models/api.models';
 
 /**
  * The summary component
@@ -13,17 +13,17 @@ export class SummaryComponent implements OnChanges {
   /**
    * The summary to display
    */
-  @Input() summary: Summary;
+  @Input() summary?: Summary;
 
   /**
    * The calculated result
    */
-  public result: number;
+  public result?: number;
 
   /**
    * The calculated performance
    */
-  public performance: number;
+  public performance?: number;
 
   /**
    * Handles all input changes.

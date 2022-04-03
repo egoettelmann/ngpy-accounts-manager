@@ -2,10 +2,10 @@ import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { combineLatest, Subscription } from 'rxjs';
-import { lock, SubscriptionLock } from '../../../../shared/utils/lock-subscriber';
-import { Category, Label } from '../../../../core/models/api.models';
-import { CategoriesService } from '../../../../core/services/domain/categories.service';
-import { LabelsService } from '../../../../core/services/domain/labels.service';
+import { lock, SubscriptionLock } from '@shared/utils/lock-subscriber';
+import { Category, Label } from '@core/models/api.models';
+import { CategoriesService } from '@core/services/domain/categories.service';
+import { LabelsService } from '@core/services/domain/labels.service';
 
 @Component({
   templateUrl: './settings-labels.view.html',
@@ -15,9 +15,9 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  categories: Category [];
-  form: FormGroup;
-  formArray: FormArray;
+  categories?: Category [];
+  form?: FormGroup;
+  formArray?: FormArray;
 
   private subscriptions = {
     static: new Subscription(),
@@ -45,11 +45,11 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
     this.subscriptions.active.unsubscribe();
   }
 
-  deleteLabel(label: Label) {
+  deleteLabel(label: Label): void {
     this.labelsService.deleteOne(label).subscribe();
   }
 
-  addLabel() {
+  addLabel(): void {
     const newLabel = {
       name: '',
       color: '',
@@ -57,29 +57,36 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
       numTransactions: 0
     } as Label;
     const control = this.buildFormControl(newLabel);
-    this.formArray.push(control);
+    this.formArray?.push(control);
     this.onFormChange(control);
   }
 
-  private buildForm(labels: Label[]) {
+  get labelForms(): FormGroup[] {
+    if (this.formArray == null) {
+      return [];
+    }
+    return this.formArray.controls as FormGroup[];
+  }
+
+  private buildForm(labels: Label[]): void {
     this.form = this.fb.group({
-      'labels': this.fb.array([])
+      labels: this.fb.array([])
     });
     this.formArray = this.form.get('labels') as FormArray;
     labels.map(label => {
       const control = this.buildFormControl(label);
-      this.formArray.push(control);
+      this.formArray?.push(control);
     });
   }
 
   private buildFormControl(label: Label): FormGroup {
     const formGroup = this.fb.group({
-      'id': [label.id],
-      'name': [label.name],
-      'color': [label.color],
-      'icon': [label.icon],
-      'category_id': [label.category ? label.category.id : null],
-      'numTransactions': [label.numTransactions]
+      id: [label.id],
+      name: [label.name],
+      color: [label.color],
+      icon: [label.icon],
+      category_id: [label.category ? label.category.id : null],
+      numTransactions: [label.numTransactions]
     });
     this.disablePrivateFields(formGroup);
 
@@ -94,7 +101,7 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
     return formGroup;
   }
 
-  private onFormChange(formGroup: FormGroup, saveLock = new SubscriptionLock()) {
+  private onFormChange(formGroup: FormGroup, saveLock = new SubscriptionLock()): void {
     const value = formGroup.value;
     this.labelsService.saveOne(value).subscribe(savedLabel => {
       formGroup.patchValue({ id: savedLabel.id }, { emitEvent: false });
@@ -102,8 +109,8 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
     });
   }
 
-  private disablePrivateFields(formGroup: FormGroup) {
-    formGroup.get('numTransactions').disable({ emitEvent: false });
+  private disablePrivateFields(formGroup: FormGroup): void {
+    formGroup?.get('numTransactions')?.disable({ emitEvent: false });
   }
 
 }

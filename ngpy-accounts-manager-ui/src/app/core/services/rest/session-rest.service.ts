@@ -22,7 +22,7 @@ export class SessionRestService {
    *
    * @param loginForm the login form (username/password)
    */
-  login(loginForm: { username?: String, password?: String }): Observable<any> {
+  login(loginForm: { username?: string, password?: string }): Observable<any> {
     return this.http.post<any>('/rest/session/login', loginForm);
   }
 

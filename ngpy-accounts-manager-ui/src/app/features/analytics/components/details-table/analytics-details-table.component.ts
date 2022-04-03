@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { GroupedValue } from '../../../../core/models/domain.models';
+import { GroupedValue } from '@core/models/domain.models';
 
 @Component({
   selector: 'app-analytics-details-table',
@@ -8,17 +8,17 @@ import { GroupedValue } from '../../../../core/models/domain.models';
 })
 export class AnalyticsDetailsTableComponent {
 
-  @Input() data: GroupedValue[];
+  @Input() data?: GroupedValue[];
   @Input() expanded = true;
 
   @Output() categoryClick = new EventEmitter<number>();
   @Output() labelClick = new EventEmitter<number>();
 
-  clickOnCategory(categoryId: number) {
+  clickOnCategory(categoryId: number): void {
     this.categoryClick.emit(categoryId);
   }
 
-  clickOnLabel(labelId: number) {
+  clickOnLabel(labelId: number): void {
     this.labelClick.emit(labelId);
   }
 

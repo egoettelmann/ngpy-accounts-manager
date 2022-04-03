@@ -1,4 +1,7 @@
-<h3>{{ 'i18n.views.settings.categories.title' | translate }} <span class="badge">{{ formArray?.controls.length }}</span></h3>
+<h3>
+  <span>{{ 'i18n.views.settings.categories.title' | translate }}</span>
+  <span class="badge">{{ categoryForms.length }}</span>
+</h3>
 
 <form [formGroup]="form" *ngIf="form" class="clr-form">
   <table class="table card-shadow" [formArrayName]="'categories'">
@@ -12,13 +15,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let categoryForm of formArray.controls" [formGroup]="categoryForm">
+    <tr *ngFor="let categoryForm of categoryForms" [formGroup]="categoryForm">
       <td class="left">
         <input class="clr-input w-100" type="text" [formControlName]="'name'" size="45" />
       </td>
       <td class="left">
           <span class="badge"
-                [style.background]="categoryForm.get('color').value">
+                [style.background]="categoryForm?.get('color')?.value">
             <span>&nbsp;</span>
           </span>
         <input class="clr-input" type="text" [formControlName]="'color'" />
@@ -31,8 +34,8 @@
         </select>
       </td>
       <td class="right">
-        <span class="label" [ngClass]="categoryForm.get('numLabels').value > 0 ? 'label-info' : 'label-danger'">
-          {{ categoryForm.get('numLabels').value }}
+        <span class="label" [ngClass]="categoryForm?.get('numLabels')?.value > 0 ? 'label-info' : 'label-danger'">
+          {{ categoryForm?.get('numLabels')?.value }}
         </span>
       </td>
       <td>

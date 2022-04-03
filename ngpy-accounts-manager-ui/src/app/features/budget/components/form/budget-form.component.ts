@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Account, Budget, Label } from '../../../../core/models/api.models';
+import { Account, Budget, Label } from '@core/models/api.models';
 
 /**
  * The budget form component
@@ -14,17 +14,17 @@ export class BudgetFormComponent implements OnChanges {
   /**
    * The transaction
    */
-  @Input() model: Budget;
+  @Input() model?: Budget;
 
   /**
    * the available labels
    */
-  @Input() labels: Label[];
+  @Input() labels?: Label[];
 
   /**
    * The available accounts
    */
-  @Input() accounts: Account[];
+  @Input() accounts?: Account[];
 
   /**
    * Triggered when the form is submitted
@@ -44,7 +44,7 @@ export class BudgetFormComponent implements OnChanges {
   /**
    * The form group
    */
-  form: FormGroup;
+  form?: FormGroup;
 
   /**
    * The available periods
@@ -76,16 +76,16 @@ export class BudgetFormComponent implements OnChanges {
   /**
    * Builds the form
    */
-  buildForm() {
+  private buildForm(): void {
     this.form = this.fb.group(
       {
-        'id': [null],
-        'name': [null, [Validators.required]],
-        'description': [null],
-        'period': [null, [Validators.required]],
-        'amount': [null, [Validators.required]],
-        'accounts': [null],
-        'labels': [null]
+        id: [null],
+        name: [null, [Validators.required]],
+        description: [null],
+        period: [null, [Validators.required]],
+        amount: [null, [Validators.required]],
+        accounts: [null],
+        labels: [null]
       }
     );
   }
@@ -95,11 +95,11 @@ export class BudgetFormComponent implements OnChanges {
    *
    * @param accounts the account ids to select
    */
-  selectAccounts(accounts: number[]) {
+  selectAccounts(accounts: (number | null)[]): void {
     if (accounts && accounts.length > 0) {
-      this.form.get('accounts').setValue(accounts);
+      this.form?.get('accounts')?.setValue(accounts);
     } else {
-      this.form.get('accounts').setValue(null);
+      this.form?.get('accounts')?.setValue(null);
     }
   }
 
@@ -108,11 +108,11 @@ export class BudgetFormComponent implements OnChanges {
    *
    * @param labels the label ids to select
    */
-  selectLabels(labels: number[]) {
+  selectLabels(labels: (number | null)[]): void {
     if (labels && labels.length > 0) {
-      this.form.get('labels').setValue(labels);
+      this.form?.get('labels')?.setValue(labels);
     } else {
-      this.form.get('labels').setValue(null);
+      this.form?.get('labels')?.setValue(null);
     }
   }
 
@@ -121,33 +121,33 @@ export class BudgetFormComponent implements OnChanges {
    *
    * @param data the form data
    */
-  initFormData(data: Budget) {
+  private initFormData(data: Budget): void {
     const t = Object.assign({}, data) as any;
     if (t.accounts != null && t.accounts.length > 0) {
-      t.accounts = t.accounts.map(account => account.id);
+      t.accounts = t.accounts.map((account: Account) => account.id);
     } else {
       t.accounts = null;
     }
     if (t.labels != null && t.labels.length > 0) {
-      t.labels = t.labels.map(label => label.id);
+      t.labels = t.labels.map((label: Label) => label.id);
     } else {
       t.labels = null;
     }
-    this.form.patchValue(t);
+    this.form?.patchValue(t);
   }
 
   /**
    * Submits the form
    */
-  submitForm() {
-    const t = Object.assign({}, this.form.value) as any;
+  submitForm(): void {
+    const t = Object.assign({}, this.form?.value) as any;
     if (t.accounts != null) {
-      t.accounts = t.accounts.map(id => this.findAccountFromId(id));
+      t.accounts = t.accounts.map((id: number) => this.findAccountFromId(id));
     } else {
       t.accounts = [];
     }
     if (t.labels != null) {
-      t.labels = t.labels.map(id => this.findLabelFromId(id));
+      t.labels = t.labels.map((id: number) => this.findLabelFromId(id));
     } else {
       t.labels = [];
     }
@@ -157,7 +157,7 @@ export class BudgetFormComponent implements OnChanges {
   /**
    * Deletes the transaction
    */
-  deleteBudget() {
+  deleteBudget(): void {
     const t = Object.assign({}, this.model);
     this.onFormDelete.emit(t);
   }
@@ -165,7 +165,7 @@ export class BudgetFormComponent implements OnChanges {
   /**
    * Cancels
    */
-  cancel() {
+  cancel(): void {
     const t = Object.assign({}, this.model);
     this.onFormCancel.emit(t);
   }
@@ -175,8 +175,8 @@ export class BudgetFormComponent implements OnChanges {
    *
    * @param accountId the account id to find
    */
-  private findAccountFromId(accountId: number): Account {
-    return this.accounts.find(account => account.id === accountId);
+  private findAccountFromId(accountId: number): Account | undefined {
+    return this.accounts?.find(account => account.id === accountId);
   }
 
   /**
@@ -184,8 +184,8 @@ export class BudgetFormComponent implements OnChanges {
    *
    * @param labelId the label id to find
    */
-  private findLabelFromId(labelId: number): Label {
-    return this.labels.find(label => label.id === labelId);
+  private findLabelFromId(labelId: number): Label | undefined {
+    return this.labels?.find(label => label.id === labelId);
   }
 
 }

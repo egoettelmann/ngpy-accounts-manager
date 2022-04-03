@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Account } from '../../../../core/models/api.models';
+import { Account } from '@core/models/api.models';
 
 /**
  * The account card component
@@ -14,6 +14,6 @@ export class DashboardAccountCardComponent {
   /**
    * The account
    */
-  @Input() account: Account;
+  @Input() account?: Account;
 
 }

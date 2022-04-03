@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SessionRestService } from '../../../services/rest/session-rest.service';
+import { SessionRestService } from '@core/services/rest/session-rest.service';
 
 /**
  * The main component

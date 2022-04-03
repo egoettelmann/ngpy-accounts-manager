@@ -1,9 +1,10 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { CommonFunctions } from '../../../../shared/utils/common-functions';
-import { CompositeKeyValue } from '../../../../core/models/api.models';
-import { ToCategoryPipe } from '../../../../shared/pipes/to-category.pipe';
-import { ToLabelPipe } from '../../../../shared/pipes/to-label.pipe';
+import { CommonFunctions } from '@shared/utils/common-functions';
+import { CompositeKeyValue } from '@core/models/api.models';
+import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
+import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
+import { Options, SeriesColumnOptions } from 'highcharts';
 
 @Component({
   selector: 'app-analytics-bar-chart',
@@ -12,8 +13,8 @@ import { ToLabelPipe } from '../../../../shared/pipes/to-label.pipe';
 })
 export class AnalyticsBarChartComponent implements OnChanges {
 
-  @Input() chartTitle: string;
-  @Input() data: CompositeKeyValue[];
+  @Input() chartTitle?: string;
+  @Input() data?: CompositeKeyValue[];
   @Input() byCategories = true;
 
   public chartOptions: any;
@@ -39,31 +40,33 @@ export class AnalyticsBarChartComponent implements OnChanges {
    * @param data the graph data
    * @returns the chart options
    */
-  private buildChartOptions(data: CompositeKeyValue[]) {
+  private buildChartOptions(data: CompositeKeyValue[]): Options {
     const that = this;
-    const options = {
+    const categories = this.buildChartCategories(data);
+    const series = this.buildChartSeries(data, categories);
+    return {
       chart: {
         type: 'column'
       },
       tooltip: {
-        formatter: function() {
+        formatter(): string {
           return '<b>' + that.resolveName(this.series.name) + '</b><br/>'
             + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
             + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
         }
       },
       legend: {
-        labelFormatter: function() {
+        labelFormatter(): string {
           return that.resolveName(this.name);
         }
       },
       xAxis: {
-        categories: []
+        categories
       },
       yAxis: {
         stackLabels: {
           enabled: true,
-          formatter: function() {
+          formatter(): string {
             return that.decimalPipe.transform(this.total, '1.2-2') + ' €';
           }
         }
@@ -73,47 +76,54 @@ export class AnalyticsBarChartComponent implements OnChanges {
           stacking: 'percent',
           dataLabels: {
             enabled: true,
-            formatter: function() {
+            formatter(): string {
               return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
             }
           }
         }
       },
-      series: []
+      series
     };
-    let categories = [];
-    const series = {};
+  }
 
+  private buildChartCategories(values: CompositeKeyValue[]): string[] {
     // Generating list of categories
-    for (const d of data) {
+    const categories: string[] = [];
+    for (const d of values) {
       if (!categories.includes(d.keyOne)) {
         categories.push(d.keyOne);
       }
     }
-    categories = categories.sort((a: string, b: string) => {
+    return categories.sort((a: string, b: string) => {
       return a.localeCompare(b);
     });
-    for (const d of data) {
+  }
+
+  private buildChartSeries(values: CompositeKeyValue[], categories: string[]): SeriesColumnOptions[] {
+    const groupedValues: any = {};
+    for (const d of values) {
       const categoryIdx = categories.indexOf(d.keyOne);
-      if (!series.hasOwnProperty(d.keyTwo)) {
-        series[d.keyTwo] = [];
+      if (!groupedValues.hasOwnProperty(d.keyTwo)) {
+        groupedValues[d.keyTwo] = [];
       }
-      CommonFunctions.resizeArray(series[d.keyTwo], 0, categoryIdx);
-      series[d.keyTwo][categoryIdx] = {
+      CommonFunctions.resizeArray(groupedValues[d.keyTwo], 0, categoryIdx);
+      groupedValues[d.keyTwo][categoryIdx] = {
         y: d.value
       };
     }
-    options.xAxis.categories = categories;
-    for (const key in series) {
-      if (series.hasOwnProperty(key)) {
-        options.series.push({
+
+    const series: SeriesColumnOptions[] = [];
+    for (const key in groupedValues) {
+      if (groupedValues.hasOwnProperty(key)) {
+        series.push({
+          type: 'column',
           name: key,
-          data: series[key],
+          data: groupedValues[key],
           color: this.resolveColor(key)
         });
       }
     }
-    return options;
+    return series;
   }
 
   /**

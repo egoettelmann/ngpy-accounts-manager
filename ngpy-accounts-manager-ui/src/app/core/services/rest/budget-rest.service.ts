@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Budget, BudgetStatus } from '../../models/api.models';
 import { RqlService } from '../rql.service';
 import { FilterRequest } from '../../models/rql.models';
-import { CommonFunctions } from '../../../shared/utils/common-functions';
+import { CommonFunctions } from '@shared/utils/common-functions';
 import { DateService } from '../date.service';
 import { flatMap, startWith, tap } from 'rxjs/operators';
 import { EventBusService } from '../event-bus.service';
@@ -39,7 +39,7 @@ export class BudgetRestService {
     const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
     return this.eventBusService.accept(['budgets.*']).pipe(
       startWith(0),
-      flatMap(() => this.http.get<Budget[]>('/rest/budgets', { params: params }))
+      flatMap(() => this.http.get<Budget[]>('/rest/budgets', { params }))
     );
   }
 
@@ -93,7 +93,7 @@ export class BudgetRestService {
 
     return this.eventBusService.accept(['budgets.*']).pipe(
       startWith(0),
-      flatMap(() => this.http.get<BudgetStatus[]>('/rest/budgets/status', { params: params }))
+      flatMap(() => this.http.get<BudgetStatus[]>('/rest/budgets/status', { params }))
     );
   }
 

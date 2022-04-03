@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { SessionRestService } from '../../services/rest/session-rest.service';
 import { AlertsService } from '../../services/domain/alerts.service';
 import { Subscription } from 'rxjs';
-import { RouterPathPipe } from '../../../shared/modules/router-path/router-path.pipe';
+import { RouterPathPipe } from '@shared/modules/router-path/router-path.pipe';
 import { RouterService } from '../../services/router.service';
 
 /**
@@ -18,12 +18,12 @@ export class NavComponent implements OnInit, OnDestroy {
   /**
    * The reference to the search input element
    */
-  @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput?: ElementRef;
 
   /**
    * The number of alerts
    */
-  numAlerts: string;
+  numAlerts?: string;
 
   /**
    * The alert subscription
@@ -90,13 +90,15 @@ export class NavComponent implements OnInit, OnDestroy {
    *
    * @param value the value to search
    */
-  search(value: string) {
+  search(value: string): void {
     this.routerService.navigate('route.transactions.search', {}, {
       queryParams: {
         description: value
       }
     });
-    this.searchInput.nativeElement.value = '';
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
+    }
   }
 
 }

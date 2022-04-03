@@ -1,4 +1,4 @@
-<div class="card">
+<div *ngIf="budget" class="card">
   <div class="card-block">
     <h4 class="card-title">
       <strong>{{ budget.name }}</strong><br/>
@@ -13,7 +13,7 @@
                 [ngStyle]="{ border: '1px solid ' + account.color, background: account.color + '30' }">
             {{ account.name }}
           </span>
-          <span *ngIf="budget.accounts.length === 0">
+          <span *ngIf="budget.accounts == null || budget.accounts.length === 0">
             {{ 'i18n.components.budgets.budget-card.all-accounts' | translate }}
           </span>
         </div>

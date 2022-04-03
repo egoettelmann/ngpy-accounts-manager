@@ -15,7 +15,7 @@
       <span>{{ d | number:'1.2-2' }}&nbsp;€</span>
     </td>
   </tr>
-  <tr *ngIf="tableMovements.length === 0">
+  <tr *ngIf="tableMovements && tableMovements.length === 0">
     <td *ngIf="quarterly" colspan="5">
       <span>{{ 'i18n.views.analytics.table.no-entries' | translate }}</span>
     </td>

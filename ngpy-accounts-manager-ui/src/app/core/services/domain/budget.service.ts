@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RqlService } from '../rql.service';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Budget, BudgetStatus, KeyValue, Transaction } from '../../models/api.models';
 import { DateService } from '../date.service';
 import { BudgetRestService } from '../rest/budget-rest.service';
@@ -48,7 +48,7 @@ export class BudgetService {
    * @param month the month
    */
   getStatusList(accounts: number[], year: number, month: number): Observable<BudgetStatus[]> {
-    let filters: FilterRequest;
+    let filters: FilterRequest | undefined;
     // Adding the account filters
     if (accounts && accounts.length > 0) {
       const accountList = this.rqlService.formatList(accounts);
@@ -62,18 +62,18 @@ export class BudgetService {
   /**
    * Gets the status history.
    *
-   * @param dateFrom
-   * @param dateTo
-   * @param period
-   * @param accounts
-   * @param labels
+   * @param dateFrom the start date
+   * @param dateTo the end date
+   * @param period the period
+   * @param accounts the list of accounts
+   * @param labels the labels
    */
   getStatusHistory(
     dateFrom: Date,
     dateTo: Date,
     period: string,
-    accounts: number[],
-    labels: number[]
+    accounts?: number[],
+    labels?: number[]
   ): Observable<KeyValue[]> {
     // Adding date and amount filters
     let filter = FilterRequest.all(
@@ -105,16 +105,16 @@ export class BudgetService {
   /**
    * Gets the list of transactions.
    *
-   * @param dateFrom
-   * @param dateTo
-   * @param accounts
-   * @param labels
+   * @param dateFrom the start date
+   * @param dateTo the end date
+   * @param accounts the list of accounts
+   * @param labels the labels
    */
   getTransactions(
     dateFrom: Date,
     dateTo: Date,
-    accounts: number[],
-    labels: number[]
+    accounts?: number[],
+    labels?: number[]
   ): Observable<Transaction[]> {
 
     let filters = FilterRequest.all(
@@ -142,7 +142,10 @@ export class BudgetService {
    *
    * @param budget the budget to delete
    */
-  deleteOne(budget: Budget): Observable<any> {
+  deleteOne(budget: Budget): Observable<void> {
+    if (budget.id == null) {
+      return throwError('No id defined in budget');
+    }
     return this.budgetRestService.deleteOne(budget.id);
   }
 
@@ -152,7 +155,7 @@ export class BudgetService {
    * @param budget the budget to save
    */
   saveOne(budget: Budget): Observable<Budget> {
-    return  this.budgetRestService.saveOne(budget);
+    return this.budgetRestService.saveOne(budget);
   }
 
 }

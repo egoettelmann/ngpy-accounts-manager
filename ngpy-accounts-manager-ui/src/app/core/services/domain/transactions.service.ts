@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Transaction } from '../../models/api.models';
 import { TransactionsRestService } from '../rest/transactions-rest.service';
 import { RqlService } from '../rql.service';
@@ -30,7 +30,7 @@ export class TransactionsService {
    *
    * @param transactionId the transaction id
    */
-  getOne(transactionId: number): Observable<Transaction> {
+  getOne(transactionId?: number): Observable<Transaction | undefined> {
     if (transactionId == null || Number.isNaN(transactionId)) {
       return of(undefined);
     }
@@ -55,11 +55,7 @@ export class TransactionsService {
    * @param month the month
    * @param accounts the accounts
    */
-  getAll(
-    year: number,
-    month: number,
-    accounts: number[]
-  ): Observable<Transaction[]> {
+  getAll(year: number, month: number, accounts?: number[]): Observable<Transaction[]> {
     // Building the date from
     const dateFrom = this.dateService.getPeriodStart(year, month);
     const dateTo = this.dateService.getPeriodEnd(year, month);
@@ -80,7 +76,7 @@ export class TransactionsService {
     }
 
     return this.transactionRestService.getAll({
-      filter: filter,
+      filter,
       sort: {
         sort: 'dateValue'
       }
@@ -94,7 +90,7 @@ export class TransactionsService {
    * @param accounts the accounts
    * @param labels the labels
    */
-  getTopCredits(year: number, accounts: number[], labels: number[]): Observable<Transaction[]> {
+  getTopCredits(year: number, accounts?: number[], labels?: number[]): Observable<Transaction[]> {
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
 
@@ -124,7 +120,7 @@ export class TransactionsService {
     }
 
     return this.transactionRestService.getAll({
-      filter: filter,
+      filter,
       page: {
         page: 1,
         pageSize: 10
@@ -143,7 +139,7 @@ export class TransactionsService {
    * @param accounts the accounts
    * @param labels the labels
    */
-  getTopDebits(year: number, accounts: number[], labels: number[]): Observable<Transaction[]> {
+  getTopDebits(year: number, accounts?: number[], labels?: number[]): Observable<Transaction[]> {
     const dateFrom = this.dateService.getPeriodStart(year);
     const dateTo = this.dateService.getPeriodEnd(year);
 
@@ -173,7 +169,7 @@ export class TransactionsService {
     }
 
     return this.transactionRestService.getAll({
-      filter: filter,
+      filter,
       page: {
         page: 1,
         pageSize: 10
@@ -190,7 +186,10 @@ export class TransactionsService {
    *
    * @param transaction the transaction to delete
    */
-  deleteOne(transaction: Transaction): Observable<any> {
+  deleteOne(transaction: Transaction): Observable<void> {
+    if (transaction.id == null) {
+      return throwError('No id defined in transaction');
+    }
     return this.transactionRestService.deleteOne(transaction.id);
   }
 

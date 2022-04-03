@@ -33,8 +33,8 @@ export interface RouterPaths {
  * In addition to the route paths, it defines the default route and the path variable identifier.
  */
 export interface RouterPathOptions {
-  paths: RouterPaths;
-  defaultRoute?: string[];
+  paths?: RouterPaths;
+  defaultRoute: string[];
   pathVariableIdentifier?: string;
 }
 

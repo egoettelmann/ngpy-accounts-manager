@@ -93,7 +93,7 @@
            [clrModalSize]="'lg'"
            [clrModalClosable]="true"
            [clrModalStaticBackdrop]="true">
-  <h3 class="modal-title">{{ selectedCategory | toCategory:'name' }}</h3>
+  <h3 *ngIf="selectedCategory" class="modal-title">{{ selectedCategory | toCategory:'name' }}</h3>
   <div class="modal-body">
     <app-analytics-bar-chart [chartTitle]="'i18n.views.analytics.modal.title' | translate"
                              [data]="analyticsByLabel"

@@ -1,15 +1,15 @@
 import { async, TestBed } from '@angular/core/testing';
 import { RqlService } from '../rql.service';
-import { of } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { format } from 'date-fns';
 import { DateService } from '../date.service';
 import { TransactionsRestService } from '../rest/transactions-rest.service';
 import { TransactionsService } from './transactions.service';
 
 class MockTransactionsRestService {
-  getAll() {}
-  getTopCredits() {}
-  getTopDebits() {}
+  getAll(): void {}
+  getTopCredits(): void {}
+  getTopDebits(): void {}
 }
 
 describe('TransactionsService', () => {
@@ -39,7 +39,7 @@ describe('TransactionsService', () => {
     let result: any = {};
     spyOn(restService, 'getAll').and.callFake((args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     const sub = service.getAll(2015, 4, []).subscribe();
     expect(restService.getAll).toHaveBeenCalled();
@@ -54,7 +54,7 @@ describe('TransactionsService', () => {
     let result: any = {};
     spyOn(restService, 'getAll').and.callFake((args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     const sub = service.getAll(2016, 12, []).subscribe();
     expect(restService.getAll).toHaveBeenCalled();
@@ -69,7 +69,7 @@ describe('TransactionsService', () => {
     let result: any = {};
     spyOn(restService, 'getAll').and.callFake((args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     const sub = service.getTopCredits(2011, [], []).subscribe();
     expect(restService.getAll).toHaveBeenCalled();
@@ -84,7 +84,7 @@ describe('TransactionsService', () => {
     let result: any = {};
     spyOn(restService, 'getAll').and.callFake((args) => {
       result = args;
-      return of({});
+      return EMPTY;
     });
     const sub = service.getTopDebits(2013, [], []).subscribe();
     expect(restService.getAll).toHaveBeenCalled();

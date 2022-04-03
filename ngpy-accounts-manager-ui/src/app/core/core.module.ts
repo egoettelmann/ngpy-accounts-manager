@@ -18,7 +18,7 @@ import { CategoriesRestService } from './services/rest/categories-rest.service';
 import { NotificationService } from './services/notification.service';
 import { KeepFocusService } from './services/keep-focus.service';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { AuthenticatedGuard } from './guards/authenticated.guard';
 import { AuthenticationService } from './services/authentication.service';
 import { ResponsiveService } from './services/responsive.service';
@@ -32,22 +32,22 @@ import { BudgetRestService } from './services/rest/budget-rest.service';
 import { BudgetService } from './services/domain/budget.service';
 import { RouterService } from './services/router.service';
 import { CategoriesService } from './services/domain/categories.service';
-import { RouterPathModule } from '../shared/modules/router-path/router-path.module';
+import { RouterPathModule } from '@shared/modules/router-path/router-path.module';
 import { AppRoutePaths } from './app-route-paths';
 import { FormsView } from './views/main/forms/forms.view';
 import { TransactionsFormComponent } from './components/transactions-form/transactions-form.component';
 import { FormsTransactionView } from './views/main/forms/transaction/forms-transaction.view';
 import { EventBusService } from './services/event-bus.service';
 import { LabelsService } from './services/domain/labels.service';
-import { ToLabelPipe } from '../shared/pipes/to-label.pipe';
-import { ToCategoryPipe } from '../shared/pipes/to-category.pipe';
+import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
+import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
 import { CacheService } from './services/cache.service';
 import { MainResolverService } from './services/resolvers/main-resolver.service';
 import { ConfigurationService } from './services/configuration.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ApiUrlInterceptor } from './interceptors/api-url.interceptor';
 
-export function HttpLoaderFactory(http: HttpClient) {
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
 }
 
@@ -115,7 +115,7 @@ export class CoreModule {
     CategoriesRestService,
     BudgetRestService,
 
-    /** Domain services **/
+    /** Domain services */
     AccountsService,
     TransactionsService,
     StatisticsService,

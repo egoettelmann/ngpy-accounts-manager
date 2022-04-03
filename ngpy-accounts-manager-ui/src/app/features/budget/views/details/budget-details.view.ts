@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BudgetService } from '../../../../core/services/domain/budget.service';
+import { BudgetService } from '@core/services/domain/budget.service';
 import { ActivatedRoute } from '@angular/router';
-import { Account, Budget, BudgetStatus, KeyValue, Label, Transaction } from '../../../../core/models/api.models';
-import { RouterService } from '../../../../core/services/router.service';
-import { DateService } from '../../../../core/services/date.service';
+import { Account, Budget, BudgetStatus, KeyValue, Label, Transaction } from '@core/models/api.models';
+import { RouterService } from '@core/services/router.service';
+import { DateService } from '@core/services/date.service';
 import { combineLatest, Subscription } from 'rxjs';
-import { AccountsService } from '../../../../core/services/domain/accounts.service';
-import { LabelsService } from '../../../../core/services/domain/labels.service';
+import { AccountsService } from '@core/services/domain/accounts.service';
+import { LabelsService } from '@core/services/domain/labels.service';
 
 @Component({
   templateUrl: './budget-details.view.html',
@@ -14,18 +14,18 @@ import { LabelsService } from '../../../../core/services/domain/labels.service';
 })
 export class BudgetDetailsView implements OnInit, OnDestroy {
 
-  currentYear: number;
-  currentMonth: number;
+  currentYear?: number;
+  currentMonth?: number;
 
-  budget: Budget;
-  statusList: BudgetStatus[];
-  transactions: Transaction[];
-  accounts: Account[];
-  labels: Label[];
+  budget?: Budget;
+  statusList?: BudgetStatus[];
+  transactions?: Transaction[];
+  accounts?: Account[];
+  labels?: Label[];
 
   showModal = false;
 
-  private budgetId: number;
+  private budgetId?: number;
 
   private subscriptions = {
     static: new Subscription(),
@@ -55,7 +55,10 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
    * Initializes the component
    */
   ngOnInit(): void {
-    this.budgetId = +this.route.snapshot.paramMap.get('budgetId');
+    const param = this.route.snapshot.paramMap.get('budgetId');
+    if (param != null) {
+      this.budgetId = +param;
+    }
     this.initData();
     const sub = combineLatest([
       this.accountsService.getAccounts(),
@@ -79,9 +82,9 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
   /**
    * Triggered on year change.
    *
-   * @param year
+   * @param year the new year
    */
-  changeYear(year: number) {
+  changeYear(year: number): void {
     this.currentYear = year;
     this.reloadData();
   }
@@ -89,9 +92,9 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
   /**
    * Triggered on month change.
    *
-   * @param month
+   * @param month the new month
    */
-  changeMonth(month: number) {
+  changeMonth(month: number): void {
     this.currentMonth = month;
     this.reloadData();
   }
@@ -100,20 +103,20 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
    * Checks if the month can be selected.
    */
   isMonthSelectable(): boolean {
-    return this.budget.period === 'DAY';
+    return this.budget != null && this.budget.period === 'DAY';
   }
 
   /**
    * Opens the modal with the budget form.
    */
-  openModal() {
+  openModal(): void {
     this.showModal = true;
   }
 
   /**
    * Closes the modal with the budget form.
    */
-  closeModal() {
+  closeModal(): void {
     this.showModal = false;
   }
 
@@ -122,7 +125,7 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
    *
    * @param budget the budget to save
    */
-  saveBudget(budget: Budget) {
+  saveBudget(budget: Budget): void {
     this.budgetService.saveOne(budget).subscribe(() => {
       this.closeModal();
       this.reloadData();
@@ -134,7 +137,7 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
    *
    * @param budget the budget to delete
    */
-  deleteBudget(budget: Budget) {
+  deleteBudget(budget: Budget): void {
     this.budgetService.deleteOne(budget).subscribe(() => {
       this.closeModal();
       this.reloadData();
@@ -144,7 +147,7 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
   /**
    * Initializes the component with the data from the route
    */
-  private initData() {
+  private initData(): void {
     this.currentYear = this.routerService.getYear(this.route);
     this.currentMonth = this.routerService.getMonth(this.route);
   }
@@ -152,15 +155,21 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
   /**
    * Reload the data from the backend and updates the route params
    */
-  private reloadData() {
+  private reloadData(): void {
+    if (this.budgetId == null) {
+      return;
+    }
     this.subscriptions.active.unsubscribe();
     this.subscriptions.active = new Subscription();
 
     const sub = this.budgetService.getDetails(this.budgetId).subscribe(budget => {
       this.budget = budget;
+      if (this.budget == null || this.budget.period == null) {
+        return;
+      }
 
-      const accountIds = this.budget.accounts.map(a => a.id);
-      const labelIds = this.budget.labels.map(l => l.id);
+      const accountIds = this.budget.accounts?.map(a => a.id);
+      const labelIds = this.budget.labels?.map(l => l.id);
 
       const dateFrom = this.buildStartDate();
       const dateTo = this.buildEndDate();
@@ -174,9 +183,12 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
       });
       this.subscriptions.active.add(subDetails);
 
+      if (this.currentYear == null) {
+        return;
+      }
       let params = {};
       params = this.routerService.setYear(this.currentYear, params);
-      if (this.isMonthSelectable()) {
+      if (this.isMonthSelectable() && this.currentMonth != null) {
         params = this.routerService.setMonth(this.currentMonth, params);
       }
       this.routerService.refresh(this.route, params);
@@ -188,26 +200,34 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
    * Builds the start date
    */
   private buildStartDate(): Date {
-    if (this.budget.period === 'DAY') {
-      return this.dateService.getPeriodStart(this.currentYear, this.currentMonth);
+    let startDateYear = this.currentYear;
+    if (startDateYear == null) {
+      startDateYear = this.dateService.getCurrentYear();
     }
-    if (this.budget.period === 'MONTH' || this.budget.period === 'QUARTER') {
-      return this.dateService.getPeriodStart(this.currentYear);
+    if (this.budget && this.budget.period === 'DAY') {
+      return this.dateService.getPeriodStart(startDateYear, this.currentMonth);
     }
-    return this.dateService.getPeriodStart(this.currentYear - 5);
+    if (this.budget && (this.budget.period === 'MONTH' || this.budget.period === 'QUARTER')) {
+      return this.dateService.getPeriodStart(startDateYear);
+    }
+    return this.dateService.getPeriodStart(startDateYear - 5);
   }
 
   /**
    * Builds the end date
    */
   private buildEndDate(): Date {
-    if (this.budget.period === 'DAY') {
-      return this.dateService.getPeriodEnd(this.currentYear, this.currentMonth);
+    let endDateYear = this.currentYear;
+    if (endDateYear == null) {
+      endDateYear = this.dateService.getCurrentYear();
     }
-    if (this.budget.period === 'MONTH' || this.budget.period === 'QUARTER') {
-      return this.dateService.getPeriodEnd(this.currentYear);
+    if (this.budget && this.budget.period === 'DAY') {
+      return this.dateService.getPeriodEnd(endDateYear, this.currentMonth);
     }
-    return this.dateService.getPeriodEnd(this.currentYear);
+    if (this.budget && (this.budget.period === 'MONTH' || this.budget.period === 'QUARTER')) {
+      return this.dateService.getPeriodEnd(endDateYear);
+    }
+    return this.dateService.getPeriodEnd(endDateYear);
   }
 
   /**
@@ -215,13 +235,13 @@ export class BudgetDetailsView implements OnInit, OnDestroy {
    *
    * @param data the list of key/values
    */
-  private buildBudgetStatusList(data: KeyValue[]) {
+  private buildBudgetStatusList(data: KeyValue[]): void {
     const statusList: BudgetStatus[] = [];
     data.forEach(item => {
       const budget = JSON.parse(JSON.stringify(this.budget)) as Budget;
       budget.name = item.key;
       statusList.push({
-        budget: budget,
+        budget,
         spending: item.value
       });
     });

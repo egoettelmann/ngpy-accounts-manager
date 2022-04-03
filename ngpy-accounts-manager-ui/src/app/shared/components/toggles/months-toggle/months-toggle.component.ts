@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DateService } from '../../../../core/services/date.service';
+import { DateService } from '@core/services/date.service';
 
 /**
  * The month toggle component
@@ -13,7 +13,7 @@ export class MonthsToggleComponent implements OnInit {
   /**
    * The current month
    */
-  @Input() currentMonth: number;
+  @Input() currentMonth?: number;
 
   /**
    * Triggered on each selection change
@@ -30,7 +30,7 @@ export class MonthsToggleComponent implements OnInit {
   /**
    * The available list of months
    */
-  public monthList: number[];
+  public monthList?: number[];
 
   /**
    * Initializes the component
@@ -42,9 +42,9 @@ export class MonthsToggleComponent implements OnInit {
   /**
    * Triggered on month change.
    *
-   * @param month
+   * @param month the new month
    */
-  changeMonth(month: number) {
+  changeMonth(month: number): void {
     this.onChange.emit(month);
   }
 

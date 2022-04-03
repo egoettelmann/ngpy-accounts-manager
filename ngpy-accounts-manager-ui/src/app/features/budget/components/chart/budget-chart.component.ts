@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { BudgetStatus } from '../../../../core/models/api.models';
+import { BudgetStatus } from '@core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
+import { Options, PointOptionsObject, SeriesBarOptions } from 'highcharts';
 
 @Component({
   selector: 'app-budget-chart',
@@ -10,8 +11,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class BudgetChartComponent implements OnChanges {
 
-  @Input() chartTitle: string;
-  @Input() data: BudgetStatus[];
+  @Input() chartTitle?: string;
+  @Input() data?: BudgetStatus[];
 
   @Output() handleClick = new EventEmitter<number>();
 
@@ -44,25 +45,26 @@ export class BudgetChartComponent implements OnChanges {
    * @param data the graph data
    * @returns the chart options
    */
-  private buildChartOptions(data: BudgetStatus[]) {
+  private buildChartOptions(data: BudgetStatus[]): Options {
     const that = this;
-    const options = {
+    const [categories, series] = this.buildChartSeries(data);
+    return {
       chart: {
         type: 'bar',
-        height: this.data.length * 50 + 62
+        height: data.length * 50 + 62
       },
       tooltip: {
-        formatter: function () {
+        formatter(): string {
           return '<b>' + this.series.name + '</b><br/>'
             + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
-            + ' (' + this.point.relativeRatio + ')';
+            + ' (' + this.point.options.custom?.relativeRatio + ')';
         }
       },
       legend: {
         verticalAlign: 'top'
       },
       xAxis: {
-        categories: [],
+        categories,
         gridLineWidth: 1
       },
       yAxis: {
@@ -73,13 +75,12 @@ export class BudgetChartComponent implements OnChanges {
       },
       plotOptions: {
         series: {
-          pointWidth: '40',
           stacking: 'percent',
           dataLabels: {
             enabled: true,
-            formatter: function () {
+            formatter(): string {
               if (this.y === 0) {
-                return;
+                return '';
               }
               return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
             }
@@ -87,24 +88,28 @@ export class BudgetChartComponent implements OnChanges {
           cursor: 'pointer',
           point: {
             events: {
-              click: function() {
-                that.handleClick.emit(this.options.budgetId);
+              click(): void {
+                that.handleClick.emit(this.options.custom?.budgetId);
               }
             }
           }
         }
       },
-      series: []
+      series
     };
-    const categories = [];
-    const series = {
-      consumption: [],
-      overrun: [],
-      available: []
-    };
+  }
+
+  private buildChartSeries(values: BudgetStatus[]): [string[], SeriesBarOptions[]] {
+    const categories: string[] = [];
+    const consumption: PointOptionsObject[] = [];
+    const overrun: PointOptionsObject[] = [];
+    const available: PointOptionsObject[] = [];
 
     // Generating list of categories
-    for (const d of data) {
+    for (const d of values) {
+      if (d.budget == null || d.budget.name == null || d.budget.amount == null) {
+        continue;
+      }
       if (!categories.includes(d.budget.name)) {
         categories.push(d.budget.name);
       }
@@ -112,53 +117,72 @@ export class BudgetChartComponent implements OnChanges {
       const totalSpending = Math.abs(d.spending);
       const totalBudget = d.budget.amount;
       if (totalSpending > totalBudget) {
-        series.consumption[categoryIdx] = {
+        // Spending are exceeding budget
+        consumption[categoryIdx] = {
           y: totalBudget,
-          relativeRatio: this.decimalPipe.transform(100, '1.2-2') + '%',
-          budgetId: d.budget.id
+          custom: {
+            relativeRatio: this.decimalPipe.transform(100, '1.2-2') + '%',
+            budgetId: d.budget.id
+          }
         };
         const aboveRatio = (totalSpending / totalBudget) - 1;
-        series.overrun[categoryIdx] = {
+        overrun[categoryIdx] = {
           y: totalSpending - totalBudget,
-          relativeRatio: '+' + this.decimalPipe.transform(aboveRatio * 100, '1.2-2') + '%',
-          budgetId: d.budget.id
+          custom: {
+            relativeRatio: '+' + this.decimalPipe.transform(aboveRatio * 100, '1.2-2') + '%',
+            budgetId: d.budget.id
+          }
         };
-        series.available[categoryIdx] = {
+        available[categoryIdx] = {
           y: 0
         };
-      } else {
-        const budgetRatio = totalSpending / totalBudget;
-        series.consumption[categoryIdx] = {
-          y: totalSpending,
+        continue;
+      }
+
+      // Spending below budget
+      const budgetRatio = totalSpending / totalBudget;
+      consumption[categoryIdx] = {
+        y: totalSpending,
+        custom: {
           relativeRatio: this.decimalPipe.transform(budgetRatio * 100, '1.2-2') + '%',
           budgetId: d.budget.id
-        };
-        const belowRatio = (totalBudget - totalSpending) / totalBudget;
-        series.available[categoryIdx] = {
-          y: totalBudget - totalSpending,
+        }
+      };
+      const belowRatio = (totalBudget - totalSpending) / totalBudget;
+      available[categoryIdx] = {
+        y: totalBudget - totalSpending,
+        custom: {
           relativeRatio: this.decimalPipe.transform(belowRatio * 100, '1.2-2') + '%',
           budgetId: d.budget.id
-        };
-        series.overrun[categoryIdx] = {
-          y: 0
-        };
-      }
+        }
+      };
+      overrun[categoryIdx] = {
+        y: 0
+      };
     }
-    options.xAxis.categories = categories;
-    options.series = [{
-      name: this.translateService.instant('i18n.components.budgets.series.overrun'),
-      data: series.overrun,
-      color: '#f45b5b'
-    }, {
-      name: this.translateService.instant('i18n.components.budgets.series.available'),
-      data: series.available,
-      color: '#90ed7d'
-    }, {
-      name: this.translateService.instant('i18n.components.budgets.series.consumption'),
-      data: series.consumption,
-      color: '#7cb5ec'
-    }];
-    return options;
+
+    return [
+      categories,
+      [{
+        type: 'bar',
+        pointWidth: 40,
+        name: this.translateService.instant('i18n.components.budgets.series.overrun'),
+        data: overrun,
+        color: '#f45b5b'
+      }, {
+        type: 'bar',
+        pointWidth: 40,
+        name: this.translateService.instant('i18n.components.budgets.series.available'),
+        data: available,
+        color: '#90ed7d'
+      }, {
+        type: 'bar',
+        pointWidth: 40,
+        name: this.translateService.instant('i18n.components.budgets.series.consumption'),
+        data: consumption,
+        color: '#7cb5ec'
+      }]
+    ];
   }
 
 }

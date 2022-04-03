@@ -14,7 +14,7 @@ export class MainView implements OnInit {
   /**
    * The application properties
    */
-  public appProperties: AppProperties;
+  public appProperties?: AppProperties;
 
   /**
    * Instantiates the component.

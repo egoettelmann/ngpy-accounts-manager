@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { Alerts } from '../../../../core/models/domain.models';
-import { Category } from '../../../../core/models/api.models';
-import { RouterService } from '../../../../core/services/router.service';
+import { Alerts } from '@core/models/domain.models';
+import { Category } from '@core/models/api.models';
+import { RouterService } from '@core/services/router.service';
 
 @Component({
   selector: 'app-dashboard-alerts',
@@ -13,17 +13,17 @@ export class DashboardAlertsComponent {
   /**
    * The alerts
    */
-  @Input() alerts: Alerts;
+  @Input() alerts?: Alerts;
 
   /**
    * The credit categories
    */
-  @Input() creditCategories: Category[];
+  @Input() creditCategories?: Category[];
 
   /**
    * The debit categories
    */
-  @Input() debitCategories: Category[];
+  @Input() debitCategories?: Category[];
 
   /**
    * Instantiates the component.
@@ -36,7 +36,7 @@ export class DashboardAlertsComponent {
   /**
    * Redirects to the label alerts view
    */
-  goToLabelAlerts() {
+  goToLabelAlerts(): void {
     this.routerService.navigate('route.transactions.search', {}, {
       queryParams: {
         labels: ''
@@ -47,7 +47,10 @@ export class DashboardAlertsComponent {
   /**
    * Redirects to the credit category alerts view
    */
-  goToCategoryCreditAlerts() {
+  goToCategoryCreditAlerts(): void {
+    if (this.debitCategories == null) {
+      return;
+    }
     this.routerService.navigate('route.transactions.search', {}, {
       queryParams: {
         categories: this.debitCategories.map(c => c.id).join(','),
@@ -59,7 +62,10 @@ export class DashboardAlertsComponent {
   /**
    * Redirects to the debit category alerts view
    */
-  goToCategoryDebitAlerts() {
+  goToCategoryDebitAlerts(): void {
+    if (this.creditCategories == null) {
+      return;
+    }
     this.routerService.navigate('route.transactions.search', {}, {
       queryParams: {
         categories: this.creditCategories.map(c => c.id).join(','),

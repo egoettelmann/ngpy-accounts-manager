@@ -2,13 +2,13 @@ import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import * as _ from 'lodash';
-import { Account, Category, CompositeKeyValue } from '../../../core/models/api.models';
-import { GroupedValue } from '../../../core/models/domain.models';
-import { StatisticsService } from '../../../core/services/domain/statistics.service';
-import { AccountsService } from '../../../core/services/domain/accounts.service';
-import { RouterService } from '../../../core/services/router.service';
-import { CategoriesService } from '../../../core/services/domain/categories.service';
-import { DateService } from '../../../core/services/date.service';
+import { Account, Category, CompositeKeyValue } from '@core/models/api.models';
+import { GroupedValue } from '@core/models/domain.models';
+import { StatisticsService } from '@core/services/domain/statistics.service';
+import { AccountsService } from '@core/services/domain/accounts.service';
+import { RouterService } from '@core/services/router.service';
+import { CategoriesService } from '@core/services/domain/categories.service';
+import { DateService } from '@core/services/date.service';
 
 @Component({
   templateUrl: './analytics.view.html',
@@ -18,20 +18,20 @@ export class AnalyticsView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  currentYear: number;
+  currentYear?: number;
   accountsFilter: number[] = [];
   quarterly = true;
 
-  accounts: Account[];
-  categories: Category[];
-  analyticsCredit: CompositeKeyValue[];
-  analyticsDebit: CompositeKeyValue[];
-  analyticsMovements: CompositeKeyValue[];
+  accounts?: Account[];
+  categories?: Category[];
+  analyticsCredit?: CompositeKeyValue[];
+  analyticsDebit?: CompositeKeyValue[];
+  analyticsMovements?: CompositeKeyValue[];
   detailsCredit: GroupedValue[] = [];
   detailsDebit: GroupedValue[] = [];
 
-  selectedCategory: number;
-  analyticsByLabel: CompositeKeyValue[];
+  selectedCategory?: number;
+  analyticsByLabel?: CompositeKeyValue[];
   showModal = false;
 
   private subscriptions = {
@@ -76,9 +76,9 @@ export class AnalyticsView implements OnInit, OnDestroy {
   /**
    * Triggered on account change.
    *
-   * @param {Account[]} accounts the new list of accounts
+   * @param accounts the new list of accounts
    */
-  changeAccounts(accounts: number[]) {
+  changeAccounts(accounts: number[]): void {
     if (!_.isEqual(this.accountsFilter, accounts)) {
       this.accountsFilter = accounts.slice(0);
       this.reloadData();
@@ -88,9 +88,9 @@ export class AnalyticsView implements OnInit, OnDestroy {
   /**
    * Triggered on year change.
    *
-   * @param year
+   * @param year the new year
    */
-  changeYear(year: number) {
+  changeYear(year: number): void {
     this.currentYear = year;
     this.reloadData();
   }
@@ -98,9 +98,9 @@ export class AnalyticsView implements OnInit, OnDestroy {
   /**
    * Triggered on period change.
    *
-   * @param quarterly
+   * @param quarterly the new flag
    */
-  changePeriod(quarterly: boolean) {
+  changePeriod(quarterly: boolean): void {
     this.quarterly = quarterly;
     this.reloadData();
   }
@@ -108,23 +108,23 @@ export class AnalyticsView implements OnInit, OnDestroy {
   /**
    * Gets the label for the period select.
    *
-   * @param quarterly
+   * @param quarterly the quarterly flag
    */
-  getPeriodSelectLabel(quarterly: boolean) {
+  getPeriodSelectLabel(quarterly: boolean): string {
     return quarterly ? 'i18n.views.analytics.period.select.quarterly' : 'i18n.views.analytics.period.select.monthly';
   }
 
   /**
    * Get the credit chart title
    */
-  get creditChartTitle() {
+  get creditChartTitle(): string {
     return this.quarterly ? 'i18n.views.analytics.quarterly.chart.credit.title' : 'i18n.views.analytics.monthly.chart.credit.title';
   }
 
   /**
    * Get the debit chart title
    */
-  get debitChartTitle() {
+  get debitChartTitle(): string {
     return this.quarterly ? 'i18n.views.analytics.quarterly.chart.debit.title' : 'i18n.views.analytics.monthly.chart.debit.title';
   }
 
@@ -133,7 +133,10 @@ export class AnalyticsView implements OnInit, OnDestroy {
    *
    * @param categoryId the category id
    */
-  displayCategoryDetails(categoryId: number) {
+  displayCategoryDetails(categoryId: number): void {
+    if (this.currentYear == null) {
+      return;
+    }
     this.selectedCategory = categoryId;
     const period = this.quarterly ? 'QUARTER' : 'MONTH';
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
@@ -150,7 +153,7 @@ export class AnalyticsView implements OnInit, OnDestroy {
    *
    * @param open false if the modal should be closed
    */
-  closeModal(open: boolean) {
+  closeModal(open: boolean): void {
     if (!open) {
       this.selectedCategory = undefined;
       this.analyticsByLabel = undefined;
@@ -164,16 +167,19 @@ export class AnalyticsView implements OnInit, OnDestroy {
    *
    * @param labelId the label id
    */
-  goToLabelDetails(labelId: number) {
+  goToLabelDetails(labelId: number): void {
+    if (this.currentYear == null) {
+      return;
+    }
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter.join(',') : undefined;
     const minDate = this.dateService.format(this.dateService.getPeriodStart(this.currentYear));
     const maxDate = this.dateService.format(this.dateService.getPeriodEnd(this.currentYear));
     this.routerService.navigate('route.transactions.search', {}, {
       queryParams: {
         labels: '' + labelId,
-        minDate: minDate,
-        maxDate: maxDate,
-        accounts: accounts
+        minDate,
+        maxDate,
+        accounts
       }
     });
   }
@@ -181,7 +187,7 @@ export class AnalyticsView implements OnInit, OnDestroy {
   /**
    * Initializes the component with the data from the route
    */
-  private initData() {
+  private initData(): void {
     this.currentYear = this.routerService.getYear(this.route);
     this.accountsFilter = this.routerService.getAccounts(this.route);
     this.quarterly = this.route.snapshot.queryParamMap.get('quarterly') === 'true';
@@ -190,7 +196,10 @@ export class AnalyticsView implements OnInit, OnDestroy {
   /**
    * Reload the data
    */
-  private reloadData() {
+  private reloadData(): void {
+    if (this.currentYear == null) {
+      return;
+    }
     const period = this.quarterly ? 'QUARTER' : 'MONTH';
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
     const sub = combineLatest([
@@ -209,10 +218,10 @@ export class AnalyticsView implements OnInit, OnDestroy {
     this.subscriptions.active.unsubscribe();
     this.subscriptions.active = sub;
 
-    let params = {};
+    let params: any = {};
     params = this.routerService.setAccounts(accounts, params);
     params = this.routerService.setYear(this.currentYear, params);
-    params['quarterly'] = this.quarterly;
+    params.quarterly = this.quarterly;
     this.routerService.refresh(this.route, params);
   }
 
@@ -222,7 +231,7 @@ export class AnalyticsView implements OnInit, OnDestroy {
    * @param details the list of details
    */
   private consolidateDetails(details: CompositeKeyValue[]): any[] {
-    const groupsByCategory = {};
+    const groupsByCategory: any = {};
     let total = 0;
     details.forEach(detail => {
       if (!groupsByCategory.hasOwnProperty(detail.keyOne)) {
@@ -235,19 +244,19 @@ export class AnalyticsView implements OnInit, OnDestroy {
       });
       total += detail.value;
     });
-    const groupsWithDetails = [];
+    const groupsWithDetails: any = [];
     Object.keys(groupsByCategory).forEach((key) => {
       const gd = {
         label: key,
-        amount: groupsByCategory[key].reduce((t, a) => t + a.amount, 0),
-        details: groupsByCategory[key].sort((g1, g2) => Math.abs(g2.amount) - Math.abs(g1.amount)),
+        amount: groupsByCategory[key].reduce((t: any, a: any) => t + a.amount, 0),
+        details: groupsByCategory[key].sort((g1: any, g2: any) => Math.abs(g2.amount) - Math.abs(g1.amount)),
         percentage: 0
       };
-      groupsByCategory[key].map(g => g.percentage = g.amount / total * 100);
+      groupsByCategory[key].map((g: any) => g.percentage = g.amount / total * 100);
       gd.percentage = gd.amount / total * 100;
       groupsWithDetails.push(gd);
     });
-    return groupsWithDetails.sort((g1, g2) => Math.abs(g2.amount) - Math.abs(g1.amount));
+    return groupsWithDetails.sort((g1: any, g2: any) => Math.abs(g2.amount) - Math.abs(g1.amount));
   }
 
 }

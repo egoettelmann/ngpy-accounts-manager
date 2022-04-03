@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { Label } from '../../../../core/models/api.models';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Label } from '@core/models/api.models';
 import * as _ from 'lodash';
 
 /**
@@ -14,7 +14,7 @@ export class LabelsToggleComponent implements OnChanges {
   /**
    * The available labels
    */
-  @Input() labels: Label[];
+  @Input() labels?: Label[];
 
   /**
    * The currently selected values
@@ -24,19 +24,19 @@ export class LabelsToggleComponent implements OnChanges {
   /**
    * Triggered on selection change
    */
-  @Output() onChange = new EventEmitter<number[]>();
+  @Output() onChange = new EventEmitter<(number | null)[]>();
 
   /**
    * The currently selected labels
    */
-  selectedLabels: number[];
+  selectedLabels?: (number | null)[];
 
   /**
    * Handles all input changes.
    *
    * @param changes the input changes
    */
-  ngOnChanges(changes) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (this.value && changes.value !== undefined) {
       if (this.value.length === 0) {
         this.toggleAllLabels();
@@ -58,7 +58,7 @@ export class LabelsToggleComponent implements OnChanges {
    *
    * @param labelId the label id
    */
-  isSelected(labelId: number): boolean {
+  isSelected(labelId: number | null): boolean {
     if (this.selectedLabels) {
       return this.selectedLabels.indexOf(labelId) > -1;
     }
@@ -70,7 +70,7 @@ export class LabelsToggleComponent implements OnChanges {
    *
    * @param labelId the label id
    */
-  toggleLabel(labelId: number) {
+  toggleLabel(labelId: number | null): void {
     if (this.selectedLabels === undefined) {
       this.selectedLabels = [];
     }
@@ -88,7 +88,7 @@ export class LabelsToggleComponent implements OnChanges {
   /**
    * Toggles all labels
    */
-  toggleAllLabels() {
+  toggleAllLabels(): void {
     if (this.selectedLabels !== undefined) {
       this.selectedLabels = undefined;
       this.onChange.emit(this.selectedLabels);
@@ -100,7 +100,7 @@ export class LabelsToggleComponent implements OnChanges {
    *
    * @param labels the labels to toggle
    */
-  toggleLabels(labels: number[]) {
+  toggleLabels(labels: (number | null)[]): void {
     const selectedLabels = labels.slice(0);
     if (!_.isEqual(selectedLabels, this.selectedLabels)) {
       this.selectedLabels = selectedLabels;

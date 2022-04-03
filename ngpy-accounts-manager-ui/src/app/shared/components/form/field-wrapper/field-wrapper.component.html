@@ -1,14 +1,14 @@
-<div class="clr-col-12 clr-col-md-4">
+<div *ngIf="i18nLabel && for" class="clr-col-12 clr-col-md-4">
   <label [for]="for">{{ i18nLabel | translate }}</label>
 </div>
-<div class="clr-col-12 clr-col-md-8">
+<div *ngIf="for && ctrl" class="clr-col-12 clr-col-md-8">
   <label [for]="for"
          aria-haspopup="true"
          role="tooltip"
          class="tooltip tooltip-validation tooltip-md"
-         [ngClass]="{'invalid': isValid()}">
+         [ngClass]="{'invalid': isInvalid()}">
     <ng-content></ng-content>
-    <span class="tooltip-content" *ngIf="isValid()">
+    <span class="tooltip-content" *ngIf="isInvalid()">
               {{ ctrl.errors | json }}
           </span>
   </label>

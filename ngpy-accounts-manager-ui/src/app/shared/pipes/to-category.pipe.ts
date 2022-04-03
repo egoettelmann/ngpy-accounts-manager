@@ -1,7 +1,7 @@
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
-import { Category } from '../../core/models/api.models';
+import { Category } from '@core/models/api.models';
 import { Subscription } from 'rxjs';
-import { CategoriesService } from '../../core/services/domain/categories.service';
+import { CategoriesService } from '@core/services/domain/categories.service';
 
 /**
  * The category name pipe.
@@ -16,7 +16,7 @@ export class ToCategoryPipe implements PipeTransform, OnDestroy {
   /**
    * The available categories
    */
-  private categories: Category[];
+  private categories?: Category[];
 
   /**
    * The subscription
@@ -84,12 +84,12 @@ export class ToCategoryPipe implements PipeTransform, OnDestroy {
    * @param category the category
    * @param attribute the attribute to extract
    */
-  private getAttribute(category: Category, attribute: string): any {
+  private getAttribute(category: Category, attribute?: string): any {
     if (attribute == null) {
       return category;
     }
     if (category.hasOwnProperty(attribute)) {
-      return category[attribute];
+      return (category as any)[attribute];
     }
     return null;
   }

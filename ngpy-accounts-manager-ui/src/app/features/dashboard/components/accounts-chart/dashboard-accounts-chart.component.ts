@@ -1,7 +1,8 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { Account } from '../../../../core/models/api.models';
-import { ResponsiveService } from '../../../../core/services/responsive.service';
+import { Account } from '@core/models/api.models';
+import { ResponsiveService } from '@core/services/responsive.service';
+import { Options, PointOptionsObject } from 'highcharts';
 
 @Component({
   selector: 'app-dashboard-accounts-chart',
@@ -10,12 +11,12 @@ import { ResponsiveService } from '../../../../core/services/responsive.service'
 })
 export class DashboardAccountsChartComponent implements OnInit, OnChanges {
 
-  @Input() chartTitle: string;
-  @Input() accounts: Account[];
+  @Input() chartTitle?: string;
+  @Input() accounts?: Account[];
 
   public graphOptions: any;
 
-  private isMediumOrUp;
+  private isMediumOrUp?: boolean;
 
   constructor(
     private responsiveService: ResponsiveService,
@@ -23,7 +24,7 @@ export class DashboardAccountsChartComponent implements OnInit, OnChanges {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.isMediumOrUp = this.responsiveService.isMediumOrUp();
   }
 
@@ -39,36 +40,42 @@ export class DashboardAccountsChartComponent implements OnInit, OnChanges {
    * @param data the graph data
    * @returns the chart options
    */
-  private buildChartOptions(data: Account[]) {
+  private buildChartOptions(data: Account[]): Options {
     const that = this;
-    const options = {
+    const series = this.buildChartSeries(data);
+    return {
       chart: {
         type: 'pie'
       },
       tooltip: {
-        formatter: function () {
+        formatter(): string {
           return '<b>' + this.point.name + '</b><br/>'
             + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
             + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
         }
       },
       series: [{
-        data: [],
+        type: 'pie',
+        data: series,
         showInLegend: !this.isMediumOrUp,
         innerSize: '60%',
         dataLabels: {
           enabled: this.isMediumOrUp
-        },
+        }
       }]
     };
-    for (const d of data) {
-      options.series[0].data.push({
+  }
+
+  private buildChartSeries(values: Account[]): PointOptionsObject[] {
+    const series: PointOptionsObject[] = [];
+    for (const d of values) {
+      series.push({
         name: d.description,
         color: d.color,
         y: d.total
       });
     }
-    return options;
+    return series;
   }
 
 }

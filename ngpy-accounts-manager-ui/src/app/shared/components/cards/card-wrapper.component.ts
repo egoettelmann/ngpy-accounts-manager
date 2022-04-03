@@ -13,6 +13,6 @@ export class CardWrapperComponent {
   /**
    * The label
    */
-  @Input() label: string;
+  @Input() label?: string;
 
 }

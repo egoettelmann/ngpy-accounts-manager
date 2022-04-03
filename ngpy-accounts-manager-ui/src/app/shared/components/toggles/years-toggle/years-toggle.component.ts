@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DateService } from '../../../../core/services/date.service';
+import { DateService } from '@core/services/date.service';
 
 /**
  * The year toggle component
@@ -13,7 +13,7 @@ export class YearsToggleComponent implements OnInit {
   /**
    * The current year
    */
-  @Input() currentYear: number;
+  @Input() currentYear?: number;
 
   /**
    * Triggered on each year change
@@ -30,7 +30,7 @@ export class YearsToggleComponent implements OnInit {
   /**
    * The list of available years
    */
-  public yearList: number[];
+  public yearList?: number[];
 
   /**
    * Initializes the component
@@ -42,9 +42,9 @@ export class YearsToggleComponent implements OnInit {
   /**
    * Triggered on year change.
    *
-   * @param year
+   * @param year the new year
    */
-  changeYear(year: number) {
+  changeYear(year: number): void {
     this.onChange.emit(year);
   }
 

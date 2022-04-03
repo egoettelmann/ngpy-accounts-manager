@@ -1,5 +1,9 @@
 <div class="login-wrapper">
-  <form class="login" autocomplete="off" [formGroup]="loginForm" (ngSubmit)="tryLogin()">
+  <form *ngIf="loginForm"
+        class="login"
+        autocomplete="off"
+        [formGroup]="loginForm"
+        (ngSubmit)="tryLogin()">
     <div class="title">
       <h3 class="welcome">{{ 'i18n.views.login.welcome.text' | translate }}</h3>
       <div>{{ 'i18n.app.title' | translate }}</div>

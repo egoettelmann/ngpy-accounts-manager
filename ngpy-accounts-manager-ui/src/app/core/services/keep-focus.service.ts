@@ -9,14 +9,14 @@ export class KeepFocusService {
   /**
    * The id of the currently focused element.
    */
-  private currentFocusId: string;
+  private currentFocusId?: string;
 
   /**
    * Stores the id of the currently focused element.
    *
    * @param id the focus id to store
    */
-  setFocus(id: string) {
+  setFocus(id: string): void {
     this.currentFocusId = id;
   }
 
@@ -26,7 +26,7 @@ export class KeepFocusService {
    *
    * @param id the focus id to clear
    */
-  unsetFocus(id: string) {
+  unsetFocus(id: string): void {
     if (this.currentFocusId === id) {
       this.currentFocusId = undefined;
     }
@@ -37,7 +37,7 @@ export class KeepFocusService {
    *
    * @param id the id to check
    */
-  hasFocus(id: string) {
+  hasFocus(id: string): boolean {
     return this.currentFocusId === id;
   }
 

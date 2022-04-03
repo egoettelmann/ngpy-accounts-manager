@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { BudgetView } from './views/budget.view';
 import { BudgetRoutingModule } from './budget-routing.module';
 import { BudgetChartComponent } from './components/chart/budget-chart.component';

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Label } from '../../models/api.models';
-import { CommonFunctions } from '../../../shared/utils/common-functions';
+import { CommonFunctions } from '@shared/utils/common-functions';
 import { EventBusService } from '../event-bus.service';
 import { flatMap, startWith, tap } from 'rxjs/operators';
 import { CacheService } from '../cache.service';

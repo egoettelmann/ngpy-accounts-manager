@@ -1,8 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
-import { RqlService } from './rql.service';
-import { FilterOperator, FilterRequest } from '../models/rql.models';
 import { CacheService } from './cache.service';
-import { of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 describe('CacheService', () => {
 
@@ -19,7 +17,7 @@ describe('CacheService', () => {
   });
 
   it('retrieve should return correct value', async(() => {
-    const results = [];
+    const results: any[] = [];
     const subject = new Subject();
     const sub = service.retrieve('key.test', subject.asObservable()).subscribe(val => {
       results.push(val);
@@ -33,14 +31,14 @@ describe('CacheService', () => {
   }));
 
   it('retrieve should return latest value to new subscriptions', async(() => {
-    const results1 = [];
+    const results1: any[] = [];
     const subject = new Subject();
     const sub1 = service.retrieve('key.test', subject.asObservable()).subscribe(val => {
       results1.push(val);
     });
     subject.next(13);
     subject.next(42);
-    const results2 = [];
+    const results2: any[] = [];
     const sub2 = service.retrieve('key.test', subject.asObservable()).subscribe(val => {
       results2.push(val);
     });
@@ -56,7 +54,7 @@ describe('CacheService', () => {
   }));
 
   it('evict should correctly empty cache', async(() => {
-    const results1 = [];
+    const results1: any[] = [];
     const subject1 = new Subject();
     const sub1 = service.retrieve('key.test1', subject1.asObservable()).subscribe(val => {
       results1.push(val);
@@ -64,7 +62,7 @@ describe('CacheService', () => {
     subject1.next(11);
     subject1.next(12);
 
-    const results2 = [];
+    const results2: any[] = [];
     const subject2 = new Subject();
     const sub2 = service.retrieve('key.test2', subject2.asObservable()).subscribe(val => {
       results2.push(val);
@@ -74,12 +72,12 @@ describe('CacheService', () => {
 
     service.evict('key.*');
 
-    const results3 = [];
+    const results3: any[] = [];
     const sub3 = service.retrieve('key.test1', subject1.asObservable()).subscribe(val => {
       results3.push(val);
     });
 
-    const results4 = [];
+    const results4: any[] = [];
     const sub4 = service.retrieve('key.test2', subject2.asObservable()).subscribe(val => {
       results4.push(val);
     });

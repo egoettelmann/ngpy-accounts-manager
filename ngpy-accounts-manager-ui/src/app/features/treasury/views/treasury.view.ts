@@ -1,13 +1,13 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
-import { Account, KeyValue, Label, Summary, Transaction } from '../../../core/models/api.models';
+import { Account, KeyValue, Label, Summary, Transaction } from '@core/models/api.models';
 import { combineLatest, Subscription } from 'rxjs';
-import { TransactionsService } from '../../../core/services/domain/transactions.service';
-import { StatisticsService } from '../../../core/services/domain/statistics.service';
-import { AccountsService } from '../../../core/services/domain/accounts.service';
-import { RouterService } from '../../../core/services/router.service';
-import { LabelsService } from '../../../core/services/domain/labels.service';
+import { TransactionsService } from '@core/services/domain/transactions.service';
+import { StatisticsService } from '@core/services/domain/statistics.service';
+import { AccountsService } from '@core/services/domain/accounts.service';
+import { RouterService } from '@core/services/router.service';
+import { LabelsService } from '@core/services/domain/labels.service';
 
 @Component({
   templateUrl: './treasury.view.html',
@@ -17,18 +17,18 @@ export class TreasuryView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  public currentYear: number;
+  public currentYear?: number;
   public accountsFilter: number[] = [];
-  public labelsFilter: number[];
+  public labelsFilter: number[] = [];
 
-  public accounts: Account[];
-  public labels: Label[];
-  public topTransactionsAsc: Transaction[];
-  public topTransactionsDesc: Transaction[];
-  public summary: Summary;
-  public evolution: KeyValue[];
-  public aggregationCredit: KeyValue[];
-  public aggregationDebit: KeyValue[];
+  public accounts?: Account[];
+  public labels?: Label[];
+  public topTransactionsAsc?: Transaction[];
+  public topTransactionsDesc?: Transaction[];
+  public summary?: Summary;
+  public evolution?: KeyValue[];
+  public aggregationCredit?: KeyValue[];
+  public aggregationDebit?: KeyValue[];
 
   private subscriptions = {
     static: new Subscription(),
@@ -65,11 +65,11 @@ export class TreasuryView implements OnInit, OnDestroy {
   /**
    * Triggered on account change.
    *
-   * @param {Account[]} accounts the new list of accounts
+   * @param accounts the new list of accounts
    */
-  changeAccounts(accounts: number[]) {
+  changeAccounts(accounts: (number | null)[]): void {
     if (!_.isEqual(this.accountsFilter, accounts)) {
-      this.accountsFilter = accounts.slice(0);
+      this.accountsFilter = accounts.slice(0) as number[];
       this.reloadData();
     }
   }
@@ -77,12 +77,12 @@ export class TreasuryView implements OnInit, OnDestroy {
   /**
    * Triggered on label change.
    *
-   * @param {number[]} labels the new list of label ids
+   * @param labels the new list of label ids
    */
-  changeLabels(labels: number[]) {
+  changeLabels(labels: (number | null)[]): void {
     const newFilter = labels;
     if (!_.isEqual(this.labelsFilter, newFilter)) {
-      this.labelsFilter = newFilter ? newFilter.slice(0) : [];
+      this.labelsFilter = (newFilter ? newFilter.slice(0) : []) as number[];
       this.reloadData();
     }
   }
@@ -90,9 +90,9 @@ export class TreasuryView implements OnInit, OnDestroy {
   /**
    * Triggered on year change.
    *
-   * @param year
+   * @param year the new year
    */
-  changeYear(year: number) {
+  changeYear(year: number): void {
     this.currentYear = year;
     this.reloadData();
   }
@@ -100,7 +100,7 @@ export class TreasuryView implements OnInit, OnDestroy {
   /**
    * Initializes the component with the data from the route
    */
-  private initData() {
+  private initData(): void {
     this.currentYear = this.routerService.getYear(this.route);
     this.accountsFilter = this.routerService.getAccounts(this.route);
     this.labelsFilter = this.routerService.getLabels(this.route);
@@ -109,7 +109,10 @@ export class TreasuryView implements OnInit, OnDestroy {
   /**
    * Loads the data for the view
    */
-  private reloadData() {
+  private reloadData(): void {
+    if (this.currentYear == null) {
+      return;
+    }
     const accounts = this.accountsFilter.length > 0 ? this.accountsFilter : undefined;
     const labels = this.labelsFilter.length > 0 ? this.labelsFilter : undefined;
     const sub = combineLatest([

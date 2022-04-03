@@ -47,7 +47,7 @@ export class TransactionsRestService {
     const params = this.rqlService.buildHttpParams(searchRequest);
     return this.eventBusService.accept(['transactions.*']).pipe(
       startWith(0),
-      flatMap(() => this.http.get<Transaction[]>('/rest/transactions', { params: params }))
+      flatMap(() => this.http.get<Transaction[]>('/rest/transactions', { params }))
     );
   }
 
@@ -60,7 +60,7 @@ export class TransactionsRestService {
     const params = this.rqlService.buildHttpParamsFromFilter(filterRequest);
     return this.eventBusService.accept(['transactions.*']).pipe(
       startWith(0),
-      flatMap(() => this.http.get<number>('/rest/transactions/count', { params: params }))
+      flatMap(() => this.http.get<number>('/rest/transactions/count', { params }))
     );
   }
 
@@ -78,7 +78,7 @@ export class TransactionsRestService {
   /**
    * Creates a transaction.
    *
-   * @param transaction
+   * @param transaction the transaction to create
    */
   createOne(transaction: Transaction): Observable<Transaction> {
     return this.http.put<Transaction>('/rest/transactions', JSON.stringify(transaction)).pipe(

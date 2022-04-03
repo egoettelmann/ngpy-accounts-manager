@@ -1,8 +1,8 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-import { Account } from '../../../../core/models/api.models';
-import { AccountsService } from '../../../../core/services/domain/accounts.service';
+import { Account } from '@core/models/api.models';
+import { AccountsService } from '@core/services/domain/accounts.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,8 +13,8 @@ export class SettingsAccountsView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  form: FormGroup;
-  formArray: FormArray;
+  form?: FormGroup;
+  formArray?: FormArray;
 
   private subscriptions = {
     static: new Subscription(),
@@ -38,31 +38,38 @@ export class SettingsAccountsView implements OnInit, OnDestroy {
     this.subscriptions.active.unsubscribe();
   }
 
-  deleteAccount(account: Account) {
+  deleteAccount(account: Account): void {
     this.accountsService.deleteOne(account).subscribe();
   }
 
-  private buildForm(accounts: Account[]) {
+  get accountForms(): FormGroup[] {
+    if (this.formArray == null) {
+      return [];
+    }
+    return this.formArray.controls as FormGroup[];
+  }
+
+  private buildForm(accounts: Account[]): void {
     this.form = this.fb.group({
-      'accounts': this.fb.array([])
+      accounts: this.fb.array([])
     });
     this.formArray = this.form.get('accounts') as FormArray;
     accounts.map(account => {
       const control = this.buildFormControl(account);
-      this.formArray.push(control);
+      this.formArray?.push(control);
     });
   }
 
   private buildFormControl(account: Account): FormGroup {
     const formGroup = this.fb.group({
-      'id': [account.id],
-      'name': [account.name],
-      'description': [account.description],
-      'color': [account.color],
-      'notify': [account.notify],
-      'active': [account.active],
-      'lastUpdate': [{ value: account.lastUpdate, disabled: true }],
-      'total': [{ value: account.total, disabled: true }]
+      id: [account.id],
+      name: [account.name],
+      description: [account.description],
+      color: [account.color],
+      notify: [account.notify],
+      active: [account.active],
+      lastUpdate: [{ value: account.lastUpdate, disabled: true }],
+      total: [{ value: account.total, disabled: true }]
     });
 
     formGroup.valueChanges.pipe(
@@ -74,7 +81,7 @@ export class SettingsAccountsView implements OnInit, OnDestroy {
     return formGroup;
   }
 
-  private onFormChange(value: Account) {
+  private onFormChange(value: Account): void {
     this.accountsService.saveOne(value).subscribe();
   }
 

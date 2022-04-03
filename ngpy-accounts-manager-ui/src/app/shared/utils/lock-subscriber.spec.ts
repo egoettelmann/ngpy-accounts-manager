@@ -13,7 +13,7 @@ describe('LockSubscriber', () => {
    */
   it('should tick normally', fakeAsync(() => {
     let i = 0;
-    let currentValue;
+    let currentValue: number | undefined;
     const obs = interval(500).pipe(
       take(4),
       map(() => i++)
@@ -40,7 +40,7 @@ describe('LockSubscriber', () => {
    */
   it('should tick with delay', fakeAsync(() => {
     let i = 0;
-    let currentValue;
+    let currentValue: number | undefined;
     const obs = interval(500).pipe(
       take(4),
       map(() => i++)
@@ -76,7 +76,7 @@ describe('LockSubscriber', () => {
   it('should tick with lock and default buffer of 1', fakeAsync(() => {
     const tickLock = new SubscriptionLock();
     let i = 0;
-    let currentValue;
+    let currentValue: number | undefined;
     const obs = interval(500).pipe(
       take(4),
       map(() => i++),
@@ -114,7 +114,7 @@ describe('LockSubscriber', () => {
   it('should tick with lock and buffer of 2', fakeAsync(() => {
     const tickLock = new SubscriptionLock();
     let i = 0;
-    let currentValue;
+    let currentValue: number | undefined;
     const obs = interval(500).pipe(
       take(4),
       map(() => i++),
@@ -154,7 +154,7 @@ describe('LockSubscriber', () => {
   it('should tick with lock and no buffer', fakeAsync(() => {
     const tickLock = new SubscriptionLock();
     let i = 0;
-    let currentValue;
+    let currentValue: number | undefined;
     const obs = interval(500).pipe(
       take(4),
       map(() => i++),
@@ -190,7 +190,7 @@ describe('LockSubscriber', () => {
   it('should tick with lock but timeout', fakeAsync(() => {
     const tickLock = new SubscriptionLock(250);
     let i = 0;
-    let currentValue;
+    let currentValue: number | undefined;
     const obs = interval(500).pipe(
       take(4),
       map(() => i++),

@@ -43,7 +43,7 @@ export class RqlService {
    * @param sortRequest the sort request
    * @param httpParams the optional http params
    */
-  public buildHttpParamsFromSort(sortRequest: SortRequest, httpParams?: HttpParams): HttpParams {
+  public buildHttpParamsFromSort(sortRequest?: SortRequest, httpParams?: HttpParams): HttpParams {
     // Building new http params if undefined
     if (!httpParams) {
       httpParams = new HttpParams();
@@ -71,7 +71,7 @@ export class RqlService {
    * @param pageRequest the page request
    * @param httpParams the optional http params
    */
-  public buildHttpParamsFromPage(pageRequest: PageRequest, httpParams?: HttpParams): HttpParams {
+  public buildHttpParamsFromPage(pageRequest?: PageRequest, httpParams?: HttpParams): HttpParams {
     // Building new http params if undefined
     if (!httpParams) {
       httpParams = new HttpParams();
@@ -99,7 +99,7 @@ export class RqlService {
    * @param filterRequest the filter request
    * @param httpParams the optional http params
    */
-  public buildHttpParamsFromFilter(filterRequest: FilterRequest, httpParams?: HttpParams): HttpParams {
+  public buildHttpParamsFromFilter(filterRequest?: FilterRequest, httpParams?: HttpParams): HttpParams {
     // Building new http params if undefined
     if (!httpParams) {
       httpParams = new HttpParams();

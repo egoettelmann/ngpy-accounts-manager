@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { DateService } from './date.service';
 import { Location } from '@angular/common';
-import { RouterPathPipe } from '../../shared/modules/router-path/router-path.pipe';
+import { RouterPathPipe } from '@shared/modules/router-path/router-path.pipe';
 
 /**
  * The Router service
@@ -17,88 +17,92 @@ export class RouterService {
   ) {
   }
 
-  navigate(routeKey: string, pathVariables?: Params, extras?: NavigationExtras) {
+  navigate(routeKey: string, pathVariables?: Params, extras?: NavigationExtras): void {
     const routePath = this.routerPathPipe.transform(routeKey, pathVariables);
     this.router.navigate(routePath, extras);
   }
 
-  refresh(activatedRoute: ActivatedRoute, queryParams?: Params) {
+  refresh(activatedRoute: ActivatedRoute, queryParams?: Params): void {
     this.router.navigate([],
       {
         relativeTo: activatedRoute,
-        queryParams: queryParams,
+        queryParams,
         queryParamsHandling: 'merge'
       });
   }
 
-  openTransactionForm(transactionId?: number) {
+  openTransactionForm(transactionId?: number): void {
     this.navigate('route.forms.transaction', {
-      transactionId: transactionId
+      transactionId
     }, {
       queryParamsHandling: 'preserve'
     });
   }
 
   getYear(route: ActivatedRoute): number {
-    if (!route.snapshot.queryParamMap.has('year')) {
+    const year = route.snapshot.queryParamMap.get('year');
+    if (year == null) {
       return this.dateService.getCurrentYear();
     }
-    return +route.snapshot.queryParamMap.get('year');
+    return +year;
   }
 
   setYear(year: number, params: Params): Params {
     if (year == null) {
       return params;
     }
-    return Object.assign({}, params, { 'year': year });
+    return Object.assign({}, params, { year });
   }
 
   getMonth(route: ActivatedRoute): number {
-    if (!route.snapshot.queryParamMap.has('month')) {
+    const month = route.snapshot.queryParamMap.get('month');
+    if (month == null) {
       return this.dateService.getCurrentMonth();
     }
-    return +route.snapshot.queryParamMap.get('month');
+    return +month;
   }
 
   setMonth(month: number, params: Params): Params {
     if (month == null) {
       return params;
     }
-    return Object.assign({}, params, { 'month': month });
+    return Object.assign({}, params, { month });
   }
 
   getAccounts(route: ActivatedRoute): number[] {
-    if (!route.snapshot.queryParamMap.has('accounts')) {
+    const accounts = route.snapshot.queryParamMap.get('accounts');
+    if (accounts == null) {
       return [];
     }
-    return route.snapshot.queryParamMap.get('accounts')
+    return accounts
       .split(',')
       .map(a => +a);
   }
 
-  setAccounts(accounts: number[], params: Params): Params {
+  setAccounts(accounts: number[] | undefined, params: Params): Params {
     if (accounts == null || accounts.length === 0) {
       return params;
     }
     const accountParam = accounts.join(',');
-    return Object.assign({}, params, { 'accounts': accountParam });
+    return Object.assign({}, params, { accounts: accountParam });
   }
 
   getLabels(route: ActivatedRoute): number[] {
-    if (!route.snapshot.queryParamMap.has('labels')) {
+    const labels = route.snapshot.queryParamMap.get('labels');
+    if (labels == null) {
       return [];
     }
-    return route.snapshot.queryParamMap.get('labels')
+    return labels
       .split(',')
       .map(a => +a);
   }
 
-  setLabels(labels: number[], params: Params): Params {
+  setLabels(labels: number[] | undefined, params: Params): Params {
     if (labels == null || labels.length === 0) {
       return params;
     }
     const labelParam = labels.join(',');
-    return Object.assign({}, params, { 'labels': labelParam });
+    return Object.assign({}, params, { labels: labelParam });
   }
 
 }
