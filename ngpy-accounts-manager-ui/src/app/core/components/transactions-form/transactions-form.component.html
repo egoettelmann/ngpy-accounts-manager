@@ -10,14 +10,16 @@
                        [i18nLabel]="'i18n.components.transactions.form.account'"
                        [ctrl]="form.get('account_id')"
                        class="form-group clr-row mb-md">
-      <select id="account"
-              clrSelect
-              [formControlName]="'account_id'">
-        <option *ngFor="let account of accounts"
-                [value]="account.id">
-          {{ account.name }} - {{ account.description }}
-        </option>
-      </select>
+      <clr-select-container>
+        <select id="account"
+                clrSelect
+                [formControlName]="'account_id'">
+          <option *ngFor="let account of accounts"
+                  [value]="account.id">
+            {{ account.name }} - {{ account.description }}
+          </option>
+        </select>
+      </clr-select-container>
     </app-field-wrapper>
 
     <!-- Reference -->
@@ -25,11 +27,13 @@
                        [i18nLabel]="'i18n.components.transactions.form.reference'"
                        [ctrl]="form.get('reference')"
                        class="form-group clr-row mb-md">
-      <input id="reference"
-             clrInput
-             [formControlName]="'reference'"
-             class="w-100"
-             type="text"/>
+      <clr-input-container>
+        <input id="reference"
+               clrInput
+               [formControlName]="'reference'"
+               class="w-100"
+               type="text"/>
+      </clr-input-container>
     </app-field-wrapper>
 
     <!-- Description -->
@@ -37,12 +41,14 @@
                        [i18nLabel]="'i18n.components.transactions.form.description'"
                        [ctrl]="form.get('description')"
                        class="form-group clr-row mb-md">
+      <clr-textarea-container>
         <textarea id="description"
                   clrTextarea
                   [formControlName]="'description'"
                   class="w-100"
                   rows="3">
         </textarea>
+      </clr-textarea-container>
     </app-field-wrapper>
 
     <!-- Value date -->
@@ -50,11 +56,13 @@
                        [i18nLabel]="'i18n.components.transactions.form.dateValue'"
                        [ctrl]="form.get('dateValue')"
                        class="form-group clr-row mb-md">
-      <input id="dateValue"
-             [clrDate]="form?.get('dateValue')?.value"
-             (clrDateChange)="changeDate($event)"
-             type="date"
-             class="w-100"/>
+      <clr-date-container>
+        <input id="dateValue"
+               [clrDate]="form?.get('dateValue')?.value"
+               (clrDateChange)="changeDate($event)"
+               type="date"
+               class="w-100"/>
+      </clr-date-container>
     </app-field-wrapper>
 
     <!-- Amount -->
@@ -62,11 +70,13 @@
                        [i18nLabel]="'i18n.components.transactions.form.amount'"
                        [ctrl]="form.get('amount')"
                        class="form-group clr-row mb-md">
-      <input id="amount"
-             clrInput
-             [formControlName]="'amount'"
-             class="w-100"
-             type="text"/>
+      <clr-input-container>
+        <input id="amount"
+               clrInput
+               [formControlName]="'amount'"
+               class="w-100"
+               type="text"/>
+      </clr-input-container>
     </app-field-wrapper>
 
     <!-- Label -->
@@ -85,12 +95,14 @@
                        [i18nLabel]="'i18n.components.transactions.form.note'"
                        [ctrl]="form.get('note')"
                        class="form-group clr-row mb-md">
+      <clr-textarea-container>
         <textarea id="note"
                   clrTextarea
                   [formControlName]="'note'"
                   class="w-100"
                   rows="3">
         </textarea>
+      </clr-textarea-container>
     </app-field-wrapper>
   </section>
 
