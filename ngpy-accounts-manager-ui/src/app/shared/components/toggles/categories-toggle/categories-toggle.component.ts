@@ -24,7 +24,7 @@ export class CategoriesToggleComponent implements OnChanges {
   /**
    * Triggered on each selection change
    */
-  @Output() onChange = new EventEmitter<number[]>();
+  @Output() categoriesChange = new EventEmitter<number[]>();
 
   /**
    * The currently selected categories
@@ -82,7 +82,7 @@ export class CategoriesToggleComponent implements OnChanges {
     } else {
       this.selectedCategories.push(categoryId);
     }
-    this.onChange.emit(this.selectedCategories);
+    this.categoriesChange.emit(this.selectedCategories);
   }
 
   /**
@@ -91,7 +91,7 @@ export class CategoriesToggleComponent implements OnChanges {
   toggleAllCategories(): void {
     if (this.selectedCategories !== undefined) {
       this.selectedCategories = undefined;
-      this.onChange.emit(this.selectedCategories);
+      this.categoriesChange.emit(this.selectedCategories);
     }
   }
 
@@ -104,7 +104,7 @@ export class CategoriesToggleComponent implements OnChanges {
     const selectedCategories = categories.slice(0);
     if (!_.isEqual(selectedCategories, this.selectedCategories)) {
       this.selectedCategories = selectedCategories;
-      this.onChange.emit(this.selectedCategories);
+      this.categoriesChange.emit(this.selectedCategories);
     }
   }
 

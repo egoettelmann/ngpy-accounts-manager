@@ -6,21 +6,21 @@
                       [label]="'i18n.components.accounts.account-toggle.label' | translate">
       <app-accounts-toggle [accounts]="accounts"
                            [preSelected]="accountsFilter"
-                           (onChange)="changeAccounts($event)">
+                           (accountsChange)="changeAccounts($event)">
       </app-accounts-toggle>
     </app-card-wrapper>
 
     <!-- Year select -->
     <app-card-wrapper [label]="'i18n.components.dates.label.year-dropdown' | translate">
       <app-years-toggle [currentYear]="currentYear"
-                        (onChange)="changeYear($event)">
+                        (yearChange)="changeYear($event)">
       </app-years-toggle>
     </app-card-wrapper>
 
     <!-- Month select -->
     <app-card-wrapper [label]="'i18n.components.dates.label.month-dropdown' | translate">
       <app-months-toggle [currentMonth]="currentMonth"
-                         (onChange)="changeMonth($event)">
+                         (monthChange)="changeMonth($event)">
       </app-months-toggle>
     </app-card-wrapper>
   </div>
@@ -50,8 +50,8 @@
     <app-budget-form [model]="newBudget"
                      [labels]="labels"
                      [accounts]="accounts"
-                     (onFormSubmit)="saveBudget($event)"
-                     (onFormCancel)="closeModal()">
+                     (submitChange)="saveBudget($event)"
+                     (cancelChange)="closeModal()">
     </app-budget-form>
   </div>
 </clr-modal>

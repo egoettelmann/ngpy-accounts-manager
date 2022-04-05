@@ -38,12 +38,12 @@ export class AutocompleteComponent implements OnChanges {
   /**
    * Triggered when an item gets selected
    */
-  @Output() onSelect = new EventEmitter<any>();
+  @Output() selectItem = new EventEmitter<any>();
 
   /**
    * Triggered when a new element is created
    */
-  @Output() onCreate = new EventEmitter<string>();
+  @Output() createItem = new EventEmitter<string>();
 
   /**
    * The model bound to the control
@@ -136,9 +136,9 @@ export class AutocompleteComponent implements OnChanges {
    */
   validate(): void {
     if (this.selectedModel) {
-      this.onSelect.emit(this.selectedModel);
+      this.selectItem.emit(this.selectedModel);
     } else {
-      this.onCreate.emit(this.ngModel);
+      this.createItem.emit(this.ngModel);
     }
     this.ngOptions = undefined;
   }

@@ -6,14 +6,14 @@
                       [label]="'i18n.components.accounts.account-toggle.label' | translate">
       <app-accounts-toggle [accounts]="accounts"
                            [preSelected]="accountsFilter"
-                           (onChange)="changeAccounts($event)">
+                           (accountsChange)="changeAccounts($event)">
       </app-accounts-toggle>
     </app-card-wrapper>
 
     <!-- Year select -->
     <app-card-wrapper [label]="'i18n.components.dates.label.year-dropdown' | translate">
       <app-years-toggle [currentYear]="currentYear"
-                        (onChange)="changeYear($event)">
+                        (yearChange)="changeYear($event)">
       </app-years-toggle>
     </app-card-wrapper>
 

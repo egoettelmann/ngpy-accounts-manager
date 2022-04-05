@@ -30,9 +30,9 @@
         <clr-alert *ngIf="loginForm.errors"
                    [clrAlertType]="'danger'"
                    [clrAlertClosable]="false">
-          <clr-alert-item *ngFor="let error of loginForm.errors | keyvalue">
+          <clr-alert-item *ngFor="let error of formErrors">
             <span class="alert-text"
-                  [innerHTML]="'i18n.error.' + error.key | translate">
+                  [innerHTML]="'i18n.error.' + error | translate">
             </span>
           </clr-alert-item>
         </clr-alert>

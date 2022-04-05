@@ -8,9 +8,9 @@
     <app-transactions-form [model]="selectedTransaction"
                            [labels]="labels"
                            [accounts]="accounts"
-                           (onFormSubmit)="saveTransaction($event)"
-                           (onFormCancel)="closeModal()"
-                           (onFormDelete)="deleteTransaction($event)">
+                           (submitChange)="saveTransaction($event)"
+                           (cancelChange)="closeModal()"
+                           (submitDelete)="deleteTransaction($event)">
     </app-transactions-form>
   </div>
 </clr-modal>

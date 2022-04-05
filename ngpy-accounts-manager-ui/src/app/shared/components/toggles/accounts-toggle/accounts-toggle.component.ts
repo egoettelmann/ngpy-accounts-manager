@@ -24,7 +24,7 @@ export class AccountsToggleComponent implements OnChanges {
   /**
    * Triggered on each selection change
    */
-  @Output() onChange = new EventEmitter<number[]>();
+  @Output() accountsChange = new EventEmitter<number[]>();
 
   /**
    * The currently selected accounts
@@ -79,7 +79,7 @@ export class AccountsToggleComponent implements OnChanges {
     } else {
       this.selectedAccounts.push(account.id);
     }
-    this.onChange.emit(this.getSelectedAccounts());
+    this.accountsChange.emit(this.getSelectedAccounts());
   }
 
   /**
@@ -92,7 +92,7 @@ export class AccountsToggleComponent implements OnChanges {
     const selectedAccounts = this.accounts.map(a => a.id);
     if (!_.isEqual(selectedAccounts, this.selectedAccounts)) {
       this.selectedAccounts = selectedAccounts;
-      this.onChange.emit(this.getSelectedAccounts());
+      this.accountsChange.emit(this.getSelectedAccounts());
     }
   }
 
@@ -105,7 +105,7 @@ export class AccountsToggleComponent implements OnChanges {
     const selectedAccounts = accounts.slice(0);
     if (!_.isEqual(selectedAccounts, this.selectedAccounts)) {
       this.selectedAccounts = selectedAccounts;
-      this.onChange.emit(this.getSelectedAccounts());
+      this.accountsChange.emit(this.getSelectedAccounts());
     }
   }
 

@@ -14,7 +14,7 @@
     <!-- Year select -->
     <app-card-wrapper [label]="'i18n.components.dates.label.year-dropdown' | translate">
       <app-years-toggle [currentYear]="currentYear"
-                        (onChange)="changeYear($event)">
+                        (yearChange)="changeYear($event)">
       </app-years-toggle>
     </app-card-wrapper>
 
@@ -22,7 +22,7 @@
     <app-card-wrapper *ngIf="isMonthSelectable()"
                       [label]="'i18n.components.dates.label.month-dropdown' | translate">
       <app-months-toggle [currentMonth]="currentMonth"
-                         (onChange)="changeMonth($event)">
+                         (monthChange)="changeMonth($event)">
       </app-months-toggle>
     </app-card-wrapper>
 
@@ -65,9 +65,9 @@
     <app-budget-form [model]="budget"
                      [labels]="labels"
                      [accounts]="accounts"
-                     (onFormSubmit)="saveBudget($event)"
-                     (onFormCancel)="closeModal()"
-                     (onFormDelete)="deleteBudget($event)">
+                     (submitChange)="saveBudget($event)"
+                     (cancelChange)="closeModal()"
+                     (submitDelete)="deleteBudget($event)">
     </app-budget-form>
   </div>
 </clr-modal>

@@ -64,7 +64,7 @@
                        class="form-group clr-row mb-md">
       <app-accounts-toggle [accounts]="accounts"
                            [preSelected]="form?.get('accounts')?.value"
-                           (onChange)="selectAccounts($event)">
+                           (accountsChange)="selectAccounts($event)">
       </app-accounts-toggle>
     </app-field-wrapper>
 
@@ -75,7 +75,7 @@
                        class="form-group clr-row mb-md">
       <app-labels-toggle [labels]="labels"
                          [value]="form?.get('labels')?.value"
-                         (onChange)="selectLabels($event)">
+                         (labelsChange)="selectLabels($event)">
       </app-labels-toggle>
     </app-field-wrapper>
   </section>

@@ -76,7 +76,7 @@
                        class="form-group clr-row mb-md">
       <app-autocomplete [value]="model?.label"
                         [options]="labels"
-                        (onSelect)="changeLabel($event)">
+                        (selectItem)="changeLabel($event)">
       </app-autocomplete>
     </app-field-wrapper>
 

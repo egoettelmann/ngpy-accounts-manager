@@ -8,7 +8,7 @@
                       [label]="'i18n.components.accounts.account-toggle.label' | translate">
       <app-accounts-toggle [accounts]="accounts"
                            [preSelected]="searchForm.get('accounts')?.value"
-                           (onChange)="changeAccounts($event)">
+                           (accountsChange)="changeAccounts($event)">
       </app-accounts-toggle>
     </app-card-wrapper>
 
@@ -17,7 +17,7 @@
                       [label]="'i18n.components.transactions.label-toggle.label' | translate">
       <app-labels-toggle [labels]="labels"
                          [value]="searchForm.get('labels')?.value"
-                         (onChange)="changeLabels($event)">
+                         (labelsChange)="changeLabels($event)">
       </app-labels-toggle>
     </app-card-wrapper>
 
@@ -27,7 +27,7 @@
       <app-categories-toggle *ngIf="categories"
                              [categories]="categories"
                              [value]="searchForm.get('categories')?.value"
-                             (onChange)="changeCategories($event)">
+                             (categoriesChange)="changeCategories($event)">
       </app-categories-toggle>
     </app-card-wrapper>
   </div>

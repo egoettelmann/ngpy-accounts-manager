@@ -28,12 +28,12 @@ export class TransactionsTableComponent {
   /**
    * Triggered when a transaction gets modified
    */
-  @Output() onChange = new EventEmitter<Transaction>();
+  @Output() transactionChange = new EventEmitter<Transaction>();
 
   /**
    * Triggered when a transaction gets deleted.
    */
-  @Output() onDelete = new EventEmitter<Transaction>();
+  @Output() transactionDelete = new EventEmitter<Transaction>();
 
   /**
    * The reference to the action buttons
@@ -53,7 +53,7 @@ export class TransactionsTableComponent {
       && label.id !== undefined
       && label.id !== transaction.label.id) {
       const newTransaction = Object.assign({}, transaction, { label_id: label.id });
-      this.onChange.emit(newTransaction);
+      this.transactionChange.emit(newTransaction);
     }
   }
 

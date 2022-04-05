@@ -24,7 +24,7 @@ export class LabelsToggleComponent implements OnChanges {
   /**
    * Triggered on selection change
    */
-  @Output() onChange = new EventEmitter<(number | null)[]>();
+  @Output() labelsChange = new EventEmitter<(number | null)[]>();
 
   /**
    * The currently selected labels
@@ -82,7 +82,7 @@ export class LabelsToggleComponent implements OnChanges {
     } else {
       this.selectedLabels.push(labelId);
     }
-    this.onChange.emit(this.selectedLabels);
+    this.labelsChange.emit(this.selectedLabels);
   }
 
   /**
@@ -91,7 +91,7 @@ export class LabelsToggleComponent implements OnChanges {
   toggleAllLabels(): void {
     if (this.selectedLabels !== undefined) {
       this.selectedLabels = undefined;
-      this.onChange.emit(this.selectedLabels);
+      this.labelsChange.emit(this.selectedLabels);
     }
   }
 
@@ -104,7 +104,7 @@ export class LabelsToggleComponent implements OnChanges {
     const selectedLabels = labels.slice(0);
     if (!_.isEqual(selectedLabels, this.selectedLabels)) {
       this.selectedLabels = selectedLabels;
-      this.onChange.emit(this.selectedLabels);
+      this.labelsChange.emit(this.selectedLabels);
     }
   }
 

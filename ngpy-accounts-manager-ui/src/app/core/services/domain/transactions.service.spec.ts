@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { RqlService } from '../rql.service';
-import { EMPTY, of } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { format } from 'date-fns';
 import { DateService } from '../date.service';
 import { TransactionsRestService } from '../rest/transactions-rest.service';

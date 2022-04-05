@@ -18,7 +18,7 @@ export class MonthsToggleComponent implements OnInit {
   /**
    * Triggered on each selection change
    */
-  @Output() onChange = new EventEmitter<number>();
+  @Output() monthChange = new EventEmitter<number>();
 
   /**
    * Instantiates the component.
@@ -45,7 +45,7 @@ export class MonthsToggleComponent implements OnInit {
    * @param month the new month
    */
   changeMonth(month: number): void {
-    this.onChange.emit(month);
+    this.monthChange.emit(month);
   }
 
 }

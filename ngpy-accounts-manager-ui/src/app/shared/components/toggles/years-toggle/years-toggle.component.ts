@@ -18,7 +18,7 @@ export class YearsToggleComponent implements OnInit {
   /**
    * Triggered on each year change
    */
-  @Output() onChange = new EventEmitter<number>();
+  @Output() yearChange = new EventEmitter<number>();
 
   /**
    * Instantiates the component.
@@ -45,7 +45,7 @@ export class YearsToggleComponent implements OnInit {
    * @param year the new year
    */
   changeYear(year: number): void {
-    this.onChange.emit(year);
+    this.yearChange.emit(year);
   }
 
 }

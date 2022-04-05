@@ -30,17 +30,17 @@ export class TransactionsFormComponent implements OnChanges {
   /**
    * Triggered when the form is submitted
    */
-  @Output() onFormSubmit = new EventEmitter<Transaction>();
+  @Output() submitChange = new EventEmitter<Transaction>();
 
   /**
    * Triggered on delete
    */
-  @Output() onFormDelete = new EventEmitter<Transaction>();
+  @Output() submitDelete = new EventEmitter<Transaction>();
 
   /**
    * Triggered on cancel
    */
-  @Output() onFormCancel = new EventEmitter<Transaction>();
+  @Output() cancelChange = new EventEmitter<Transaction>();
 
   /**
    * The form group
@@ -135,7 +135,7 @@ export class TransactionsFormComponent implements OnChanges {
     }
     const t = Object.assign({}, this.model, this.form.value) as Transaction;
     t.dateValue = this.dateService.format(t.dateValue as any);
-    this.onFormSubmit.emit(t);
+    this.submitChange.emit(t);
   }
 
   /**
@@ -143,7 +143,7 @@ export class TransactionsFormComponent implements OnChanges {
    */
   deleteTransaction(): void {
     const t = Object.assign({}, this.model);
-    this.onFormDelete.emit(t);
+    this.submitDelete.emit(t);
   }
 
   /**
@@ -151,7 +151,7 @@ export class TransactionsFormComponent implements OnChanges {
    */
   cancel(): void {
     const t = Object.assign({}, this.model);
-    this.onFormCancel.emit(t);
+    this.cancelChange.emit(t);
   }
 
 }

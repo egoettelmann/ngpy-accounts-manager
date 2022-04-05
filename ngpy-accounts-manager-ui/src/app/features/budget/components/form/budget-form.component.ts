@@ -29,17 +29,17 @@ export class BudgetFormComponent implements OnChanges {
   /**
    * Triggered when the form is submitted
    */
-  @Output() onFormSubmit = new EventEmitter<Budget>();
+  @Output() submitChange = new EventEmitter<Budget>();
 
   /**
    * Triggered on delete
    */
-  @Output() onFormDelete = new EventEmitter<Budget>();
+  @Output() submitDelete = new EventEmitter<Budget>();
 
   /**
    * Triggered on cancel
    */
-  @Output() onFormCancel = new EventEmitter<Budget>();
+  @Output() cancelChange = new EventEmitter<Budget>();
 
   /**
    * The form group
@@ -151,7 +151,7 @@ export class BudgetFormComponent implements OnChanges {
     } else {
       t.labels = [];
     }
-    this.onFormSubmit.emit(t);
+    this.submitChange.emit(t);
   }
 
   /**
@@ -159,7 +159,7 @@ export class BudgetFormComponent implements OnChanges {
    */
   deleteBudget(): void {
     const t = Object.assign({}, this.model);
-    this.onFormDelete.emit(t);
+    this.submitDelete.emit(t);
   }
 
   /**
@@ -167,7 +167,7 @@ export class BudgetFormComponent implements OnChanges {
    */
   cancel(): void {
     const t = Object.assign({}, this.model);
-    this.onFormCancel.emit(t);
+    this.cancelChange.emit(t);
   }
 
   /**

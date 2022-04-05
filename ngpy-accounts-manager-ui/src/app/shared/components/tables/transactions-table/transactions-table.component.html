@@ -29,8 +29,8 @@
         <app-autocomplete [uuid]="''+transaction.id"
                           [value]="transaction.label"
                           [options]="labels"
-                          (onSelect)="changeLabel($event, transaction)"
-                          (onCreate)="addLabel($event, transaction)">
+                          (selectItem)="changeLabel($event, transaction)"
+                          (createItem)="addLabel($event, transaction)">
         </app-autocomplete>
       </td>
       <td class="clr-hidden-sm-down">

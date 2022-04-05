@@ -28,7 +28,7 @@
     <app-transactions-table [transactions]="transactions"
                             [labels]="labels"
                             [editable]="true"
-                            (onChange)="saveTransaction($event)">
+                            (transactionChange)="saveTransaction($event)">
     </app-transactions-table>
   </div>
 </div>

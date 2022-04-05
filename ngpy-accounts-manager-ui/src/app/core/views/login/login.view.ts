@@ -71,6 +71,13 @@ export class LoginView implements OnInit {
     });
   }
 
+  get formErrors(): string[] {
+    if (!this.loginForm || !this.loginForm.errors) {
+      return [];
+    }
+    return Object.keys(this.loginForm.errors);
+  }
+
   private buildForm(): void {
     this.loginForm = this.fb.group({
       username: [null, [Validators.required]],
