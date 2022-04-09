@@ -9,9 +9,9 @@ services:
       context: ./ngpy-accounts-manager-api
       args:
         SOURCE_VERSION: 'dev'
-    entrypoint: ['/entrypoint.sh']
+    entrypoint: ['./entrypoint.sh']
     ports:
-      - '5000:9001'
+      - '5000:5050'
     volumes:
       - ./ngpy-accounts-manager-api/src/app:/var/task/app:ro,delegated
     environment:
@@ -34,6 +34,7 @@ services:
       - ./ngpy-accounts-manager-ui/dist/ngpy-accounts-manager-ui:/usr/share/nginx/html
     environment:
       NGINX_PROFILE: 'dev'
+      API_TARGET_HOST: 'http://api:5050/'
 
   # Database
   # Postgres database
