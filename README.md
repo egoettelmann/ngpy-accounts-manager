@@ -6,7 +6,7 @@ Small webapp to manage accounts with some statistics.
 
 ## Tech Stack
 
-[![Build Status](https://travis-ci.org/egoettelmann/ngpy-accounts-manager.svg?branch=develop)](https://travis-ci.org/egoettelmann/ngpy-accounts-manager)
+[![Build Status](https://travis-ci.com/egoettelmann/ngpy-accounts-manager.svg?branch=develop)](https://travis-ci.com/egoettelmann/ngpy-accounts-manager)
 
 - Angular 8
 - Flask / SQLAlchemy

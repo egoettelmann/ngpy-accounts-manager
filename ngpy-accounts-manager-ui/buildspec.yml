@@ -1,0 +1,23 @@
+version: 0.2
+
+# Required variables
+#  - ${PROD_BACKEND_URI}
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+  pre_build:
+    commands:
+      - 'echo Installing source NPM dependencies...'
+      - 'npm install --prefix ngpy-accounts-manager-ui'
+      - 'envsubst < "./ngpy-accounts-manager/src/assets/config/application-prod.json" > "./ngpy-accounts-manager/src/assets/config/application.json"'
+  build:
+    commands:
+      - 'echo Building the Angular app...'
+      - 'npm run --prefix ngpy-accounts-manager-ui build'
+
+artifacts:
+  base-directory: 'ngpy-accounts-manager-ui/dist/ngpy-accounts-manager-ui'
+  files:
+    - '**/*'
