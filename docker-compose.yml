@@ -3,13 +3,13 @@ version: '3.1'
 services:
 
   # API
-  # Python backend that exposes REST controllers
+  # Python backend that exposes REST controllers through Flask web server
   api:
     build:
       context: ./ngpy-accounts-manager-api
       args:
         SOURCE_VERSION: 'dev'
-    restart: always
+    entrypoint: ['/entrypoint.sh']
     ports:
       - '5000:9001'
     volumes:
@@ -31,7 +31,7 @@ services:
     ports:
       - '4200:80'
     volumes:
-      - ./ngpy-accounts-manager-ui/dist:/usr/share/nginx/html
+      - ./ngpy-accounts-manager-ui/dist/ngpy-accounts-manager-ui:/usr/share/nginx/html
     environment:
       NGINX_PROFILE: 'dev'
 

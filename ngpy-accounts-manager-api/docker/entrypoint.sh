@@ -6,7 +6,5 @@
 # Running migrations
 python migrate.py || exit
 
-# Executing normal entrypoint
-# as defined here: https://github.com/lambci/docker-lambda/blob/master/python3.7/run/Dockerfile
-echo "Starting '$@'"
-exec /var/rapid/init --bootstrap /var/runtime/bootstrap "$@"
+# Starting web server
+exec python web.py

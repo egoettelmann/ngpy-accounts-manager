@@ -9,25 +9,33 @@ services:
     ports:
       - '5000:8080'
     environment:
-      LAMBDA_ENDPOINT: http://lambda:9001
+      LAMBDA_ENDPOINT: http://lambda-api:9001
       LAMBDA_NAME: function
       PORT: 8080
 
-  # Lambda function
+  # Lambda function that handles the API
   # Docker image that emulates lambda behaviour (available on port 9001).
-  lambda:
+  lambda-api:
     build:
       context: ./ngpy-accounts-manager-api
       args:
         SOURCE_VERSION: 'lambda'
     volumes:
-      - ./ngpy-accounts-manager-api/src/app:/var/task/app:ro,delegated
       - ./database/storage:/var/task/storage
     environment:
       DOCKER_LAMBDA_STAY_OPEN: 1
       DATABASE_URI: 'postgresql://${DB_USERNAME}:${DB_PASSWORD}@db:5432/api'
       SESSION_SECRET_KEY: '${SESSION_SECRET_KEY}'
       CORS_ORIGIN: 'http://localhost:4210'
+
+  # Lambda function that handles the DB migration
+  # Docker image that waits that the database is up, executes the migration and dies afterwards.
+  lambda-migrate:
+    build:
+      context: ./ngpy-accounts-manager-api
+    entrypoint: ./wait && python migrate.py
+    environment:
+      DATABASE_URI: 'postgresql://${DB_USERNAME}:${DB_PASSWORD}@db:5432/api'
       WAIT_HOSTS: db:5432
 
   # UI
@@ -39,8 +47,6 @@ services:
         PROD_BACKEND_URI: '${BACKEND_URI}'
     ports:
       - '4200:80'
-    volumes:
-      - ./ngpy-accounts-manager-ui/dist/ngpy-accounts-manager-ui:/usr/share/nginx/html
     environment:
       NGINX_PROFILE: 'lambda'
       API_TARGET_HOST: 'http://api:8080/'

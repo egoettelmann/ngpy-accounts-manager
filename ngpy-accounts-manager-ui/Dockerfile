@@ -32,15 +32,8 @@ ARG PROD_BACKEND_URI
 ENV PROD_BACKEND_URI $PROD_BACKEND_URI
 RUN find ./src/assets/config/. -type f -exec bash -c 'envsubst < $1 > $1.tmp && mv $1.tmp $1' -- {} \;
 
-# Building and packaging
+# Building
 RUN npm run build
-WORKDIR /build/dist/ngpy-accounts-manager-ui
-RUN zip -9yrq ngpy-accounts-manager-ui.zip .
-
-# Copying archive to output folder
-WORKDIR /build/output
-RUN cp /build/dist/ngpy-accounts-manager-ui/ngpy-accounts-manager-ui.zip .
-RUN ls -al /build/output
 
 ##################
 # Run image
@@ -51,4 +44,4 @@ FROM nginx:1.19.4
 COPY ./docker/default.conf.template /etc/nginx/templates/
 
 # Adding the app
-COPY --from=build /build/dist /usr/share/nginx/html
+COPY --from=build /build/dist/ngpy-accounts-manager-ui /usr/share/nginx/html

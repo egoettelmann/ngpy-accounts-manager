@@ -1,7 +1,7 @@
 ##################
 # Build image
 ##################
-FROM public.ecr.aws/lambda/python:3.7 AS build
+FROM lambci/lambda:build-python3.7 AS build
 
 # Defining build folder
 WORKDIR /build
@@ -35,7 +35,7 @@ USER root
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait .
 RUN chmod +x ./wait
 
-# Adding entrypoint script
+# Adding alternative entrypoint script
 COPY ./docker/entrypoint.sh .
 RUN chmod +x ./entrypoint.sh
 
@@ -47,6 +47,3 @@ COPY --from=build /build/target .
 
 # Command that executes lambda handler
 CMD [ "lambda.handler" ]
-
-# Defining custom entrypoint (to execute migration script)
-ENTRYPOINT ["./entrypoint.sh"]
