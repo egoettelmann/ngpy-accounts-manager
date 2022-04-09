@@ -13,6 +13,9 @@ alembic==1.3.1
 # Email dependencies
 sendgrid==5.6.0
 
+# Lambda dependencies
+aws-wsgi==0.2.7
+
 # ML dependencies
 numpy==1.21.5
 joblib==1.1.0

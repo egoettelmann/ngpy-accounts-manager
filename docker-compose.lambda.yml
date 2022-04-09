@@ -3,21 +3,31 @@ version: '3.1'
 services:
 
   # API
-  # Python backend that exposes REST controllers
+  # Proxy that translates HTTP requests into lambda invocations.
   api:
+    image: elthrasher/http-lambda-invoker
+    ports:
+      - '5000:8080'
+    environment:
+      LAMBDA_ENDPOINT: http://lambda:9001
+      LAMBDA_NAME: function
+      PORT: 8080
+
+  # Lambda function
+  # Docker image that emulates lambda behaviour (available on port 9001).
+  lambda:
     build:
       context: ./ngpy-accounts-manager-api
       args:
-        SOURCE_VERSION: 'dev'
-    restart: always
-    ports:
-      - '5000:9001'
+        SOURCE_VERSION: 'lambda'
     volumes:
       - ./ngpy-accounts-manager-api/src/app:/var/task/app:ro,delegated
+      - ./database/storage:/var/task/storage
     environment:
+      DOCKER_LAMBDA_STAY_OPEN: 1
       DATABASE_URI: 'postgresql://${DB_USERNAME}:${DB_PASSWORD}@db:5432/api'
       SESSION_SECRET_KEY: '${SESSION_SECRET_KEY}'
-      CORS_ORIGIN: '${FRONTEND_URI}'
+      CORS_ORIGIN: 'http://localhost:4210'
       WAIT_HOSTS: db:5432
 
   # UI
@@ -27,13 +37,13 @@ services:
       context: ./ngpy-accounts-manager-ui
       args:
         PROD_BACKEND_URI: '${BACKEND_URI}'
-    restart: always
     ports:
       - '4200:80'
     volumes:
-      - ./ngpy-accounts-manager-ui/dist:/usr/share/nginx/html
+      - ./ngpy-accounts-manager-ui/dist/ngpy-accounts-manager-ui:/usr/share/nginx/html
     environment:
-      NGINX_PROFILE: 'dev'
+      NGINX_PROFILE: 'lambda'
+      API_TARGET_HOST: 'http://api:8080/'
 
   # Database
   # Postgres database

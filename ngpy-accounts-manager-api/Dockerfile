@@ -1,7 +1,7 @@
 ##################
 # Build image
 ##################
-FROM lambci/lambda:build-python3.7 AS build
+FROM public.ecr.aws/lambda/python:3.7 AS build
 
 # Defining build folder
 WORKDIR /build
@@ -22,12 +22,6 @@ RUN echo "$(date +%F).$SOURCE_VERSION" > ./target/assets/version.txt
 
 # Packaging
 WORKDIR /build/target
-RUN zip -9yrq ngpy-accounts-manager-api.zip .
-
-# Copying archive to output folder
-WORKDIR /build/output
-RUN cp /build/target/ngpy-accounts-manager-api.zip .
-RUN ls -al /build/output
 
 ##################
 # Run image
@@ -51,4 +45,8 @@ USER sbx_user1051
 # Adding the app
 COPY --from=build /build/target .
 
-ENTRYPOINT ./wait && ./entrypoint.sh
+# Command that executes lambda handler
+CMD [ "lambda.handler" ]
+
+# Defining custom entrypoint (to execute migration script)
+ENTRYPOINT ["./entrypoint.sh"]

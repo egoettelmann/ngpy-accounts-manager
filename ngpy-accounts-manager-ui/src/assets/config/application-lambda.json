@@ -1,0 +1,4 @@
+{
+  "environment": "lambda",
+  "apiUrl": "http://localhost:4200/api"
+}
