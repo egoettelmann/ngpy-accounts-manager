@@ -65,10 +65,10 @@ jobs:
             - npm-
       - run:
           name: "Get dependencies"
-          command: npm install
+          command: npm ci --cache .npm --prefer-offline
       - save_cache:
           paths:
-            - ./node_modules
+            - ./.npm
           key: npm-{{ checksum "package-lock.json" }}
       - run:
           name: "Build"
@@ -82,8 +82,15 @@ jobs:
   test-ui:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
     docker:
-      - image: << pipeline.parameters.docker-image-ui >>
+      - image: << pipeline.parameters.docker-image-ui >>-browsers
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run:
+          name: "Check install"
+          command: |
+            google-chrome --version
+            chromedriver --version
       - attach_workspace:
           at: .
       - run:
