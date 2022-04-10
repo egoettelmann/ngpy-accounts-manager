@@ -8,6 +8,9 @@ parameters:
   docker-image-ui:
     type: string
     default: "cimg/node:14.19"
+  docker-image-ui-tests:
+    type: string
+    default: "cimg/node:14.19-browsers"
 
 jobs:
   # Build the API
@@ -82,7 +85,7 @@ jobs:
   test-ui:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
     docker:
-      - image: << pipeline.parameters.docker-image-ui >>-browsers
+      - image: << pipeline.parameters.docker-image-ui-tests >>
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
