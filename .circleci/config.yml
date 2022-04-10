@@ -10,7 +10,7 @@ parameters:
     default: "cimg/node:14.19"
 
 jobs:
-  # Build and test the API
+  # Build the API
   build-api:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
     docker:
@@ -24,20 +24,34 @@ jobs:
             - pip-
       - run:
           name: "Get dependencies"
-          command: pip install -r requirements.txt -t ./site-packages
+          command: pip install -r requirements.txt -t ./src/site-packages
       - save_cache:
           paths:
-            - ./site-packages
+            - ./src/site-packages
           key: pip-{{ checksum "requirements.txt" }}
-      - run:
-          name: "Test"
-          command: PYTHONPATH=./site-packages/:./src python -m pytest tests/
       - persist_to_workspace:
           root: .
           paths:
-            - .
+            - ./src
+            - ./tests
 
-  # Build and test the UI
+  # Test the API
+  test-api:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
+    docker:
+      - image: << pipeline.parameters.docker-image-api >>
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Test"
+          command: PYTHONPATH=./src python -m pytest tests/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./src
+
+  # Build the UI
   build-ui:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
     docker:
@@ -57,26 +71,53 @@ jobs:
             - ./.npm
           key: npm-{{ checksum "package-lock.json" }}
       - run:
-          name: "Test"
-          command: npm run test
-      - run:
           name: "Build"
           command: npm run build
       - persist_to_workspace:
           root: .
           paths:
-            - .
+            - ./dist/ngpy-accounts-manager-ui
+            - ./src
+
+  # Test the UI
+  test-ui:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
+    docker:
+      - image: << pipeline.parameters.docker-image-ui >>
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Test"
+          command: npm run test
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./dist/ngpy-accounts-manager-ui
 
 workflows:
-  # The main workflow:
-  # - build api and build ui
+  # The main workflow
   build-and-test:
     jobs:
+      # API: build and test
       - build-api:
           filters:
             branches:
               only: /.*/
+      - test-api:
+          requires:
+            - build-api
+          filters:
+            branches:
+              only: /.*/
+      # UI: build and test
       - build-ui:
+          filters:
+            branches:
+              only: /.*/
+      - test-ui:
+          requires:
+            - build-ui
           filters:
             branches:
               only: /.*/
