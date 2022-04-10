@@ -1,97 +1,49 @@
 NgPy-Accounts-Manager
 =====================
 
-Small webapp to manage accounts with some statistics.
+Small webapp to manage accounts, define budgets and get some statistics.
+
+## Usage instructions
+
+The simplest way to run the app is through [Docker](https://www.docker.com/products/docker-desktop/).
+
+1. Rename the `sample.env` file into `.env`
+2. Run the `docker-compose.yml` file at the root of the project:
+   ```sh
+   docker-compose up
+   ```
+3. Open a browser on:
+   - <http://localhost:4200>
+4. Login in with following credentials:
+   - user: `user`
+   - password: `password`
+5. Some sample data has been provided to explore the app
 
 
-## Tech Stack
+## Technical details [![CircleCI](https://circleci.com/gh/egoettelmann/ngpy-accounts-manager/tree/develop.svg?style=svg)](https://circleci.com/gh/egoettelmann/ngpy-accounts-manager/tree/develop)
 
-[![Build Status](https://travis-ci.com/egoettelmann/ngpy-accounts-manager.svg?branch=develop)](https://travis-ci.com/egoettelmann/ngpy-accounts-manager)
+The app is split in following components:
+- a UI, written in Angular and relying on Clarity
+- an API, written in Python and relying on Flask with SQLAlchemy
+- a relational database (PostreSQL by default)
 
-- Angular / Clarity Design System
-- Flask / SQLAlchemy
+### Local development
 
-## Installation, build and run
-
-First, install and run the backend with python:
-
+First, install and run the API with Python:
 ```
-pip install -r requirements.txt
-python ngpy-accounts-manager-api/webserver.py
+cd ngpy-accounts-manager-api
+pip install -r requirements.txt -t ./src/site-packages
+python src/webserver.py
 ```
+This will start the REST API on <http://localhost:5050>.
 
-Then, install and run the frontend through the Webpack dev server:
-
+Then, install and run the UI through the Angular CLI:
 ```
+cd ngpy-accounts-manager-ui
 npm install
-npm run start --prefix ngpy-accounts-manager-ui
+npm run start
 ```
-
-To simply build the frontend:
-```
-npm run build
-```
-
-### Docker build
-
-As an alternative, you can build the entire stack using Docker:
-
-```shell script
-docker-compose -f docker-compose.build.yml up --build --no-start -V
-```
-
-And then get the artifacts:
-```shell script
-docker cp ngpy-accounts-manager_ui_1:/build/output/ngpy-accounts-manager-ui.zip ./target/ngpy-accounts-manager-ui.zip
-docker cp ngpy-accounts-manager_api_1:/build/output/ngpy-accounts-manager-api.zip ./target/ngpy-accounts-manager-api.zip
-```
-
-## Release Notes
-
-### `0.6.0`
-
-- Added budget section
-- Fixed quarterly formula
-- Added datepicker for forms
-- Added Python unit tests
-- Added Alembic for DB migrations
-- Major rework of code structure 
-
-### `0.5.0`
-
-- Added native Python logging
-- Switched to Python type-hinting
-- Worked on CI: added frontend tests and set-version
-- Added RQL support for better requests flexibility
-- Improved PWA compliance and responsiveness
-- Added alerts on dashboard
-- Charts display more data
-- Improved search form
-
-### `0.4.1`
-
-- Added scheduler for sending notifications
-- Refactored frontend app structure
-- Added analytics details charts
-- Migrated to Angular 8 and Clarity 2
-- Improved responsiveness
-
-### `0.3.0`
-
-- Created global search
-- Improved transaction form
-- Added alert message on dashboard for unassigned transactions
-
-### `0.2.2`
-
-- Responsiveness on mobile improved
-- Added settings section for managing labels, categories and accounts
-
-### `0.2.1`
-
-- Separated app into multiple modules that are lazy-loaded
-- Migrated to Angular 5.1.0
-- Fixed design issues
+This will start the frontend on <http://localhost:4210>.
 
 
 ## Roadmap
@@ -102,17 +54,23 @@ docker cp ngpy-accounts-manager_api_1:/build/output/ngpy-accounts-manager-api.zi
   - best option seems to be Aurora Serverless
     - https://aws.amazon.com/fr/rds/aurora/serverless/
     - https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html
+- Backend
+  - AWS lambda (with Docker image)
 - Frontend
   - push to public s3 bucket
 - Deploy
-  - Github Actions may be a solution
-    - https://blog.jakoblind.no/aws-lambda-github-actions/
-  - CircleCI
-    - https://circleci.com/orbs/registry/orb/circleci/aws-sam-serverless
-  - Otherwise Travis, AWS CodeBuild/CodeDeploy ?
+  - CircleCI: 
+    - <https://circleci.com/orbs/registry/orb/circleci/aws-sam-serverless>
+  - AWS CodeBuild/CodeDeploy ?
+  - Github Actions ?
+    - <https://blog.jakoblind.no/aws-lambda-github-actions/>
 
 ### Tech
 
+- Separate Python test dependencies into a separate `requirements` file
+  - build would be cleaner (there should be 2 install folders)
+  - no need to bundle test dependencies
+- Add <https://snyk.io/> ?
 - Create a PWA with Angular ?
 
 ### Features
@@ -122,4 +80,3 @@ docker cp ngpy-accounts-manager_api_1:/build/output/ngpy-accounts-manager-api.zi
   - Period can only be closed at a date of 30 days before the current day
 - Add sort and filters on transactions table
 - Add document section for RIB
-- Some machine learning on existing labels for auto-importing transactions
