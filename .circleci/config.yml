@@ -31,7 +31,7 @@ jobs:
           key: pip-{{ checksum "requirements.txt" }}
       - run:
           name: "Test"
-          command: python -m pytest
+          command: PYTHONPATH=./target/site-packages/ python -m pytest tests/
       - persist_to_workspace:
           root: .
           paths:
@@ -58,9 +58,10 @@ jobs:
           key: npm-{{ checksum "package-lock.json" }}
       - run:
           name: "Test"
-          command: |
-            npm run test
-            npm run build
+          command: npm run test
+      - run:
+          name: "Build"
+          command: npm run build
       - persist_to_workspace:
           root: .
           paths:
@@ -69,7 +70,7 @@ jobs:
 workflows:
   # The main workflow:
   # - build api and build ui
-  build-and-deploy:
+  build-and-test:
     jobs:
       - build-api:
           filters:
