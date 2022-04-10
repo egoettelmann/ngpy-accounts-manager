@@ -1,0 +1,81 @@
+version: 2.1
+
+# Defining parameters
+parameters:
+  docker-image-api:
+    type: string
+    default: "cimg/python:3.7"
+  docker-image-ui:
+    type: string
+    default: "cimg/node:14.19"
+
+jobs:
+  # Build and test the API
+  build-api:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
+    docker:
+      - image: << pipeline.parameters.docker-image-api >>
+    steps:
+      - checkout:
+          path: ~/ngpy-accounts-manager
+      - restore_cache:
+          keys:
+            - pip-{{ checksum "requirements.txt" }}
+            - pip-
+      - run:
+          name: "Get dependencies"
+          command: pip install -r requirements.txt -t ./target/site-packages
+      - save_cache:
+          paths:
+            - ./target/site-packages
+          key: pip-{{ checksum "requirements.txt" }}
+      - run:
+          name: "Test"
+          command: python -m pytest
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  # Build and test the UI
+  build-ui:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
+    docker:
+      - image: << pipeline.parameters.docker-image-ui >>
+    steps:
+      - checkout:
+          path: ~/ngpy-accounts-manager
+      - restore_cache:
+          keys:
+            - npm-{{ checksum "package-lock.json" }}
+            - npm-
+      - run:
+          name: "Get dependencies"
+          command: npm ci --cache .npm --prefer-offline
+      - save_cache:
+          paths:
+            - ./.npm
+          key: npm-{{ checksum "package-lock.json" }}
+      - run:
+          name: "Test"
+          command: |
+            npm run test
+            npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+workflows:
+  # The main workflow:
+  # - build api and build ui
+  build-and-deploy:
+    jobs:
+      - build-api:
+          filters:
+            branches:
+              only: /.*/
+      - build-ui:
+          filters:
+            branches:
+              only: /.*/
