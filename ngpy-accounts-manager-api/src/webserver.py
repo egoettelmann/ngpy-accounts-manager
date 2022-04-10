@@ -1,3 +1,4 @@
+import logging
 import sys
 
 sys.path.append('./site-packages')
@@ -16,15 +17,19 @@ depynject_container = Depynject(providers={
 # Building the App
 app = create_app(depynject_container=depynject_container)
 
-# Defining Lambda handler
-def handler(event, context):
-    """
-    Handler for Lambda function
-    :param event:
-    :param context:
-    :return:
-    """
-    result = awsgi.response(app, event, context)
-    # Mapping the statusCode to 'int' type for 'elthrasher/http-lambda-invoker'
-    result['statusCode'] = int(result['statusCode'])
-    return result
+
+######################
+# Post request filter
+######################
+@app.teardown_request
+def teardown_request(exception):
+    rdi_provider.clear()
+    if exception is not None:
+        logging.critical('App teardown due to exception %s', exception)
+
+
+######################
+# Starting the WebApp
+######################
+if __name__ == '__main__':
+    app.run(debug=True, port=5050, threaded=True, host='0.0.0.0')

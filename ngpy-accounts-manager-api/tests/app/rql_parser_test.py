@@ -2,13 +2,21 @@ import pytest
 import flask
 import urllib.parse
 
-from domain.search_request import FilterOperator
-from rql_parser import RqlRequestParser
+from app.config import AppProperties
+from app.domain.search_request import FilterOperator
+from app.rql_parser import RqlRequestParser
+from app.main import create_app
 
 
 @pytest.fixture()
 def request_factory():
-    app = flask.Flask(__name__)
+    app_properties = AppProperties(
+        database_url = 'sqlite:///:memory:',
+        session_secret_key = '',
+        cors_origin = '',
+        app_version = 'unit-test'
+    )
+    app = create_app(app_properties=app_properties)
 
     def request(rql_string):
         query_params = urllib.parse.quote(rql_string)

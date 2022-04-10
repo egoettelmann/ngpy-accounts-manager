@@ -20,6 +20,12 @@ ARG SOURCE_VERSION
 ENV SOURCE_VERSION $SOURCE_VERSION
 RUN echo "$(date +%F).$SOURCE_VERSION" > ./target/assets/version.txt
 
+# Copying test files
+COPY ./tests ./tests
+
+# Testing
+RUN PYTHONPATH=./target/site-packages/:./target python -m pytest tests/
+
 # Packaging
 WORKDIR /build/target
 

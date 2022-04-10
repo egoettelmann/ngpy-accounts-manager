@@ -7,14 +7,18 @@ from app.modules.di_providers import StaticSingletonDiProvider
 
 from app.domain.services import ClassificationService
 
-from app.main import entity_manager
+from app.main import create_app
 
 # Configuring Dependency Injection
 spdi_provider = StaticSingletonDiProvider()
 depynject_container = Depynject(providers={
     'request': spdi_provider.provide
 })
-depynject_container.register_singleton(entity_manager)
+
+# Building the App
+app = create_app(depynject_container=depynject_container)
+
+# Retrieving classification service
 classification_service: ClassificationService = depynject_container.provide(ClassificationService)
 
 ##########################

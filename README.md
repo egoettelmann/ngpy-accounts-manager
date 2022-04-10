@@ -8,7 +8,7 @@ Small webapp to manage accounts with some statistics.
 
 [![Build Status](https://travis-ci.com/egoettelmann/ngpy-accounts-manager.svg?branch=develop)](https://travis-ci.com/egoettelmann/ngpy-accounts-manager)
 
-- Angular 8
+- Angular / Clarity Design System
 - Flask / SQLAlchemy
 
 ## Installation, build and run
@@ -17,7 +17,7 @@ First, install and run the backend with python:
 
 ```
 pip install -r requirements.txt
-python ngpy-accounts-manager-api/web.py
+python ngpy-accounts-manager-api/webserver.py
 ```
 
 Then, install and run the frontend through the Webpack dev server:

@@ -24,14 +24,14 @@ jobs:
             - pip-
       - run:
           name: "Get dependencies"
-          command: pip install -r requirements.txt -t ./target/site-packages
+          command: pip install -r requirements.txt -t ./site-packages
       - save_cache:
           paths:
-            - ./target/site-packages
+            - ./site-packages
           key: pip-{{ checksum "requirements.txt" }}
       - run:
           name: "Test"
-          command: PYTHONPATH=./target/site-packages/ python -m pytest tests/
+          command: PYTHONPATH=./site-packages/:./src python -m pytest tests/
       - persist_to_workspace:
           root: .
           paths:

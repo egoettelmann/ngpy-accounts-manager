@@ -1,5 +1,5 @@
-from dbconnector import EntityManager
-from modules.depynject import Depynject
+from app.dbconnector import EntityManager
+from app.modules.depynject import Depynject
 
 d_injector = Depynject()
 

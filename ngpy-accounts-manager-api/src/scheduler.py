@@ -1,22 +1,28 @@
 import sys
+import logging
+
 
 sys.path.append('./site-packages')
 
-import logging
-
-from app.main import entity_manager
-from app.domain.services import AccountService, NotificationService
 from app.modules.depynject import Depynject
 from app.modules.di_providers import SimplePrototypeDiProvider
+
+from app.domain.services import NotificationService, AccountService
+
+from app.main import create_app
 
 # Configuring Dependency Injection
 spdi_provider = SimplePrototypeDiProvider()
 depynject_container = Depynject(providers={
     'request': spdi_provider.provide
 })
-depynject_container.register_singleton(entity_manager)
-notification_service = depynject_container.provide(NotificationService)
-account_service = depynject_container.provide(AccountService)
+
+# Building the App
+app = create_app(depynject_container=depynject_container)
+
+# Retrieving required services
+notification_service: NotificationService = depynject_container.provide(NotificationService)
+account_service: AccountService = depynject_container.provide(AccountService)
 
 ##########################
 # Executing the Scheduler
