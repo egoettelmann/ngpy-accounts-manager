@@ -139,12 +139,11 @@ workflows:
       # Required env vars:
       #  - AWS_ACCESS_KEY_ID
       #  - AWS_SECRET_ACCESS_KEY
-      #  - AWS_DEFAULT_REGION
-      #  - AWS_ACCOUNT_ID
-      #  - AWS_RESOURCE_NAME_PREFIX
+      #  - AWS_REGION
+      #  - AWS_ECR_REGISTRY_ID
       - aws-ecr/build-and-push-image:
           path: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
-          repo: "${AWS_RESOURCE_NAME_PREFIX}"
+          repo: "${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ngpy-accounts-manager"
           tag: "${CIRCLE_SHA1}"
           requires:
             - test-api
