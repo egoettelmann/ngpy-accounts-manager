@@ -11,11 +11,18 @@ parameters:
   branch-release:
     type: string
     default: "release"
+# Additional environment variables are required:
+#  - AWS_ACCESS_KEY_ID
+#  - AWS_SECRET_ACCESS_KEY
+#  - AWS_REGION
+#  - AWS_ECR_REGISTRY_ID
+#  - AWS_S3_ARCHIVE
 
 # Adding required orbs
 orbs:
   browser-tools: circleci/browser-tools@1.2.5
   aws-ecr: circleci/aws-ecr@8.0.0
+  aws-s3: circleci/aws-s3@3.0.0
 
 jobs:
   # Build the API
@@ -109,6 +116,38 @@ jobs:
           paths:
             - ./dist/ngpy-accounts-manager-ui
 
+  # Release the API
+  release-api:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
+    docker:
+      - image: << pipeline.parameters.docker-image-api >>
+    steps:
+      - checkout:
+          path: ~/ngpy-accounts-manager
+      - aws-ecr/build-and-push-image:
+          path: ./ngpy-accounts-manager-api
+          repo: "ngpy-accounts-manager"
+          tag: "${CIRCLE_SHA1}"
+          extra-build-args: "--build-arg SOURCE_VERSION=${CIRCLE_SHA1:0:7}"
+
+  # Release the UI
+  release-ui:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
+    docker:
+      - image: << pipeline.parameters.docker-image-ui >>
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Packaging"
+          command: |
+            cd dist/ngpy-accounts-manager-ui
+            zip -r ../ngpy-accounts-manager-ui.zip .
+            cd ../..
+      - aws-s3/copy:
+          from: dist/ngpy-accounts-manager-ui.zip
+          to: "s3://${AWS_S3_ARCHIVE}/ngpy-accounts-manager/"
+
 workflows:
   # The main workflow
   build-and-test:
@@ -135,17 +174,15 @@ workflows:
           filters:
             branches:
               only: /.*/
-      # Release and push the API to ECR
-      # Required env vars:
-      #  - AWS_ACCESS_KEY_ID
-      #  - AWS_SECRET_ACCESS_KEY
-      #  - AWS_REGION
-      #  - AWS_ECR_REGISTRY_ID
-      - aws-ecr/build-and-push-image:
-          path: ./ngpy-accounts-manager-api
-          repo: "ngpy-accounts-manager"
-          tag: "${CIRCLE_SHA1}"
-          extra-build-args: '--build-arg SOURCE_VERSION=${CIRCLE_SHA1:0:7}'
+      # Release: API and UI
+      - release-api:
+          requires:
+            - test-api
+            - test-ui
+          filters:
+            branches:
+              only: << pipeline.parameters.branch-release >>
+      - release-ui:
           requires:
             - test-api
             - test-ui
