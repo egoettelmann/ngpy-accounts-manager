@@ -166,7 +166,6 @@ workflows:
           path: ./ngpy-accounts-manager-api
           repo: "ngpy-accounts-manager"
           tag: "${CIRCLE_SHA1}"
-          extra-build-args: "--build-arg SOURCE_VERSION=${CIRCLE_SHA1:0:7}"
           requires:
             - test-api
             - test-ui
