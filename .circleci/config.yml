@@ -116,20 +116,6 @@ jobs:
           paths:
             - ./dist/ngpy-accounts-manager-ui
 
-  # Release the API
-  release-api:
-    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
-    docker:
-      - image: << pipeline.parameters.docker-image-api >>
-    steps:
-      - checkout:
-          path: ~/ngpy-accounts-manager
-      - aws-ecr/build-and-push-image:
-          path: ./ngpy-accounts-manager-api
-          repo: "ngpy-accounts-manager"
-          tag: "${CIRCLE_SHA1}"
-          extra-build-args: "--build-arg SOURCE_VERSION=${CIRCLE_SHA1:0:7}"
-
   # Release the UI
   release-ui:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
@@ -175,7 +161,11 @@ workflows:
             branches:
               only: /.*/
       # Release: API and UI
-      - release-api:
+      - aws-ecr/build-and-push-image:
+          path: ./ngpy-accounts-manager-api
+          repo: "ngpy-accounts-manager"
+          tag: "${CIRCLE_SHA1}"
+          extra-build-args: "--build-arg SOURCE_VERSION=${CIRCLE_SHA1:0:7}"
           requires:
             - test-api
             - test-ui
