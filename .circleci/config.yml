@@ -143,7 +143,7 @@ workflows:
       #  - AWS_ECR_REGISTRY_ID
       - aws-ecr/build-and-push-image:
           path: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
-          repo: "${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ngpy-accounts-manager"
+          repo: "ngpy-accounts-manager"
           tag: "${CIRCLE_SHA1}"
           requires:
             - test-api
