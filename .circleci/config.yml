@@ -140,25 +140,21 @@ workflows:
     jobs:
       # Build: API and UI
       - build-api:
-          name: "Build - API"
           filters:
             branches:
               only: /.*/
       - build-ui:
-          name: "Build - UI"
           filters:
             branches:
               only: /.*/
       # Test: API and UI
       - test-api:
-          name: "Test - API"
           requires:
             - build-api
           filters:
             branches:
               only: /.*/
       - test-ui:
-          name: "Test - UI"
           requires:
             - build-ui
           filters:
@@ -166,7 +162,6 @@ workflows:
               only: /.*/
       # Release: API and UI
       - aws-ecr/build-and-push-image:
-          name: "Release - API"
           path: ./ngpy-accounts-manager-api
           repo: "ngpy-accounts-manager"
           tag: "${CIRCLE_SHA1}"
@@ -178,7 +173,6 @@ workflows:
             branches:
               only: << pipeline.parameters.branch-release >>
       - release-ui:
-          name: "Release - UI"
           requires:
             - test-api
             - test-ui
