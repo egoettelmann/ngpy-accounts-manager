@@ -60,15 +60,15 @@ This will start the frontend on <http://localhost:4210>.
   - push to public s3 bucket
 - Deploy
   - CircleCI:
-    - API: <https://circleci.com/developer/orbs/orb/circleci/aws-ecr>
-      - push to ECR as 'release' step
-      - how to redeploy lambda ?
-    - UI: <https://circleci.com/developer/orbs/orb/circleci/aws-s3>
-      - use 'copy' to store artefact in s3
-      - use 'sync' to update s3 web bucket
+    - [ ] API: [circleci/aws-ecr](https://circleci.com/developer/orbs/orb/circleci/aws-ecr)
+      - [ ] push to ECR as 'release' step
+      - [ ] how to redeploy lambda ?
+    - [ ] UI: [circleci/aws-s3](https://circleci.com/developer/orbs/orb/circleci/aws-s3)
+      - [x] use 'copy' to store artefact in s3
+      - [ ] missing 'envsubst' for PROD_BACKEND_URI
+      - [ ] use 'sync' to update s3 web bucket
+    - [ ] deploy should be after 'approval' job
   - AWS CodeBuild/CodeDeploy ?
-  - Github Actions ?
-    - <https://blog.jakoblind.no/aws-lambda-github-actions/>
 
 ### Tech
 

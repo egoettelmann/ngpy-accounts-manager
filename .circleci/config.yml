@@ -38,7 +38,7 @@ jobs:
             - pip-{{ checksum "requirements.txt" }}
             - pip-
       - run:
-          name: "Get dependencies"
+          name: "Installing dependencies"
           command: pip install -r requirements.txt -t ./src/site-packages
       - save_cache:
           paths:
@@ -63,14 +63,14 @@ jobs:
             - npm-{{ checksum "package-lock.json" }}
             - npm-
       - run:
-          name: "Get dependencies"
+          name: "Installing dependencies"
           command: npm ci --cache .npm --prefer-offline
       - save_cache:
           paths:
             - ./.npm
           key: npm-{{ checksum "package-lock.json" }}
       - run:
-          name: "Build"
+          name: "Building"
           command: npm run build
       - persist_to_workspace:
           root: .
@@ -86,7 +86,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: "Test"
+          name: "Testing"
           command: PYTHONPATH=./src/site-packages:./src python -m pytest tests/
       - persist_to_workspace:
           root: .
@@ -102,14 +102,14 @@ jobs:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
-          name: "Check install"
+          name: "Checking install"
           command: |
             google-chrome --version
             chromedriver --version
       - attach_workspace:
           at: .
       - run:
-          name: "Test"
+          name: "Testing"
           command: npm run test
       - persist_to_workspace:
           root: .
@@ -131,6 +131,7 @@ jobs:
             zip -r ../ngpy-accounts-manager-ui.zip .
             cd ../..
       - aws-s3/copy:
+          name: "Uploading"
           from: dist/ngpy-accounts-manager-ui.zip
           to: "s3://${AWS_S3_ARCHIVE}/ngpy-accounts-manager/${CIRCLE_SHA1:0:7}/"
 
@@ -162,6 +163,7 @@ workflows:
               only: /.*/
       # Release: API and UI
       - aws-ecr/build-and-push-image:
+          name: "release-api"
           path: ./ngpy-accounts-manager-api
           repo: "ngpy-accounts-manager"
           tag: "${CIRCLE_SHA1}"

@@ -16,15 +16,7 @@ RUN pip install -r requirements.txt -t ./target/site-packages
 COPY ./src ./target
 
 # Defining version
-ARG SOURCE_VERSION
-ENV SOURCE_VERSION $SOURCE_VERSION
-RUN echo "$(date +%F).$SOURCE_VERSION" > ./target/assets/version.txt
-
-# Copying test files
-COPY ./tests ./tests
-
-# Testing
-RUN PYTHONPATH=./target/site-packages/:./target python -m pytest tests/
+RUN echo "$(date +%F)" > ./target/assets/version.txt
 
 # Packaging
 WORKDIR /build/target
