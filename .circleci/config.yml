@@ -109,24 +109,6 @@ jobs:
           paths:
             - ./dist/ngpy-accounts-manager-ui
 
-  # Release and push the API to ECR
-  # Required env vars:
-  #  - AWS_ACCESS_KEY_ID
-  #  - AWS_SECRET_ACCESS_KEY
-  #  - AWS_DEFAULT_REGION
-  #  - AWS_ACCOUNT_ID
-  #  - AWS_RESOURCE_NAME_PREFIX
-  release-api:
-    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
-    docker:
-      - image: << pipeline.parameters.docker-image-api >>
-    steps:
-      - checkout:
-          path: ~/ngpy-accounts-manager
-      - aws-ecr/build-and-push-image:
-          repo: "${AWS_RESOURCE_NAME_PREFIX}"
-          tag: "${CIRCLE_SHA1}"
-
 workflows:
   # The main workflow
   build-and-test:
@@ -153,8 +135,17 @@ workflows:
           filters:
             branches:
               only: /.*/
-      # Release: API and UI
-      - release-api:
+      # Release and push the API to ECR
+      # Required env vars:
+      #  - AWS_ACCESS_KEY_ID
+      #  - AWS_SECRET_ACCESS_KEY
+      #  - AWS_DEFAULT_REGION
+      #  - AWS_ACCOUNT_ID
+      #  - AWS_RESOURCE_NAME_PREFIX
+      - aws-ecr/build-and-push-image:
+          path: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
+          repo: "${AWS_RESOURCE_NAME_PREFIX}"
+          tag: "${CIRCLE_SHA1}"
           requires:
             - test-api
             - test-ui
