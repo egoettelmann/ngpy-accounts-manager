@@ -39,22 +39,6 @@ jobs:
             - ./src
             - ./tests
 
-  # Test the API
-  test-api:
-    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
-    docker:
-      - image: << pipeline.parameters.docker-image-api >>
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: "Test"
-          command: PYTHONPATH=./src/site-packages:./src python -m pytest tests/
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./src
-
   # Build the UI
   build-ui:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
@@ -81,6 +65,22 @@ jobs:
           root: .
           paths:
             - .
+
+  # Test the API
+  test-api:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
+    docker:
+      - image: << pipeline.parameters.docker-image-api >>
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Test"
+          command: PYTHONPATH=./src/site-packages:./src python -m pytest tests/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./src
 
   # Test the UI
   test-ui:
@@ -109,19 +109,19 @@ workflows:
   # The main workflow
   build-and-test:
     jobs:
-      # API: build and test
+      # Build: API and UI
       - build-api:
           filters:
             branches:
               only: /.*/
-      - test-api:
-          requires:
-            - build-api
+      - build-ui:
           filters:
             branches:
               only: /.*/
-      # UI: build and test
-      - build-ui:
+      # Test: API and UI
+      - test-api:
+          requires:
+            - build-api
           filters:
             branches:
               only: /.*/

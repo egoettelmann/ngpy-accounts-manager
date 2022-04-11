@@ -60,6 +60,8 @@ This will start the frontend on <http://localhost:4210>.
   - push to public s3 bucket
 - Deploy
   - CircleCI: 
+    - <https://circleci.com/docs/2.0/ecs-ecr/>
+    - <https://github.com/CircleCI-Public/circleci-demo-aws-ecs-ecr/blob/orbs/.circleci/config.yml>
     - <https://circleci.com/orbs/registry/orb/circleci/aws-sam-serverless>
   - AWS CodeBuild/CodeDeploy ?
   - Github Actions ?
