@@ -131,7 +131,6 @@ jobs:
             zip -r ../ngpy-accounts-manager-ui.zip .
             cd ../..
       - aws-s3/copy:
-          name: "Uploading"
           from: dist/ngpy-accounts-manager-ui.zip
           to: "s3://${AWS_S3_ARCHIVE}/ngpy-accounts-manager/${CIRCLE_SHA1:0:7}/"
 
