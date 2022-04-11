@@ -118,6 +118,8 @@ jobs:
   #  - AWS_RESOURCE_NAME_PREFIX
   release-api:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
+    docker:
+      - image: << pipeline.parameters.docker-image-api >>
     steps:
       - checkout:
           path: ~/ngpy-accounts-manager
