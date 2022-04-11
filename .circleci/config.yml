@@ -8,10 +8,14 @@ parameters:
   docker-image-ui:
     type: string
     default: "cimg/node:14.19"
+  branch-release:
+    type: string
+    default: "release"
 
-# Adding orb to install browsers
+# Adding required orbs
 orbs:
   browser-tools: circleci/browser-tools@1.2.5
+  aws-ecr: circleci/aws-ecr@8.0.0
 
 jobs:
   # Build the API
@@ -105,6 +109,22 @@ jobs:
           paths:
             - ./dist/ngpy-accounts-manager-ui
 
+  # Release and push the API to ECR
+  # Required env vars:
+  #  - AWS_ACCESS_KEY_ID
+  #  - AWS_SECRET_ACCESS_KEY
+  #  - AWS_DEFAULT_REGION
+  #  - AWS_ACCOUNT_ID
+  #  - AWS_RESOURCE_NAME_PREFIX
+  release-api:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
+    steps:
+      - checkout:
+          path: ~/ngpy-accounts-manager
+      - aws-ecr/build-and-push-image:
+          repo: "${AWS_RESOURCE_NAME_PREFIX}"
+          tag: "${CIRCLE_SHA1}"
+
 workflows:
   # The main workflow
   build-and-test:
@@ -131,3 +151,11 @@ workflows:
           filters:
             branches:
               only: /.*/
+      # Release: API and UI
+      - release-api:
+          requires:
+            - test-api
+            - test-ui
+          filters:
+            branches:
+              only: << pipeline.parameters.branch-release >>
