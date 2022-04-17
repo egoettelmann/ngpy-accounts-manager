@@ -146,8 +146,7 @@ jobs:
   # Release the API
   release-api:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
-    docker:
-      - image: << pipeline.parameters.docker-image-api >>
+    executor: aws-ecr/default
     steps:
       - attach_workspace:
           at: ~/
@@ -272,7 +271,6 @@ workflows:
               only: /.*/
       # Release: API and UI
       - release-api:
-          executor: aws-ecr/default
           requires:
             - test-api
             - test-ui
