@@ -43,7 +43,7 @@ jobs:
       - run:
           name: "Updating version"
           command: |
-            set APP_VERSION="$(date +%Y-%m-%d).${CIRCLE_SHA1:0:7}"
+            export APP_VERSION="$(date +%Y-%m-%d).${CIRCLE_SHA1:0:7}"
             echo "$APP_VERSION"
             echo "export APP_VERSION=$APP_VERSION" >> $BASH_ENV
             mkdir -p workspace
@@ -153,10 +153,11 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
+          name: "Test workspace structure"
+          command: ls -al ~/
+      - run:
           name: "Reloading vars"
           command: cat ~/workspace/workflow-env-vars >> $BASH_ENV
-      - checkout:
-          path: ~/ngpy-accounts-manager
       - aws-ecr/ecr-login
       - aws-ecr/build-image:
           repo: "ngpy-accounts-manager"
@@ -170,6 +171,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - run:
+          name: "Test workspace structure"
+          command: ls -al ~/
       - run:
           name: "Reloading vars"
           command: cat ~/workspace/workflow-env-vars >> $BASH_ENV
