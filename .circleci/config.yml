@@ -272,7 +272,7 @@ workflows:
               only: /.*/
       # Release: API and UI
       - release-api:
-          executors: aws-ecr/default
+          executor: aws-ecr/default
           requires:
             - test-api
             - test-ui
