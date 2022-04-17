@@ -50,25 +50,33 @@ This will start the frontend on <http://localhost:4210>.
 
 ### Migration to AWS
 
-- Database
-  - best option seems to be Aurora Serverless
-    - https://aws.amazon.com/fr/rds/aurora/serverless/
-    - https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html
-- Backend
-  - AWS lambda (with Docker image)
-- Frontend
-  - push to public s3 bucket
-- Deploy
-  - CircleCI:
-    - [ ] API: [circleci/aws-ecr](https://circleci.com/developer/orbs/orb/circleci/aws-ecr)
-      - [ ] push to ECR as 'release' step
-      - [ ] how to redeploy lambda ?
-    - [ ] UI: [circleci/aws-s3](https://circleci.com/developer/orbs/orb/circleci/aws-s3)
-      - [x] use 'copy' to store artefact in s3
-      - [ ] missing 'envsubst' for PROD_BACKEND_URI
-      - [ ] use 'sync' to update s3 web bucket
-    - [ ] deploy should be after 'approval' job
-  - AWS CodeBuild/CodeDeploy ?
+- [x] Setup with Cloudformation template
+  - [x] database: best option seems to be Aurora Serverless
+  - [x] backend: lambda (with Docker image)
+  - [x] API Gateway
+  - [X] UI: push to public s3 bucket
+- [ ] Continuous deployment through CircleCI
+  - [x] setup build/test pipeline
+  - [x] setup release step:
+    - [x] push API Docker image to ECR
+      - [circleci/aws-ecr](https://circleci.com/developer/orbs/orb/circleci/aws-ecr)
+    - [x] push UI as Zip to artifacts bucket
+      - [circleci/aws-s3](https://circleci.com/developer/orbs/orb/circleci/aws-s3)
+  - [ ] setup deploy step 
+    - [ ] add an approval step (to trigger deployment)
+    - [ ] refresh API with `deploy` of Cloudformation template ?
+    - [ ] missing 'envsubst' for PROD_BACKEND_URI
+    - [ ] sync UI artifacts with S3 Web bucket
+    - [ ] clear Cloudfront cache
+- [ ] open issues
+  - [ ] trigger DB migrations on deploy
+    - one option could be to use a dedicated Lambda function
+  - [ ] start RDS cluster on page load
+    - use an API call to start/get status ?
+    - improve UI to display loader
+  - [ ] store and load ML pipeline
+    - use S3 bucket ?
+    - use database (and store also current precision) ?
 
 ### Tech
 
