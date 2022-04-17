@@ -11,16 +11,26 @@ parameters:
   branch-release:
     type: string
     default: "release"
-# Additional environment variables are required:
+# Additional environment variables are required for release and deployment:
 #  - AWS_ACCESS_KEY_ID
 #  - AWS_SECRET_ACCESS_KEY
 #  - AWS_REGION
 #  - AWS_ECR_REGISTRY_ID
 #  - AWS_S3_ARCHIVE
+#  - AWS_S3_WEB
+#  - ENV_PROFILE
+#  - SESSION_SECRET_KEY
+#  - DOMAIN_NAME_API
+#  - DOMAIN_NAME_UI = AWS_S3_WEB
+#  - HOSTED_ZONE_ID
+#  - CERTIFICATE_ARN
+#  - DATABASE_USERNAME
+#  - DATABASE_PASSWORD
 
 # Adding required orbs
 orbs:
   browser-tools: circleci/browser-tools@1.2.5
+  aws-cli: circleci/aws-cli@8.0.0
   aws-ecr: circleci/aws-ecr@8.0.0
   aws-s3: circleci/aws-s3@3.0.0
 
@@ -116,6 +126,19 @@ jobs:
           paths:
             - ./dist/ngpy-accounts-manager-ui
 
+  # Release the API
+  release-api:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
+    docker:
+      - image: << pipeline.parameters.docker-image-api >>
+    steps:
+      - checkout:
+          path: ~/ngpy-accounts-manager
+      - aws-ecr/ecr-login
+      - aws-ecr/build-image:
+          repo: "ngpy-accounts-manager"
+          tag: "${CIRCLE_SHA1:0:7}"
+
   # Release the UI
   release-ui:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
@@ -133,6 +156,50 @@ jobs:
       - aws-s3/copy:
           from: dist/ngpy-accounts-manager-ui.zip
           to: "s3://${AWS_S3_ARCHIVE}/ngpy-accounts-manager/${CIRCLE_SHA1:0:7}/"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./dist/ngpy-accounts-manager-ui
+
+  # Deploy the API
+  deploy-api:
+    docker:
+      - image: << pipeline.parameters.docker-image-api >>
+    steps:
+      - checkout
+      - aws-cli/setup
+      - run:
+          name: "Deploying"
+          command: |
+            aws cloudformation deploy \
+              --stack-name NgPyAccountsManager \
+              --template-file ./.aws/cloudformation.yaml \
+              --capabilities CAPABILITY_NAMED_IAM \
+              --parameter-overrides \
+              AppName=NgPyAccountsManager \
+              ArtifactsBucket="${AWS_S3_ARCHIVE}" \
+              WebBucket="${AWS_S3_WEB}" \
+              LambdaImage="${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ngpy-accounts-manager:${CIRCLE_SHA1:0:7}" \
+              EnvironmentProfile="${ENV_PROFILE}" \
+              SessionSecretKey="${SESSION_SECRET_KEY}" \
+              DomainNameApi="${DOMAIN_NAME_API}" \
+              DomainNameUi="${DOMAIN_NAME_UI}" \
+              HostedZoneId="${HOSTED_ZONE_ID}" \
+              CertificateArn="${CERTIFICATE_ARN}" \
+              DBUsername="${DATABASE_USERNAME}" \
+              DBPassword="${DATABASE_PASSWORD}"
+
+  # Deploy the UI
+  deploy-ui:
+    working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
+    docker:
+      - image: << pipeline.parameters.docker-image-ui >>
+    steps:
+      - attach_workspace:
+          at: .
+      - aws-s3/sync:
+          from: dist/ngpy-accounts-manager-ui
+          to: "s3://${AWS_S3_WEB}"
 
 workflows:
   # The main workflow
@@ -161,11 +228,7 @@ workflows:
             branches:
               only: /.*/
       # Release: API and UI
-      - aws-ecr/build-and-push-image:
-          name: "release-api"
-          path: ./ngpy-accounts-manager-api
-          repo: "ngpy-accounts-manager"
-          tag: "${CIRCLE_SHA1}"
+      - release-api:
           requires:
             - test-api
             - test-ui
@@ -179,3 +242,15 @@ workflows:
           filters:
             branches:
               only: << pipeline.parameters.branch-release >>
+      # Deploy: API and UI
+      - hold:
+          type: approval
+          requires:
+            - release-api
+            - release-ui
+      - deploy-api:
+          requires:
+            - hold
+      - deploy-ui:
+          requires:
+            - hold
