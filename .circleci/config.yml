@@ -30,7 +30,7 @@ parameters:
 # Adding required orbs
 orbs:
   browser-tools: circleci/browser-tools@1.2.5
-  aws-cli: circleci/aws-cli@8.0.0
+  aws-cli: circleci/aws-cli@3.0.0
   aws-ecr: circleci/aws-ecr@8.0.0
   aws-s3: circleci/aws-s3@3.0.0
 
