@@ -151,10 +151,10 @@ jobs:
       - image: << pipeline.parameters.docker-image-api >>
     steps:
       - attach_workspace:
-          at: /tmp/cci-test/workspace
+          at: .
       - run:
           name: "Reloading vars"
-          command: cat workspace/new-env-vars >> $BASH_ENV
+          command: cat ./workspace/new-env-vars >> $BASH_ENV
       - checkout:
           path: ~/ngpy-accounts-manager
       - aws-ecr/ecr-login
@@ -172,7 +172,7 @@ jobs:
           at: .
       - run:
           name: "Reloading vars"
-          command: cat workspace/new-env-vars >> $BASH_ENV
+          command: cat ./workspace/new-env-vars >> $BASH_ENV
       - run:
           name: "Packaging"
           command: |
