@@ -74,8 +74,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - ./ngpy-accounts-manager/ngpy-accounts-manager-api/src
-            - ./ngpy-accounts-manager/ngpy-accounts-manager-api/tests
+            - ./ngpy-accounts-manager/ngpy-accounts-manager-api
 
   # Build the UI
   build-ui:
@@ -115,10 +114,6 @@ jobs:
       - run:
           name: "Testing"
           command: PYTHONPATH=./src/site-packages:./src python -m pytest tests/
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - ./ngpy-accounts-manager/ngpy-accounts-manager-api/src
 
   # Test the UI
   test-ui:
@@ -138,10 +133,6 @@ jobs:
       - run:
           name: "Testing"
           command: npm run test
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - ./ngpy-accounts-manager/ngpy-accounts-manager-ui/dist/ngpy-accounts-manager-ui
 
   # Release the API
   release-api:
