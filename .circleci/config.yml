@@ -35,6 +35,24 @@ orbs:
   aws-s3: circleci/aws-s3@3.0.0
 
 jobs:
+  # Updating the version
+  update-version:
+    docker:
+      - image: golang:latest
+    steps:
+      - run:
+          name: "Updating version"
+          command: |
+            set APP_VERSION="$(date +%Y-%m-%d).${CIRCLE_SHA1:0:7}"
+            echo "$APP_VERSION"
+            echo "export APP_VERSION=$APP_VERSION" >> $BASH_ENV
+            mkdir -p workspace
+            echo "export APP_VERSION=$APP_VERSION" >> workspace/new-env-vars
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - new-env-vars
+
   # Build the API
   build-api:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-api
@@ -132,12 +150,17 @@ jobs:
     docker:
       - image: << pipeline.parameters.docker-image-api >>
     steps:
+      - attach_workspace:
+          at: /tmp/cci-test/workspace
+      - run:
+          name: "Reloading vars"
+          command: cat workspace/new-env-vars >> $BASH_ENV
       - checkout:
           path: ~/ngpy-accounts-manager
       - aws-ecr/ecr-login
       - aws-ecr/build-image:
           repo: "ngpy-accounts-manager"
-          tag: "${CIRCLE_SHA1:0:7}"
+          tag: "${APP_VERSION}"
 
   # Release the UI
   release-ui:
@@ -148,6 +171,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: "Reloading vars"
+          command: cat workspace/new-env-vars >> $BASH_ENV
+      - run:
           name: "Packaging"
           command: |
             cd dist/ngpy-accounts-manager-ui
@@ -155,7 +181,7 @@ jobs:
             cd ../..
       - aws-s3/copy:
           from: dist/ngpy-accounts-manager-ui.zip
-          to: "s3://${AWS_S3_ARCHIVE}/ngpy-accounts-manager/${CIRCLE_SHA1:0:7}/"
+          to: "s3://${AWS_S3_ARCHIVE}/ngpy-accounts-manager/${APP_VERSION}/"
       - persist_to_workspace:
           root: .
           paths:
@@ -166,6 +192,11 @@ jobs:
     docker:
       - image: << pipeline.parameters.docker-image-api >>
     steps:
+      - attach_workspace:
+          at: /tmp/cci-test/workspace
+      - run:
+          name: "Reloading vars"
+          command: cat workspace/new-env-vars >> $BASH_ENV
       - checkout
       - aws-cli/setup
       - run:
@@ -179,7 +210,7 @@ jobs:
               AppName=NgPyAccountsManager \
               ArtifactsBucket="${AWS_S3_ARCHIVE}" \
               WebBucket="${AWS_S3_WEB}" \
-              LambdaImage="${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ngpy-accounts-manager:${CIRCLE_SHA1:0:7}" \
+              LambdaImage="${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ngpy-accounts-manager:${APP_VERSION}" \
               EnvironmentProfile="${ENV_PROFILE}" \
               SessionSecretKey="${SESSION_SECRET_KEY}" \
               DomainNameApi="${DOMAIN_NAME_API}" \
@@ -197,6 +228,11 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run:
+          name: "Updating API URI"
+          command: |
+            export PROD_BACKEND_URI="https://${DOMAIN_NAME_API}"
+            find dist/ngpy-accounts-manager-ui/assets/config/. -type f -exec bash -c 'envsubst < $1 > $1.tmp && mv $1.tmp $1' -- {} \;
       - aws-s3/sync:
           from: dist/ngpy-accounts-manager-ui
           to: "s3://${AWS_S3_WEB}"
@@ -205,12 +241,21 @@ workflows:
   # The main workflow
   build-and-test:
     jobs:
+      # Updating version
+      - update-version:
+          filters:
+            branches:
+              only: /.*/
       # Build: API and UI
       - build-api:
+          requires:
+            - update-version
           filters:
             branches:
               only: /.*/
       - build-ui:
+          requires:
+            - update-version
           filters:
             branches:
               only: /.*/
