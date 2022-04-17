@@ -47,11 +47,11 @@ jobs:
             echo "$APP_VERSION"
             echo "export APP_VERSION=$APP_VERSION" >> $BASH_ENV
             mkdir -p workspace
-            echo "export APP_VERSION=$APP_VERSION" >> workspace/new-env-vars
+            echo "export APP_VERSION=$APP_VERSION" >> ./workspace/workflow-env-vars
       - persist_to_workspace:
-          root: workspace
+          root: .
           paths:
-            - new-env-vars
+            - ./workspace/workflow-env-vars
 
   # Build the API
   build-api:
@@ -73,10 +73,10 @@ jobs:
             - ./src/site-packages
           key: pip-{{ checksum "requirements.txt" }}
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - ./src
-            - ./tests
+            - ./ngpy-accounts-manager/ngpy-accounts-manager-api/src
+            - ./ngpy-accounts-manager/ngpy-accounts-manager-api/tests
 
   # Build the UI
   build-ui:
@@ -101,9 +101,9 @@ jobs:
           name: "Building"
           command: npm run build
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .
+            - ./ngpy-accounts-manager/ngpy-accounts-manager-ui
 
   # Test the API
   test-api:
@@ -112,14 +112,14 @@ jobs:
       - image: << pipeline.parameters.docker-image-api >>
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Testing"
           command: PYTHONPATH=./src/site-packages:./src python -m pytest tests/
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - ./src
+            - ./ngpy-accounts-manager/ngpy-accounts-manager-api/src
 
   # Test the UI
   test-ui:
@@ -135,14 +135,14 @@ jobs:
             google-chrome --version
             chromedriver --version
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Testing"
           command: npm run test
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - ./dist/ngpy-accounts-manager-ui
+            - ./ngpy-accounts-manager/ngpy-accounts-manager-ui/dist/ngpy-accounts-manager-ui
 
   # Release the API
   release-api:
@@ -151,10 +151,10 @@ jobs:
       - image: << pipeline.parameters.docker-image-api >>
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Reloading vars"
-          command: cat ./workspace/new-env-vars >> $BASH_ENV
+          command: cat ~/workspace/workflow-env-vars >> $BASH_ENV
       - checkout:
           path: ~/ngpy-accounts-manager
       - aws-ecr/ecr-login
@@ -169,10 +169,10 @@ jobs:
       - image: << pipeline.parameters.docker-image-ui >>
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Reloading vars"
-          command: cat ./workspace/new-env-vars >> $BASH_ENV
+          command: cat ~/workspace/workflow-env-vars >> $BASH_ENV
       - run:
           name: "Packaging"
           command: |
@@ -189,14 +189,15 @@ jobs:
 
   # Deploy the API
   deploy-api:
+    working_directory: ~/ngpy-accounts-manager
     docker:
       - image: << pipeline.parameters.docker-image-api >>
     steps:
       - attach_workspace:
-          at: /tmp/cci-test/workspace
+          at: ~/
       - run:
           name: "Reloading vars"
-          command: cat workspace/new-env-vars >> $BASH_ENV
+          command: cat ~/workspace/workflow-env-vars >> $BASH_ENV
       - checkout
       - aws-cli/setup
       - run:
@@ -227,7 +228,7 @@ jobs:
       - image: << pipeline.parameters.docker-image-ui >>
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Updating API URI"
           command: |
