@@ -44,8 +44,7 @@ jobs:
           name: "Updating version"
           command: |
             export APP_VERSION="$(date +%Y-%m-%d).${CIRCLE_SHA1:0:7}"
-            echo "$APP_VERSION"
-            echo "export APP_VERSION=$APP_VERSION" >> $BASH_ENV
+            echo "Defining version: $APP_VERSION"
             mkdir -p workspace
             echo "export APP_VERSION=$APP_VERSION" >> ./workspace/workflow-env-vars
       - persist_to_workspace:
@@ -153,9 +152,6 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: "Test workspace structure"
-          command: ls -al ~/
-      - run:
           name: "Reloading vars"
           command: cat ~/workspace/workflow-env-vars >> $BASH_ENV
       - aws-ecr/ecr-login
@@ -171,9 +167,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run:
-          name: "Test workspace structure"
-          command: ls -al ~/
       - run:
           name: "Reloading vars"
           command: cat ~/workspace/workflow-env-vars >> $BASH_ENV
@@ -279,6 +272,7 @@ workflows:
               only: /.*/
       # Release: API and UI
       - release-api:
+          executors: aws-ecr/default
           requires:
             - test-api
             - test-ui
