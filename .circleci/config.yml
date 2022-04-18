@@ -185,7 +185,6 @@ jobs:
       - run:
           name: "Reloading vars"
           command: cat ~/workspace/workflow-env-vars >> $BASH_ENV
-      - checkout
       - aws-cli/setup
       - run:
           name: "Deploying"
