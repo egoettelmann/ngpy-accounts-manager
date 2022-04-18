@@ -37,10 +37,12 @@ orbs:
 jobs:
   # Updating the version
   update-version:
+    working_directory: ~/
     docker:
       - image: golang:latest
     steps:
-      - checkout
+      - checkout:
+          path: ~/ngpy-accounts-manager
       - run:
           name: "Updating version"
           command: |
@@ -49,9 +51,9 @@ jobs:
             mkdir -p workspace
             echo "export APP_VERSION=$APP_VERSION" >> ./workspace/workflow-env-vars
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - ./.aws
+            - ./ngpy-accounts-manager/.aws
             - ./workspace/workflow-env-vars
 
   # Build the API
@@ -193,7 +195,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --stack-name NgPyAccountsManager \
-              --template-file ./.aws/cloudformation.yaml \
+              --template-file ~/ngpy-accounts-manager/.aws/cloudformation.yaml \
               --capabilities CAPABILITY_NAMED_IAM \
               --parameter-overrides \
               AppName=NgPyAccountsManager \
