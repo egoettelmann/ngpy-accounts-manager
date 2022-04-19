@@ -218,7 +218,7 @@ jobs:
   deploy-ui:
     working_directory: ~/ngpy-accounts-manager/ngpy-accounts-manager-ui
     docker:
-      - image: circleci/python:3.7
+      - image: cimg/base:2022.04
     steps:
       - attach_workspace:
           at: ~/
@@ -234,7 +234,7 @@ jobs:
 
 workflows:
   # The main workflow
-  build-and-test:
+  build-test-deploy:
     jobs:
       # Updating version
       - update-version:

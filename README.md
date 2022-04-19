@@ -63,12 +63,18 @@ This will start the frontend on <http://localhost:4210>.
     - [x] push UI as Zip to artifacts bucket
       - [circleci/aws-s3](https://circleci.com/developer/orbs/orb/circleci/aws-s3)
   - [ ] setup deploy step 
-    - [ ] add an approval step (to trigger deployment)
-    - [ ] refresh API with `deploy` of Cloudformation template ?
+    - [x] add an approval step (to trigger deployment)
+    - [x] refresh API with `deploy` of Cloudformation template ?
     - [ ] missing 'envsubst' for PROD_BACKEND_URI
-    - [ ] sync UI artifacts with S3 Web bucket
+    - [ ] write app version (with git hash) to API (`version.txt`)
+      - <https://github.com/CircleCI-Public/aws-ecr-orb/issues/182>
+    - [x] sync UI artifacts with S3 Web bucket
     - [ ] clear Cloudfront cache
-- [ ] open issues
+    - [ ] push to master with tag
+- [x] Add script for managing admin AWS tasks
+  - [x] update IAM policies for CI job
+  - [x] update CloudFormation stack
+- [ ] Open issues
   - [ ] trigger DB migrations on deploy
     - one option could be to use a dedicated Lambda function
   - [ ] start RDS cluster on page load
