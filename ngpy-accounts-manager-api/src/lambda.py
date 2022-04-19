@@ -1,4 +1,5 @@
 import sys
+import awsgi
 
 sys.path.append('./site-packages')
 
