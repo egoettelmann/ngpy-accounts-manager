@@ -19,7 +19,7 @@ services:
     build:
       context: ./ngpy-accounts-manager-api
       args:
-        SOURCE_VERSION: 'lambda'
+        APP_VERSION: 'dev'
     volumes:
       - ./database/storage:/var/task/storage
     environment:
@@ -33,6 +33,8 @@ services:
   lambda-migrate:
     build:
       context: ./ngpy-accounts-manager-api
+      args:
+        APP_VERSION: 'dev'
     entrypoint: ./wait && python migrate.py
     environment:
       DATABASE_URI: 'postgresql://${DB_USERNAME}:${DB_PASSWORD}@db:5432/api'

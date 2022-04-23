@@ -16,7 +16,9 @@ RUN pip install -r requirements.txt -t ./target/site-packages
 COPY ./src ./target
 
 # Defining version
-RUN echo "$(date +%F)" > ./target/assets/version.txt
+ARG APP_VERSION
+ENV APP_VERSION $APP_VERSION
+RUN echo "$APP_VERSION" > ./target/assets/version.txt
 
 # Packaging
 WORKDIR /build/target

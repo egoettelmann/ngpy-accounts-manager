@@ -31,7 +31,7 @@ parameters:
 orbs:
   browser-tools: circleci/browser-tools@1.2.5
   aws-cli: circleci/aws-cli@3.0.0
-  aws-ecr: circleci/aws-ecr@8.0.0
+  aws-ecr: circleci/aws-ecr@8.1.0
   aws-s3: circleci/aws-s3@3.0.0
 
 jobs:
@@ -154,6 +154,7 @@ jobs:
       - aws-ecr/build-image:
           repo: "ngpy-accounts-manager"
           tag: "${APP_VERSION}"
+          extra-build-args: "--build-arg APP_VERSION=${APP_VERSION}"
 
   # Release the UI
   release-ui:
