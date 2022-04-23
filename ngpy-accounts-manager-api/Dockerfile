@@ -1,7 +1,7 @@
 ##################
 # Build image
 ##################
-FROM lambci/lambda:build-python3.7 AS build
+FROM public.ecr.aws/lambda/python:3.7 AS build
 
 # Defining build folder
 WORKDIR /build
@@ -10,7 +10,7 @@ WORKDIR /build
 COPY ./requirements.txt .
 
 # Installing dependencies
-RUN pip install -r requirements.txt -t ./target/site-packages
+RUN pip3 install -r requirements.txt --target ./target/site-packages
 
 # Copying sources and assets
 COPY ./src ./target
@@ -26,24 +26,18 @@ WORKDIR /build/target
 ##################
 # Run image
 ##################
-FROM lambci/lambda:python3.7
-
-# Switching user to root
-USER root
+FROM public.ecr.aws/lambda/python:3.7
 
 # Adding wait script
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait .
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait ${LAMBDA_TASK_ROOT}
 RUN chmod +x ./wait
 
 # Adding alternative entrypoint script
-COPY ./docker/entrypoint.sh .
+COPY ./docker/entrypoint.sh ${LAMBDA_TASK_ROOT}
 RUN chmod +x ./entrypoint.sh
 
-# Switching user
-USER sbx_user1051
-
 # Adding the app
-COPY --from=build /build/target .
+COPY --from=build /build/target ${LAMBDA_TASK_ROOT}
 
 # Command that executes lambda handler
 CMD [ "lambda.handler" ]

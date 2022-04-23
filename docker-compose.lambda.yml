@@ -9,7 +9,7 @@ services:
     ports:
       - '5000:8080'
     environment:
-      LAMBDA_ENDPOINT: http://lambda-api:9001
+      LAMBDA_ENDPOINT: http://lambda-api:8080
       LAMBDA_NAME: function
       PORT: 8080
 
