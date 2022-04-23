@@ -15,7 +15,12 @@ from .modules.restipy import Api
 def create_app(app_properties: AppProperties = None,
                depynject_container: Depynject = None):
     # Configuring Logging
-    logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
+    if logging.getLogger().hasHandlers():
+        # The Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,
+        # `.basicConfig` does not execute. Thus, we set the level directly.
+        logging.getLogger().setLevel(logging.INFO)
+    else:
+        logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
 
     # Configuring Dependency Injection
     if depynject_container is None:
