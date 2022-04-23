@@ -1,7 +1,8 @@
 import sys
-import awsgi
 
 sys.path.append('./site-packages')
+
+import awsgi
 
 from app.modules.depynject import Depynject
 from app.modules.di_providers import RequestDiProvider

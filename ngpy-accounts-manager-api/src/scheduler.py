@@ -1,7 +1,6 @@
 import sys
 import logging
 
-
 sys.path.append('./site-packages')
 
 from app.modules.depynject import Depynject
