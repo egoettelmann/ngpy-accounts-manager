@@ -48,33 +48,39 @@ def inject(silent=False, **hints):
     def wrap(m):
 
         def wrapper(*args, **kwargs):
+            # Checking if Dependency Context has been bound to method
             instance = __INJECTING_LIST__[m.__qualname__]['bound_instance']
-            if instance is not None:
-                defaults = __INJECTING_LIST__[m.__qualname__]['defaults']
-                if defaults is not None:
-                    arguments = list(reversed(__INJECTING_LIST__[m.__qualname__]['arguments']))
-                    num_args = len((list(args)[1:]))
-                    args_to_resolve = list(defaults)[num_args:]
-                    for idx, val in enumerate(reversed(args_to_resolve)):
-                        # We loop through the default args that were not given as positional arg
-                        if val is not None:
-                            # The default value should be None
-                            continue
-                        arg_name = arguments[idx]
-                        if arg_name in kwargs:
-                            # The default arg should not be given as named arg
-                            continue
-                        resolve_name = arg_name
-                        if arg_name in hints and isinstance(hints[arg_name], str):
-                            # Is there a hint given as a string ?
-                            resolve_name = hints[arg_name]
-                        try:
-                            kwargs[arg_name] = instance.provide(resolve_name)
-                        except InjectionError as e:
-                            if not silent:
-                                raise e
-            else:
+            if instance is None:
                 logging.error('Invoked %s with @inject but no DI context bound, is the class injectable ?', m.__qualname__)
+                return m(*args, **kwargs)
+
+            # Checking if there are default arguments
+            defaults = __INJECTING_LIST__[m.__qualname__]['defaults']
+            if defaults is None:
+                return m(*args, **kwargs)
+
+            # Resolving default arguments
+            arguments = list(reversed(__INJECTING_LIST__[m.__qualname__]['arguments']))
+            num_args = len((list(args)[1:]))
+            args_to_resolve = list(defaults)[num_args:]
+            for idx, val in enumerate(reversed(args_to_resolve)):
+                # We loop through the default args that were not given as positional arg
+                if val is not None:
+                    # The default value should be None
+                    continue
+                arg_name = arguments[idx]
+                if arg_name in kwargs:
+                    # The default arg should not be given as named arg
+                    continue
+                resolve_name = arg_name
+                if arg_name in hints and isinstance(hints[arg_name], str):
+                    # Is there a hint given as a string ?
+                    resolve_name = hints[arg_name]
+                try:
+                    kwargs[arg_name] = instance.provide(resolve_name)
+                except InjectionError as e:
+                    if not silent:
+                        raise e
             return m(*args, **kwargs)
 
         return wrapper
@@ -108,30 +114,51 @@ class Depynject:
         :param options: the options
         :return:
         """
+        # If class reference has been provided as string, providing by name
         if isinstance(class_ref, str):
             return self.__provide_by_name__(class_ref)
+
+        # Using class name as identifier
         classname = class_ref.__qualname__
+
+        # Resolving scope from options
         i_scope = None
         if 'scope' in options:
             i_scope = options['scope']
+
+        # If class name not registered yet, registering it
         if classname not in __INJECTABLE_LIST__:
             scope = options.pop('scope', 'singleton')
             injectable(scope=scope, **options)(class_ref)
+
+        # Binding method to instance
         for m in __INJECTABLE_LIST__[classname]['injecting_methods']:
             if __INJECTING_LIST__[m]['bound_instance'] is None:
-                logging.debug('Method %s successfully bound to instance', m)
                 __INJECTING_LIST__[m]['bound_instance'] = self
+                logging.debug('Method %s successfully bound to instance', m)
+
+        # If no scope defined in options, using scope from registry
         if i_scope is None:
             i_scope = __INJECTABLE_LIST__[classname]['scope']
+
+        # Using registered arguments
         i_args = __INJECTABLE_LIST__[classname]['arguments']
+
+        # If scope is 'prototype', creating new instance
         if i_scope == 'prototype':
             return self.create_new_instance(class_ref, i_args)
+
+        # If scope is 'singleton', retrieving from singleton store
         if i_scope == 'singleton':
             if classname not in self.singleton_store:
                 self.singleton_store[classname] = self.create_new_instance(class_ref, i_args)
             return self.singleton_store[classname]
+
+        # Otherwise, using 'custom' scope from providers
         if i_scope in self.providers:
             return self.providers[i_scope](class_ref, i_args, self)
+
+        # Raise exception
         raise InjectionError('Cannot resolve injectable class with name ' + classname)
 
     def __provide_by_name__(self, class_name):

@@ -73,7 +73,7 @@ class Api:
         """
         r_function = self.wrap(f, post=self.as_json, instance=instance)
         self.app.add_url_rule(self.prefix + rule, endpoint, r_function, **options)
-        logging.info('Added RESTFUL route {%s%s} as endpoint {%s}', self.prefix, rule, endpoint)
+        logging.debug('Added RESTFUL route {%s%s} as endpoint {%s}', self.prefix, rule, endpoint)
 
     def as_json(self, *args, **kwargs):
         """

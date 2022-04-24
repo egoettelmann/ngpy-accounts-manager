@@ -18,33 +18,40 @@ def create_app(app_properties: AppProperties = None,
     if logging.getLogger().hasHandlers():
         # The Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,
         # `.basicConfig` does not execute. Thus, we set the level directly.
-        logging.getLogger().setLevel(logging.INFO)
+        # TODO: change level to INFO
+        logging.getLogger().setLevel(logging.DEBUG)
     else:
         logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
 
     # Configuring Dependency Injection
+    logging.debug('Configuring dependency injection')
     if depynject_container is None:
         depynject_container = Depynject()
 
     # Building App properties if required
+    logging.debug('Retrieving App properties')
     if app_properties is None:
         app_properties = build_default_app_properties()
     depynject_container.register_singleton(app_properties)
 
     # Configuring Database
+    logging.debug('Registering database')
     entity_manager = EntityManager(app_properties.database_url)
     depynject_container.register_singleton(entity_manager)
 
     # Instantiating the App
+    logging.debug('Instantiating App')
     app = Flask(__name__)
 
     # Adding secret key for encrypting cookies
     app.secret_key = app_properties.session_secret_key
 
     # Configuring the API
+    logging.debug('Configuring API')
     api = configure_api(app, app_properties.cors_origin, depynject_container)
 
     # Configuring security
+    logging.debug('Configuring security')
     configure_security(api)
 
     return app
