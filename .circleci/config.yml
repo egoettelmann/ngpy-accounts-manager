@@ -154,7 +154,7 @@ jobs:
       - aws-ecr/build-image:
           repo: "ngpy-accounts-manager"
           tag: "${APP_VERSION}"
-          extra-build-args: "--build-arg APP_VERSION=${APP_VERSION}"
+          extra-build-args: "--build-arg APP_VERSION"
 
   # Release the UI
   release-ui:
@@ -287,14 +287,14 @@ workflows:
             branches:
               only: << pipeline.parameters.branch-release >>
       # Deploy: API and UI
-      - hold:
+      - approve-deployment:
           type: approval
           requires:
             - release-api
             - release-ui
       - deploy-api:
           requires:
-            - hold
+            - approve-deployment
       - deploy-ui:
           requires:
-            - hold
+            - approve-deployment
