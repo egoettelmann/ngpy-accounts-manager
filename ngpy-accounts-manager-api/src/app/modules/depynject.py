@@ -14,6 +14,7 @@ def injectable(name=None, scope='singleton', **options):
     :param scope: the scope of the created class ('singleton', 'prototype' or any other provided handler)
     :return: the decorated class
     """
+
     def decorator(c):
         args = inspect.getfullargspec(c.__init__).args[1:]
         injecting_methods = []
@@ -45,6 +46,7 @@ def inject(silent=False, **hints):
     :param: hints: other arguments will be looked at for finding the injectable
     :return: the decorated method
     """
+
     def wrap(m):
 
         def wrapper(*args, **kwargs):

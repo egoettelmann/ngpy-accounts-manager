@@ -30,6 +30,13 @@ class BaseAppException(Exception):
         return msg
 
 
+class AppNotReadyException(BaseAppException):
+    """
+    The app not ready exception
+    """
+    pass
+
+
 class NotFoundException(BaseAppException):
     """
     The not found exception
@@ -85,3 +92,4 @@ class ApplicationExceptionHandler(DefaultExceptionHandler):
         self.add(NotAuthenticatedException, 'A401', 'not_authenticated', 401)
         self.add(NotFoundException, 'A404', 'not_found', 404)
         self.add(FileImportException, 'A409', 'file_import_failed', 409)
+        self.add(AppNotReadyException, 'A503', 'app_not_ready', 503)
