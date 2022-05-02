@@ -8,9 +8,6 @@ parameters:
   docker-image-ui:
     type: string
     default: "cimg/node:14.19"
-  branch-release:
-    type: string
-    default: "release"
 # Additional environment variables are required for release and deployment:
 #  - AWS_ACCESS_KEY_ID
 #  - AWS_SECRET_ACCESS_KEY
@@ -272,29 +269,23 @@ workflows:
             branches:
               only: /.*/
       # Release: API and UI
+      - approve-release:
+          type: approval
+          requires:
+            - test-api
+            - test-ui
       - release-api:
           requires:
-            - test-api
-            - test-ui
-          filters:
-            branches:
-              only: << pipeline.parameters.branch-release >>
+            - approve-release
       - release-ui:
           requires:
-            - test-api
-            - test-ui
-          filters:
-            branches:
-              only: << pipeline.parameters.branch-release >>
+            - approve-release
       # Deploy: API and UI
-      - approve-deployment:
-          type: approval
+      - deploy-api:
           requires:
             - release-api
             - release-ui
-      - deploy-api:
-          requires:
-            - approve-deployment
       - deploy-ui:
           requires:
-            - approve-deployment
+            - release-api
+            - release-ui
