@@ -6,7 +6,6 @@ from sqlalchemy.orm import scoped_session, sessionmaker, Query, Session
 from sqlalchemy.pool import QueuePool
 
 from .query_adapter import QueryAdapter
-from ..domain.exceptions import AppNotReadyException
 from ..modules.depynject import inject, injectable
 
 __AVAILABLE_MANAGERS__ = {}
@@ -36,10 +35,7 @@ class EntityManager:
         :param request_scoped_session: the optional request scoped session
         :return:
         """
-        try:
-            self.__init_engine()
-        except Exception as e:
-            raise AppNotReadyException('Database not ready yet: ' + str(e))
+        self.__init_engine()
         if request_scoped_session is None:
             return scoped_session(self.session_maker)()
         return request_scoped_session()

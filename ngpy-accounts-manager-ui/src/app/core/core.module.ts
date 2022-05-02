@@ -46,6 +46,7 @@ import { MainResolverService } from './services/resolvers/main-resolver.service'
 import { ConfigurationService } from './services/configuration.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ApiUrlInterceptor } from './interceptors/api-url.interceptor';
+import { ConfigRestService } from '@core/services/rest/config-rest.service';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -107,6 +108,7 @@ export class CoreModule {
   static PROVIDER_LIST = [
     /** REST services */
     SessionRestService,
+    ConfigRestService,
     UploadRestService,
     AccountsRestService,
     StatisticsRestService,

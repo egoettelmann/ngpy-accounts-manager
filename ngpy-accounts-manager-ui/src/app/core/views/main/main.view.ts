@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SessionRestService } from '../../services/rest/session-rest.service';
 import { AppProperties } from '../../models/api.models';
+import { ConfigurationService } from '@core/services/configuration.service';
 
 /**
  * The main component
@@ -19,16 +19,16 @@ export class MainView implements OnInit {
   /**
    * Instantiates the component.
    *
-   * @param sessionRestService the session rest service
+   * @param configurationService the configuration service
    */
-  constructor(private sessionRestService: SessionRestService) {
+  constructor(private configurationService: ConfigurationService) {
   }
 
   /**
    * Initializes the component
    */
   ngOnInit(): void {
-    this.sessionRestService.getProperties().subscribe(data => {
+    this.configurationService.getApiProperties().subscribe(data => {
       this.appProperties = data;
     });
   }

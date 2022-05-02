@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AppProperties } from '../../models/api.models';
 
 /**
  * The session rest service.
@@ -38,13 +37,6 @@ export class SessionRestService {
    */
   getSession(): Observable<any> {
     return this.http.get<any>('/rest/session/user');
-  }
-
-  /**
-   * Gets the application properties
-   */
-  getProperties(): Observable<AppProperties> {
-    return this.http.get<AppProperties>('/rest/session/properties');
   }
 
 }

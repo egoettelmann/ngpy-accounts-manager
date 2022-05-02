@@ -4,7 +4,8 @@ import { AppProperties } from '../../models/api.models';
 import { RouterService } from '../../services/router.service';
 import { catchError } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EMPTY, Observable, throwError } from 'rxjs';
+import { EMPTY, Observable, of, throwError } from 'rxjs';
+import { ConfigurationService } from '@core/services/configuration.service';
 
 /**
  * The login component
@@ -31,13 +32,20 @@ export class LoginView implements OnInit {
   public appProperties?: AppProperties;
 
   /**
+   * The current API status
+   */
+  public apiStatus?: { ready: boolean, progress?: number};
+
+  /**
    * Instantiates the component.
    *
    * @param routerService the router service
+   * @param configurationService the configuration service
    * @param sessionService the session service
    * @param fb the form builder
    */
   constructor(private routerService: RouterService,
+              private configurationService: ConfigurationService,
               private sessionService: SessionRestService,
               private fb: FormBuilder
   ) {
@@ -48,8 +56,17 @@ export class LoginView implements OnInit {
    */
   ngOnInit(): void {
     this.buildForm();
-    this.sessionService.getProperties().subscribe(data => {
+    this.configurationService.getApiProperties().subscribe(data => {
       this.appProperties = data;
+    });
+    this.configurationService.getApiStatus(35000, 4).pipe(
+      catchError(() => {
+        return of({
+          ready: false
+        });
+      })
+    ).subscribe(apiStatus => {
+      this.apiStatus = apiStatus;
     });
   }
 

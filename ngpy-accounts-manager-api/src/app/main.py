@@ -18,8 +18,7 @@ def create_app(app_properties: AppProperties = None,
     if logging.getLogger().hasHandlers():
         # The Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,
         # `.basicConfig` does not execute. Thus, we set the level directly.
-        # TODO: change level to INFO
-        logging.getLogger().setLevel(logging.DEBUG)
+        logging.getLogger().setLevel(logging.INFO)
     else:
         logging.basicConfig(format='%(asctime)s - %(thread)d - %(levelname)s - %(name)s - %(message)s', level=logging.DEBUG)
 
@@ -95,6 +94,7 @@ def configure_api(app: Flask,
     api.register(TransactionController)
     api.register(StatisticsController)
     api.register(SessionController)
+    api.register(ConfigController)
 
     # Defining App error handler
     @app.errorhandler(404)
@@ -103,6 +103,7 @@ def configure_api(app: Flask,
         return api.return_exception(NotFoundException('Not found'))
 
     return api
+
 
 def configure_security(api: Api):
     app = api.app
@@ -118,11 +119,13 @@ def configure_security(api: Api):
             else:
                 logging.debug('Request from user %s', session['logged_user_id'])
 
-    def is_secured(request: request) -> bool:
-        if request.method == 'OPTIONS':
+    def is_secured(req: request) -> bool:
+        if req.method == 'OPTIONS':
             return False
-        if not request.path.startswith(api.prefix):
+        if not req.path.startswith(api.prefix):
             return False
-        if request.endpoint.startswith('SessionController'):
+        if req.endpoint.startswith('SessionController'):
+            return False
+        if req.endpoint.startswith('ConfigController'):
             return False
         return True

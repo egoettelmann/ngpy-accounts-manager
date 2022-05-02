@@ -7,9 +7,25 @@
   padding-top: .5rem;
   text-align: center;
 
-  .login-version {
+  &__version {
+    display: inline-block;
     font-size: 0.5rem;
     color: darkgray;
+  }
+
+  &__status {
+    display: inline-block;
+  }
+
+  &__progress {
+    text-align: center;
+
+    .progress {
+      width: 60%;
+      height: 3px;
+      margin-left: 20%;
+      border-radius: 2px;
+    }
   }
 }
 

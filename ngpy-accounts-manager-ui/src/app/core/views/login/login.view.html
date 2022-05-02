@@ -48,8 +48,25 @@
         <span>{{ 'i18n.views.login.form.button.submit' | translate }}</span>
       </button>
     </div>
-    <div *ngIf="appProperties" class="login-footer">
-      <span class="login-version">{{ appProperties.appVersion }}</span>
+    <div class="login-footer">
+      <div *ngIf="appProperties && appProperties.appVersion" class="login-footer__version">
+        <span>{{ appProperties.appVersion }}</span>
+      </div>
+      <div *ngIf="apiStatus && apiStatus.progress === undefined" class="login-footer__status">
+        <clr-icon *ngIf="!apiStatus.ready"
+                  shape="exclamation-circle"
+                  class="text-danger"
+        ></clr-icon>
+        <clr-icon *ngIf="apiStatus.ready"
+                  shape="check-circle"
+                  class="text-success"
+        ></clr-icon>
+      </div>
+      <div *ngIf="apiStatus && apiStatus.progress !== undefined" class="login-footer__progress">
+        <div class="progress top">
+          <progress [value]="apiStatus.progress" max="100"></progress>
+        </div>
+      </div>
     </div>
   </form>
 </div>

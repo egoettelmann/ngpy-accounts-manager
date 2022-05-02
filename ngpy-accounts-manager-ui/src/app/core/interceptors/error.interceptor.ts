@@ -36,7 +36,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   /**
    * Intercepts the request to transform any errors happening on the HTTP call.
    * Any error will be transformed into a Notification.
-   * Additionally, 500 errors will be notified (to be displayed in modal).
+   * Additionally, 5xx errors will be displayed in an error modal (except for 503).
    *
    * @param req the request
    * @param next the handler
@@ -49,7 +49,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         const restError = this.buildRestError(err);
 
         // Technical exception are notified (to be displayed in modal)
-        if (err.status > 500) {
+        if (err.status > 500 && err.status !== 503) {
           this.notificationService.notify({
             type: 'ERROR',
             ...restError

@@ -2,6 +2,7 @@
 from .account_controller import AccountController
 from .budget_controller import BudgetController
 from .category_controller import CategoryController
+from .config_controller import ConfigController
 from .label_controller import LabelController
 from .session_controller import SessionController
 from .statistics_controller import StatisticsController

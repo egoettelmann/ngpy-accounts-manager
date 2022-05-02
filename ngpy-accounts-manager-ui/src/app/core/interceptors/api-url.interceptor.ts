@@ -37,7 +37,7 @@ export class ApiUrlInterceptor implements HttpInterceptor {
     }
 
     // Adding base url to all API calls
-    return this.configurationService.getAppProperties().pipe(
+    return this.configurationService.getApiConfiguration().pipe(
       map(appProperties => appProperties.apiUrl),
       map(apiUrl => req.clone({ url: apiUrl + req.url })),
       flatMap(apiReq => next.handle(apiReq))

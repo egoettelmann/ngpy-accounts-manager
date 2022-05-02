@@ -38,7 +38,7 @@ class DefaultExceptionHandler:
             logging.error('An unhandled error occurred: %s', e)
             raise e
         if isinstance(e, self.exceptions[idx]['reference']):
-            logging.error('An error occurred while handling request: %s', e)
+            logging.error('An error occurred while handling request: %s', str(e))
             return (
                 self.build(
                     self.exceptions[idx]['code'],
