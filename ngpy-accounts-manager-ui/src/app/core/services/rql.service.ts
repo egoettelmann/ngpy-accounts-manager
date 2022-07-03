@@ -105,11 +105,14 @@ export class RqlService {
       httpParams = new HttpParams();
     }
 
-    // Adding the rql attribute
+    // Checking that the filter request is defined
     if (!filterRequest) {
       return httpParams;
     }
-    httpParams = httpParams.set(RqlService.RQL_ATTRIBUTE, filterRequest.toString());
+
+    // Encoding the request and adding the attribute
+    const encodedRequest = encodeURIComponent(filterRequest.toString());
+    httpParams = httpParams.set(RqlService.RQL_ATTRIBUTE, encodedRequest);
 
     // Done
     return httpParams;

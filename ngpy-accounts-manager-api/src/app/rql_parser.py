@@ -117,7 +117,11 @@ class RqlRequestParser:
         :param request: the request to extract all parameters from
         :return: the filter param object
         """
-        rql_expression = request.args.get(self.__parser_options.rql_attribute)
+        encoded_request = request.args.get(self.__parser_options.rql_attribute)
+        if encoded_request is None:
+            logging.info('RqlParser: no filters supplied')
+            return None
+        rql_expression = urllib.parse.unquote(encoded_request)
         return self.__parse_rql_expression(rql_expression)
 
     def __parse_rql_expression(self, rql_expression: str) -> Optional[FilterRequest]:
@@ -126,9 +130,6 @@ class RqlRequestParser:
         :param rql_expression: the expression to parse
         :return: the filter param object
         """
-        if rql_expression is None:
-            logging.info('RqlParser: no filters supplied')
-            return None
         start = rql_expression.find('(')
         end = rql_expression.rfind(')')
         if start == -1 or end == -1:
