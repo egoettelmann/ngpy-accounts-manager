@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.4'
 
 services:
 
@@ -8,7 +8,7 @@ services:
       context: ./ngpy-accounts-manager-api
       target: build
       args:
-        SOURCE_VERSION: 'prd'
+        APP_VERSION: 'prd'
     command: ls -al
 
   # UI
