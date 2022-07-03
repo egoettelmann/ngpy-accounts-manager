@@ -15,7 +15,6 @@ parameters:
 #  - AWS_ECR_REGISTRY_ID
 #  - AWS_S3_ARCHIVE
 #  - AWS_S3_WEB
-#  - ENV_PROFILE
 #  - SESSION_SECRET_KEY
 #  - DOMAIN_NAME_API
 #  - DOMAIN_NAME_UI = AWS_S3_WEB
@@ -203,7 +202,6 @@ jobs:
               ArtifactsBucket="${AWS_S3_ARCHIVE}" \
               WebBucket="${AWS_S3_WEB}" \
               LambdaImage="${AWS_ECR_REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ngpy-accounts-manager:${APP_VERSION}" \
-              EnvironmentProfile="${ENV_PROFILE}" \
               SessionSecretKey="${SESSION_SECRET_KEY}" \
               DomainNameApi="${DOMAIN_NAME_API}" \
               DomainNameUi="${DOMAIN_NAME_UI}" \

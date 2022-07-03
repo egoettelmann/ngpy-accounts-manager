@@ -77,7 +77,6 @@ update_cloudformation() {
       ArtifactsBucket="${ARTIFACTS_BUCKET}" \
       WebBucket="${WEB_BUCKET}" \
       LambdaImage="${LAMBDA_IMAGE}" \
-      EnvironmentProfile="${ENV_PROFILE}" \
       SessionSecretKey="${SESSION_SECRET_KEY}" \
       DomainNameApi="${DOMAIN_NAME_API}" \
       DomainNameUi="${DOMAIN_NAME_UI}" \
