@@ -1,6 +1,7 @@
 from .account_service import AccountService
 from .classification_service import ClassificationService
 from .parsers import Resolver
+from .parsers.parser import ParserError
 from .parsers.resolve import ResolveError
 from .transaction_service import TransactionService
 from ..exceptions import FileImportException, DuplicateElementsException
@@ -56,6 +57,8 @@ class ImportService:
             self.__transaction_service.create_all(transactions)
             return result
         except ResolveError as e:
+            raise FileImportException(e.message, cause=e)
+        except ParserError as e:
             raise FileImportException(e.message, cause=e)
         except DuplicateElementsException as e:
             if not e.context:

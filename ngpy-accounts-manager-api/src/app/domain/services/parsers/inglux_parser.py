@@ -4,7 +4,7 @@ import datetime
 import hashlib
 from typing import List
 
-from .parser import Parser
+from .parser import Parser, ParserError
 from ...models import Transaction
 
 
@@ -21,8 +21,11 @@ class IngLuxParser(Parser):
             if first_line:  # skip first line
                 first_line = False
                 continue
-            t = self.create_transaction(row)
-            transactions.append(t)
+            try:
+                t = self.create_transaction(row)
+                transactions.append(t)
+            except BaseException as e:
+                raise ParserError('Failed to parse row [' + ','.join(row) + ']: ' + str(e))
         return transactions
 
     def get_account_name(self) -> str:
