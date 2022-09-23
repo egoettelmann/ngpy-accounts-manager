@@ -34,7 +34,8 @@
         </app-autocomplete>
       </td>
       <td class="clr-hidden-sm-down">
-        <span class="tooltip tooltip-sm tooltip-top-right"
+        <span *ngIf="transaction.label?.name"
+              class="tooltip tooltip-sm tooltip-top-right"
               role="tooltip"
               aria-haspopup="true">
           <clr-icon class="is-solid"
