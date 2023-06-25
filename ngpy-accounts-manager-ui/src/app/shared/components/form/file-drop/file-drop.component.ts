@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { UploadRestService } from '@core/services/rest/upload-rest.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -17,6 +17,11 @@ import { EMPTY } from 'rxjs';
   encapsulation: ViewEncapsulation.None
 })
 export class FileDropComponent {
+
+  /**
+   * The file input element.
+   */
+  @ViewChild('fileInput', { static: true }) fileInput?: ElementRef<HTMLInputElement>;
 
   /**
    * The form is loading flag
@@ -84,6 +89,9 @@ export class FileDropComponent {
         return EMPTY;
       }),
       finalize(() => {
+        if (this.fileInput) {
+          this.fileInput.nativeElement.value = '';
+        }
         this.formIsLoading = false;
       })
     ).subscribe((result) => {
