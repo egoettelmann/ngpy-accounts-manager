@@ -14,14 +14,16 @@
     </tr>
     <tr>
       <td class="text-left">{{ 'i18n.components.statistics.summary.end' | translate }}</td>
-      <td class="text-right font-weight-bold" [ngClass]="getAmountColor(summary.amountEnd)">{{ summary.amountEnd | number:'1.2-2' }}&nbsp;€</td>
+      <td class="text-right" [ngClass]="getAmountColor(summary.amountEnd)">{{ summary.amountEnd | number:'1.2-2' }}&nbsp;€</td>
       <td class="text-left">{{ 'i18n.components.statistics.summary.credit' | translate }}</td>
       <td class="text-right" [ngClass]="getAmountColor(summary.totalCredit)">{{ summary.totalCredit | number:'1.2-2' }}&nbsp;€</td>
     </tr>
     <tr *ngIf="performance && result">
-      <td class="text-left">{{ 'i18n.components.statistics.summary.result' | translate }}</td>
-      <td class="text-right font-weight-bold" [ngClass]="getAmountColor(result)">
-        <span>{{ result | number:'1.2-2' }}&nbsp;&euro;</span>
+      <td class="text-left">
+        <strong>{{ 'i18n.components.statistics.summary.result' | translate }}</strong>
+      </td>
+      <td class="text-right" [ngClass]="getAmountColor(result)">
+        <strong>{{ result | number:'1.2-2' }}&nbsp;&euro;</strong>
       </td>
       <td class="text-left">&nbsp;</td>
       <td class="text-right" [ngClass]="getAmountColor(performance)">

@@ -1,3 +1,4 @@
+# Run with 'docker compose up --force-recreate --renew-anon-volumes'
 version: '3.4'
 
 services:
