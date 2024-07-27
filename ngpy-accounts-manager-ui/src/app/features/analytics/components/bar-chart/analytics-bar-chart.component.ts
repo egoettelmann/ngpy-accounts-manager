@@ -5,6 +5,7 @@ import { CompositeKeyValue } from '@core/models/api.models';
 import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
 import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
 import { Options, SeriesColumnOptions } from 'highcharts';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-analytics-bar-chart',
@@ -21,7 +22,8 @@ export class AnalyticsBarChartComponent implements OnChanges {
 
   constructor(private decimalPipe: DecimalPipe,
               private toCategoryPipe: ToCategoryPipe,
-              private toLabelPipe: ToLabelPipe
+              private toLabelPipe: ToLabelPipe,
+              private translateService: TranslateService
   ) {
   }
 
@@ -46,13 +48,32 @@ export class AnalyticsBarChartComponent implements OnChanges {
     const series = this.buildChartSeries(data, categories);
     return {
       chart: {
-        type: 'column'
+        type: 'column',
+        marginTop: 25,
       },
       tooltip: {
+        shared: true,
+        useHTML: true,
         formatter(): string {
-          return '<b>' + that.resolveName(this.series.name) + '</b><br/>'
-            + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
-            + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
+          if (!this.points) {
+            return '';
+          }
+          let tooltip = '<table class="tip">'
+            + '<caption><b>' + this.x + '</b></caption>'
+            + '<tbody>';
+          for (const point of this.points) {
+            tooltip += '<tr>'
+              + '<th><span class="badge" style="background-color: ' + point.series.color + '">&nbsp;</span></th>'
+              + '<td style="text-align: right">' + that.decimalPipe.transform(point.y, '1.2-2') + ' €</td>'
+              + '<td style="text-align: right">(' + that.decimalPipe.transform(Math.abs(point.percentage), '1.2-2') + ' %)</td>'
+              + '</tr>';
+          }
+          tooltip += '<tr>'
+            + '<th>' + that.translateService.instant('i18n.views.analytics.chart.tooltip.total') + ': </th>'
+            + '<td colspan="2" style="text-align: right"><b>' + that.decimalPipe.transform(this.points[0].total, '1.2-2') + ' €</b></td>'
+            + '</tr>'
+            + '</tbody></table>';
+          return tooltip;
         }
       },
       legend: {
@@ -63,19 +84,12 @@ export class AnalyticsBarChartComponent implements OnChanges {
       xAxis: {
         categories
       },
-      yAxis: {
-        stackLabels: {
-          enabled: true,
-          formatter(): string {
-            return that.decimalPipe.transform(this.total, '1.2-2') + ' €';
-          }
-        }
-      },
       plotOptions: {
         column: {
           stacking: 'percent',
           dataLabels: {
             enabled: true,
+            allowOverlap: true,
             formatter(): string {
               return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
             }

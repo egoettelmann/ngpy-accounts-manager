@@ -54,10 +54,31 @@ export class BudgetChartComponent implements OnChanges {
         height: data.length * 50 + 62
       },
       tooltip: {
+        shared: true,
+        useHTML: true,
         formatter(): string {
-          return '<b>' + this.series.name + '</b><br/>'
-            + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
-            + ' (' + this.point.options.custom?.relativeRatio + ')';
+          if (!this.points) {
+            return '';
+          }
+          let tooltip = '<table class="tip">'
+            + '<caption><b>' + this.x + '</b></caption>'
+            + '<tbody>';
+          for (const point of this.points) {
+            if (point.y === 0) {
+              continue;
+            }
+            tooltip += '<tr>'
+              + '<th><span class="badge" style="background-color: ' + point.series.color + '">&nbsp;</span></th>'
+              + '<td style="text-align: right">' + that.decimalPipe.transform(point.y, '1.2-2') + ' €</td>'
+              + '<td style="text-align: right">(' + that.decimalPipe.transform(Math.abs(point.percentage), '1.2-2') + ' %)</td>'
+              + '</tr>';
+          }
+          tooltip += '<tr>'
+            + '<th>' + that.translateService.instant('i18n.views.analytics.chart.tooltip.total') + ': </th>'
+            + '<td colspan="2" style="text-align: right"><b>' + that.decimalPipe.transform(this.points[0].total, '1.2-2') + ' €</b></td>'
+            + '</tr>'
+            + '</tbody></table>';
+          return tooltip;
         }
       },
       legend: {

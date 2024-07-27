@@ -3,6 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { KeyValue } from '@core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
 import { Options, SeriesColumnOptions, SeriesLineOptions } from 'highcharts';
+import { tr } from 'date-fns/locale';
 
 @Component({
   selector: 'app-treasury-evolution-chart',
@@ -48,7 +49,39 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
     const [categories, credits, debits, lines] = this.buildChartSeries(evolution, aggregationCredit, aggregationDebit);
     return {
       tooltip: {
+        shared: true,
+        useHTML: true,
         formatter(): string {
+          if (!this.points) {
+            return '';
+          }
+          let tooltip = '<table class="tip">'
+            + '<caption><b>' + this.x + '</b></caption>'
+            + '<tbody>';
+          for (const point of this.points) {
+            if (point.y === 0) {
+              continue;
+            }
+            let trend = '';
+            if (point.series.type === 'line' && point.x !== 0 && point.y != null) {
+              const prevPoint = point.series.data[this.point.x - 1];
+              if (prevPoint != null && prevPoint.y != null && prevPoint.y !== 0) {
+                const diff = (point.y - prevPoint.y) / prevPoint.y * 100;
+                trend = '' + that.decimalPipe.transform(diff, '1.2-2');
+                if (diff >= 0) {
+                  trend = '+' + trend;
+                }
+                trend = '<span class="text-' + (diff >= 0 ? 'success' : 'danger') + '">(' + trend + ' %)</span>';
+              }
+            }
+            tooltip += '<tr>'
+              + '<th><span class="badge" style="background-color: ' + point.series.color + '">&nbsp;</span></th>'
+              + '<td style="text-align: right">' + that.decimalPipe.transform(point.y, '1.2-2') + ' €</td>'
+              + '<td style="text-align: right">' + trend + '</td>'
+              + '</tr>';
+          }
+          tooltip += '</tbody></table>';
+          return tooltip;
           return '' + this.x + ': <b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>';
         }
       },

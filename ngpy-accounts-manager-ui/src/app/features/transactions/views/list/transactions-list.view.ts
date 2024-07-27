@@ -176,8 +176,15 @@ export class TransactionsListView implements OnInit, OnDestroy {
         type: 'column'
       },
       tooltip: {
+        useHTML: true,
         formatter(): string {
-          return '' + this.x + ': <b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>';
+          return '<table class="tip">'
+            + '<caption><b>' + this.x + '</b></caption>'
+            + '<tbody>'
+            + '<tr>'
+            + '<td><b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b></td>'
+            + '</tr>'
+            + '</tbody></table>';
         }
       },
       xAxis: {

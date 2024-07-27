@@ -50,6 +50,9 @@ export class AnalyticsPieChartComponent implements OnChanges {
           return that.toCategoryPipe.transform(+this.name, 'name');
         }
       },
+      tooltip: {
+        useHTML: true,
+      },
       plotOptions: {
         pie: {
           center: ['50%', '50%'],
@@ -94,9 +97,14 @@ export class AnalyticsPieChartComponent implements OnChanges {
         tooltip: {
           headerFormat: '',
           pointFormatter(): string {
-            return '<b>' + that.toCategoryPipe.transform(+this.name, 'name') + '</b><br/>'
-              + '<b>' + that.decimalPipe.transform(this.options?.custom?.amount, '1.2-2') + ' €</b>'
-              + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
+            return '<table class="tip">'
+              + '<caption><b>' + that.toCategoryPipe.transform(+this.name, 'name') + '</b></caption>'
+              + '<tbody>'
+              + '<tr>'
+              + '<td><b>' + that.decimalPipe.transform(this.options?.custom?.amount, '1.2-2') + ' €</b></td>'
+              + '<td>(' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)</td>'
+              + '</tr>'
+              + '</tbody></table>';
           }
         }
       }, {
@@ -109,9 +117,14 @@ export class AnalyticsPieChartComponent implements OnChanges {
         tooltip: {
           headerFormat: '',
           pointFormatter(): string {
-            return '<b>' + that.toLabelPipe.transform(+this.name, 'name') + '</b><br/>'
-              + '<b>' + that.decimalPipe.transform(this.options?.custom?.amount, '1.2-2') + ' €</b>'
-              + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
+            return '<table class="tip">'
+              + '<caption><b>' + that.toLabelPipe.transform(+this.name, 'name') + '</b></caption>'
+              + '<tbody>'
+              + '<tr>'
+              + '<td><b>' + that.decimalPipe.transform(this.options?.custom?.amount, '1.2-2') + ' €</b></td>'
+              + '<td>(' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)</td>'
+              + '</tr>'
+              + '</tbody></table>';
           }
         }
       }]

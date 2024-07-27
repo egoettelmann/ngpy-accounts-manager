@@ -48,10 +48,16 @@ export class DashboardAccountsChartComponent implements OnInit, OnChanges {
         type: 'pie'
       },
       tooltip: {
+        useHTML: true,
         formatter(): string {
-          return '<b>' + this.point.name + '</b><br/>'
-            + '<b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>'
-            + ' (' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)';
+          return '<table class="tip">'
+            + '<caption><b>' + this.point.name + '</b></caption>'
+            + '<tbody>'
+            + '<tr>'
+            + '<td><b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b></td>'
+            + '<td>(' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)</td>'
+            + '</tr>'
+            + '</tbody></table>';
         }
       },
       series: [{
