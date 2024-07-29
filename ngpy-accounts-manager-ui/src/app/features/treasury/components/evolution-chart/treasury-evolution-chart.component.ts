@@ -2,8 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { KeyValue } from '@core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
-import { Options, SeriesColumnOptions, SeriesLineOptions } from 'highcharts';
-import { tr } from 'date-fns/locale';
+import { Options, SeriesAreaOptions, SeriesColumnOptions } from 'highcharts';
 
 @Component({
   selector: 'app-treasury-evolution-chart',
@@ -58,31 +57,37 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
           let tooltip = '<table class="tip">'
             + '<caption><b>' + this.x + '</b></caption>'
             + '<tbody>';
+          let trendValue = null;
+          let trendPercent = null;
           for (const point of this.points) {
             if (point.y === 0) {
               continue;
             }
-            let trend = '';
-            if (point.series.type === 'line' && point.x !== 0 && point.y != null) {
-              const prevPoint = point.series.data[this.point.x - 1];
-              if (prevPoint != null && prevPoint.y != null && prevPoint.y !== 0) {
-                const diff = (point.y - prevPoint.y) / prevPoint.y * 100;
-                trend = '' + that.decimalPipe.transform(diff, '1.2-2');
-                if (diff >= 0) {
-                  trend = '+' + trend;
-                }
-                trend = '<span class="text-' + (diff >= 0 ? 'success' : 'danger') + '">(' + trend + ' %)</span>';
-              }
-            }
             tooltip += '<tr>'
               + '<th><span class="badge" style="background-color: ' + point.series.color + '">&nbsp;</span></th>'
               + '<td style="text-align: right">' + that.decimalPipe.transform(point.y, '1.2-2') + ' €</td>'
-              + '<td style="text-align: right">' + trend + '</td>'
+              + '</tr>';
+            if (point.series.type === 'area' && point.x !== 0 && point.y != null) {
+              const prevPoint = point.series.data[this.point.x - 1];
+              if (prevPoint != null && prevPoint.y != null && prevPoint.y !== 0) {
+                trendValue = point.y - prevPoint.y;
+                trendPercent = trendValue / prevPoint.y * 100;
+              }
+            }
+          }
+          if (trendValue != null) {
+            let trend = '' + that.decimalPipe.transform(trendPercent, '1.2-2');
+            if (trendValue >= 0) {
+              trend = '+' + trend;
+            }
+            trend = '<span class="text-' + (trendValue >= 0 ? 'success' : 'danger') + '">(' + trend + ' %)</span>';
+            tooltip += '<tr>'
+              + '<td>' + trend + '</td>'
+              + '<td style="text-align: right; border-top: 1px solid black">' + that.decimalPipe.transform(trendValue, '1.2-2') + ' €</td>'
               + '</tr>';
           }
           tooltip += '</tbody></table>';
           return tooltip;
-          return '' + this.x + ': <b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b>';
         }
       },
       xAxis: {
@@ -100,7 +105,7 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
     evolution: KeyValue[],
     aggregationCredit: KeyValue[],
     aggregationDebit: KeyValue[]
-  ): [string[], SeriesColumnOptions, SeriesColumnOptions, SeriesLineOptions] {
+  ): [string[], SeriesAreaOptions, SeriesColumnOptions, SeriesColumnOptions] {
     const categories: string[] = [];
     const creditSeries: number[] = [];
     const debitSeries: number[] = [];
@@ -127,24 +132,26 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
       }
     });
     return [
-      categories,
+      categories, {
+        name: this.translateService.instant('i18n.views.treasury.chart.evolution'),
+        type: 'area',
+        data: evolutionSeries,
+        color: '#7cb5ec'
+      },
       {
         name: this.translateService.instant('i18n.views.treasury.chart.credits'),
         type: 'column',
         data: creditSeries,
         stacking: 'normal',
-        color: '#90ed7d'
+        color: '#90ed7d',
+        pointPlacement: -0.5
       }, {
         name: this.translateService.instant('i18n.views.treasury.chart.debits'),
         type: 'column',
         data: debitSeries,
         stacking: 'normal',
-        color: '#f45b5b'
-      }, {
-        name: this.translateService.instant('i18n.views.treasury.chart.evolution'),
-        type: 'line',
-        data: evolutionSeries,
-        color: '#434348'
+        color: '#f45b5b',
+        pointPlacement: -0.5
       }
     ];
   }

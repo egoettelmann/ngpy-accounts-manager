@@ -48,6 +48,15 @@ This will start the frontend on <http://localhost:4210>.
 
 ## Roadmap
 
+### TODO
+
+- [ ] auto-dump DB on `down`
+- [ ] rewrite docker-compose to use health checks instead of `wait`
+- [ ] cloud hosting, checkout alternatives to serverless DB
+  - https://www.clever-cloud.com/pricing/
+  - https://neon.tech/pricing
+  - dedicated ec2/lightsail on AWS ?
+
 ### Migration to AWS
 
 - [x] Setup with Cloudformation template
@@ -94,8 +103,8 @@ This will start the frontend on <http://localhost:4210>.
 
 ### Features
 
-- Add possibility to close a period at a given date
-  - Impossible to change amount or account of a transaction before this date
-  - Period can only be closed at a date of 30 days before the current day
+- Improve analytics section
+  - Entries in collapsed/expanded section should allow to open bar chart with only clicked entry selected
+  - Add a way to compare a category/label with previous year
+    - https://www.highcharts.com/demo/highcharts/column-comparison
 - Add sort and filters on transactions table
-- Add document section for RIB

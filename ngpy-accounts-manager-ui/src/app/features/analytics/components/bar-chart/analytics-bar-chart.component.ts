@@ -84,9 +84,12 @@ export class AnalyticsBarChartComponent implements OnChanges {
       xAxis: {
         categories
       },
+      yAxis: {
+        reversedStacks: false,
+      },
       plotOptions: {
         column: {
-          stacking: 'percent',
+          stacking: 'normal',
           dataLabels: {
             enabled: true,
             allowOverlap: true,
