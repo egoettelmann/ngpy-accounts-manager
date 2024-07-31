@@ -90,7 +90,7 @@
 <clr-modal *ngIf="analyticsByLabel"
            [clrModalOpen]="showModal"
            (clrModalOpenChange)="closeModal($event)"
-           [clrModalSize]="'lg'"
+           [clrModalSize]="'xl'"
            [clrModalClosable]="true"
            [clrModalStaticBackdrop]="true">
   <h3 *ngIf="selectedCategory" class="modal-title">{{ selectedCategory | toCategory:'name' }}</h3>
