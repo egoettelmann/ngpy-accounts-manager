@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Account, Category, Label } from '@core/models/api.models';
 import { FilterOperator, FilterRequest } from '@core/models/rql.models';
 import { Subscription } from 'rxjs';
@@ -22,13 +22,13 @@ export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
 
   @Output() searchChange = new EventEmitter<FilterRequest>();
 
-  searchForm?: FormGroup;
+  searchForm?: UntypedFormGroup;
 
   private changeSubscription?: Subscription;
 
   constructor(private route: ActivatedRoute,
               private routerService: RouterService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private dateService: DateService,
               private rqlService: RqlService
   ) {}

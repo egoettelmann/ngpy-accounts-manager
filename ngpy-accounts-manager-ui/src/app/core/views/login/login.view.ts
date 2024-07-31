@@ -3,7 +3,7 @@ import { SessionRestService } from '../../services/rest/session-rest.service';
 import { AppProperties } from '../../models/api.models';
 import { RouterService } from '../../services/router.service';
 import { catchError } from 'rxjs/operators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { ConfigurationService } from '@core/services/configuration.service';
 
@@ -19,7 +19,7 @@ export class LoginView implements OnInit {
   /**
    * The login form
    */
-  public loginForm?: FormGroup;
+  public loginForm?: UntypedFormGroup;
 
   /**
    * The form is loading flag
@@ -47,7 +47,7 @@ export class LoginView implements OnInit {
   constructor(private routerService: RouterService,
               private configurationService: ConfigurationService,
               private sessionService: SessionRestService,
-              private fb: FormBuilder
+              private fb: UntypedFormBuilder
   ) {
   }
 

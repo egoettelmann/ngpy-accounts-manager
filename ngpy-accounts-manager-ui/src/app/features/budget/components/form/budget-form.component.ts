@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Account, Budget, Label } from '@core/models/api.models';
 
 /**
@@ -44,7 +44,7 @@ export class BudgetFormComponent implements OnChanges {
   /**
    * The form group
    */
-  form?: FormGroup;
+  form?: UntypedFormGroup;
 
   /**
    * The available periods
@@ -57,7 +57,7 @@ export class BudgetFormComponent implements OnChanges {
    * @param fb the form builder
    */
   constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
   }
 

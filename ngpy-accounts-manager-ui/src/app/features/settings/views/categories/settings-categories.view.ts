@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Category } from '@core/models/api.models';
 import { CategoriesService } from '@core/services/domain/categories.service';
@@ -13,15 +13,15 @@ export class SettingsCategoriesView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  form?: FormGroup;
-  formArray?: FormArray;
+  form?: UntypedFormGroup;
+  formArray?: UntypedFormArray;
 
   private subscriptions = {
     static: new Subscription(),
     active: new Subscription()
   };
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private categoriesService: CategoriesService) {
   }
 
@@ -41,25 +41,25 @@ export class SettingsCategoriesView implements OnInit, OnDestroy {
     this.categoriesService.deleteOne(category).subscribe();
   }
 
-  get categoryForms(): FormGroup[] {
+  get categoryForms(): UntypedFormGroup[] {
     if (this.formArray == null) {
       return [];
     }
-    return this.formArray.controls as FormGroup[];
+    return this.formArray.controls as UntypedFormGroup[];
   }
 
   private buildForm(categories: Category[]): void {
     this.form = this.fb.group({
       categories: this.fb.array([])
     });
-    this.formArray = this.form.get('categories') as FormArray;
+    this.formArray = this.form.get('categories') as UntypedFormArray;
     categories.map(category => {
       const control = this.buildFormControl(category);
       this.formArray?.push(control);
     });
   }
 
-  private buildFormControl(category: Category): FormGroup {
+  private buildFormControl(category: Category): UntypedFormGroup {
     const formGroup = this.fb.group({
       id: [category.id],
       name: [category.name],

@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { combineLatest, Subscription } from 'rxjs';
 import { lock, SubscriptionLock } from '@shared/utils/lock-subscriber';
@@ -16,15 +16,15 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
   @HostBinding('class') hostClass = 'content-area';
 
   categories?: Category [];
-  form?: FormGroup;
-  formArray?: FormArray;
+  form?: UntypedFormGroup;
+  formArray?: UntypedFormArray;
 
   private subscriptions = {
     static: new Subscription(),
     active: new Subscription()
   };
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private labelsService: LabelsService,
               private categoriesService: CategoriesService) {
   }
@@ -61,25 +61,25 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
     this.onFormChange(control);
   }
 
-  get labelForms(): FormGroup[] {
+  get labelForms(): UntypedFormGroup[] {
     if (this.formArray == null) {
       return [];
     }
-    return this.formArray.controls as FormGroup[];
+    return this.formArray.controls as UntypedFormGroup[];
   }
 
   private buildForm(labels: Label[]): void {
     this.form = this.fb.group({
       labels: this.fb.array([])
     });
-    this.formArray = this.form.get('labels') as FormArray;
+    this.formArray = this.form.get('labels') as UntypedFormArray;
     labels.map(label => {
       const control = this.buildFormControl(label);
       this.formArray?.push(control);
     });
   }
 
-  private buildFormControl(label: Label): FormGroup {
+  private buildFormControl(label: Label): UntypedFormGroup {
     const formGroup = this.fb.group({
       id: [label.id],
       name: [label.name],
@@ -101,7 +101,7 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
     return formGroup;
   }
 
-  private onFormChange(formGroup: FormGroup, saveLock = new SubscriptionLock()): void {
+  private onFormChange(formGroup: UntypedFormGroup, saveLock = new SubscriptionLock()): void {
     const value = formGroup.value;
     this.labelsService.saveOne(value).subscribe(savedLabel => {
       formGroup.patchValue({ id: savedLabel.id }, { emitEvent: false });
@@ -109,7 +109,7 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
     });
   }
 
-  private disablePrivateFields(formGroup: FormGroup): void {
+  private disablePrivateFields(formGroup: UntypedFormGroup): void {
     formGroup?.get('numTransactions')?.disable({ emitEvent: false });
   }
 

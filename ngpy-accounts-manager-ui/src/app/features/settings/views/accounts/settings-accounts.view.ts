@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Account } from '@core/models/api.models';
 import { AccountsService } from '@core/services/domain/accounts.service';
@@ -13,15 +13,15 @@ export class SettingsAccountsView implements OnInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'content-area';
 
-  form?: FormGroup;
-  formArray?: FormArray;
+  form?: UntypedFormGroup;
+  formArray?: UntypedFormArray;
 
   private subscriptions = {
     static: new Subscription(),
     active: new Subscription()
   };
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private accountsService: AccountsService
   ) {
   }
@@ -42,25 +42,25 @@ export class SettingsAccountsView implements OnInit, OnDestroy {
     this.accountsService.deleteOne(account).subscribe();
   }
 
-  get accountForms(): FormGroup[] {
+  get accountForms(): UntypedFormGroup[] {
     if (this.formArray == null) {
       return [];
     }
-    return this.formArray.controls as FormGroup[];
+    return this.formArray.controls as UntypedFormGroup[];
   }
 
   private buildForm(accounts: Account[]): void {
     this.form = this.fb.group({
       accounts: this.fb.array([])
     });
-    this.formArray = this.form.get('accounts') as FormArray;
+    this.formArray = this.form.get('accounts') as UntypedFormArray;
     accounts.map(account => {
       const control = this.buildFormControl(account);
       this.formArray?.push(control);
     });
   }
 
-  private buildFormControl(account: Account): FormGroup {
+  private buildFormControl(account: Account): UntypedFormGroup {
     const formGroup = this.fb.group({
       id: [account.id],
       name: [account.name],

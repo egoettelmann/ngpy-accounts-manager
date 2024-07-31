@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Account, Label, Transaction } from '../../models/api.models';
 import { DateService } from '../../services/date.service';
 
@@ -45,7 +45,7 @@ export class TransactionsFormComponent implements OnChanges {
   /**
    * The form group
    */
-  form?: FormGroup;
+  form?: UntypedFormGroup;
 
   /**
    * Instantiates the component.
@@ -54,7 +54,7 @@ export class TransactionsFormComponent implements OnChanges {
    * @param dateService the date service
    */
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dateService: DateService
   ) {}
 
