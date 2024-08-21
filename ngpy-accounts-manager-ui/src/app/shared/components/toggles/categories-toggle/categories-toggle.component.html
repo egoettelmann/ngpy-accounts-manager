@@ -1,6 +1,6 @@
 <clr-dropdown *ngIf="categories">
   <button type="button" class="btn btn-link" clrDropdownTrigger>
-    {{ selectedCategories ? (selectedCategories?.length + ('i18n.components.transactions.category-toggle.labels' | translate)) : ('i18n.components.transactions.category-toggle.all-labels' | translate) }}
+    {{ selectedCategories ? (selectedCategories.length + ('i18n.components.transactions.category-toggle.labels' | translate)) : ('i18n.components.transactions.category-toggle.all-labels' | translate) }}
     <clr-icon shape="caret down"></clr-icon>
   </button>
   <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>

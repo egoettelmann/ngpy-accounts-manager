@@ -1,6 +1,6 @@
 <clr-dropdown *ngIf="accounts">
   <button type="button" class="btn btn-link" clrDropdownTrigger>
-    {{ selectedAccounts?.length === accounts?.length ? ('i18n.components.accounts.account-toggle.all-accounts' | translate) : selectedAccounts?.length + ('i18n.components.accounts.account-toggle.accounts' | translate) }}
+    {{ selectedAccounts.length === accounts.length ? ('i18n.components.accounts.account-toggle.all-accounts' | translate) : selectedAccounts.length + ('i18n.components.accounts.account-toggle.accounts' | translate) }}
     <clr-icon shape="caret down"></clr-icon>
   </button>
   <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
