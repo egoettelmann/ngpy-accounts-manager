@@ -66,7 +66,7 @@ export class AutocompleteComponent implements OnChanges {
    * @param changes the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.value
+    if (changes['value']
       && this.value
       && this.value.hasOwnProperty(this.valueAttribute)
       && this.options

@@ -16,7 +16,7 @@ export class AnalyticsMovementsTableComponent implements OnChanges {
   tableMovements?: ChartSerie[];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes.movements && !changes.quarterly) {
+    if (!changes['movements'] && !changes['quarterly']) {
       return;
     }
     if (this.movements) {

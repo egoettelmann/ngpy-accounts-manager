@@ -37,14 +37,14 @@ export class CategoriesToggleComponent implements OnChanges {
    * @param changes the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.value && changes.value !== undefined) {
+    if (this.value && changes['value'] !== undefined) {
       if (this.value.length === 0) {
         this.toggleAllCategories();
       } else {
         this.toggleCategories(this.value);
       }
     }
-    if (changes.categories && this.categories) {
+    if (changes['categories'] && this.categories) {
       if (this.selectedCategories === undefined || this.selectedCategories.length === 0) {
         this.toggleAllCategories();
       } else {

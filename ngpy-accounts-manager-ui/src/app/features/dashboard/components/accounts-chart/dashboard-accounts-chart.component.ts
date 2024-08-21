@@ -29,7 +29,7 @@ export class DashboardAccountsChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.accounts && this.accounts) {
+    if (changes['accounts'] && this.accounts) {
       this.graphOptions = this.buildChartOptions(this.accounts);
     }
   }

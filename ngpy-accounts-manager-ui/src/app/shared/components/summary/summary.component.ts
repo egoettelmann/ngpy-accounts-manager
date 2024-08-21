@@ -31,7 +31,7 @@ export class SummaryComponent implements OnChanges {
    * @param changes the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.summary != null && this.summary) {
+    if (changes['summary'] != null && this.summary) {
       this.result = this.summary.totalDebit + this.summary.totalCredit;
       this.performance = (this.summary.amountEnd / this.summary.amountStart - 1) * 100;
     }

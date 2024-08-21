@@ -37,14 +37,14 @@ export class AccountsToggleComponent implements OnChanges {
    * @param changes changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.preSelected && this.preSelected != null) {
+    if (changes['preSelected'] && this.preSelected != null) {
       if (this.preSelected.length === 0) {
         this.toggleAllAccounts();
       } else {
         this.toggleAccounts(this.preSelected);
       }
     }
-    if (changes.accounts && this.accounts) {
+    if (changes['accounts'] && this.accounts) {
       if (this.selectedAccounts === undefined || this.selectedAccounts.length === 0) {
         this.toggleAllAccounts();
       } else {

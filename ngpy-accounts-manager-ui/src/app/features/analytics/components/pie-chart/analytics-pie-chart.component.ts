@@ -27,7 +27,7 @@ export class AnalyticsPieChartComponent implements OnChanges {
    * Triggered chen the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.data && this.data) {
+    if (changes['data'] && this.data) {
       this.chartOptions = this.buildChartOptions(this.data);
     }
   }
@@ -72,7 +72,7 @@ export class AnalyticsPieChartComponent implements OnChanges {
                 const parentName = this.name;
                 const details = this.series.chart.series[1].data;
                 details.forEach((point) => {
-                  if (point.options?.custom?.parent === parentName) {
+                  if (point.options?.custom?.['parent'] === parentName) {
                     if (point.visible) {
                       point.setVisible(false);
                     } else {
@@ -101,7 +101,7 @@ export class AnalyticsPieChartComponent implements OnChanges {
               + '<caption><b>' + that.toCategoryPipe.transform(+this.name, 'name') + '</b></caption>'
               + '<tbody>'
               + '<tr>'
-              + '<td><b>' + that.decimalPipe.transform(this.options?.custom?.amount, '1.2-2') + ' €</b></td>'
+              + '<td><b>' + that.decimalPipe.transform(this.options?.custom?.['amount'], '1.2-2') + ' €</b></td>'
               + '<td>(' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)</td>'
               + '</tr>'
               + '</tbody></table>';
@@ -121,7 +121,7 @@ export class AnalyticsPieChartComponent implements OnChanges {
               + '<caption><b>' + that.toLabelPipe.transform(+this.name, 'name') + '</b></caption>'
               + '<tbody>'
               + '<tr>'
-              + '<td><b>' + that.decimalPipe.transform(this.options?.custom?.amount, '1.2-2') + ' €</b></td>'
+              + '<td><b>' + that.decimalPipe.transform(this.options?.custom?.['amount'], '1.2-2') + ' €</b></td>'
               + '<td>(' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)</td>'
               + '</tr>'
               + '</tbody></table>';

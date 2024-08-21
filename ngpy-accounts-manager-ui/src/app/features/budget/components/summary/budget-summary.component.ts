@@ -32,7 +32,7 @@ export class BudgetSummaryComponent implements OnChanges {
    * @param changes the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.statusList != null && this.statusList) {
+    if (changes['statusList'] != null && this.statusList) {
       this.calculateSummary(this.statusList);
     }
   }

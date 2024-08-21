@@ -1,5 +1,4 @@
-import { RouterModule, Routes } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { Routes } from '@angular/router';
 import { LoginView } from '@core/views/login/login.view';
 import { MainView } from '@core/views/main/main.view';
 import { AuthenticatedGuard } from '@core/guards/authenticated.guard';
@@ -7,7 +6,7 @@ import { FormsView } from '@core/views/main/forms/forms.view';
 import { FormsTransactionView } from '@core/views/main/forms/transaction/forms-transaction.view';
 import { MainResolverService } from '@core/services/resolvers/main-resolver.service';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'login',
     component: LoginView
@@ -62,12 +61,3 @@ const routes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forRoot(routes, { useHash: true })
-  ]
-})
-export class AppRoutingModule {
-
-}

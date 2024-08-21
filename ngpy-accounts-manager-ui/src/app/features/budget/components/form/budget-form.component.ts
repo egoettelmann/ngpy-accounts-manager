@@ -67,7 +67,7 @@ export class BudgetFormComponent implements OnChanges {
    * @param changes the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.model && this.model) {
+    if (changes['model'] && this.model) {
       this.buildForm();
       this.initFormData(this.model);
     }

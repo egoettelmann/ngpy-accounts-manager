@@ -34,7 +34,7 @@ export class BudgetChartComponent implements OnChanges {
    * Triggered chen the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.data && this.data) {
+    if (changes['data'] && this.data) {
       this.chartOptions = this.buildChartOptions(this.data);
     }
   }
@@ -110,7 +110,7 @@ export class BudgetChartComponent implements OnChanges {
           point: {
             events: {
               click(): void {
-                that.handleClick.emit(this.options.custom?.budgetId);
+                that.handleClick.emit(this.options?.custom?.['budgetId']);
               }
             }
           }

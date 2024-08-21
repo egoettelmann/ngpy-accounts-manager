@@ -33,7 +33,7 @@ export class BudgetHistoryChartComponent implements OnChanges {
    * Triggered chen the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.data && this.data) {
+    if (changes['data'] && this.data) {
       this.chartOptions = this.buildChartOptions(this.data);
     }
   }

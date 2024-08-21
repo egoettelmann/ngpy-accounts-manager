@@ -28,7 +28,7 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (
-      (changes.evolutionData || changes.aggregationCreditData || changes.aggregationDebitData)
+      (changes['evolutionData'] || changes['aggregationCreditData'] || changes['aggregationDebitData'])
       && this.evolutionData && this.aggregationCreditData && this.aggregationDebitData
     ) {
       this.chartOptions = this.buildChartOptions(this.evolutionData, this.aggregationCreditData, this.aggregationDebitData);

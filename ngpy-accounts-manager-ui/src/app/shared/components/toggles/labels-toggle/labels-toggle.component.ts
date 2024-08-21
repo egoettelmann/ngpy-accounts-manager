@@ -37,14 +37,14 @@ export class LabelsToggleComponent implements OnChanges {
    * @param changes the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.value && changes.value !== undefined) {
+    if (this.value && changes['value'] !== undefined) {
       if (this.value.length === 0) {
         this.toggleAllLabels();
       } else {
         this.toggleLabels(this.value);
       }
     }
-    if (changes.labels && this.labels) {
+    if (changes['labels'] && this.labels) {
       if (this.selectedLabels === undefined || this.selectedLabels.length === 0) {
         this.toggleAllLabels();
       } else {

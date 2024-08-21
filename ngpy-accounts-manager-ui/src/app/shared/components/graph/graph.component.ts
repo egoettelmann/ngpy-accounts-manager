@@ -57,7 +57,7 @@ export class GraphComponent implements OnChanges, AfterViewInit {
    * @param changes the input changes
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.options != null && this.options) {
+    if (changes['options'] != null && this.options) {
       this.drawChart();
     }
   }

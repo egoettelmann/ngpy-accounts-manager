@@ -73,7 +73,7 @@ class LockSubscriber<T> extends Subscriber<T> {
    * @param value the value to emit
    * @private
    */
-  protected _next(value: T): void {
+  protected override _next(value: T): void {
     this.keptValues.push(value);
     this.lockNext();
     while (this.buffer > -1 && this.keptValues.length > this.buffer) {
@@ -86,7 +86,7 @@ class LockSubscriber<T> extends Subscriber<T> {
    * Once all remaining values are emitted, the destination will be completed.
    * @private
    */
-  protected _complete(): void {
+  protected override _complete(): void {
     this.isComplete = true;
     this.lockNext();
   }
