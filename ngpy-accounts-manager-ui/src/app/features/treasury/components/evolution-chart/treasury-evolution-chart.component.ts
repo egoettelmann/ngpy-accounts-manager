@@ -3,11 +3,16 @@ import { DecimalPipe } from '@angular/common';
 import { KeyValue } from '@core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
 import { Options, SeriesAreaOptions, SeriesColumnOptions } from 'highcharts';
+import { ChartComponent } from '@shared/components/chart/chart.component';
 
 @Component({
+  standalone: true,
   selector: 'app-treasury-evolution-chart',
   templateUrl: './treasury-evolution-chart.component.html',
-  styleUrls: ['./treasury-evolution-chart.component.scss']
+  styleUrls: ['./treasury-evolution-chart.component.scss'],
+  imports: [
+    ChartComponent
+  ]
 })
 export class TreasuryEvolutionChartComponent implements OnChanges {
 

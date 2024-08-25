@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { DateService } from './date.service';
 import { Location } from '@angular/common';
-import { RouterPathPipe } from '@shared/modules/router-path/router-path.pipe';
+import { RouterPathPipe } from '@shared/modules/app-router/router-path.pipe';
 
 /**
  * The Router service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class RouterService {
 
   constructor(private router: Router,

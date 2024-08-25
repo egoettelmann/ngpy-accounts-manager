@@ -2,16 +2,30 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { SessionRestService } from '../../services/rest/session-rest.service';
 import { AlertsService } from '../../services/domain/alerts.service';
 import { Subscription } from 'rxjs';
-import { RouterPathPipe } from '@shared/modules/router-path/router-path.pipe';
+import { RouterPathPipe } from '@shared/modules/app-router/router-path.pipe';
 import { RouterService } from '../../services/router.service';
+import { CommonModule } from '@angular/common';
+import { AppRouterModule } from '@shared/modules/app-router/app-router.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { ClrIconModule, ClrNavigationModule } from '@clr/angular';
+import { FileDropComponent } from '@shared/components/form/file-drop/file-drop.component';
 
 /**
  * The navigation component
  */
 @Component({
+  standalone: true,
   selector: 'app-navigation',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss']
+  styleUrls: ['./nav.component.scss'],
+  imports: [
+    CommonModule,
+    AppRouterModule,
+    TranslateModule,
+    ClrNavigationModule,
+    ClrIconModule,
+    FileDropComponent
+  ]
 })
 export class NavComponent implements OnInit, OnDestroy {
 

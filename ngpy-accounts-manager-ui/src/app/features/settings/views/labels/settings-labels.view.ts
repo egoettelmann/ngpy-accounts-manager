@@ -1,15 +1,26 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { combineLatest, Subscription } from 'rxjs';
 import { lock, SubscriptionLock } from '@shared/utils/lock-subscriber';
 import { Category, Label } from '@core/models/api.models';
 import { CategoriesService } from '@core/services/domain/categories.service';
 import { LabelsService } from '@core/services/domain/labels.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ClrIconModule, ClrSelectModule } from '@clr/angular';
 
 @Component({
+  standalone: true,
   templateUrl: './settings-labels.view.html',
-  styleUrls: ['./settings-labels.view.scss']
+  styleUrls: ['./settings-labels.view.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ClrIconModule,
+    ClrSelectModule,
+  ]
 })
 export class SettingsLabelsView implements OnInit, OnDestroy {
 

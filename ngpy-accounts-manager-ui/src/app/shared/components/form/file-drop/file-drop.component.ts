@@ -1,20 +1,26 @@
 import { Component, ElementRef, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
+import { FileSystemFileEntry, NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { UploadRestService } from '@core/services/rest/upload-rest.service';
 import { NotificationService } from '@core/services/notification.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { DecimalPipe } from '@angular/common';
 import { RestError } from '@core/models/api.models';
 import { EMPTY } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 /**
  * The file drop component
  */
 @Component({
+  standalone: true,
   selector: 'app-file-drop',
   templateUrl: './file-drop.component.html',
   styleUrls: ['./file-drop.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    TranslateModule,
+    NgxFileDropModule
+  ]
 })
 export class FileDropComponent {
 

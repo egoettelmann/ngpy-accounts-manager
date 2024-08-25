@@ -9,10 +9,36 @@ import { AccountsService } from '@core/services/domain/accounts.service';
 import { RouterService } from '@core/services/router.service';
 import { CategoriesService } from '@core/services/domain/categories.service';
 import { DateService } from '@core/services/date.service';
+import { CardWrapperComponent } from '@shared/components/cards/card-wrapper.component';
+import { AccountsToggleComponent } from '@shared/components/toggles/accounts/accounts-toggle.component';
+import { YearsToggleComponent } from '@shared/components/toggles/years/years-toggle.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { ClrDropdownModule, ClrModalModule } from '@clr/angular';
+import { AnalyticsMovementsTableComponent } from '../components/movements-table/analytics-movements-table.component';
+import { AnalyticsBarChartComponent } from '../components/bar-chart/analytics-bar-chart.component';
+import { AnalyticsPieChartComponent } from '../components/pie-chart/analytics-pie-chart.component';
+import { AnalyticsDetailsTableComponent } from '../components/details-table/analytics-details-table.component';
+import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   templateUrl: './analytics.view.html',
-  styleUrls: ['./analytics.view.scss']
+  styleUrls: ['./analytics.view.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ClrDropdownModule,
+    ClrModalModule,
+    CardWrapperComponent,
+    AccountsToggleComponent,
+    YearsToggleComponent,
+    AnalyticsMovementsTableComponent,
+    AnalyticsBarChartComponent,
+    AnalyticsPieChartComponent,
+    AnalyticsDetailsTableComponent,
+    ToCategoryPipe
+  ]
 })
 export class AnalyticsView implements OnInit, OnDestroy {
 

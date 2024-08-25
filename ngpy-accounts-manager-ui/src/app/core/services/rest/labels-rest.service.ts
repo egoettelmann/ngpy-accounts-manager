@@ -10,7 +10,7 @@ import { CacheService } from '../cache.service';
 /**
  * The labels rest service.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class LabelsRestService {
 
   /**

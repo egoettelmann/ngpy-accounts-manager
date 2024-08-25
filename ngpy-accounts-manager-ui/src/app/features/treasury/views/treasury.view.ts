@@ -8,10 +8,31 @@ import { StatisticsService } from '@core/services/domain/statistics.service';
 import { AccountsService } from '@core/services/domain/accounts.service';
 import { RouterService } from '@core/services/router.service';
 import { LabelsService } from '@core/services/domain/labels.service';
+import { CommonModule } from '@angular/common';
+import { CardWrapperComponent } from '@shared/components/cards/card-wrapper.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { AccountsToggleComponent } from '@shared/components/toggles/accounts/accounts-toggle.component';
+import { YearsToggleComponent } from '@shared/components/toggles/years/years-toggle.component';
+import { LabelsToggleComponent } from '@shared/components/toggles/labels/labels-toggle.component';
+import { SummaryComponent } from '@shared/components/summary/summary.component';
+import { TreasuryEvolutionChartComponent } from '../components/evolution-chart/treasury-evolution-chart.component';
+import { TransactionsTableComponent } from '@shared/components/tables/transactions/transactions-table.component';
 
 @Component({
+  standalone: true,
   templateUrl: './treasury.view.html',
-  styleUrls: ['./treasury.view.scss']
+  styleUrls: ['./treasury.view.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    CardWrapperComponent,
+    AccountsToggleComponent,
+    YearsToggleComponent,
+    LabelsToggleComponent,
+    SummaryComponent,
+    TransactionsTableComponent,
+    TreasuryEvolutionChartComponent
+  ]
 })
 export class TreasuryView implements OnInit, OnDestroy {
 

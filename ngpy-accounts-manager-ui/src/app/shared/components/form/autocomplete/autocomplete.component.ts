@@ -1,12 +1,21 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { KeepFocusDirective } from '@shared/modules/keep-focus/keep-focus.directive';
 
 /**
  * The autocomplete component
  */
 @Component({
+  standalone: true,
   selector: 'app-autocomplete',
   templateUrl: './autocomplete.component.html',
-  styleUrls: ['./autocomplete.component.scss']
+  styleUrls: ['./autocomplete.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    KeepFocusDirective,
+  ]
 })
 export class AutocompleteComponent implements OnChanges {
 

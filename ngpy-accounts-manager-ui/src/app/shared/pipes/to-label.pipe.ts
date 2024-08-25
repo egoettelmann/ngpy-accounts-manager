@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
  * Transforms a label id into its name.
  */
 @Pipe({
+  standalone:  true,
   name: 'toLabel',
   pure: false
 })

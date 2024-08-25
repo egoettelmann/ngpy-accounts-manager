@@ -1,13 +1,31 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Account, Budget, Label } from '@core/models/api.models';
+import { CommonModule } from '@angular/common';
+import { FieldWrapperComponent } from '@shared/components/form/field-wrapper/field-wrapper.component';
+import { ClrInputModule, ClrSelectModule, ClrTextareaModule } from '@clr/angular';
+import { TranslateModule } from '@ngx-translate/core';
+import { AccountsToggleComponent } from '@shared/components/toggles/accounts/accounts-toggle.component';
+import { LabelsToggleComponent } from '@shared/components/toggles/labels/labels-toggle.component';
 
 /**
  * The budget form component
  */
 @Component({
+  standalone: true,
   selector: 'app-budget-form',
-  templateUrl: './budget-form.component.html'
+  templateUrl: './budget-form.component.html',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ClrInputModule,
+    ClrSelectModule,
+    ClrTextareaModule,
+    FieldWrapperComponent,
+    AccountsToggleComponent,
+    LabelsToggleComponent
+  ]
 })
 export class BudgetFormComponent implements OnChanges {
 

@@ -11,7 +11,7 @@ import { TransactionsRestService } from '../rest/transactions-rest.service';
 /**
  * The budget service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BudgetService {
 
   /**

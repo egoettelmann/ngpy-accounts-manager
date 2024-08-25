@@ -1,12 +1,21 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import { Summary } from '@core/models/api.models';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ClrIconModule } from '@clr/angular';
 
 /**
  * The summary component
  */
 @Component({
+  standalone: true,
   selector: 'app-summary',
-  templateUrl: './summary.component.html'
+  templateUrl: './summary.component.html',
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ClrIconModule
+  ]
 })
 export class SummaryComponent implements OnChanges {
 

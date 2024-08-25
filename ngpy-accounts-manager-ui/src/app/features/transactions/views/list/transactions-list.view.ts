@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Params } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import * as _ from 'lodash';
@@ -12,10 +12,32 @@ import { RouterService } from '@core/services/router.service';
 import { LabelsService } from '@core/services/domain/labels.service';
 import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
 import { Options, XrangePointOptionsObject } from 'highcharts';
+import { TranslateModule } from '@ngx-translate/core';
+import { CardWrapperComponent } from '@shared/components/cards/card-wrapper.component';
+import { AccountsToggleComponent } from '@shared/components/toggles/accounts/accounts-toggle.component';
+import { YearsToggleComponent } from '@shared/components/toggles/years/years-toggle.component';
+import { MonthsToggleComponent } from '@shared/components/toggles/months/months-toggle.component';
+import { SummaryComponent } from '@shared/components/summary/summary.component';
+import { ChartComponent } from '@shared/components/chart/chart.component';
+import { TransactionsTableComponent } from '@shared/components/tables/transactions/transactions-table.component';
+import { ClrIconModule } from '@clr/angular';
 
 @Component({
+  standalone: true,
   templateUrl: './transactions-list.view.html',
-  styleUrls: ['./transactions-list.view.scss']
+  styleUrls: ['./transactions-list.view.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ClrIconModule,
+    CardWrapperComponent,
+    AccountsToggleComponent,
+    YearsToggleComponent,
+    MonthsToggleComponent,
+    SummaryComponent,
+    ChartComponent,
+    TransactionsTableComponent,
+  ]
 })
 export class TransactionsListView implements OnInit, OnDestroy {
 

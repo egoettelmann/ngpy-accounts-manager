@@ -6,10 +6,19 @@ import { ActivatedRoute } from '@angular/router';
 import { TransactionsService } from '@core/services/domain/transactions.service';
 import { RouterService } from '@core/services/router.service';
 import { LabelsService } from '@core/services/domain/labels.service';
+import { ClrModalModule } from '@clr/angular';
+import { TransactionsFormComponent } from '@core/components/transactions-form/transactions-form.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone:  true,
   templateUrl: './forms-transaction.view.html',
-  styleUrls: ['./forms-transaction.view.scss']
+  styleUrls: ['./forms-transaction.view.scss'],
+  imports: [
+    CommonModule,
+    ClrModalModule,
+    TransactionsFormComponent
+  ]
 })
 export class FormsTransactionView implements OnInit, OnDestroy {
 

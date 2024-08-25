@@ -6,7 +6,7 @@ import { LabelsRestService } from '../rest/labels-rest.service';
 /**
  * The labels service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class LabelsService {
 
   /**

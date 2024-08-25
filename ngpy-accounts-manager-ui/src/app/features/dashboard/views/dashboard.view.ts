@@ -6,10 +6,27 @@ import { Alerts } from '@core/models/domain.models';
 import { CategoriesService } from '@core/services/domain/categories.service';
 import { combineLatest, Subscription } from 'rxjs';
 import { StatisticsService } from '@core/services/domain/statistics.service';
+import { DashboardAlertsComponent } from '../components/alerts/dashboard-alerts.component';
+import { ClrSpinnerModule } from '@clr/angular';
+import { DashboardTotalSummaryComponent } from '../components/total-summary/dashboard-total-summary.component';
+import { DashboardAccountsChartComponent } from '../components/accounts-chart/dashboard-accounts-chart.component';
+import { DashboardAccountCardComponent } from '../components/account-card/dashboard-account-card.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   templateUrl: './dashboard.view.html',
-  styleUrls: ['./dashboard.view.scss']
+  styleUrls: ['./dashboard.view.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ClrSpinnerModule,
+    DashboardAlertsComponent,
+    DashboardTotalSummaryComponent,
+    DashboardAccountsChartComponent,
+    DashboardAccountCardComponent
+  ]
 })
 export class DashboardView implements OnInit, OnDestroy {
 

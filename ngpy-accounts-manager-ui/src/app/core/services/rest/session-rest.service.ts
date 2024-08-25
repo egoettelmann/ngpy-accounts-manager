@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 /**
  * The session rest service.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SessionRestService {
 
   /**

@@ -5,7 +5,7 @@ import { HttpParams } from '@angular/common/http';
 /**
  * The RQL service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class RqlService {
 
   private static readonly SORT_ATTRIBUTE = 'sort';

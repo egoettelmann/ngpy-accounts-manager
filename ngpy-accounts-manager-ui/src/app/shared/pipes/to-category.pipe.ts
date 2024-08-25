@@ -8,6 +8,7 @@ import { CategoriesService } from '@core/services/domain/categories.service';
  * Transforms a category id into its name.
  */
 @Pipe({
+  standalone: true,
   name: 'toCategory',
   pure: false
 })

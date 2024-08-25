@@ -4,7 +4,7 @@ import { format, parse } from 'date-fns';
 /**
  * The Date service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class DateService {
 
   /**

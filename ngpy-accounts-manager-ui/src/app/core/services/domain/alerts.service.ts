@@ -8,7 +8,7 @@ import { Alerts } from '../../models/domain.models';
 /**
  * The alerts service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AlertsService {
 
   /**

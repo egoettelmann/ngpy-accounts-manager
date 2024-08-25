@@ -8,7 +8,7 @@ import { take } from 'rxjs/operators';
 /**
  * The main resolver service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MainResolverService implements Resolve<any> {
 
   /**

@@ -6,7 +6,7 @@ import { CommonFunctions } from '@shared/utils/common-functions';
 /**
  * The cache service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CacheService {
 
   /**

@@ -3,11 +3,16 @@ import { DecimalPipe } from '@angular/common';
 import { Account } from '@core/models/api.models';
 import { ResponsiveService } from '@core/services/responsive.service';
 import { Options, PointOptionsObject } from 'highcharts';
+import { ChartComponent } from '@shared/components/chart/chart.component';
 
 @Component({
+  standalone: true,
   selector: 'app-dashboard-accounts-chart',
   templateUrl: './dashboard-accounts-chart.component.html',
-  styleUrls: ['./dashboard-accounts-chart.component.scss']
+  styleUrls: ['./dashboard-accounts-chart.component.scss'],
+  imports: [
+    ChartComponent
+  ]
 })
 export class DashboardAccountsChartComponent implements OnInit, OnChanges {
 

@@ -1,7 +1,7 @@
 /**
  * The app route paths
  */
-import { RouterPaths } from '@shared/modules/router-path/router-path.models';
+import { RouterPaths } from '@shared/modules/app-router/router-path.models';
 
 export const AppRoutePaths: RouterPaths = {
 

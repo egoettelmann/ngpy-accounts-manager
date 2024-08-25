@@ -4,11 +4,16 @@ import { GroupedValue } from '@core/models/domain.models';
 import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
 import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
 import { Options, PointOptionsObject } from 'highcharts';
+import { ChartComponent } from '@shared/components/chart/chart.component';
 
 @Component({
+  standalone:  true,
   selector: 'app-analytics-pie-chart',
   templateUrl: './analytics-pie-chart.component.html',
-  styleUrls: ['./analytics-pie-chart.component.scss']
+  styleUrls: ['./analytics-pie-chart.component.scss'],
+  imports: [
+    ChartComponent
+  ]
 })
 export class AnalyticsPieChartComponent implements OnChanges {
 

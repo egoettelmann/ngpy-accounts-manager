@@ -6,7 +6,7 @@ import { Observable, Subject } from 'rxjs';
 /**
  * The notification service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class NotificationService {
 
   /**

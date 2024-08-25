@@ -10,7 +10,7 @@ import { EventBusService } from '../event-bus.service';
 /**
  * The transactions rest service.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TransactionsRestService {
 
   /**

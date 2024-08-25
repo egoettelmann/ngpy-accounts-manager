@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Account, Summary } from '@core/models/api.models';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ClrIconModule } from '@clr/angular';
 
 /**
  * The total summary interface
@@ -13,9 +16,15 @@ declare interface TotalSummary {
  * The account card component
  */
 @Component({
+  standalone: true,
   selector: 'app-dashboard-total-summary',
   templateUrl: './dashboard-total-summary.component.html',
-  styleUrls: ['./dashboard-total-summary.component.scss']
+  styleUrls: ['./dashboard-total-summary.component.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ClrIconModule,
+  ]
 })
 export class DashboardTotalSummaryComponent implements OnInit {
 

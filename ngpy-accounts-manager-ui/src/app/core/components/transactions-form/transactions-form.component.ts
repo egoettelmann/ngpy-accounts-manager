@@ -1,14 +1,31 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Account, Label, Transaction } from '../../models/api.models';
 import { DateService } from '../../services/date.service';
+import { FieldWrapperComponent } from '@shared/components/form/field-wrapper/field-wrapper.component';
+import { ClrDatepickerModule, ClrInputModule, ClrSelectModule, ClrTextareaModule } from '@clr/angular';
+import { AutocompleteComponent } from '@shared/components/form/autocomplete/autocomplete.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 /**
  * The transactions form component
  */
 @Component({
+  standalone: true,
   selector: 'app-transactions-form',
-  templateUrl: './transactions-form.component.html'
+  templateUrl: './transactions-form.component.html',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ClrSelectModule,
+    ClrInputModule,
+    ClrTextareaModule,
+    ClrDatepickerModule,
+    AutocompleteComponent,
+    FieldWrapperComponent
+  ]
 })
 export class TransactionsFormComponent implements OnChanges {
 

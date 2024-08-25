@@ -1,47 +1,45 @@
 import { Routes } from '@angular/router';
-import { LoginView } from '@core/views/login/login.view';
-import { MainView } from '@core/views/main/main.view';
-import { AuthenticatedGuard } from '@core/guards/authenticated.guard';
+import { authenticatedGuard } from '@core/guards/authenticated.guard';
 import { FormsView } from '@core/views/main/forms/forms.view';
 import { FormsTransactionView } from '@core/views/main/forms/transaction/forms-transaction.view';
 import { MainResolverService } from '@core/services/resolvers/main-resolver.service';
 
-export const routes: Routes = [
+export const appRoutes: Routes = [
   {
     path: 'login',
-    component: LoginView
+    loadComponent: () => import('./core/views/login/login.view').then(m => m.LoginView)
   },
   {
     path: '',
-    component: MainView,
-    canActivate: [AuthenticatedGuard],
+    canActivate: [authenticatedGuard()],
     resolve: {
       data: MainResolverService
     },
+    loadComponent: () => import('./core/views/main/main.view').then(m => m.MainView),
     children: [
       {
         path: 'dashboard',
-        loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule)
+        loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes)
       },
       {
         path: 'transactions',
-        loadChildren: () => import('./features/transactions/transactions.module').then(m => m.TransactionsModule)
+        loadChildren: () => import('./features/transactions/transactions.routes').then(m => m.transactionsRoutes)
       },
       {
         path: 'treasury',
-        loadChildren: () => import('./features/treasury/treasury.module').then(m => m.TreasuryModule)
+        loadChildren: () => import('./features/treasury/treasury.routes').then(m => m.treasuryRoutes)
       },
       {
         path: 'analytics',
-        loadChildren: () => import('./features/analytics/analytics.module').then(m => m.AnalyticsModule)
+        loadChildren: () => import('./features/analytics/analytics.routes').then(m => m.analyticsRoutes)
       },
       {
         path: 'budgets',
-        loadChildren: () => import('./features/budget/budget.module').then(m => m.BudgetModule)
+        loadChildren: () => import('./features/budget/budget.routes').then(m => m.budgetRoutes)
       },
       {
         path: 'settings',
-        loadChildren: () => import('./features/settings/settings.module').then(m => m.SettingsModule)
+        loadChildren: () => import('./features/settings/settings.routes').then(m => m.settingsRoutes)
       },
       {
         path: '**',

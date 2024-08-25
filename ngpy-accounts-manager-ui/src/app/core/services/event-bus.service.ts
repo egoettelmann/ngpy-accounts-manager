@@ -14,7 +14,7 @@ interface EventBusMessage {
 /**
  * The event bus service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class EventBusService {
 
   /**

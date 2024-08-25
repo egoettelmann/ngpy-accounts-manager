@@ -11,11 +11,11 @@
     <clr-stack-content class="stacked-column-3 text-right">{{ group.amount | number:'1.2-2' }}&nbsp;€</clr-stack-content>
     <clr-stack-content class="stacked-column-2 text-right">{{ group.percentage | number:'1.2-2' }}&nbsp;%</clr-stack-content>
     <clr-stack-content class="stacked-column-1 text-right">
-      <clr-icon class="clickable"
+      <cds-icon class="clickable"
                 (click)="clickOnCategory(+group.label)"
                 shape="details"
                 size="16">
-      </clr-icon>
+      </cds-icon>
     </clr-stack-content>
 
     <clr-stack-block *ngFor="let row of group.details">
@@ -23,11 +23,11 @@
       <clr-stack-content class="stacked-column-3 text-right">{{ row.amount | number:'1.2-2' }}&nbsp;€</clr-stack-content>
       <clr-stack-content class="stacked-column-2 text-right">{{ row.percentage | number:'1.2-2' }}&nbsp;%</clr-stack-content>
       <clr-stack-content class="stacked-column-1 text-right">
-        <clr-icon class="clickable"
+        <cds-icon class="clickable"
                   (click)="clickOnLabel(+row.label)"
                   shape="pop-out"
                   size="16">
-        </clr-icon>
+        </cds-icon>
       </clr-stack-content>
     </clr-stack-block>
   </clr-stack-block>

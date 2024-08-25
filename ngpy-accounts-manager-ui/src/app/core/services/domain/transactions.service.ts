@@ -9,7 +9,7 @@ import { DateService } from '../date.service';
 /**
  * The transactions service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TransactionsService {
 
   /**

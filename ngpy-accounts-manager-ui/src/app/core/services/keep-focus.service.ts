@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 /**
  * The keep focus service to store the currently focused element.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class KeepFocusService {
 
   /**

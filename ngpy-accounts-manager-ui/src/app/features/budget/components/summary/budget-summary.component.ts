@@ -1,13 +1,20 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { BudgetStatus } from '@core/models/api.models';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 /**
  * The budget summary component
  */
 @Component({
+  standalone: true,
   selector: 'app-budget-summary',
   templateUrl: './budget-summary.component.html',
-  styleUrls: ['./budget-summary.component.scss']
+  styleUrls: ['./budget-summary.component.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule
+  ]
 })
 export class BudgetSummaryComponent implements OnChanges {
 

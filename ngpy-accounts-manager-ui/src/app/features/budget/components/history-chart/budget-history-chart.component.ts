@@ -3,11 +3,16 @@ import { DecimalPipe } from '@angular/common';
 import { BudgetStatus } from '@core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
 import { Options, PointOptionsObject, SeriesColumnOptions } from 'highcharts';
+import { ChartComponent } from '@shared/components/chart/chart.component';
 
 @Component({
+  standalone: true,
   selector: 'app-budget-history-chart',
   templateUrl: './budget-history-chart.component.html',
-  styleUrls: ['./budget-history-chart.component.scss']
+  styleUrls: ['./budget-history-chart.component.scss'],
+  imports: [
+    ChartComponent
+  ]
 })
 export class BudgetHistoryChartComponent implements OnChanges {
 

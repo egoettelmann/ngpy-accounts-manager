@@ -12,7 +12,7 @@ import { EventBusService } from '../event-bus.service';
 /**
  * The budget rest service.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BudgetRestService {
 
   /**

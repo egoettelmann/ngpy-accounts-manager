@@ -1,4 +1,4 @@
-<div class="login-wrapper">
+<div class="login-wrapper" [ngStyle]="{'--bg-image': 'url(' + bgImage + ')'}">
   <form *ngIf="loginForm"
         class="login"
         autocomplete="off"
@@ -12,16 +12,16 @@
     <div class="login-group">
       <div [hidden]="formIsLoading">
         <input [formControlName]="'username'"
-               autocomplete="off"
                clrInput
+               autocomplete="off"
                name="username"
                class="username"
                type="text"
                id="login_username"
                [placeholder]="'i18n.views.login.form.placeholder.username' | translate">
         <input [formControlName]="'password'"
-               autocomplete="off"
                clrInput
+               autocomplete="off"
                name="password"
                class="password"
                type="password"
@@ -53,14 +53,14 @@
         <span>{{ appProperties.appVersion }}</span>
       </div>
       <div *ngIf="apiStatus && apiStatus.progress === undefined" class="login-footer__status">
-        <clr-icon *ngIf="!apiStatus.ready"
+        <cds-icon *ngIf="!apiStatus.ready"
                   shape="exclamation-circle"
                   class="text-danger"
-        ></clr-icon>
-        <clr-icon *ngIf="apiStatus.ready"
+        ></cds-icon>
+        <cds-icon *ngIf="apiStatus.ready"
                   shape="check-circle"
                   class="text-success"
-        ></clr-icon>
+        ></cds-icon>
       </div>
       <div *ngIf="apiStatus && apiStatus.progress !== undefined" class="login-footer__progress">
         <div class="progress top">

@@ -10,7 +10,7 @@ import { subMonths, subYears } from 'date-fns';
 /**
  * The statistics service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class StatisticsService {
 
   /**

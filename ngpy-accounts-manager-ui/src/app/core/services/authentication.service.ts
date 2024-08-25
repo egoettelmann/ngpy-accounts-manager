@@ -7,7 +7,7 @@ import { SessionRestService } from './rest/session-rest.service';
 /**
  * The authentication service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
   /**

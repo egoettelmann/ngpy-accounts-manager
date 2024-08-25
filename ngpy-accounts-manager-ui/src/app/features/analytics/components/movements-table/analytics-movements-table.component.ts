@@ -2,11 +2,20 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChartSerie } from '@core/models/domain.models';
 import { CompositeKeyValue } from '@core/models/api.models';
 import { CommonFunctions } from '@shared/utils/common-functions';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
 
 @Component({
+  standalone:  true,
   selector: 'app-analytics-movements-table',
   templateUrl: './analytics-movements-table.component.html',
-  styleUrls: ['./analytics-movements-table.component.scss']
+  styleUrls: ['./analytics-movements-table.component.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ToCategoryPipe,
+  ]
 })
 export class AnalyticsMovementsTableComponent implements OnChanges {
 

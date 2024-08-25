@@ -7,10 +7,35 @@ import { DateService } from '@core/services/date.service';
 import { combineLatest, Subscription } from 'rxjs';
 import { AccountsService } from '@core/services/domain/accounts.service';
 import { LabelsService } from '@core/services/domain/labels.service';
+import { CommonModule } from '@angular/common';
+import { BudgetCardComponent } from '../../components/card/budget-card.component';
+import { CardWrapperComponent } from '@shared/components/cards/card-wrapper.component';
+import { YearsToggleComponent } from '@shared/components/toggles/years/years-toggle.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { MonthsToggleComponent } from '@shared/components/toggles/months/months-toggle.component';
+import { BudgetSummaryComponent } from '../../components/summary/budget-summary.component';
+import { BudgetHistoryChartComponent } from '../../components/history-chart/budget-history-chart.component';
+import { TransactionsTableComponent } from '@shared/components/tables/transactions/transactions-table.component';
+import { ClrModalModule } from '@clr/angular';
+import { BudgetFormComponent } from '../../components/form/budget-form.component';
 
 @Component({
+  standalone: true,
   templateUrl: './budget-details.view.html',
-  styleUrls: ['./budget-details.view.scss']
+  styleUrls: ['./budget-details.view.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ClrModalModule,
+    CardWrapperComponent,
+    YearsToggleComponent,
+    MonthsToggleComponent,
+    TransactionsTableComponent,
+    BudgetCardComponent,
+    BudgetSummaryComponent,
+    BudgetHistoryChartComponent,
+    BudgetFormComponent
+  ]
 })
 export class BudgetDetailsView implements OnInit, OnDestroy {
 

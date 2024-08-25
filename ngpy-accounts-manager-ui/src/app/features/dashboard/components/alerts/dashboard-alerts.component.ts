@@ -2,11 +2,21 @@ import { Component, Input } from '@angular/core';
 import { Alerts } from '@core/models/domain.models';
 import { Category } from '@core/models/api.models';
 import { RouterService } from '@core/services/router.service';
+import { ClrAlertModule, ClrDropdownModule } from '@clr/angular';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-dashboard-alerts',
   templateUrl: './dashboard-alerts.component.html',
-  styleUrls: ['./dashboard-alerts.component.scss']
+  styleUrls: ['./dashboard-alerts.component.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ClrAlertModule,
+    ClrDropdownModule,
+  ]
 })
 export class DashboardAlertsComponent {
 

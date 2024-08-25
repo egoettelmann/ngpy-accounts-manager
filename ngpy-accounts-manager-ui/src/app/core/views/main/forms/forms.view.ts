@@ -1,27 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { SessionRestService } from '@core/services/rest/session-rest.service';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 /**
  * The main component
  */
 @Component({
+  standalone: true,
   templateUrl: './forms.view.html',
-  styleUrls: ['./forms.view.scss']
+  styleUrls: ['./forms.view.scss'],
+  imports: [RouterOutlet]
 })
-export class FormsView implements OnInit {
-
-  /**
-   * Instantiates the component.
-   *
-   * @param sessionRestService the session rest service
-   */
-  constructor(private sessionRestService: SessionRestService) {
-  }
-
-  /**
-   * Initializes the component
-   */
-  ngOnInit(): void {
-  }
-
+export class FormsView {
 }

@@ -7,7 +7,7 @@ import { AppProperties } from '@core/models/api.models';
 /**
  * The configuration service.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ConfigurationService {
 
   /**

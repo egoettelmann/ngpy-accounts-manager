@@ -1,13 +1,23 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Account } from '@core/models/api.models';
 import { AccountsService } from '@core/services/domain/accounts.service';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ClrIconModule } from '@clr/angular';
 
 @Component({
+  standalone: true,
   templateUrl: './settings-accounts.view.html',
-  styleUrls: ['./settings-accounts.view.scss']
+  styleUrls: ['./settings-accounts.view.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ClrIconModule
+  ]
 })
 export class SettingsAccountsView implements OnInit, OnDestroy {
 

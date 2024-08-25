@@ -1,46 +1,26 @@
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
-import { EMPTY, Observable } from 'rxjs';
+import { CanActivateFn } from '@angular/router';
+import { EMPTY } from 'rxjs';
 import { AuthenticationService } from '../services/authentication.service';
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { RouterService } from '../services/router.service';
 
 /**
- * The authentication guard
+ * Checks if the route can be activated, otherwise redirects to the login page.
  */
-@Injectable()
-export class AuthenticatedGuard implements CanActivate {
+export function authenticatedGuard(): CanActivateFn {
+  return () => {
+    const authenticationService: AuthenticationService = inject(AuthenticationService);
+    const routerService: RouterService = inject(RouterService);
 
-  /**
-   * Instantiates the guard.
-   *
-   * @param authenticationService the authentication service
-   * @param routerService the router service
-   */
-  constructor(
-    private authenticationService: AuthenticationService,
-    private routerService: RouterService
-  ) {}
-
-  /**
-   * Checks if the route can be activated, otherwise redirects to the login page.
-   *
-   * @param route the activated route
-   * @param state the state
-   */
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> {
-    return this.authenticationService.getConnectedUser().pipe(
+    return authenticationService.getConnectedUser().pipe(
       catchError(() => {
-        this.routerService.navigate('route.login');
+        routerService.navigate('route.login');
         return EMPTY;
       }),
       map(user => {
         return !!user;
       })
     );
-  }
-
+  };
 }

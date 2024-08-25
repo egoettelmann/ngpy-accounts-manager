@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Account, Category, Label } from '@core/models/api.models';
 import { FilterOperator, FilterRequest } from '@core/models/rql.models';
 import { Subscription } from 'rxjs';
@@ -8,11 +8,29 @@ import { RqlService } from '@core/services/rql.service';
 import { ActivatedRoute } from '@angular/router';
 import { DateService } from '@core/services/date.service';
 import { RouterService } from '@core/services/router.service';
+import { CommonModule } from '@angular/common';
+import { CardWrapperComponent } from '@shared/components/cards/card-wrapper.component';
+import { AccountsToggleComponent } from '@shared/components/toggles/accounts/accounts-toggle.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { LabelsToggleComponent } from '@shared/components/toggles/labels/labels-toggle.component';
+import { CategoriesToggleComponent } from '@shared/components/toggles/categories/categories-toggle.component';
+import { ClrDatepickerModule } from '@clr/angular';
 
 @Component({
+  standalone: true,
   selector: 'app-transactions-search-form',
   templateUrl: './transactions-search-form.component.html',
-  styleUrls: ['./transactions-search-form.component.scss']
+  styleUrls: ['./transactions-search-form.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    CardWrapperComponent,
+    AccountsToggleComponent,
+    LabelsToggleComponent,
+    CategoriesToggleComponent,
+    ClrDatepickerModule
+  ]
 })
 export class TransactionsSearchFormComponent implements OnInit, OnDestroy {
 

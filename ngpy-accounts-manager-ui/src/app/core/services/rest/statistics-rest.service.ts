@@ -11,7 +11,7 @@ import { flatMap, startWith } from 'rxjs/operators';
 /**
  * The statistics rest service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class StatisticsRestService {
 
   /**

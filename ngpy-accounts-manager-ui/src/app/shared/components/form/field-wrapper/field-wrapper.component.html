@@ -9,7 +9,7 @@
          [ngClass]="{'invalid': isInvalid()}">
     <ng-content></ng-content>
     <span class="tooltip-content" *ngIf="isInvalid()">
-              {{ ctrl.errors | json }}
-          </span>
+      {{ ctrl.errors | json }}
+    </span>
   </label>
 </div>

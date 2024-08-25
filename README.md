@@ -95,6 +95,11 @@ This will start the frontend on <http://localhost:4210>.
 
 ### Tech
 
+- Migrate to Angular 18
+  - Use standalone components
+  - Use control-flow syntax
+  - Check source-map-explorer to analyze bundle sizes
+  - Use @clr/angular v18 once available
 - Separate Python test dependencies into a separate `requirements` file
   - build would be cleaner (there should be 2 install folders)
   - no need to bundle test dependencies

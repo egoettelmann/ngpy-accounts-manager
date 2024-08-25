@@ -8,7 +8,7 @@ import { ImportResult } from '../../models/api.models';
 /**
  * The upload rest service.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UploadRestService {
 
   /**

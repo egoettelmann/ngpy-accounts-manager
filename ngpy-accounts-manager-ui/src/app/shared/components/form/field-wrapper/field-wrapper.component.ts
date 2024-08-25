@@ -1,13 +1,21 @@
 import { Component, Input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+import { CommonModule, JsonPipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 /**
  * The field wrapper for forms
  */
 @Component({
+  standalone: true,
   selector: 'app-field-wrapper',
   templateUrl: './field-wrapper.component.html',
-  styleUrls: ['./field-wrapper.component.scss']
+  styleUrls: ['./field-wrapper.component.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    JsonPipe,
+  ]
 })
 export class FieldWrapperComponent {
 

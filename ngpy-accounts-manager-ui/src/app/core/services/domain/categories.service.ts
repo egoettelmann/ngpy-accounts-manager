@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 /**
  * The categories service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CategoriesService {
 
   /**

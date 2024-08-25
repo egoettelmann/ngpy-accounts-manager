@@ -7,7 +7,7 @@ import { FilterOperator, FilterRequest } from '../../models/rql.models';
 /**
  * The accounts service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AccountsService {
 
   /**

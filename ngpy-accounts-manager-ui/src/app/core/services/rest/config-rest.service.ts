@@ -7,7 +7,7 @@ import { catchError, concatMap, delay, map, retryWhen, take } from 'rxjs/operato
 /**
  * The config rest service.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ConfigRestService {
 
   /**

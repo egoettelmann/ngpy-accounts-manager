@@ -6,10 +6,23 @@ import { FilterRequest } from '@core/models/rql.models';
 import { AccountsService } from '@core/services/domain/accounts.service';
 import { CategoriesService } from '@core/services/domain/categories.service';
 import { LabelsService } from '@core/services/domain/labels.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { TransactionsSearchFormComponent } from '../../components/search-form/transactions-search-form.component';
+import { ClrAlertModule } from '@clr/angular';
+import { TransactionsTableComponent } from '@shared/components/tables/transactions/transactions-table.component';
 
 @Component({
+  standalone: true,
   templateUrl: './transactions-search.view.html',
-  styleUrls: ['./transactions-search.view.scss']
+  styleUrls: ['./transactions-search.view.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ClrAlertModule,
+    TransactionsSearchFormComponent,
+    TransactionsTableComponent,
+  ]
 })
 export class TransactionsSearchView implements OnInit, OnDestroy {
 

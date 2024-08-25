@@ -1,13 +1,24 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Category } from '@core/models/api.models';
 import { CategoriesService } from '@core/services/domain/categories.service';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ClrIconModule, ClrSelectModule } from '@clr/angular';
 
 @Component({
+  standalone:  true,
   templateUrl: './settings-categories.view.html',
-  styleUrls: ['./settings-categories.view.scss']
+  styleUrls: ['./settings-categories.view.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ClrIconModule,
+    ClrSelectModule
+  ]
 })
 export class SettingsCategoriesView implements OnInit, OnDestroy {
 

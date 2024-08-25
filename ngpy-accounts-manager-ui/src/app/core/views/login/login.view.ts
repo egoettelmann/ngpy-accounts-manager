@@ -3,18 +3,35 @@ import { SessionRestService } from '../../services/rest/session-rest.service';
 import { AppProperties } from '../../models/api.models';
 import { RouterService } from '../../services/router.service';
 import { catchError } from 'rxjs/operators';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EMPTY, Observable, of, throwError } from 'rxjs';
 import { ConfigurationService } from '@core/services/configuration.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ClrAlertModule, ClrIconModule, ClrInputModule } from '@clr/angular';
+import { NotificationModalComponent } from '@shared/components/modals/notification/notification-modal.component';
+import { checkCircleIcon, ClarityIcons, exclamationCircleIcon } from '@cds/core/icon';
 
 /**
  * The login component
  */
 @Component({
+  standalone: true,
   templateUrl: './login.view.html',
-  styleUrls: ['./login.view.scss']
+  styleUrls: ['./login.view.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ClrInputModule,
+    ClrAlertModule,
+    ClrIconModule,
+    NotificationModalComponent
+  ]
 })
 export class LoginView implements OnInit {
+
+  public bgImage = `https://picsum.photos/seed/${new Date().getMonth()}/1920/1080`;
 
   /**
    * The login form
@@ -49,6 +66,7 @@ export class LoginView implements OnInit {
               private sessionService: SessionRestService,
               private fb: UntypedFormBuilder
   ) {
+    ClarityIcons.addIcons(exclamationCircleIcon, checkCircleIcon);
   }
 
   /**

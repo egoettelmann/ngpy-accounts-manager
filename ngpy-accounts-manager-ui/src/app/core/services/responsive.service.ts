@@ -4,7 +4,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 /**
  * The responsive service.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ResponsiveService {
 
   /**

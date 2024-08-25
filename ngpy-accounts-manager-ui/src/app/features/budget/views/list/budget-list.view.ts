@@ -8,10 +8,32 @@ import * as _ from 'lodash';
 import { RouterService } from '@core/services/router.service';
 import { combineLatest, Subscription } from 'rxjs';
 import { LabelsService } from '@core/services/domain/labels.service';
+import { CardWrapperComponent } from '@shared/components/cards/card-wrapper.component';
+import { AccountsToggleComponent } from '@shared/components/toggles/accounts/accounts-toggle.component';
+import { YearsToggleComponent } from '@shared/components/toggles/years/years-toggle.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { MonthsToggleComponent } from '@shared/components/toggles/months/months-toggle.component';
+import { BudgetChartComponent } from '../../components/chart/budget-chart.component';
+import { ClrIconModule, ClrModalModule } from '@clr/angular';
+import { CommonModule } from '@angular/common';
+import { BudgetFormComponent } from '../../components/form/budget-form.component';
 
 @Component({
+  standalone: true,
   templateUrl: './budget-list.view.html',
-  styleUrls: ['./budget-list.view.scss']
+  styleUrls: ['./budget-list.view.scss'],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ClrIconModule,
+    ClrModalModule,
+    CardWrapperComponent,
+    AccountsToggleComponent,
+    YearsToggleComponent,
+    MonthsToggleComponent,
+    BudgetChartComponent,
+    BudgetFormComponent,
+  ]
 })
 export class BudgetListView implements OnInit, OnDestroy {
 

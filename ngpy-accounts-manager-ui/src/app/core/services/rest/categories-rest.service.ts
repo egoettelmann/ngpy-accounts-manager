@@ -9,7 +9,7 @@ import { CacheService } from '../cache.service';
 /**
  * The categories rest service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CategoriesRestService {
 
   /**

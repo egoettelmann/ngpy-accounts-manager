@@ -6,11 +6,16 @@ import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
 import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
 import { Options, SeriesColumnOptions } from 'highcharts';
 import { TranslateService } from '@ngx-translate/core';
+import { ChartComponent } from '@shared/components/chart/chart.component';
 
 @Component({
+  standalone: true,
   selector: 'app-analytics-bar-chart',
   templateUrl: './analytics-bar-chart.component.html',
-  styleUrls: ['./analytics-bar-chart.component.scss']
+  styleUrls: ['./analytics-bar-chart.component.scss'],
+  imports: [
+    ChartComponent
+  ]
 })
 export class AnalyticsBarChartComponent implements OnChanges {
 

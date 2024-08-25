@@ -12,8 +12,8 @@
           <strong>{{ 'i18n.views.dashboard.accounts.rolling-month' | translate }}</strong>
         </div>
         <div class="clr-col-6 clr-col-md-2 text-right" [ngClass]="getAmountColor(summaries.month.total)">
-          <clr-icon *ngIf="summaries.month.performance >= 0" shape="plus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></clr-icon>
-          <clr-icon *ngIf="summaries.month.performance < 0" shape="minus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></clr-icon>
+          <cds-icon *ngIf="summaries.month.performance >= 0" shape="plus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></cds-icon>
+          <cds-icon *ngIf="summaries.month.performance < 0" shape="minus-circle" class="is-solid" [ngStyle]="{'margin-top': '-4px'}"></cds-icon>
           <span>&nbsp;{{ summaries.month.performance | number:'1.2-2' }} %</span>
         </div>
         <div class="clr-col-6 clr-col-md-3 text-right" [ngClass]="getAmountColor(summaries.month.total)">

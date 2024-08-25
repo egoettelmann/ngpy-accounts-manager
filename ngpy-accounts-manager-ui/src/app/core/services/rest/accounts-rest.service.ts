@@ -10,7 +10,7 @@ import { flatMap, startWith, tap } from 'rxjs/operators';
 /**
  * The accounts rest service.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AccountsRestService {
 
   /**
