@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ClrDropdownModule, ClrIconModule } from '@clr/angular';
+import { angleIcon, circleIcon, ClarityIcons, successStandardIcon } from '@cds/core/icon';
 
 /**
  * The label toggle component
@@ -40,6 +41,10 @@ export class LabelsToggleComponent implements OnChanges {
    * The currently selected labels
    */
   selectedLabels?: (number | null)[];
+
+  constructor() {
+    ClarityIcons.addIcons(angleIcon, successStandardIcon, circleIcon);
+  }
 
   /**
    * Handles all input changes.

@@ -22,14 +22,14 @@
       <clr-dropdown class="text-right">
         <button type="button" class="btn btn-link" clrDropdownTrigger>
           {{ getPeriodSelectLabel(quarterly) | translate }}
-          <clr-icon shape="caret down"></clr-icon>
+          <cds-icon shape="angle" direction="down"></cds-icon>
         </button>
         <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
           <button *ngFor="let period of [true, false]"
                   type="button"
                   clrDropdownItem
                   (click)="changePeriod(period)">
-            <clr-icon *ngIf="period === quarterly" shape="success-standard" class="is-success"></clr-icon>
+            <cds-icon *ngIf="period === quarterly" shape="success-standard" class="is-success"></cds-icon>
             <span *ngIf="period !== quarterly" class="icon-empty">&nbsp;</span>
             &nbsp;{{ getPeriodSelectLabel(period) | translate }}
           </button>

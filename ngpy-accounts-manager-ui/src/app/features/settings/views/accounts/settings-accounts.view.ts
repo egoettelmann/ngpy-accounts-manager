@@ -6,7 +6,8 @@ import { AccountsService } from '@core/services/domain/accounts.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { ClrIconModule } from '@clr/angular';
+import { ClrCheckboxModule, ClrIconModule } from '@clr/angular';
+import { ClarityIcons, plusIcon, trashIcon } from '@cds/core/icon';
 
 @Component({
   standalone: true,
@@ -16,7 +17,8 @@ import { ClrIconModule } from '@clr/angular';
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
-    ClrIconModule
+    ClrIconModule,
+    ClrCheckboxModule
   ]
 })
 export class SettingsAccountsView implements OnInit, OnDestroy {
@@ -34,6 +36,7 @@ export class SettingsAccountsView implements OnInit, OnDestroy {
   constructor(private fb: UntypedFormBuilder,
               private accountsService: AccountsService
   ) {
+    ClarityIcons.addIcons(plusIcon, trashIcon);
   }
 
   ngOnInit(): void {

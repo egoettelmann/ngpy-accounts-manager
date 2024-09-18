@@ -3,6 +3,7 @@ import { DateService } from '@core/services/date.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ClrDropdownModule, ClrIconModule } from '@clr/angular';
+import { angleIcon, ClarityIcons, successStandardIcon } from '@cds/core/icon';
 
 /**
  * The year toggle component
@@ -35,7 +36,9 @@ export class YearsToggleComponent implements OnInit {
    *
    * @param dateService the date service
    */
-  constructor(private dateService: DateService) {}
+  constructor(private dateService: DateService) {
+    ClarityIcons.addIcons(angleIcon, successStandardIcon);
+  }
 
   /**
    * The list of available years

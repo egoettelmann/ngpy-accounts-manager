@@ -4,6 +4,7 @@ import { Account } from '@core/models/api.models';
 import { ResponsiveService } from '@core/services/responsive.service';
 import { Options, PointOptionsObject } from 'highcharts';
 import { ChartComponent } from '@shared/components/chart/chart.component';
+import { FormatService } from '@core/services/format.service';
 
 @Component({
   standalone: true,
@@ -25,7 +26,7 @@ export class DashboardAccountsChartComponent implements OnInit, OnChanges {
 
   constructor(
     private responsiveService: ResponsiveService,
-    private decimalPipe: DecimalPipe
+    private formatService: FormatService
   ) {
   }
 
@@ -59,8 +60,8 @@ export class DashboardAccountsChartComponent implements OnInit, OnChanges {
             + '<caption><b>' + this.point.name + '</b></caption>'
             + '<tbody>'
             + '<tr>'
-            + '<td><b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b></td>'
-            + '<td>(' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)</td>'
+            + '<td><b>' + that.formatService.formatNumber(this.y) + ' €</b></td>'
+            + '<td>(' + that.formatService.formatNumber(this.percentage) + '%)</td>'
             + '</tr>'
             + '</tbody></table>';
         }

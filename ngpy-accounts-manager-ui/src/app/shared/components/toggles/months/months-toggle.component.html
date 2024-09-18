@@ -1,14 +1,14 @@
 <clr-dropdown class="col-xs-6 text-right">
   <button type="button" class="btn btn-link" clrDropdownTrigger>
     {{ 'i18n.months.' + currentMonth | translate }}
-    <clr-icon shape="caret down"></clr-icon>
+    <cds-icon shape="angle" direction="down"></cds-icon>
   </button>
   <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
     <button *ngFor="let month of monthList"
             type="button"
             clrDropdownItem
             (click)="changeMonth(month)">
-      <clr-icon *ngIf="month === currentMonth" shape="success-standard" class="is-success"></clr-icon>
+      <cds-icon *ngIf="month === currentMonth" shape="success-standard" class="is-success"></cds-icon>
       <span *ngIf="month !== currentMonth" class="icon-empty">&nbsp;</span>
       &nbsp;{{ 'i18n.months.' + month | translate }}
     </button>

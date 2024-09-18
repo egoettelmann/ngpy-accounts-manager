@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { ClrDropdownModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { angleIcon, circleIcon, ClarityIcons, successStandardIcon } from '@cds/core/icon';
 
 /**
  * The account toggle component
@@ -40,6 +41,10 @@ export class AccountsToggleComponent implements OnChanges {
    * The currently selected accounts
    */
   selectedAccounts: number[] = [];
+
+  constructor() {
+    ClarityIcons.addIcons(angleIcon, successStandardIcon, circleIcon);
+  }
 
   /**
    * Triggered on any input changes.

@@ -5,9 +5,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
 import { CommonModule } from '@angular/common';
 import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
+import { ClarityIcons, detailsIcon, popOutIcon } from '@cds/core/icon';
 
 @Component({
-  standalone:  true,
+  standalone: true,
   selector: 'app-analytics-details-table',
   templateUrl: './analytics-details-table.component.html',
   styleUrls: ['./analytics-details-table.component.scss'],
@@ -27,6 +28,10 @@ export class AnalyticsDetailsTableComponent {
 
   @Output() categoryClick = new EventEmitter<number>();
   @Output() labelClick = new EventEmitter<number>();
+
+  constructor() {
+    ClarityIcons.addIcons(detailsIcon, popOutIcon);
+  }
 
   clickOnCategory(categoryId: number): void {
     this.categoryClick.emit(categoryId);

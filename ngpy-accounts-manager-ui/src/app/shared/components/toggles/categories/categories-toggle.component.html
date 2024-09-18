@@ -1,22 +1,22 @@
 <clr-dropdown *ngIf="categories">
   <button type="button" class="btn btn-link" clrDropdownTrigger>
     {{ selectedCategories ? (selectedCategories.length + ('i18n.components.transactions.category-toggle.labels' | translate)) : ('i18n.components.transactions.category-toggle.all-labels' | translate) }}
-    <clr-icon shape="caret down"></clr-icon>
+    <cds-icon shape="angle" direction="down"></cds-icon>
   </button>
   <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
     <button type="button"
             clrDropdownItem
             (click)="toggleAllCategories()">
-      <clr-icon *ngIf="!selectedCategories" shape="success-standard" class="is-success"></clr-icon>
-      <clr-icon *ngIf="selectedCategories" shape="circle"></clr-icon>
+      <cds-icon *ngIf="!selectedCategories" shape="success-standard" class="is-success"></cds-icon>
+      <cds-icon *ngIf="selectedCategories" shape="circle"></cds-icon>
       <span>&nbsp;{{ 'i18n.components.transactions.category-toggle.all-labels' | translate }}</span>
     </button>
     <button *ngFor="let category of categories"
             type="button"
             clrDropdownItem
             (click)="toggleCategory(category.id)">
-      <clr-icon *ngIf="isSelected(category.id)" shape="success-standard" class="is-success"></clr-icon>
-      <clr-icon *ngIf="!isSelected(category.id)" shape="circle"></clr-icon>
+      <cds-icon *ngIf="isSelected(category.id)" shape="success-standard" class="is-success"></cds-icon>
+      <cds-icon *ngIf="!isSelected(category.id)" shape="circle"></cds-icon>
       <span>&nbsp;{{ category.name }}</span>
     </button>
   </clr-dropdown-menu>

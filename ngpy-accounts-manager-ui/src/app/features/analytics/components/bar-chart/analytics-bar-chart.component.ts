@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { CommonFunctions } from '@shared/utils/common-functions';
 import { CompositeKeyValue } from '@core/models/api.models';
 import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
@@ -7,6 +6,7 @@ import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
 import { Options, SeriesColumnOptions } from 'highcharts';
 import { TranslateService } from '@ngx-translate/core';
 import { ChartComponent } from '@shared/components/chart/chart.component';
+import { FormatService } from '@core/services/format.service';
 
 @Component({
   standalone: true,
@@ -25,7 +25,7 @@ export class AnalyticsBarChartComponent implements OnChanges {
 
   public chartOptions: any;
 
-  constructor(private decimalPipe: DecimalPipe,
+  constructor(private formatService: FormatService,
               private toCategoryPipe: ToCategoryPipe,
               private toLabelPipe: ToLabelPipe,
               private translateService: TranslateService
@@ -54,7 +54,7 @@ export class AnalyticsBarChartComponent implements OnChanges {
     return {
       chart: {
         type: 'column',
-        marginTop: 25,
+        marginTop: 25
       },
       tooltip: {
         shared: true,
@@ -69,13 +69,13 @@ export class AnalyticsBarChartComponent implements OnChanges {
           for (const point of this.points) {
             tooltip += '<tr>'
               + '<th><span class="badge" style="background-color: ' + point.series.color + '">&nbsp;</span></th>'
-              + '<td style="text-align: right">' + that.decimalPipe.transform(point.y, '1.2-2') + ' €</td>'
-              + '<td style="text-align: right">(' + that.decimalPipe.transform(Math.abs(point.percentage), '1.2-2') + ' %)</td>'
+              + '<td style="text-align: right">' + that.formatService.formatNumber(point.y) + ' €</td>'
+              + '<td style="text-align: right">(' + that.formatService.formatNumber(Math.abs(point.percentage)) + ' %)</td>'
               + '</tr>';
           }
           tooltip += '<tr>'
             + '<th>' + that.translateService.instant('i18n.views.analytics.chart.tooltip.total') + ': </th>'
-            + '<td colspan="2" style="text-align: right"><b>' + that.decimalPipe.transform(this.points[0].total, '1.2-2') + ' €</b></td>'
+            + '<td colspan="2" style="text-align: right"><b>' + that.formatService.formatNumber(this.points[0].total) + ' €</b></td>'
             + '</tr>'
             + '</tbody></table>';
           return tooltip;
@@ -90,7 +90,7 @@ export class AnalyticsBarChartComponent implements OnChanges {
         categories
       },
       yAxis: {
-        reversedStacks: false,
+        reversedStacks: false
       },
       plotOptions: {
         column: {
@@ -99,7 +99,7 @@ export class AnalyticsBarChartComponent implements OnChanges {
             enabled: true,
             allowOverlap: true,
             formatter(): string {
-              return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
+              return that.formatService.formatNumber(this.y) + ' €';
             }
           }
         }

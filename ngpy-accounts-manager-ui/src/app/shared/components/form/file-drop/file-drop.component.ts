@@ -3,10 +3,10 @@ import { FileSystemFileEntry, NgxFileDropEntry, NgxFileDropModule } from 'ngx-fi
 import { UploadRestService } from '@core/services/rest/upload-rest.service';
 import { NotificationService } from '@core/services/notification.service';
 import { catchError, finalize } from 'rxjs/operators';
-import { DecimalPipe } from '@angular/common';
 import { RestError } from '@core/models/api.models';
 import { EMPTY } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { FormatService } from '@core/services/format.service';
 
 /**
  * The file drop component
@@ -39,15 +39,16 @@ export class FileDropComponent {
    *
    * @param uploadService the upload service
    * @param notificationService the notification service
-   * @param decimalPipe the decimal pipe
+   * @param formatService the format service
    * @param ngZone the angular zone to manage the drop callback
    */
   constructor(
     private uploadService: UploadRestService,
     private notificationService: NotificationService,
-    private decimalPipe: DecimalPipe,
+    private formatService: FormatService,
     private ngZone: NgZone
-  ) {}
+  ) {
+  }
 
   /**
    * Event triggered through a "drop".
@@ -108,7 +109,7 @@ export class FileDropComponent {
         context: {
           imported: '' + result.imported,
           assigned: '' + result.assigned,
-          total_amount: this.decimalPipe.transform(result.total_amount, '1.2-2') + ' €'
+          total_amount: this.formatService.formatNumber(result.total_amount) + ' €'
         }
       });
     });

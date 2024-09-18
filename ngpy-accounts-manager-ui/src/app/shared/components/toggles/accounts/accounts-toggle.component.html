@@ -1,22 +1,22 @@
 <clr-dropdown *ngIf="accounts">
   <button type="button" class="btn btn-link" clrDropdownTrigger>
     {{ selectedAccounts.length === accounts.length ? ('i18n.components.accounts.account-toggle.all-accounts' | translate) : selectedAccounts.length + ('i18n.components.accounts.account-toggle.accounts' | translate) }}
-    <clr-icon shape="caret down"></clr-icon>
+    <cds-icon shape="angle" direction="down"></cds-icon>
   </button>
   <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
     <button type="button"
             clrDropdownItem
             (click)="toggleAllAccounts()">
-      <clr-icon *ngIf="selectedAccounts?.length === accounts?.length" shape="success-standard" class="is-success"></clr-icon>
-      <clr-icon *ngIf="selectedAccounts?.length !== accounts?.length" shape="circle"></clr-icon>
+      <cds-icon *ngIf="selectedAccounts?.length === accounts?.length" shape="success-standard" class="is-success"></cds-icon>
+      <cds-icon *ngIf="selectedAccounts?.length !== accounts?.length" shape="circle"></cds-icon>
       <span>&nbsp;{{ 'i18n.components.accounts.account-toggle.all-accounts' | translate }}</span>
     </button>
     <button *ngFor="let account of accounts"
             type="button"
             clrDropdownItem
             (click)="toggleAccount(account)">
-      <clr-icon *ngIf="isSelected(account)" shape="success-standard" class="is-success"></clr-icon>
-      <clr-icon *ngIf="!isSelected(account)" shape="circle"></clr-icon>
+      <cds-icon *ngIf="isSelected(account)" shape="success-standard" class="is-success"></cds-icon>
+      <cds-icon *ngIf="!isSelected(account)" shape="circle"></cds-icon>
       <span>&nbsp;{{ account.name }} - {{ account.description }}</span>
     </button>
   </clr-dropdown-menu>

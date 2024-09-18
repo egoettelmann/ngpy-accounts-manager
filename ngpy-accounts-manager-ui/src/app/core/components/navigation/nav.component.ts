@@ -7,8 +7,9 @@ import { RouterService } from '../../services/router.service';
 import { CommonModule } from '@angular/common';
 import { AppRouterModule } from '@shared/modules/app-router/app-router.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { ClrIconModule, ClrNavigationModule } from '@clr/angular';
+import { ClrIconModule } from '@clr/angular';
 import { FileDropComponent } from '@shared/components/form/file-drop/file-drop.component';
+import { ClarityIcons, cogIcon, logoutIcon, searchIcon } from '@cds/core/icon';
 
 /**
  * The navigation component
@@ -22,7 +23,6 @@ import { FileDropComponent } from '@shared/components/form/file-drop/file-drop.c
     CommonModule,
     AppRouterModule,
     TranslateModule,
-    ClrNavigationModule,
     ClrIconModule,
     FileDropComponent
   ]
@@ -61,6 +61,7 @@ export class NavComponent implements OnInit, OnDestroy {
     private sessionService: SessionRestService,
     private alertsService: AlertsService
   ) {
+    ClarityIcons.addIcons(searchIcon, cogIcon, logoutIcon);
   }
 
   /**

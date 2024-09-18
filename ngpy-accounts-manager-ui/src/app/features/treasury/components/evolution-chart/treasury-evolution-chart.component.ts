@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { KeyValue } from '@core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
 import { Options, SeriesAreaOptions, SeriesColumnOptions } from 'highcharts';
 import { ChartComponent } from '@shared/components/chart/chart.component';
+import { FormatService } from '@core/services/format.service';
 
 @Component({
   standalone: true,
@@ -24,8 +24,7 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
   public chartOptions: any;
 
   constructor(private translateService: TranslateService,
-              private decimalPipe: DecimalPipe
-  ) {
+              private formatService: FormatService) {
   }
 
   /**
@@ -70,7 +69,7 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
             }
             tooltip += '<tr>'
               + '<th><span class="badge" style="background-color: ' + point.series.color + '">&nbsp;</span></th>'
-              + '<td style="text-align: right">' + that.decimalPipe.transform(point.y, '1.2-2') + ' €</td>'
+              + '<td style="text-align: right">' + that.formatService.formatNumber(point.y) + ' €</td>'
               + '</tr>';
             if (point.series.type === 'area' && point.x !== 0 && point.y != null) {
               const prevPoint = point.series.data[this.point.x - 1];
@@ -81,14 +80,14 @@ export class TreasuryEvolutionChartComponent implements OnChanges {
             }
           }
           if (trendValue != null) {
-            let trend = '' + that.decimalPipe.transform(trendPercent, '1.2-2');
+            let trend = '' + that.formatService.formatNumber(trendPercent);
             if (trendValue >= 0) {
               trend = '+' + trend;
             }
             trend = '<span class="text-' + (trendValue >= 0 ? 'success' : 'danger') + '">(' + trend + ' %)</span>';
             tooltip += '<tr>'
               + '<td>' + trend + '</td>'
-              + '<td style="text-align: right; border-top: 1px solid black">' + that.decimalPipe.transform(trendValue, '1.2-2') + ' €</td>'
+              + '<td style="text-align: right; border-top: 1px solid black">' + that.formatService.formatNumber(trendValue) + ' €</td>'
               + '</tr>';
           }
           tooltip += '</tbody></table>';

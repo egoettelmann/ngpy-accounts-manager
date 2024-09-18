@@ -11,6 +11,9 @@ import { apiUrlInterceptor } from '@core/interceptors/api-url.interceptor';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { errorInterceptor } from '@core/interceptors/error.interceptor';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
+import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export function TranslateHttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -28,6 +31,7 @@ export const appConfig: ApplicationConfig = {
       ])
     ),
     importProvidersFrom([
+      BrowserAnimationsModule,
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
@@ -40,6 +44,14 @@ export const appConfig: ApplicationConfig = {
         defaultRoute: ['root', 'main', 'dashboard']
       }),
       AppKeepFocusModule.forRoot()
-    ])
+    ]),
+    {
+      provide: ToLabelPipe,
+      useClass: ToLabelPipe,
+    },
+    {
+      provide: ToCategoryPipe,
+      useClass: ToCategoryPipe,
+    },
   ]
 };

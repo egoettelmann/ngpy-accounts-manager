@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import * as _ from 'lodash';
@@ -21,6 +21,8 @@ import { SummaryComponent } from '@shared/components/summary/summary.component';
 import { ChartComponent } from '@shared/components/chart/chart.component';
 import { TransactionsTableComponent } from '@shared/components/tables/transactions/transactions-table.component';
 import { ClrIconModule } from '@clr/angular';
+import { FormatService } from '@core/services/format.service';
+import { angleIcon, ClarityIcons, noteIcon, plusIcon, successStandardIcon } from '@cds/core/icon';
 
 @Component({
   standalone: true,
@@ -36,7 +38,7 @@ import { ClrIconModule } from '@clr/angular';
     MonthsToggleComponent,
     SummaryComponent,
     ChartComponent,
-    TransactionsTableComponent,
+    TransactionsTableComponent
   ]
 })
 export class TransactionsListView implements OnInit, OnDestroy {
@@ -65,9 +67,10 @@ export class TransactionsListView implements OnInit, OnDestroy {
               private statisticsService: StatisticsService,
               private accountsService: AccountsService,
               private dateService: DateService,
-              private decimalPipe: DecimalPipe,
+              private formatService: FormatService,
               private toLabelPipe: ToLabelPipe
   ) {
+    ClarityIcons.addIcons(noteIcon, plusIcon);
   }
 
   ngOnInit(): void {
@@ -204,7 +207,7 @@ export class TransactionsListView implements OnInit, OnDestroy {
             + '<caption><b>' + this.x + '</b></caption>'
             + '<tbody>'
             + '<tr>'
-            + '<td><b>' + that.decimalPipe.transform(this.y, '1.2-2') + ' €</b></td>'
+            + '<td><b>' + that.formatService.formatNumber(this.y) + ' €</b></td>'
             + '</tr>'
             + '</tbody></table>';
         }

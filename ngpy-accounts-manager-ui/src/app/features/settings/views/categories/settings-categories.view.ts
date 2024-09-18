@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ClrIconModule, ClrSelectModule } from '@clr/angular';
+import { ClarityIcons, plusIcon, trashIcon } from '@cds/core/icon';
 
 @Component({
   standalone:  true,
@@ -34,6 +35,7 @@ export class SettingsCategoriesView implements OnInit, OnDestroy {
 
   constructor(private fb: UntypedFormBuilder,
               private categoriesService: CategoriesService) {
+    ClarityIcons.addIcons(plusIcon, trashIcon);
   }
 
   ngOnInit(): void {

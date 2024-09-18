@@ -3,6 +3,7 @@ import { DateService } from '@core/services/date.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ClrDropdownModule } from '@clr/angular';
+import { angleIcon, circleIcon, ClarityIcons, successStandardIcon } from '@cds/core/icon';
 
 /**
  * The month toggle component
@@ -34,7 +35,9 @@ export class MonthsToggleComponent implements OnInit {
    *
    * @param dateService the date service
    */
-  constructor(private dateService: DateService) {}
+  constructor(private dateService: DateService) {
+    ClarityIcons.addIcons(angleIcon, successStandardIcon);
+  }
 
   /**
    * The available list of months

@@ -9,6 +9,7 @@ import { LabelsService } from '@core/services/domain/labels.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ClrIconModule, ClrSelectModule } from '@clr/angular';
+import { angleIcon, ClarityIcons, plusIcon, successStandardIcon, trashIcon } from '@cds/core/icon';
 
 @Component({
   standalone: true,
@@ -38,6 +39,7 @@ export class SettingsLabelsView implements OnInit, OnDestroy {
   constructor(private fb: UntypedFormBuilder,
               private labelsService: LabelsService,
               private categoriesService: CategoriesService) {
+    ClarityIcons.addIcons(plusIcon, trashIcon);
   }
 
   ngOnInit(): void {

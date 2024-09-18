@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { BudgetStatus } from '@core/models/api.models';
 import { TranslateService } from '@ngx-translate/core';
 import { Options, PointOptionsObject, SeriesColumnOptions } from 'highcharts';
 import { ChartComponent } from '@shared/components/chart/chart.component';
+import { FormatService } from '@core/services/format.service';
 
 @Component({
   standalone: true,
@@ -24,13 +24,12 @@ export class BudgetHistoryChartComponent implements OnChanges {
   /**
    * Instantiates the component.
    *
-   * @param router the router
-   * @param decimalPipe the decimal pipe
    * @param translateService the translate service
+   * @param formatService the format service
    */
   constructor(
-    private decimalPipe: DecimalPipe,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private formatService: FormatService
   ) {
   }
 
@@ -72,13 +71,13 @@ export class BudgetHistoryChartComponent implements OnChanges {
             }
             tooltip += '<tr>'
               + '<th><span class="badge" style="background-color: ' + point.series.color + '">&nbsp;</span></th>'
-              + '<td style="text-align: right">' + that.decimalPipe.transform(point.y, '1.2-2') + ' €</td>'
-              + '<td style="text-align: right">(' + that.decimalPipe.transform(Math.abs(point.percentage), '1.2-2') + ' %)</td>'
+              + '<td style="text-align: right">' + that.formatService.formatNumber(point.y) + ' €</td>'
+              + '<td style="text-align: right">(' + that.formatService.formatNumber(Math.abs(point.percentage)) + ' %)</td>'
               + '</tr>';
           }
           tooltip += '<tr>'
             + '<th>' + that.translateService.instant('i18n.views.analytics.chart.tooltip.total') + ': </th>'
-            + '<td colspan="2" style="text-align: right"><b>' + that.decimalPipe.transform(this.points[0].total, '1.2-2') + ' €</b></td>'
+            + '<td colspan="2" style="text-align: right"><b>' + that.formatService.formatNumber(this.points[0].total) + ' €</b></td>'
             + '</tr>'
             + '</tbody></table>';
           return tooltip;
@@ -101,7 +100,7 @@ export class BudgetHistoryChartComponent implements OnChanges {
               if (this.y === 0) {
                 return '';
               }
-              return that.decimalPipe.transform(this.y, '1.2-2') + ' €';
+              return that.formatService.formatNumber(this.y) + ' €';
             }
           }
         }
@@ -132,7 +131,7 @@ export class BudgetHistoryChartComponent implements OnChanges {
         consumption[categoryIdx] = {
           y: totalBudget,
           custom: {
-            relativeRatio: this.decimalPipe.transform(100, '1.2-2') + '%',
+            relativeRatio: this.formatService.formatNumber(100) + '%',
             budgetId: d.budget.id
           }
         };
@@ -140,7 +139,7 @@ export class BudgetHistoryChartComponent implements OnChanges {
         overrun[categoryIdx] = {
           y: totalSpending - totalBudget,
           custom: {
-            relativeRatio: '+' + this.decimalPipe.transform(aboveRatio * 100, '1.2-2') + '%',
+            relativeRatio: '+' + this.formatService.formatNumber(aboveRatio * 100) + '%',
             budgetId: d.budget.id
           }
         };
@@ -155,7 +154,7 @@ export class BudgetHistoryChartComponent implements OnChanges {
       consumption[categoryIdx] = {
         y: totalSpending,
         custom: {
-          relativeRatio: this.decimalPipe.transform(budgetRatio * 100, '1.2-2') + '%',
+          relativeRatio: this.formatService.formatNumber(budgetRatio * 100) + '%',
           budgetId: d.budget.id
         }
       };
@@ -163,7 +162,7 @@ export class BudgetHistoryChartComponent implements OnChanges {
       available[categoryIdx] = {
         y: totalBudget - totalSpending,
         custom: {
-          relativeRatio: this.decimalPipe.transform(belowRatio * 100, '1.2-2') + '%',
+          relativeRatio: this.formatService.formatNumber(belowRatio * 100) + '%',
           budgetId: d.budget.id
         }
       };

@@ -11,6 +11,9 @@
   "i18n.error.B200": "File import successful",
   "i18n.error.file_import_success": "The provided file has been uploaded successfully.<br/> A total of <strong>{{assigned}}</strong> from <strong>{{imported}}</strong> transactions have been assigned.<br/> The total imported amount is of <strong>{{ total_amount }}</strong>",
 
+  "i18n.format.date": "yyyy-MM-dd",
+  "i18n.format.number": "1.2-2",
+
   "i18n.app.title": "Account Manager",
 
   "i18n.months.1": "January",

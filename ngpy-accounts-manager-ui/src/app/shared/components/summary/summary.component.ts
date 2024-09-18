@@ -3,6 +3,7 @@ import { Summary } from '@core/models/api.models';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ClrIconModule } from '@clr/angular';
+import { angleIcon, ClarityIcons, minusCircleIcon, plusCircleIcon, successStandardIcon } from '@cds/core/icon';
 
 /**
  * The summary component
@@ -33,6 +34,10 @@ export class SummaryComponent implements OnChanges {
    * The calculated performance
    */
   public performance?: number;
+
+  constructor() {
+    ClarityIcons.addIcons(plusCircleIcon, minusCircleIcon);
+  }
 
   /**
    * Handles all input changes.

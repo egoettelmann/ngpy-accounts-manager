@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { ClrDropdownModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { angleIcon, circleIcon, ClarityIcons, successStandardIcon } from '@cds/core/icon';
 
 /**
  * The category toggle component
@@ -39,6 +40,10 @@ export class CategoriesToggleComponent implements OnChanges {
    * The currently selected categories
    */
   selectedCategories?: number[];
+
+  constructor() {
+    ClarityIcons.addIcons(angleIcon, successStandardIcon, circleIcon);
+  }
 
   /**
    * Triggered on each input change.

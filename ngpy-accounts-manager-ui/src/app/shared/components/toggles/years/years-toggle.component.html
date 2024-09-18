@@ -1,14 +1,14 @@
 <clr-dropdown class="col-xs-6 text-right">
   <button type="button" class="btn btn-link" clrDropdownTrigger>
     {{ currentYear }}
-    <clr-icon shape="caret down"></clr-icon>
+    <cds-icon shape="angle" direction="down"></cds-icon>
   </button>
   <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
     <button *ngFor="let year of yearList"
             type="button"
             clrDropdownItem
             (click)="changeYear(year)">
-      <clr-icon *ngIf="year === currentYear" shape="success-standard" class="is-success"></clr-icon>
+      <cds-icon *ngIf="year === currentYear" shape="success-standard" class="is-success"></cds-icon>
       <span *ngIf="year !== currentYear" class="icon-empty">&nbsp;</span>
       &nbsp;{{ year }}
     </button>

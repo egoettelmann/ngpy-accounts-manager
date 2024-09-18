@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import { GroupedValue } from '@core/models/domain.models';
 import { ToLabelPipe } from '@shared/pipes/to-label.pipe';
 import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
 import { Options, PointOptionsObject } from 'highcharts';
 import { ChartComponent } from '@shared/components/chart/chart.component';
+import { FormatService } from '@core/services/format.service';
 
 @Component({
-  standalone:  true,
+  standalone: true,
   selector: 'app-analytics-pie-chart',
   templateUrl: './analytics-pie-chart.component.html',
   styleUrls: ['./analytics-pie-chart.component.scss'],
@@ -22,9 +22,9 @@ export class AnalyticsPieChartComponent implements OnChanges {
 
   public chartOptions: any;
 
-  constructor(private decimalPipe: DecimalPipe,
-              private toLabelPipe: ToLabelPipe,
-              private toCategoryPipe: ToCategoryPipe
+  constructor(private toLabelPipe: ToLabelPipe,
+              private toCategoryPipe: ToCategoryPipe,
+              private formatService: FormatService
   ) {
   }
 
@@ -56,7 +56,7 @@ export class AnalyticsPieChartComponent implements OnChanges {
         }
       },
       tooltip: {
-        useHTML: true,
+        useHTML: true
       },
       plotOptions: {
         pie: {
@@ -106,8 +106,8 @@ export class AnalyticsPieChartComponent implements OnChanges {
               + '<caption><b>' + that.toCategoryPipe.transform(+this.name, 'name') + '</b></caption>'
               + '<tbody>'
               + '<tr>'
-              + '<td><b>' + that.decimalPipe.transform(this.options?.custom?.['amount'], '1.2-2') + ' €</b></td>'
-              + '<td>(' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)</td>'
+              + '<td><b>' + that.formatService.formatNumber(this.options?.custom?.['amount']) + ' €</b></td>'
+              + '<td>(' + that.formatService.formatNumber(this.percentage) + '%)</td>'
               + '</tr>'
               + '</tbody></table>';
           }
@@ -126,8 +126,8 @@ export class AnalyticsPieChartComponent implements OnChanges {
               + '<caption><b>' + that.toLabelPipe.transform(+this.name, 'name') + '</b></caption>'
               + '<tbody>'
               + '<tr>'
-              + '<td><b>' + that.decimalPipe.transform(this.options?.custom?.['amount'], '1.2-2') + ' €</b></td>'
-              + '<td>(' + that.decimalPipe.transform(this.percentage, '1.2-2') + '%)</td>'
+              + '<td><b>' + that.formatService.formatNumber(this.options?.custom?.['amount']) + ' €</b></td>'
+              + '<td>(' + that.formatService.formatNumber(this.percentage) + '%)</td>'
               + '</tr>'
               + '</tbody></table>';
           }

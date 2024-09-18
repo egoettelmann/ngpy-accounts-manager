@@ -20,6 +20,7 @@ import { AnalyticsPieChartComponent } from '../components/pie-chart/analytics-pi
 import { AnalyticsDetailsTableComponent } from '../components/details-table/analytics-details-table.component';
 import { ToCategoryPipe } from '@shared/pipes/to-category.pipe';
 import { CommonModule } from '@angular/common';
+import { angleIcon, ClarityIcons, successStandardIcon } from '@cds/core/icon';
 
 @Component({
   standalone: true,
@@ -73,6 +74,7 @@ export class AnalyticsView implements OnInit, OnDestroy {
               private statisticsService: StatisticsService,
               private dateService: DateService
   ) {
+    ClarityIcons.addIcons(angleIcon, successStandardIcon);
   }
 
   /**

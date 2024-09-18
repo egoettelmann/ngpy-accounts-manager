@@ -3,6 +3,7 @@ import { Account, Summary } from '@core/models/api.models';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ClrIconModule } from '@clr/angular';
+import { angleIcon, ClarityIcons, minusCircleIcon, plusCircleIcon, successStandardIcon } from '@cds/core/icon';
 
 /**
  * The total summary interface
@@ -61,6 +62,10 @@ export class DashboardTotalSummaryComponent implements OnInit {
     threeMonths: TotalSummary,
     year: TotalSummary
   };
+
+  constructor() {
+    ClarityIcons.addIcons(plusCircleIcon, minusCircleIcon);
+  }
 
   /**
    * Initializes the component

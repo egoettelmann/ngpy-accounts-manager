@@ -21,7 +21,7 @@
         <input class="clr-input w-100" type="text" [formControlName]="'name'" />
       </td>
       <td class="left">
-        <clr-icon [attr.shape]="labelForm?.get('icon')?.value"></clr-icon>
+        <cds-icon [attr.shape]="labelForm?.get('icon')?.value"></cds-icon>
         <input class="clr-input" type="text" [formControlName]="'icon'" />
       </td>
       <td class="left">
@@ -43,7 +43,7 @@
       </td>
       <td>
         <button type="button" class="btn btn-sm btn-icon btn-danger" (click)="deleteLabel(labelForm.value)">
-          <clr-icon shape="trash" size="16"></clr-icon>
+          <cds-icon shape="trash" size="16"></cds-icon>
         </button>
       </td>
     </tr>
@@ -52,6 +52,6 @@
 </form>
 
 <button type="button" class="btn btn-sm btn-icon btn-info" (click)="addLabel()">
-  <clr-icon shape="plus"></clr-icon>
+  <cds-icon shape="plus"></cds-icon>
   <span>{{ 'i18n.views.settings.labels.add' | translate }}</span>
 </button>
